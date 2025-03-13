@@ -62,6 +62,38 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_embed_unity:
+    dependency: "direct main"
+    description:
+      name: flutter_embed_unity
+      sha256: "01fcf2ad5827ece168311bb974c78491d3f6f54ec4c67b4713680c29b5ad87d0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
+  flutter_embed_unity_2022_3_android:
+    dependency: transitive
+    description:
+      name: flutter_embed_unity_2022_3_android
+      sha256: "6eb19e53bdd12990a06416e392b99f9e098f9651c74e6ad0f9191ff0328dc6bb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  flutter_embed_unity_2022_3_ios:
+    dependency: transitive
+    description:
+      name: flutter_embed_unity_2022_3_ios
+      sha256: "654ed70cf0fd678715e52ee2fa22b2babe540a42d1e663b9a3891fb0654201b4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  flutter_embed_unity_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_embed_unity_platform_interface
+      sha256: f6c51507623af383dc78fb0a6957b139f6b1d0cc5ef368f507551beac21d33c4
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -139,6 +171,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      sha256: "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.8"
   sky_engine:
     dependency: transitive
     description: flutter
