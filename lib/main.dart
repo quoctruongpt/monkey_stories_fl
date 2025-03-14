@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
       home: Stack(
         children: [
           const MyHomePage(title: 'Monkey Stories'),
-          // const UnityView(),
           Consumer<UnityProvider>(
             builder: (context, unityProvider, child) {
               return AnimatedPositioned(

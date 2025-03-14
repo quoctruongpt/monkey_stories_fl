@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_embed_unity/flutter_embed_unity.dart';
+import 'package:monkey_stories/constants/unity.dart';
 import 'package:monkey_stories/providers/unity_provider.dart';
 import 'package:provider/provider.dart';
 import 'result_screen.dart';
+import 'package:monkey_stories/types/unity.dart';
+import 'package:monkey_stories/services/unity_service.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -19,15 +21,29 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    Provider.of<UnityProvider>(context, listen: false).registerHandler('user', (
+      UnityMessage message,
+    ) async {
+      // Process the user message and return a response
+      return {"id": 1234, "name": 'John Smith', "avatar": ''};
+    });
   }
 
   @override
   void dispose() {
+    Provider.of<UnityProvider>(
+      context,
+      listen: false,
+    ).unregisterHandler('user');
     super.dispose();
   }
 
   void _openUnity() {
-    print('Opening Unity...');
+    final message = UnityMessage(
+      type: MessageTypes.openUnity,
+      payload: {'destination': 'map_lesson'},
+    );
+    UnityService.sendToUnityWithoutResult(message);
     Provider.of<UnityProvider>(context, listen: false).showUnity();
   }
 
@@ -39,18 +55,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _sendMessageToUnity() {
-    print('Sending message to Unity...');
-    // final unityProvider = Provider.of<UnityProvider>(context, listen: false);
-    // unityProvider.showUnity();
-    // Add a delay to ensure Unity is loaded before sending message
-    Future.delayed(const Duration(milliseconds: 500), () {
-      sendToUnity(
-        'GameManager',
-        'ReceiveMessageFromFlutter',
-        'Hello from Flutter!',
-      );
-    });
+  Future<void> _sendMessageToUnity() async {
+    print("vao day");
+    final message = UnityMessage(
+      type: MessageTypes.coin,
+      payload: {'action': 'get'},
+    );
+
+    final response = await Provider.of<UnityProvider>(
+      context,
+      listen: false,
+    ).sendMessageToUnityWithResponse(message);
+
+    print(response.toString());
   }
 
   @override
