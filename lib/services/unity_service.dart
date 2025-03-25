@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
-import 'package:monkey_stories/constants/unity.dart';
+import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/types/unity.dart';
 import 'package:monkey_stories/utils/uuid.dart';
 
@@ -49,7 +49,7 @@ class UnityService {
     } catch (e) {
       // Clean up resources in case of exception
       _cleanupRequest(id);
-      throw e;
+      rethrow;
     }
 
     return completer.future;
@@ -68,7 +68,6 @@ class UnityService {
       }
       return false;
     } catch (error) {
-      print('Error handling Unity message: $error');
       return false;
     }
   }

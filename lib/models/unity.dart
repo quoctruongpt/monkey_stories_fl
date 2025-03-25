@@ -14,3 +14,11 @@ class MessageTypes {
   static const String coin = 'coin';
   static const String user = 'user';
 }
+
+enum ResultStatus {
+  success(true),
+  failure(false);
+
+  final bool value;
+  const ResultStatus(this.value);
+}

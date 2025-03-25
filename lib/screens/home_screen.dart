@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monkey_stories/constants/unity.dart';
-import 'package:monkey_stories/providers/unity_provider.dart';
-import 'package:provider/provider.dart';
-import 'result_screen.dart';
-import 'package:monkey_stories/types/unity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/services/unity_service.dart';
+import 'package:monkey_stories/types/unity.dart';
+
+import 'result_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -21,20 +22,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    Provider.of<UnityProvider>(context, listen: false).registerHandler('user', (
+    context.read<UnityCubit>().registerHandler('user', (
       UnityMessage message,
     ) async {
-      // Process the user message and return a response
       return {"id": 1234, "name": 'John Smith', "avatar": ''};
     });
   }
 
   @override
   void dispose() {
-    Provider.of<UnityProvider>(
-      context,
-      listen: false,
-    ).unregisterHandler('user');
+    context.read<UnityCubit>().unregisterHandler('user');
     super.dispose();
   }
 
@@ -44,11 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
       payload: {'destination': 'map_lesson'},
     );
     UnityService.sendToUnityWithoutResult(message);
-    Provider.of<UnityProvider>(context, listen: false).showUnity();
+    context.read<UnityCubit>().showUnity();
   }
 
   void _openResult() {
-    print('Opening Result...');
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const ResultScreen()),
@@ -56,18 +52,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _sendMessageToUnity() async {
-    print("vao day");
     final message = UnityMessage(
       type: MessageTypes.coin,
       payload: {'action': 'get'},
     );
 
-    final response = await Provider.of<UnityProvider>(
-      context,
-      listen: false,
-    ).sendMessageToUnityWithResponse(message);
-
-    print(response.toString());
+    final response = await context
+        .read<UnityCubit>()
+        .sendMessageToUnityWithResponse(message);
   }
 
   @override
