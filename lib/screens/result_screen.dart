@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monkey_stories/screens/home_screen.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -23,12 +22,12 @@ class _ResultScreenState extends State<ResultScreen> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MyHomePage(title: 'Monkey Stories'),
-              ),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const MyHomePage(title: 'Monkey Stories'),
+            //   ),
+            // );
           },
           child: const Text('Back to Home'),
         ),

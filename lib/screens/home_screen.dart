@@ -45,10 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openResult() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const ResultScreen()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const ResultScreen()),
+    // );
   }
 
   Future<void> _sendMessageToUnity() async {
