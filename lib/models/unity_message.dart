@@ -1,14 +1,14 @@
 // Class message với generic payload
 import 'dart:convert';
 
-class UnityMessage<T> {
+class UnityMessage {
   final String? id;
   final String type;
-  final T payload;
+  final dynamic payload;
 
   UnityMessage({this.id, required this.type, required this.payload});
 
-  UnityMessage<T> copyWith({String? id}) {
+  UnityMessage copyWith({String? id}) {
     return UnityMessage(id: id ?? this.id, type: type, payload: payload);
   }
 

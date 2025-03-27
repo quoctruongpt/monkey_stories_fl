@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/services/unity_service.dart';
-import 'package:monkey_stories/types/unity.dart';
 
 part 'unity_state.dart';
 

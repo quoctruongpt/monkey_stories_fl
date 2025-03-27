@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/navigation/route_observer.dart';
 import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/types/unity.dart';
+import 'package:monkey_stories/models/unity_message.dart';
 
 final logger = Logger("UnityScreen");
 

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/types/unity.dart';
+import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/utils/uuid.dart';
 
 final logger = Logger("UnityService");

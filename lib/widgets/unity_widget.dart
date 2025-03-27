@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/types/unity.dart';
+import 'package:monkey_stories/models/unity_message.dart';
 
 final logger = Logger("UnityView");
 
