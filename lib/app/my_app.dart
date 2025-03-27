@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/app/router.dart';
+import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
@@ -12,8 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UnityCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => UnityCubit()),
+        BlocProvider(create: (context) => OrientationCubit()),
+      ],
       child: MaterialApp.router(
         routerConfig: router,
         builder: (context, child) {

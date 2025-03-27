@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/services/unity_service.dart';
 import 'package:monkey_stories/types/unity.dart';
-
-import 'result_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -21,7 +19,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     context.read<UnityCubit>().registerHandler('user', (
       UnityMessage message,
     ) async {
@@ -45,10 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openResult() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const ResultScreen()),
-    // );
+    context.push('/result');
   }
 
   Future<void> _sendMessageToUnity() async {

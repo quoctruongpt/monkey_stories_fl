@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
@@ -12,7 +11,6 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
@@ -22,12 +20,7 @@ class _ResultScreenState extends State<ResultScreen> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => const MyHomePage(title: 'Monkey Stories'),
-            //   ),
-            // );
+            // context.pop();
           },
           child: const Text('Back to Home'),
         ),
@@ -35,7 +28,3 @@ class _ResultScreenState extends State<ResultScreen> {
     );
   }
 }
-
-// SystemChrome.setPreferredOrientations([
-//   DeviceOrientation.portraitUp,
-// ]);

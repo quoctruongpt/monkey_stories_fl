@@ -29,4 +29,9 @@ class UnityMessage<T> {
       payload: json['payload'],
     );
   }
+
+  @override
+  String toString() {
+    return 'UnityMessage(type: $type, payload: $payload)';
+  }
 }
