@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/models/orientation.dart';
 import 'package:monkey_stories/types/unity.dart';
 
 final logger = Logger("UnityView");
@@ -34,26 +32,12 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
     await context.read<UnityCubit>().handleUnityMessage(message);
   }
 
-  void _onLandscape() {
-    context.read<OrientationCubit>().lockOrientation(
-      context,
-      AppOrientation.landscapeLeft,
-    );
-  }
-
-  void _onPortrait() {
-    context.read<OrientationCubit>().lockOrientation(
-      context,
-      AppOrientation.portrait,
-    );
-  }
-
   void _increment() {
     final UnityMessage message = UnityMessage(
       type: "coin",
       payload: {'action': 'update', 'amount': 1},
     );
-    context.read<UnityCubit>().sendMessageToUnity(message);
+    context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
   }
 
   @override
@@ -70,14 +54,6 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
                 bottom: 0,
                 child: Column(
                   children: [
-                    FilledButton(
-                      onPressed: _onLandscape,
-                      child: Text("Landscape"),
-                    ),
-                    FilledButton(
-                      onPressed: _onPortrait,
-                      child: Text("Portrait"),
-                    ),
                     FilledButton(onPressed: _increment, child: Text("+")),
                   ],
                 ),

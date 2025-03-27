@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/app/router.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
 final logger = Logger("MyApp");

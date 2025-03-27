@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/services/unity_service.dart';
 import 'package:monkey_stories/types/unity.dart';
 
@@ -17,7 +16,6 @@ class UnityCubit extends Cubit<UnityState> {
 
   // Bật Unity, unity sẽ đè lên UI khác
   void showUnity() {
-    logger.info("chạy vào showUnity");
     if (!state.isUnityVisible) {
       emit(state.copyWith(isUnityVisible: true));
     }
@@ -89,9 +87,6 @@ class UnityCubit extends Cubit<UnityState> {
 
   Future<dynamic> _handleDefaultLogic(UnityMessage message) async {
     switch (message.type) {
-      case MessageTypes.closeUnity:
-        hideUnity();
-        return null;
       case 'getVersion':
         return '1.0.0';
       default:

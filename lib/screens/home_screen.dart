@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/services/unity_service.dart';
 import 'package:monkey_stories/types/unity.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -33,12 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openUnity() {
-    final message = UnityMessage(
-      type: MessageTypes.openUnity,
-      payload: {'destination': 'map_lesson'},
-    );
-    UnityService.sendToUnityWithoutResult(message);
-    context.read<UnityCubit>().showUnity();
+    context.push('/unity');
   }
 
   void _openResult() {

@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/types/unity.dart';
 import 'package:monkey_stories/utils/uuid.dart';
+
+final logger = Logger("UnityService");
 
 class UnityService {
   static final Map<String, Completer<dynamic>> _messageQueue = {};
@@ -15,6 +18,7 @@ class UnityService {
     final updatedMessage =
         message.id == null ? message.copyWith(id: generateShortId()) : message;
 
+    logger.info("sendToUnityWithoutResult ${updatedMessage.toString()}");
     sendToUnity(
       UnityGameObjects.reactNativeBridge,
       UnityMethodNames.requestUnityAction,
@@ -40,6 +44,7 @@ class UnityService {
     });
 
     try {
+      logger.info("sendToUnityWithResponse ${updatedMessage.toString()}");
       // Send message to Unity
       sendToUnity(
         UnityGameObjects.reactNativeBridge,
@@ -58,6 +63,7 @@ class UnityService {
   static Future<bool> handleUnityMessage(String data) async {
     try {
       final Map<String, dynamic> message = jsonDecode(data);
+      logger.info("handleUnityMessage $data");
       final String? id = message['id'];
       final Map<String, dynamic>? payload =
           message['payload'] as Map<String, dynamic>?;
