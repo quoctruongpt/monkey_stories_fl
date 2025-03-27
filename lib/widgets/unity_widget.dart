@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 
-final logger = Logger("UnityView");
+final logger = Logger('UnityView');
 
 class UnityView extends StatefulWidget {
   const UnityView({super.key});
@@ -34,7 +34,7 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
 
   void _increment() {
     final UnityMessage message = UnityMessage(
-      type: "coin",
+      type: 'coin',
       payload: {'action': 'update', 'amount': 1},
     );
     context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
@@ -54,7 +54,7 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
                 bottom: 0,
                 child: Column(
                   children: [
-                    FilledButton(onPressed: _increment, child: Text("+")),
+                    FilledButton(onPressed: _increment, child: const Text('+')),
                   ],
                 ),
               ),

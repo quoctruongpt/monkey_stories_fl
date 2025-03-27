@@ -7,7 +7,7 @@ import 'package:monkey_stories/core/navigation/route_observer.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 
-final logger = Logger("UnityScreen");
+final logger = Logger('UnityScreen');
 
 class UnityScreen extends StatefulWidget {
   const UnityScreen({super.key});
@@ -70,6 +70,6 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return const Placeholder();
   }
 }

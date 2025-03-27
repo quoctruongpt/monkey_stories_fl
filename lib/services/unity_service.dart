@@ -7,7 +7,7 @@ import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/utils/uuid.dart';
 
-final logger = Logger("UnityService");
+final logger = Logger('UnityService');
 
 class UnityService {
   static final Map<String, Completer<dynamic>> _messageQueue = {};
@@ -18,7 +18,7 @@ class UnityService {
     final updatedMessage =
         message.id == null ? message.copyWith(id: generateShortId()) : message;
 
-    logger.info("sendToUnityWithoutResult ${updatedMessage.toString()}");
+    logger.info('sendToUnityWithoutResult ${updatedMessage.toString()}');
     sendToUnity(
       UnityGameObjects.reactNativeBridge,
       UnityMethodNames.requestUnityAction,
@@ -35,16 +35,19 @@ class UnityService {
     _messageQueue[id] = completer;
 
     // Set timeout
-    _timeoutTimers[id] = Timer(Duration(milliseconds: _timeoutDuration), () {
-      if (_messageQueue.containsKey(id)) {
-        _messageQueue[id]?.completeError('Unity response timeout');
-        _messageQueue.remove(id);
-        _timeoutTimers.remove(id);
-      }
-    });
+    _timeoutTimers[id] = Timer(
+      const Duration(milliseconds: _timeoutDuration),
+      () {
+        if (_messageQueue.containsKey(id)) {
+          _messageQueue[id]?.completeError('Unity response timeout');
+          _messageQueue.remove(id);
+          _timeoutTimers.remove(id);
+        }
+      },
+    );
 
     try {
-      logger.info("sendToUnityWithResponse ${updatedMessage.toString()}");
+      logger.info('sendToUnityWithResponse ${updatedMessage.toString()}');
       // Send message to Unity
       sendToUnity(
         UnityGameObjects.reactNativeBridge,
@@ -63,7 +66,7 @@ class UnityService {
   static Future<bool> handleUnityMessage(String data) async {
     try {
       final Map<String, dynamic> message = jsonDecode(data);
-      logger.info("handleUnityMessage $data");
+      logger.info('handleUnityMessage $data');
       final String? id = message['id'];
       final Map<String, dynamic>? payload =
           message['payload'] as Map<String, dynamic>?;

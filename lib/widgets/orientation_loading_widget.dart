@@ -10,7 +10,6 @@ class OrientationLoading extends StatefulWidget {
 class _OrientationLoadingState extends State<OrientationLoading> {
   // Thời gian animation
   static const Duration _animationDuration = Duration(milliseconds: 300);
-  static const Duration _autoHideDuration = Duration(seconds: 1);
 
   // Giá trị animation
   static const double _initialBorderRadius = 30.0;

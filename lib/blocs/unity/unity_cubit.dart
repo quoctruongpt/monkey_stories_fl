@@ -7,7 +7,7 @@ import 'package:monkey_stories/services/unity_service.dart';
 
 part 'unity_state.dart';
 
-final Logger logger = Logger("UnityCubit");
+final Logger logger = Logger('UnityCubit');
 
 class UnityCubit extends Cubit<UnityState> {
   UnityCubit() : super(UnityState(isUnityVisible: false));
@@ -67,7 +67,9 @@ class UnityCubit extends Cubit<UnityState> {
       } catch (handlerError) {
         _sendResponse(unityMessage, false, handlerError.toString());
       }
-    } catch (parseError) {}
+    } catch (parseError) {
+      logger.warning(parseError.toString());
+    }
   }
 
   void _sendResponse(

@@ -21,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
     context.read<UnityCubit>().registerHandler('user', (
       UnityMessage message,
     ) async {
-      return {"id": 1234, "name": 'John Smith', "avatar": ''};
+      return {'id': 1234, 'name': 'John Smith', 'avatar': ''};
     });
   }
 
@@ -45,9 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       payload: {'action': 'get'},
     );
 
-    final response = await context
-        .read<UnityCubit>()
-        .sendMessageToUnityWithResponse(message);
+    await context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
   }
 
   @override

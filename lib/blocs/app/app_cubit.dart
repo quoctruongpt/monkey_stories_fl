@@ -8,7 +8,7 @@ class AppCubit extends Cubit<AppState> {
   void showLoading() {
     emit(state.copyWith(isOrientationLoading: true));
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       emit(state.copyWith(isOrientationLoading: false));
     });
   }

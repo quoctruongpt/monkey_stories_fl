@@ -9,7 +9,7 @@ import 'package:monkey_stories/screens/home_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
 import 'package:monkey_stories/screens/unity_screen.dart';
 
-final logger = Logger("router");
+final logger = Logger('router');
 final GoRouter router = GoRouter(
   observers: [routeObserver],
   routes: <RouteBase>[
@@ -20,7 +20,7 @@ final GoRouter router = GoRouter(
           context,
           AppOrientation.portrait,
         );
-        return MaterialPage(child: MyHomePage(title: "Home"));
+        return const MaterialPage(child: MyHomePage(title: 'Home'));
       },
     ),
     GoRoute(
@@ -30,7 +30,7 @@ final GoRouter router = GoRouter(
           context,
           AppOrientation.landscapeLeft,
         );
-        return MaterialPage(child: ResultScreen());
+        return const MaterialPage(child: ResultScreen());
       },
     ),
     GoRoute(
@@ -41,10 +41,10 @@ final GoRouter router = GoRouter(
           context,
           AppOrientation.landscapeLeft,
         );
-        return MaterialPage(child: UnityScreen());
+        return const MaterialPage(child: UnityScreen());
       },
       redirect: (context, state) {
-        logger.info("redirect");
+        logger.info('redirect');
 
         return null;
       },

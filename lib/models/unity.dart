@@ -1,5 +1,5 @@
 class UnityGameObjects {
-  static const String reactNativeBridge = "ReactNativeBridge";
+  static const String reactNativeBridge = 'ReactNativeBridge';
 }
 
 class UnityMethodNames {

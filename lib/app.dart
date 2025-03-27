@@ -8,7 +8,7 @@ import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
-final logger = Logger("MyApp");
+final logger = Logger('MyApp');
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
               // Unity Widget sẽ đè lên UI khi cần thiết
               BlocBuilder<UnityCubit, UnityState>(
                 builder: (context, state) {
-                  logger.info("isUnityVisible ${state.isUnityVisible}");
+                  logger.info('isUnityVisible ${state.isUnityVisible}');
                   return AnimatedPositioned(
                     duration: const Duration(milliseconds: 300),
                     left:
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
                 child: BlocBuilder<AppCubit, AppState>(
                   builder: (context, state) {
                     return state.isOrientationLoading
-                        ? OrientationLoading()
+                        ? const OrientationLoading()
                         : const SizedBox.shrink();
                   },
                 ),

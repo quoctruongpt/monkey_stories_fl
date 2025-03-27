@@ -9,14 +9,14 @@ import 'package:monkey_stories/models/unity_message.dart';
 
 part 'orientation_state.dart';
 
-final logger = Logger("OrientationCubit");
+final logger = Logger('OrientationCubit');
 
 class OrientationCubit extends Cubit<OrientationState> {
   OrientationCubit()
     : super(OrientationState(orientation: AppOrientation.portrait));
 
   void lockOrientation(BuildContext context, AppOrientation orientation) {
-    logger.info("Lock $orientation");
+    logger.info('Lock $orientation');
 
     switch (orientation) {
       case AppOrientation.portrait:
