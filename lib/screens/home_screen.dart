@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 
@@ -32,11 +33,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openUnity() {
-    context.push('/unity');
+    context.push(AppRoutes.unity);
   }
 
   void _openResult() {
-    context.push('/result');
+    context.push(AppRoutes.result);
   }
 
   Future<void> _sendMessageToUnity() async {
