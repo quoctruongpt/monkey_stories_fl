@@ -7,6 +7,7 @@ import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/navigation/router.dart';
+import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
@@ -27,6 +28,8 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp.router(
             routerConfig: router,
+            theme: AppTheme.lightTheme,
+            themeMode: ThemeMode.light,
             localizationsDelegates: [
               const AppLocalizationsDelegate(),
               GlobalMaterialLocalizations.delegate,
