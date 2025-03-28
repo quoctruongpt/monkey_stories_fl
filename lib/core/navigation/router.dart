@@ -21,7 +21,7 @@ final GoRouter router = GoRouter(
           context,
           AppOrientation.portrait,
         );
-        return const MaterialPage(child: MyHomePage(title: 'Home'));
+        return const MaterialPage(child: MyHomePage());
       },
     ),
     GoRoute(

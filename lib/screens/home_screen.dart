@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(AppLocalizations.of(context).translate('home.title')),
       ),
       body: Center(
         child: Column(
@@ -78,6 +78,26 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: _openResult,
               child: const Text('Open Result'),
+            ),
+            BlocBuilder<AppCubit, AppState>(
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {
+                    context.read<AppCubit>().changeLanguage('vi');
+                  },
+                  child: const Text('vi'),
+                );
+              },
+            ),
+            BlocBuilder<AppCubit, AppState>(
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {
+                    context.read<AppCubit>().changeLanguage('en');
+                  },
+                  child: const Text('en'),
+                );
+              },
             ),
           ],
         ),

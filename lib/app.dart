@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
@@ -21,56 +23,68 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => OrientationCubit()),
         BlocProvider(create: (context) => AppCubit()),
       ],
-      child: MaterialApp.router(
-        routerConfig: router,
-        builder: (context, child) {
-          return Stack(
-            children: [
-              // Hiển thị nội dung chính của ứng dụng
-              child ?? const SizedBox.shrink(),
+      child: BlocBuilder<AppCubit, AppState>(
+        builder: (context, state) {
+          return MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: [
+              const AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en'), Locale('vi')],
+            locale: Locale(state.languageCode),
+            builder: (context, child) {
+              return Stack(
+                children: [
+                  // Hiển thị nội dung chính của ứng dụng
+                  child ?? const SizedBox.shrink(),
 
-              // Unity Widget sẽ đè lên UI khi cần thiết
-              BlocBuilder<UnityCubit, UnityState>(
-                builder: (context, state) {
-                  logger.info('isUnityVisible ${state.isUnityVisible}');
-                  return AnimatedPositioned(
-                    duration: const Duration(milliseconds: 300),
-                    left:
-                        state.isUnityVisible
-                            ? 0
-                            : -MediaQuery.of(context).size.width,
-                    top: 0,
-                    right:
-                        state.isUnityVisible
-                            ? 0
-                            : MediaQuery.of(context).size.width,
-                    bottom: 0,
-                    child: const UnityView(),
-                  );
-                },
-              ),
-
-              MultiBlocListener(
-                listeners: [
-                  BlocListener<OrientationCubit, OrientationState>(
-                    listenWhen:
-                        (previous, current) =>
-                            previous.orientation != current.orientation,
-                    listener: (context, state) {
-                      context.read<AppCubit>().showLoading();
+                  // Unity Widget sẽ đè lên UI khi cần thiết
+                  BlocBuilder<UnityCubit, UnityState>(
+                    builder: (context, state) {
+                      logger.info('isUnityVisible ${state.isUnityVisible}');
+                      return AnimatedPositioned(
+                        duration: const Duration(milliseconds: 300),
+                        left:
+                            state.isUnityVisible
+                                ? 0
+                                : -MediaQuery.of(context).size.width,
+                        top: 0,
+                        right:
+                            state.isUnityVisible
+                                ? 0
+                                : MediaQuery.of(context).size.width,
+                        bottom: 0,
+                        child: const UnityView(),
+                      );
                     },
-                    // child: Container(color: Colors.blue),
+                  ),
+
+                  MultiBlocListener(
+                    listeners: [
+                      BlocListener<OrientationCubit, OrientationState>(
+                        listenWhen:
+                            (previous, current) =>
+                                previous.orientation != current.orientation,
+                        listener: (context, state) {
+                          context.read<AppCubit>().showLoading();
+                        },
+                        // child: Container(color: Colors.blue),
+                      ),
+                    ],
+                    child: BlocBuilder<AppCubit, AppState>(
+                      builder: (context, state) {
+                        return state.isOrientationLoading
+                            ? const OrientationLoading()
+                            : const SizedBox.shrink();
+                      },
+                    ),
                   ),
                 ],
-                child: BlocBuilder<AppCubit, AppState>(
-                  builder: (context, state) {
-                    return state.isOrientationLoading
-                        ? const OrientationLoading()
-                        : const SizedBox.shrink();
-                  },
-                ),
-              ),
-            ],
+              );
+            },
           );
         },
       ),
