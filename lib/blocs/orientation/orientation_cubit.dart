@@ -6,6 +6,7 @@ import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/models/orientation.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
+import 'package:monkey_stories/models/unity_payload.dart';
 
 part 'orientation_state.dart';
 
@@ -38,10 +39,11 @@ class OrientationCubit extends Cubit<OrientationState> {
   }
 
   void _lockOrientationUnity(BuildContext context, AppOrientation orientation) {
-    final UnityMessage message = UnityMessage(
-      type: MessageTypes.orientation,
-      payload: {'orientation': orientation.value},
-    );
+    final UnityMessage<OrientationPayload> message =
+        UnityMessage<OrientationPayload>(
+          type: MessageTypes.orientation,
+          payload: OrientationPayload(orientation: orientation),
+        );
     context.read<UnityCubit>().sendMessageToUnity(message);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/models/unity_message.dart';
+import 'package:monkey_stories/models/unity_payload.dart';
 
 final logger = Logger('UnityView');
 
@@ -33,9 +34,9 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
   }
 
   void _increment() {
-    final UnityMessage message = UnityMessage(
+    final UnityMessage<CoinPayload> message = UnityMessage<CoinPayload>(
       type: 'coin',
-      payload: {'action': 'update', 'amount': 1},
+      payload: CoinPayload(action: 'update', amount: 1),
     );
     context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
   }

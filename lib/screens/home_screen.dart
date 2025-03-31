@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
+import 'package:monkey_stories/models/unity_payload.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -41,9 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _sendMessageToUnity() async {
-    final message = UnityMessage(
+    final message = UnityMessage<CoinPayload>(
       type: MessageTypes.coin,
-      payload: {'action': 'get'},
+      payload: CoinPayload(action: 'get'),
     );
 
     await context.read<UnityCubit>().sendMessageToUnityWithResponse(message);

@@ -1,11 +1,12 @@
 // Class message với generic payload
 import 'dart:convert';
+import 'package:monkey_stories/models/unity_payload.dart';
 
-class UnityMessage {
+class UnityMessage<T> {
   final String? id;
   final String type;
   final bool? response;
-  final dynamic payload;
+  final T payload;
 
   UnityMessage({
     this.id,
@@ -28,7 +29,12 @@ class UnityMessage {
     return jsonEncode({
       'id': id,
       'type': type,
-      'payload': payload is Map ? payload : payload.toString(),
+      'payload':
+          payload is UnityPayload
+              ? (payload as UnityPayload).toJson()
+              : payload is Map
+              ? payload
+              : payload.toString(),
       'response': response,
     });
   }
