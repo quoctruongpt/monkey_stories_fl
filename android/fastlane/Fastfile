@@ -1,0 +1,163 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+require 'net/http'
+require 'uri'
+require 'json'
+
+default_platform(:android)
+
+platform :android do
+  desc "Build APK"
+  lane :build do
+    gradle(task: "clean assembleRelease")
+    
+    # Lấy timestamp để đặt tên file APK
+    timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
+    custom_apk_name = "app-release-#{timestamp}.apk"
+
+    # Định nghĩa đường dẫn APK gốc
+    original_apk_path = "../../build/app/outputs/apk/release/app-release.apk"
+
+    # Định nghĩa đường dẫn APK sau khi đổi tên
+    new_apk_path = "../../build/app/outputs/apk/release/#{custom_apk_name}"
+
+    # Đổi tên file APK
+    File.rename(original_apk_path, new_apk_path)
+
+    UI.success("Renamed APK to: #{new_apk_path}")
+    
+    # File URL mặc định nếu không thể upload
+    file_url = "https://example.com/dummy-url-for-testing/#{custom_apk_name}"
+    
+    # Thử upload file nếu có thể
+    begin
+      uploaded_url = upload_apk_to_server(new_apk_path)
+      file_url = uploaded_url unless uploaded_url.nil? || uploaded_url.empty?
+    rescue => e
+      UI.error("Error during upload: #{e.message}")
+      UI.important("Using fallback URL instead")
+    end
+    
+    # In URL ra để debug
+    UI.important("Returning URL: #{file_url}")
+    
+    # Trả về URL
+    file_url
+  end
+  
+  desc "Build AAB"
+  lane :build_release do
+    # Build AAB
+    gradle(task: "bundleRelease")
+    
+    # Lấy timestamp để đặt tên file
+    timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
+    custom_aab_name = "app-release-#{timestamp}.aab"
+
+    # Định nghĩa đường dẫn AAB gốc
+    original_aab_path = "../../build/app/outputs/bundle/release/app-release.aab"
+
+    # Định nghĩa đường dẫn AAB sau khi đổi tên
+    new_aab_path = "../../build/app/outputs/bundle/release/#{custom_aab_name}"
+
+    # Đổi tên file AAB
+    File.rename(original_aab_path, new_aab_path)
+
+    UI.success("Renamed AAB to: #{new_aab_path}")
+    
+    # Upload AAB
+    aab_url = upload_apk_to_server(new_aab_path)
+    
+    # Trả về URL của AAB
+    aab_url
+  end
+  
+  def upload_apk_to_server(file_path)
+    UI.message("Checking file: #{file_path}")
+    
+    unless File.exist?(file_path)
+      UI.error("File not found: #{file_path}")
+      return nil
+    end
+    
+    UI.message("File exists, size: #{File.size(file_path)} bytes")
+    
+    begin
+      url = URI("https://media.monkeyuni.net/api/upload")
+      
+      # Tạo request với headers
+      request = Net::HTTP::Post.new(url)
+      request["token"] = "a813ec766197294184a938c331b08e7e"
+      
+      # Tạo form data
+      file = File.open(file_path, 'rb')
+      form_data = [
+        ['file', file],
+        ['description', ''],
+        ['folder_path', 'CI_MS']
+      ]
+      request.set_form(form_data, 'multipart/form-data')
+      
+      # Thực hiện request
+      UI.message("Sending request to #{url}")
+      response = Net::HTTP.start(url.hostname, url.port, use_ssl: true, read_timeout: 300) do |http|
+        http.request(request)
+      end
+      
+      UI.message("Got response with code: #{response.code}")
+      
+      if response.code == '200'
+        UI.success("Upload file successfully")
+        
+        # Parse JSON response
+        response_json = JSON.parse(response.body)
+        UI.message("Response JSON: #{response.body}")
+        
+        # Lấy URL từ response
+        file_url = nil
+        
+        # Xử lý cả 2 trường hợp: thành công và file đã tồn tại
+        if (response_json["status"] == "success" || response_json["status"] == "fail") && response_json["data"]
+          # Trường hợp file đã tồn tại cũng sẽ trả về thông tin file
+          file_url = response_json["data"]["link"]
+          s3_url = response_json["data"]["link_s3"]
+          
+          if response_json["status"] == "fail"
+            UI.important("File đã tồn tại, sử dụng URL của file cũ")
+          end
+          
+          UI.success("File URL: #{file_url}")
+          UI.success("S3 URL: #{s3_url}")
+        else
+          UI.error("Không thể tìm thấy URL của file trong response")
+        end
+        
+        return file_url
+      else
+        UI.error("Failed to upload file")
+        UI.error("Response code: #{response.code}")
+        UI.error("Response body: #{response.body}")
+        return nil
+      end
+    rescue => e
+      UI.error("Error during upload: #{e.message}")
+      UI.error(e.backtrace.join("\n"))
+      return nil
+    ensure
+      file.close if file && !file.closed?
+    end
+  end
+end

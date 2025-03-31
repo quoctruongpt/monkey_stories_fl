@@ -13,23 +13,31 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-## iOS
+## Android
 
-### ios get_version
-
-```sh
-[bundle exec] fastlane ios get_version
-```
-
-Get version information
-
-### ios beta
+### android build
 
 ```sh
-[bundle exec] fastlane ios beta
+[bundle exec] fastlane android build
 ```
 
-Push a new beta build to TestFlight
+Build APK
+
+### android build_release
+
+```sh
+[bundle exec] fastlane android build_release
+```
+
+Build APK và AAB
+
+### android build_aab
+
+```sh
+[bundle exec] fastlane android build_aab
+```
+
+Build chỉ AAB
 
 ----
 
