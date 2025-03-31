@@ -4,12 +4,23 @@ import 'dart:convert';
 class UnityMessage {
   final String? id;
   final String type;
+  final bool? response;
   final dynamic payload;
 
-  UnityMessage({this.id, required this.type, required this.payload});
+  UnityMessage({
+    this.id,
+    required this.type,
+    required this.payload,
+    this.response,
+  });
 
-  UnityMessage copyWith({String? id}) {
-    return UnityMessage(id: id ?? this.id, type: type, payload: payload);
+  UnityMessage copyWith({String? id, bool? response}) {
+    return UnityMessage(
+      id: id ?? this.id,
+      type: type,
+      payload: payload,
+      response: response ?? this.response,
+    );
   }
 
   // Chuyển thành JSON string để gửi
@@ -18,6 +29,7 @@ class UnityMessage {
       'id': id,
       'type': type,
       'payload': payload is Map ? payload : payload.toString(),
+      'response': response,
     });
   }
 
@@ -27,6 +39,7 @@ class UnityMessage {
       id: json['id'] as String?,
       type: json['type'] as String,
       payload: json['payload'],
+      response: json['response'],
     );
   }
 

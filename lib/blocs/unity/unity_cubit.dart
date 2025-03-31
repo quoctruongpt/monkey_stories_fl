@@ -56,6 +56,10 @@ class UnityCubit extends Cubit<UnityState> {
         }
       }
 
+      if (unityMessage.response == false) {
+        return;
+      }
+
       final handler = _messageHandlers[unityMessage.type];
       dynamic result;
 

@@ -16,7 +16,9 @@ class UnityService {
 
   static void sendToUnityWithoutResult(UnityMessage message) {
     final updatedMessage =
-        message.id == null ? message.copyWith(id: generateShortId()) : message;
+        message.id == null
+            ? message.copyWith(id: generateShortId(), response: false)
+            : message;
 
     logger.info('sendToUnityWithoutResult ${updatedMessage.toString()}');
     sendToUnity(
@@ -28,7 +30,10 @@ class UnityService {
 
   static Future<dynamic> sendToUnityWithResponse(UnityMessage message) async {
     final String id = generateShortId();
-    final UnityMessage updatedMessage = message.copyWith(id: id);
+    final UnityMessage updatedMessage = message.copyWith(
+      id: id,
+      response: true,
+    );
     final completer = Completer<dynamic>();
 
     // Add to message queue
@@ -84,7 +89,7 @@ class UnityService {
   static void _cleanupRequest(String id, {dynamic completeData}) {
     if (_messageQueue.containsKey(id)) {
       if (completeData != null) {
-        if (completeData['status'] == 'success') {
+        if (completeData['success'] == true) {
           _messageQueue[id]?.complete(completeData);
         } else {
           _messageQueue[id]?.completeError(completeData);
