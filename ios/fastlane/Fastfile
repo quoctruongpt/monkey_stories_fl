@@ -16,10 +16,34 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Get version information"
+  lane :get_version do
+    version_code = get_build_number(xcodeproj: "Runner.xcodeproj")
+    version_name = get_version_number(xcodeproj: "Runner.xcodeproj")
+    
+    UI.message "Version Code: #{version_code}"
+    UI.message "Version Name: #{version_name}"
+    
+    return {
+      version_code: version_code,
+      version_name: version_name
+    }
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    # Lấy version code và version name
+    version_code = get_build_number(xcodeproj: "Runner.xcodeproj")
+    version_name = get_version_number(xcodeproj: "Runner.xcodeproj")
+    
     increment_build_number(xcodeproj: "Runner.xcodeproj")
     build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
     upload_to_testflight
+    
+    # Trả về version code và version name
+    return {
+      version_code: version_code,
+      version_name: version_name
+    }
   end
 end
