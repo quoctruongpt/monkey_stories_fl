@@ -31,6 +31,14 @@ Get version information
 
 Push a new beta build to TestFlight
 
+### ios update_version_name
+
+```sh
+[bundle exec] fastlane ios update_version_name
+```
+
+Thay đổi version name
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

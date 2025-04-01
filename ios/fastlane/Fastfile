@@ -40,4 +40,20 @@ platform :ios do
     build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
     upload_to_testflight
   end
+  
+  desc "Thay đổi version name"
+  lane :update_version_name do |options|
+    new_version_name = options[:version]
+    if new_version_name.nil?
+      UI.user_error!("Vui lòng cung cấp version name mới bằng cách sử dụng tham số version, ví dụ: fastlane update_version_name version:1.0.0")
+    end
+    
+    # Cập nhật version name trong file project
+    increment_version_number(
+      xcodeproj: "Runner.xcodeproj",
+      version_number: new_version_name
+    )
+    
+    UI.success("Đã cập nhật version name thành #{new_version_name}")
+  end
 end
