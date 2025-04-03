@@ -13,6 +13,7 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: primaryColor,
+    fontFamily: 'Nunito',
     colorScheme: const ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
