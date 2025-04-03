@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
+import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => OrientationCubit()),
         BlocProvider(create: (_) => AppCubit()),
         BlocProvider(create: (_) => DebugCubit()),
+        BlocProvider(create: (_) => FloatButtonCubit()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:
@@ -54,16 +56,57 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AppBuilder extends StatelessWidget {
+class AppBuilder extends StatefulWidget {
   final Widget? child;
   const AppBuilder({super.key, this.child});
 
   @override
+  State<AppBuilder> createState() => _AppBuilderState();
+}
+
+class _AppBuilderState extends State<AppBuilder>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutQuad,
+    );
+
+    _animationController.addListener(_updateButtonPosition);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _updateButtonPosition() {
+    context.read<FloatButtonCubit>().updateAnimationProgress(_animation.value);
+
+    if (_animation.value >= 1.0) {
+      _animationController.stop();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         // Hiển thị nội dung chính của ứng dụng
-        child ?? const SizedBox.shrink(),
+        widget.child ?? const SizedBox.shrink(),
 
         // Unity Widget sẽ đè lên UI khi cần thiết
         BlocBuilder<UnityCubit, UnityState>(
@@ -71,7 +114,6 @@ class AppBuilder extends StatelessWidget {
               (previous, current) =>
                   previous.isUnityVisible != current.isUnityVisible,
           builder: (context, state) {
-            final size = MediaQuery.of(context).size;
             return AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               left: state.isUnityVisible ? 0 : -size.width,
@@ -111,6 +153,15 @@ class AppBuilder extends StatelessWidget {
                 context.read<AppCubit>().showLoading();
               },
             ),
+            BlocListener<FloatButtonCubit, FloatButtonState>(
+              listenWhen:
+                  (previous, current) =>
+                      !previous.isAnimating && current.isAnimating,
+              listener: (context, state) {
+                _animationController.reset();
+                _animationController.forward();
+              },
+            ),
           ],
           child: BlocSelector<AppCubit, AppState, bool>(
             selector: (state) => state.isOrientationLoading,
@@ -120,6 +171,47 @@ class AppBuilder extends StatelessWidget {
                   : const SizedBox.shrink();
             },
           ),
+        ),
+
+        // Nút màu vàng có thể kéo thả và tự động đi về viền gần nhất khi buông
+        BlocBuilder<FloatButtonCubit, FloatButtonState>(
+          builder: (context, state) {
+            return Positioned(
+              left: state.x,
+              top: state.y,
+              child: GestureDetector(
+                onPanUpdate: (details) {
+                  context.read<FloatButtonCubit>().updatePosition(
+                    details.delta.dx,
+                    details.delta.dy,
+                    size,
+                  );
+                },
+                onPanEnd: (_) {
+                  context.read<FloatButtonCubit>().snapToNearestEdge(size);
+                },
+                onTap: () {
+                  context.read<DebugCubit>().toggleDebugView();
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.amber,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.bug_report, color: Colors.white),
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
