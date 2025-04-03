@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class OrientationLoading extends StatefulWidget {
   const OrientationLoading({super.key});
@@ -49,8 +50,18 @@ class _OrientationLoadingState extends State<OrientationLoading> {
                 duration: _animationDuration,
                 curve: Curves.easeInOut,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.lightBlue,
                   borderRadius: BorderRadius.circular(borderRadiusValue),
+                ),
+                child: Center(
+                  child: SizedBox(
+                    width: 250,
+                    height: 250,
+                    child: Lottie.asset(
+                      'assets/lottie/rotate.json',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
             );

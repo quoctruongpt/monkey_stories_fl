@@ -93,7 +93,6 @@ class MyApp extends StatelessWidget {
                         listener: (context, state) {
                           context.read<AppCubit>().showLoading();
                         },
-                        // child: Container(color: Colors.blue),
                       ),
                     ],
                     child: BlocBuilder<AppCubit, AppState>(
