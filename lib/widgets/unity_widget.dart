@@ -16,6 +16,14 @@ class UnityView extends StatefulWidget {
 }
 
 class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
+  late UnityCubit _unityCubit;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _unityCubit = context.read<UnityCubit>();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -25,12 +33,12 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    context.read<UnityCubit>().hideUnity();
+    _unityCubit.hideUnity();
     super.dispose();
   }
 
   Future<void> _handleUnityMessage(String message) async {
-    await context.read<UnityCubit>().handleUnityMessage(message);
+    await _unityCubit.handleUnityMessage(message);
   }
 
   void _increment() {
@@ -38,7 +46,7 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
       type: 'coin',
       payload: CoinPayload(action: 'update', amount: 1),
     );
-    context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
+    _unityCubit.sendMessageToUnityWithResponse(message);
   }
 
   @override
