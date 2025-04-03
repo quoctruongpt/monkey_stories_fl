@@ -28,6 +28,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.0
+  flutter_dotenv: ^5.2.1
   flutter_embed_unity: ^1.2.5
   flutter_localizations:
     sdk: flutter
@@ -45,3 +46,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/translations/
+    - .env.dev
+    - .env.prod

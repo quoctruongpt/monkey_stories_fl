@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
+import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/widgets/debug_view_widget.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => UnityCubit()),
         BlocProvider(create: (context) => OrientationCubit()),
         BlocProvider(create: (context) => AppCubit()),
+        BlocProvider(create: (context) => DebugCubit()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         builder: (context, state) {
@@ -65,6 +68,22 @@ class MyApp extends StatelessWidget {
                     },
                   ),
 
+                  BlocBuilder<DebugCubit, DebugState>(
+                    builder: (context, state) {
+                      return state.isShowDebugView
+                          ? Material(
+                            // Thêm Material wrapper và sử dụng Navigator cho DebugViewWidget
+                            child: Navigator(
+                              onGenerateRoute:
+                                  (settings) => MaterialPageRoute(
+                                    builder:
+                                        (context) => const DebugViewWidget(),
+                                  ),
+                            ),
+                          )
+                          : const SizedBox.shrink();
+                    },
+                  ),
                   MultiBlocListener(
                     listeners: [
                       BlocListener<OrientationCubit, OrientationState>(

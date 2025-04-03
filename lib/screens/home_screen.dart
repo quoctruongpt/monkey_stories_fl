@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
+import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/navigation/app_routes.dart';
@@ -97,6 +98,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     context.read<AppCubit>().changeLanguage('en');
                   },
                   child: const Text('en'),
+                );
+              },
+            ),
+            BlocBuilder<DebugCubit, DebugState>(
+              builder: (context, state) {
+                return ElevatedButton(
+                  onPressed: () {
+                    context.read<DebugCubit>().toggleDebugView();
+                  },
+                  child: const Text('debug'),
                 );
               },
             ),
