@@ -49,6 +49,24 @@ class DebugScreen extends StatelessWidget {
                 child: const Text('Logger'),
               ),
             ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/shared-prefs');
+                },
+                child: const Text('Shared Preferences'),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/bloc-viewer');
+                },
+                child: const Text('Bloc Viewer'),
+              ),
+            ),
             BlocBuilder<DebugCubit, DebugState>(
               builder: (context, state) {
                 return SizedBox(
