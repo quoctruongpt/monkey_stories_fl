@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context, state) {
                 return ElevatedButton(
                   onPressed: () {
-                    context.read<DebugCubit>().toggleDebugView();
+                    context.read<DebugCubit>().toggleModeDebug();
                   },
                   child: const Text('debug'),
                 );

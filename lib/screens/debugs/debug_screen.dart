@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/models/language.dart';
@@ -21,17 +22,45 @@ class DebugScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            FilledButton(
-              onPressed: () {
-                environmentService.showEnvironmentSelector(context);
-              },
-              child: const Text('Cài đặt môi trường'),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  environmentService.showEnvironmentSelector(context);
+                },
+                child: const Text('Cài đặt môi trường'),
+              ),
             ),
-            FilledButton(
-              onPressed: () {
-                _showDialogChangeLanguage(context);
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  _showDialogChangeLanguage(context);
+                },
+                child: const Text('Cài đặt ngôn ngữ'),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/logger');
+                },
+                child: const Text('Logger'),
+              ),
+            ),
+            BlocBuilder<DebugCubit, DebugState>(
+              builder: (context, state) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () {
+                      context.read<DebugCubit>().toggleLogger();
+                    },
+                    child: Text('Bật logger: ${state.isShowLogger}'),
+                  ),
+                );
               },
-              child: const Text('Cài đặt ngôn ngữ'),
             ),
           ],
         ),

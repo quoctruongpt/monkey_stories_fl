@@ -11,6 +11,7 @@ import 'package:monkey_stories/core/localization/app_localizations_delegate.dart
 import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
+import 'package:monkey_stories/services/logger_service.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
@@ -83,6 +84,15 @@ class _AppBuilderState extends State<AppBuilder>
     );
 
     _animationController.addListener(_updateButtonPosition);
+
+    // Lắng nghe thay đổi trạng thái của DebugCubit để bật/tắt logging
+    context.read<DebugCubit>().stream.listen((state) {
+      if (state.isShowLogger) {
+        Logging.debugCubit = context.read<DebugCubit>();
+      } else {
+        Logging.debugCubit = null;
+      }
+    });
   }
 
   @override
@@ -167,43 +177,54 @@ class _AppBuilderState extends State<AppBuilder>
         ),
 
         // Nút màu vàng có thể kéo thả và tự động đi về viền gần nhất khi buông
-        BlocBuilder<FloatButtonCubit, FloatButtonState>(
+        BlocBuilder<DebugCubit, DebugState>(
           builder: (context, state) {
-            return Positioned(
-              left: state.x,
-              top: state.y,
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  context.read<FloatButtonCubit>().updatePosition(
-                    details.delta.dx,
-                    details.delta.dy,
-                    size,
-                  );
-                },
-                onPanEnd: (_) {
-                  context.read<FloatButtonCubit>().snapToNearestEdge(size);
-                },
-                onTap: () {
-                  context.read<DebugCubit>().toggleDebugView();
-                },
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Colors.amber,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
+            return state.isModeDebug
+                ? BlocBuilder<FloatButtonCubit, FloatButtonState>(
+                  builder: (context, state) {
+                    return Positioned(
+                      left: state.x,
+                      top: state.y,
+                      child: GestureDetector(
+                        onPanUpdate: (details) {
+                          context.read<FloatButtonCubit>().updatePosition(
+                            details.delta.dx,
+                            details.delta.dy,
+                            size,
+                          );
+                        },
+                        onPanEnd: (_) {
+                          context.read<FloatButtonCubit>().snapToNearestEdge(
+                            size,
+                          );
+                        },
+                        onTap: () {
+                          context.read<DebugCubit>().toggleDebugView();
+                        },
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            color: Colors.amber,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 8,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.bug_report,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: const Icon(Icons.bug_report, color: Colors.white),
-                ),
-              ),
-            );
+                    );
+                  },
+                )
+                : const SizedBox.shrink();
           },
         ),
       ],
