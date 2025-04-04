@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
@@ -9,6 +10,8 @@ import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/models/unity_payload.dart';
+
+final logger = Logger('HomeScreen');
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -48,7 +51,20 @@ class _MyHomePageState extends State<MyHomePage> {
       payload: CoinPayload(action: 'get'),
     );
 
-    await context.read<UnityCubit>().sendMessageToUnityWithResponse(message);
+    try {
+      final response = await context
+          .read<UnityCubit>()
+          .sendMessageToUnityWithResponse(message);
+      logger.info('Nhận phản hồi từ Unity: $response');
+    } catch (error) {
+      logger.severe('Lỗi khi giao tiếp với Unity: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Không thể kết nối với Unity: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
