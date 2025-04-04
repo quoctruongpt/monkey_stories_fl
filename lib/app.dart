@@ -10,7 +10,7 @@ import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/navigation/router.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/widgets/debug_view_widget.dart';
+import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
 import 'package:monkey_stories/widgets/unity_widget.dart';
 
@@ -130,14 +130,7 @@ class _AppBuilderState extends State<AppBuilder>
           selector: (state) => state.isShowDebugView,
           builder: (context, isShowDebugView) {
             return isShowDebugView
-                ? Material(
-                  child: Navigator(
-                    onGenerateRoute:
-                        (settings) => MaterialPageRoute(
-                          builder: (context) => const DebugViewWidget(),
-                        ),
-                  ),
-                )
+                ? const DebugNavigator()
                 : const SizedBox.shrink();
           },
         ),
