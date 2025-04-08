@@ -51,6 +51,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void usernameChanged(String value) {
+    logger.info('usernameChanged: $value');
     final username = Username.dirty(value);
     // Cập nhật username và xóa lỗi cũ (nếu có) khi người dùng nhập liệu
     final isValid = Formz.validate([username, state.password]);

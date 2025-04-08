@@ -9,7 +9,6 @@ import 'package:monkey_stories/blocs/login/login_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_state.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/utils/lottie_utils.dart';
-import 'package:monkey_stories/utils/validators.dart';
 import 'package:monkey_stories/widgets/button_widget.dart';
 import 'package:monkey_stories/widgets/horizontal_line_text.dart';
 import 'package:monkey_stories/widgets/loading_overlay.dart';
@@ -30,8 +29,32 @@ class LoginScreenProvider extends StatelessWidget {
   }
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController _usernameController;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialValue = context.read<LoginCubit>().state.username.value;
+    _usernameController = TextEditingController(text: initialValue);
+    _usernameController.addListener(() {
+      // Cập nhật Cubit khi controller thay đổi
+      context.read<LoginCubit>().usernameChanged(_usernameController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,27 +104,44 @@ class LoginScreen extends StatelessWidget {
 
                               const SizedBox(height: Spacing.sm),
 
-                              TextField(
-                                onChanged: (value) {
-                                  context.read<LoginCubit>().usernameChanged(
-                                    value,
-                                  );
+                              BlocListener<LoginCubit, LoginState>(
+                                listener: (context, state) {
+                                  if (_usernameController.text !=
+                                      state.username.value) {
+                                    _usernameController.text =
+                                        state.username.value;
+                                    // Có thể cần di chuyển con trỏ về cuối
+                                    _usernameController
+                                        .selection = TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _usernameController.text.length,
+                                      ),
+                                    );
+                                  }
                                 },
-                                decoration: InputDecoration(
-                                  labelText: 'Số điện thoại/Tên đăng nhập',
-                                  errorText: state.username.displayError?.name,
-                                  suffixIcon:
-                                      state.username.isNotValid &&
-                                              state.username.value.isNotEmpty
-                                          ? IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                              Icons.cancel,
-                                              color:
-                                                  AppTheme.textSecondaryColor,
-                                            ),
-                                          )
-                                          : null,
+                                child: TextField(
+                                  controller: _usernameController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Số điện thoại/Tên đăng nhập',
+                                    errorText:
+                                        state.username.displayError?.name,
+                                    suffixIcon:
+                                        state.username.isNotValid &&
+                                                state.username.value.isNotEmpty
+                                            ? IconButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<LoginCubit>()
+                                                    .usernameChanged('');
+                                              },
+                                              icon: const Icon(
+                                                Icons.cancel,
+                                                color:
+                                                    AppTheme.textSecondaryColor,
+                                              ),
+                                            )
+                                            : null,
+                                  ),
                                 ),
                               ),
 
