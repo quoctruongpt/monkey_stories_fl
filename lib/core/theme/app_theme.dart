@@ -10,6 +10,8 @@ class AppTheme {
   static const Color textColor = Color(0xFF4B4B4B);
   static const Color textSecondaryColor = Color(0xFF777777);
   static const Color textGrayColor = Color(0xFFA3A3A3);
+  static const Color textGrayLightColor = Color(0xFFAFAFAF);
+  static const Color textBlueColor = Color(0xFF3393FF);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);
@@ -51,8 +53,16 @@ class AppTheme {
         fontWeight: FontWeight.w800,
         color: textColor,
       ),
-      bodyLarge: TextStyle(fontSize: 16, color: textColor),
-      bodyMedium: TextStyle(fontSize: 14, color: textColor),
+      bodyLarge: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: textColor,
+        fontWeight: FontWeight.w800,
+      ),
       labelLarge: TextStyle(fontSize: 14, color: textSecondaryColor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -74,5 +84,40 @@ class AppTheme {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: textGrayLightColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: textGrayLightColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      hintStyle: const TextStyle(
+        fontSize: 20,
+        color: textGrayLightColor,
+        fontWeight: FontWeight.w800,
+        fontFamily: 'Nunito',
+      ),
+      labelStyle: TextStyle(
+        fontSize: 20,
+        color: textGrayLightColor,
+        fontWeight: FontWeight.w800,
+        fontFamily: 'Nunito',
+      ),
+    ),
   );
+}
+
+class Spacing {
+  static const double xs = 4.0;
+  static const double sm = 8.0;
+  static const double md = 16.0;
+  static const double lg = 24.0;
+  static const double xl = 32.0;
+  static const double xxl = 40.0;
 }

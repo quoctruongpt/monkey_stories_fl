@@ -238,7 +238,10 @@ class _AppButtonState extends State<AppButton> {
                                 ),
                               ),
                             )
-                            : TextButton(widget: widget, textColor: textColor),
+                            : TextInButton(
+                              widget: widget,
+                              textColor: textColor,
+                            ),
                   ),
                 ),
               ),
@@ -295,8 +298,12 @@ class _AppButtonState extends State<AppButton> {
   }
 }
 
-class TextButton extends StatelessWidget {
-  const TextButton({super.key, required this.widget, required this.textColor});
+class TextInButton extends StatelessWidget {
+  const TextInButton({
+    super.key,
+    required this.widget,
+    required this.textColor,
+  });
 
   final AppButton widget;
   final Color textColor;

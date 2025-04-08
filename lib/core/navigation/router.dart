@@ -7,12 +7,15 @@ import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/core/navigation/route_observer.dart';
 import 'package:monkey_stories/models/orientation.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
+import 'package:monkey_stories/screens/login_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
 import 'package:monkey_stories/screens/unity_screen.dart';
+import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
 
 final logger = Logger('router');
 final GoRouter router = GoRouter(
   observers: [routeObserver],
+  initialLocation: AppRoutes.home,
   routes: <RouteBase>[
     GoRoute(
       path: AppRoutes.home,
@@ -47,6 +50,18 @@ final GoRouter router = GoRouter(
       redirect: (context, state) {
         logger.info('redirect');
         return null;
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.yearOfBirth,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: YearOfBirthScreen());
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.login,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: LoginScreen());
       },
     ),
   ],
