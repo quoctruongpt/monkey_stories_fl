@@ -44,138 +44,143 @@ class LoginScreen extends StatelessWidget {
         ),
         body: SafeArea(
           top: false,
-          child: SingleChildScrollView(
-            // Allows scrolling if content overflows
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: Spacing.lg,
-                right: Spacing.lg,
-                top: Spacing.xxl,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Lottie.asset(
-                    'assets/lottie/monkey_hello.lottie',
-                    decoder: customDecoder,
-                    width: 151,
-                    height: 169,
-                  ),
-
-                  const SizedBox(height: Spacing.sm),
-
-                  TextField(
-                    onChanged: (value) {},
-                    decoration: const InputDecoration(
-                      labelText: 'Số điện thoại/Tên đăng nhập',
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: Spacing.lg,
+              right: Spacing.lg,
+              top: Spacing.xxl,
+            ),
+            child: Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Lottie.asset(
+                      'assets/lottie/monkey_hello.lottie',
+                      decoder: customDecoder,
+                      width: 151,
+                      height: 169,
                     ),
-                  ),
 
-                  const SizedBox(height: Spacing.sm),
+                    const SizedBox(height: Spacing.sm),
 
-                  TextField(
-                    onChanged: (value) {},
-                    decoration: const InputDecoration(labelText: 'Mật khẩu'),
-                  ),
-
-                  const SizedBox(height: Spacing.sm),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Device ID: 100600', // Replace with dynamic Device ID if needed
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.textGrayLightColor,
-                        ),
+                    TextField(
+                      onChanged: (value) {},
+                      decoration: const InputDecoration(
+                        labelText: 'Số điện thoại/Tên đăng nhập',
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Quên mật khẩu?",
+                    ),
+
+                    const SizedBox(height: Spacing.md),
+
+                    TextField(
+                      onChanged: (value) {},
+                      decoration: const InputDecoration(labelText: 'Mật khẩu'),
+                    ),
+
+                    const SizedBox(height: Spacing.sm),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Device ID: 100600', // Replace with dynamic Device ID if needed
                           style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(color: AppTheme.textSecondaryColor),
+                              ?.copyWith(color: AppTheme.textGrayLightColor),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: Spacing.md),
-
-                  AppButton.primary(
-                    text: "Đăng nhập",
-                    onPressed: () {},
-                    isFullWidth: true,
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  Center(
-                    child: TextAndAction(
-                      text: 'Nếu bạn có mã kích hoạt, ',
-                      actionText: 'Nhập tại đây.',
-                      onActionTap: () {},
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Quên mật khẩu?",
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(color: AppTheme.textSecondaryColor),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
 
-                  const SizedBox(height: Spacing.xxl),
+                    const SizedBox(height: Spacing.md),
 
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-                    child: HorizontalLineText(text: "Hoặc đăng nhập với"),
-                  ),
-
-                  const SizedBox(height: Spacing.xl),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: _buildSocialButton(
-                          Colors.blue.shade700,
-                          Icons.facebook,
-                          () {
-                            /* TODO: Handle Facebook Login */
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: Spacing.md),
-                      Expanded(
-                        child: _buildSocialButton(
-                          Colors.white,
-                          Icons.access_alarm_outlined,
-                          () {
-                            /* TODO: Handle Google Login */
-                          },
-                          isGoogle: true,
-                        ),
-                      ), // Placeholder icon
-                      const SizedBox(width: Spacing.md),
-                      Expanded(
-                        child: _buildSocialButton(
-                          Colors.black,
-                          Icons.apple,
-                          () {
-                            /* TODO: Handle Apple Login */
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: Spacing.lg),
-
-                  Center(
-                    child: TextAndAction(
-                      text: 'Bạn chưa có tài khoản? ',
-                      actionText: 'Đăng ký',
-                      onActionTap: () {},
+                    AppButton.primary(
+                      text: "Đăng nhập",
+                      onPressed: () {},
+                      isFullWidth: true,
                     ),
-                  ),
-                  const SizedBox(height: 20), // Add some padding at the bottom
-                ],
+
+                    const SizedBox(height: 20),
+
+                    Center(
+                      child: TextAndAction(
+                        text: 'Nếu bạn có mã kích hoạt, ',
+                        actionText: 'Nhập tại đây.',
+                        onActionTap: () {},
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(
+            left: Spacing.lg,
+            right: Spacing.lg,
+            bottom: Spacing.md + MediaQuery.of(context).padding.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.md),
+                child: HorizontalLineText(text: "Hoặc đăng nhập với"),
+              ),
+
+              const SizedBox(height: Spacing.xl),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: _buildSocialButton(
+                      Colors.blue.shade700,
+                      Icons.facebook,
+                      () {
+                        /* TODO: Handle Facebook Login */
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: Spacing.md),
+                  Expanded(
+                    child: _buildSocialButton(
+                      Colors.white,
+                      Icons.access_alarm_outlined,
+                      () {
+                        /* TODO: Handle Google Login */
+                      },
+                      isGoogle: true,
+                    ),
+                  ),
+                  const SizedBox(width: Spacing.md),
+                  Expanded(
+                    child: _buildSocialButton(Colors.black, Icons.apple, () {
+                      /* TODO: Handle Apple Login */
+                    }),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: Spacing.lg),
+
+              Center(
+                child: TextAndAction(
+                  text: 'Bạn chưa có tài khoản? ',
+                  actionText: 'Đăng ký',
+                  onActionTap: () {},
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
