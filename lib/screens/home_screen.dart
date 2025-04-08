@@ -10,6 +10,7 @@ import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/models/unity_payload.dart';
+import 'package:monkey_stories/widgets/button_widget.dart';
 
 final logger = Logger('HomeScreen');
 
@@ -126,6 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: const Text('debug'),
                 );
               },
+            ),
+            AppButton.secondary(
+              text: "Login",
+              onPressed: () {},
+              isFullWidth: true,
+              disabled: true,
             ),
           ],
         ),
