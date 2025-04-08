@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
+import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => AppCubit()),
         BlocProvider(create: (_) => DebugCubit()),
         BlocProvider(create: (_) => FloatButtonCubit()),
+        BlocProvider(create: (_) => AuthenticationCubit()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:

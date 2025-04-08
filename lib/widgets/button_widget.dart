@@ -206,11 +206,11 @@ class _AppButtonState extends State<AppButton> {
                     0,
                   ),
                   child: ElevatedButton(
-                    onPressed:
-                        (widget.isLoading || widget.disabled) ? null : () {},
+                    onPressed: null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: mainColor,
-                      disabledBackgroundColor: disabledBackgroundColor,
+                      disabledBackgroundColor:
+                          widget.disabled ? disabledBackgroundColor : mainColor,
                       padding: widget.padding ?? defaultPadding,
                       shape: RoundedRectangleBorder(
                         borderRadius:

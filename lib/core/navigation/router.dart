@@ -15,7 +15,7 @@ import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
 final logger = Logger('router');
 final GoRouter router = GoRouter(
   observers: [routeObserver],
-  initialLocation: AppRoutes.login,
+  initialLocation: AppRoutes.home,
   routes: <RouteBase>[
     GoRoute(
       path: AppRoutes.home,
@@ -61,7 +61,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoutes.login,
       pageBuilder: (context, state) {
-        return const MaterialPage(child: LoginScreen());
+        return const MaterialPage(child: LoginScreenProvider());
       },
     ),
   ],
