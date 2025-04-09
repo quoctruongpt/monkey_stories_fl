@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
@@ -18,26 +19,30 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> _loadSavedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final languageCode = prefs.getString('language_code') ?? 'vi';
+    final languageCode = prefs.getString(SharedPrefKeys.languageCode) ?? 'vi';
     emit(state.copyWith(languageCode: languageCode));
   }
 
   Future<void> changeLanguage(String languageCode) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('language_code', languageCode);
+    await prefs.setString(SharedPrefKeys.languageCode, languageCode);
     emit(state.copyWith(languageCode: languageCode));
   }
 
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    final isDarkMode = prefs.getBool('isDarkMode') ?? false;
+    final isDarkMode = prefs.getBool(SharedPrefKeys.isDarkMode) ?? false;
     emit(state.copyWith(isDarkMode: isDarkMode));
   }
 
   Future<void> toggleTheme() async {
     final prefs = await SharedPreferences.getInstance();
     final isDarkMode = !state.isDarkMode;
-    await prefs.setBool('isDarkMode', isDarkMode);
+    await prefs.setBool(SharedPrefKeys.isDarkMode, isDarkMode);
     emit(state.copyWith(isDarkMode: isDarkMode));
+  }
+
+  void updateDeviceInfo({String? deviceId}) {
+    emit(state.copyWith(deviceId: deviceId));
   }
 }

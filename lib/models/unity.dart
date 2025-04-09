@@ -1,9 +1,9 @@
 class UnityGameObjects {
-  static const String reactNativeBridge = 'ReactNativeBridge';
+  static const String reactNativeBridge = 'AppUnityBridge';
 }
 
 class UnityMethodNames {
-  static const String requestUnityAction = 'RequestUnityAction';
+  static const String requestUnityAction = 'SendToUnity';
   static const String resultFromUnity = 'OnResultFromUnity';
 }
 

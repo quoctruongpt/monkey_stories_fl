@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
+import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_state.dart';
@@ -178,13 +179,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Device ID: 100600',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge?.copyWith(
-                                      color: AppTheme.textGrayLightColor,
-                                    ),
+                                  BlocBuilder<AppCubit, AppState>(
+                                    builder: (context, state) {
+                                      return Text(
+                                        'Device ID: ${state.deviceId}',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge?.copyWith(
+                                          color: AppTheme.textGrayLightColor,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   TextButton(
                                     onPressed: () {

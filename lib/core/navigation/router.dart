@@ -9,14 +9,25 @@ import 'package:monkey_stories/models/orientation.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
 import 'package:monkey_stories/screens/login_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
+import 'package:monkey_stories/screens/splash_screen.dart';
 import 'package:monkey_stories/screens/unity_screen.dart';
 import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
 
 final logger = Logger('router');
 final GoRouter router = GoRouter(
   observers: [routeObserver],
-  initialLocation: AppRoutes.login,
+  initialLocation: AppRoutes.splash,
   routes: <RouteBase>[
+    GoRoute(
+      path: AppRoutes.splash,
+      pageBuilder: (context, state) {
+        context.read<OrientationCubit>().lockOrientation(
+          context,
+          AppOrientation.portrait,
+        );
+        return const MaterialPage(child: SplashScreen());
+      },
+    ),
     GoRoute(
       path: AppRoutes.home,
       pageBuilder: (context, state) {

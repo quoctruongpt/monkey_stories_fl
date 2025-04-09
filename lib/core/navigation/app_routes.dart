@@ -4,4 +4,5 @@ class AppRoutes {
   static const String unity = '/unity';
   static const String yearOfBirth = '/year-of-birth';
   static const String login = '/login';
+  static const String splash = '/splash';
 }
