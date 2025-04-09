@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
+import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
@@ -22,19 +23,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final UnityCubit _unityCubit;
+
   @override
   void initState() {
     super.initState();
-    context.read<UnityCubit>().registerHandler('user', (
-      UnityMessage message,
-    ) async {
+    _unityCubit = context.read<UnityCubit>();
+    _unityCubit.registerHandler('user', (UnityMessage message) async {
       return {'id': 1234, 'name': 'John Smith', 'avatar': ''};
     });
   }
 
   @override
   void dispose() {
-    context.read<UnityCubit>().unregisterHandler('user');
+    _unityCubit.unregisterHandler('user');
     super.dispose();
   }
 
@@ -53,9 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     try {
-      final response = await context
-          .read<UnityCubit>()
-          .sendMessageToUnityWithResponse(message);
+      final response = await _unityCubit.sendMessageToUnityWithResponse(
+        message,
+      );
       logger.info('Nhận phản hồi từ Unity: $response');
     } catch (error) {
       logger.severe('Lỗi khi giao tiếp với Unity: $error');
@@ -128,11 +130,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
-            AppButton.secondary(
-              text: "Login",
-              onPressed: () {},
-              isFullWidth: true,
-              disabled: true,
+            ElevatedButton(
+              onPressed: () {
+                context.read<AuthenticationCubit>().logOut();
+                context.go(AppRoutes.login);
+              },
+              child: const Text("logout"),
             ),
           ],
         ),

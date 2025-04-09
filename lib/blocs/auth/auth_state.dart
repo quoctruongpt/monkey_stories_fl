@@ -1,37 +1,27 @@
 part of 'auth_cubit.dart';
 
-// Lớp cơ sở cho các trạng thái Authentication
-abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
+class AuthState extends Equatable {
+  final User? user;
+  final AuthError? error;
+  final bool isAuthenticated;
+
+  const AuthState({this.user, this.error, this.isAuthenticated = false});
+
+  AuthState copyWith({User? user, AuthError? error, bool? isAuthenticated}) {
+    return AuthState(
+      user: user ?? this.user,
+      error: error,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+    );
+  }
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [user, error];
 }
 
-// Trạng thái khởi tạo
-class AuthenticationInitial extends AuthenticationState {}
-
-// Trạng thái đang tải (ví dụ: đang gọi API)
-class AuthenticationLoading extends AuthenticationState {}
-
-// Trạng thái đã xác thực thành công
-class AuthenticationAuthenticated extends AuthenticationState {
-  // TODO: Thêm thuộc tính người dùng (user object)
-  // final User user;
-  // const AuthenticationAuthenticated(this.user);
-  // @override
-  // List<Object?> get props => [user];
-}
-
-// Trạng thái chưa xác thực (chưa đăng nhập hoặc đã đăng xuất)
-class AuthenticationUnauthenticated extends AuthenticationState {}
-
-// Trạng thái xác thực thất bại
-class AuthenticationFailure extends AuthenticationState {
+class AuthError {
   final String message;
+  final int code;
 
-  const AuthenticationFailure(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  const AuthError({required this.message, required this.code});
 }

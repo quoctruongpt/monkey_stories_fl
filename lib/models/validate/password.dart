@@ -8,7 +8,7 @@ class Password extends FormzInput<String, PasswordValidationError> {
   const Password.dirty([super.value = '']) : super.dirty();
 
   // Độ dài tối thiểu
-  static const int minLength = 6;
+  static const int minLength = 4;
   static const int maxLength = 30;
 
   // Regex chỉ cho phép các ký tự ASCII thường dùng trong mật khẩu (không dấu, không cách)

@@ -29,13 +29,13 @@ class ApiResponse<T> {
   final ApiStatus status; // Changed to enum
   final String message;
   final int code;
-  final T data; // Data field remains generic
+  final T? data; // Make data nullable
 
   ApiResponse({
     required this.status,
     required this.message,
     required this.code,
-    required this.data,
+    this.data, // Remove required
   });
 
   /// Factory constructor to create an [ApiResponse] from a JSON map.

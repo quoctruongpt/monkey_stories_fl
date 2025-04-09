@@ -6,7 +6,7 @@ import 'package:monkey_stories/models/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
-import 'package:monkey_stories/services/location_api_service.dart';
+import 'package:monkey_stories/services/api/location_api_service.dart';
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
         final response = await locationApiService.registerDeviceLocation();
         if (response.status == ApiStatus.success) {
           _logger.info('Response: ${response.status}');
-          deviceId = response.data.deviceId;
+          deviceId = response.data?.deviceId;
           await prefs.setString(SharedPrefKeys.deviceId, deviceId!);
           _logger.info('Device registered successfully. Device ID: $deviceId');
         } else {

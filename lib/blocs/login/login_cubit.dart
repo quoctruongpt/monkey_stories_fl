@@ -4,49 +4,45 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart'; // Import Auth Cubit
 // import 'package:monkey_stories/blocs/auth/auth_state.dart'; // Remove this import
 import 'package:monkey_stories/blocs/login/login_state.dart'; // Import Login State
-import 'package:monkey_stories/models/password.dart';
+import 'package:monkey_stories/models/validate/password.dart';
 import 'dart:async';
 
-import 'package:monkey_stories/models/username.dart'; // Import dart:async để sử dụng StreamSubscription
+import 'package:monkey_stories/models/validate/username.dart'; // Import dart:async để sử dụng StreamSubscription
 
 final logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> {
   final AuthenticationCubit _authenticationCubit;
-  late StreamSubscription _authSubscription;
+  late StreamSubscription<AuthState>
+  _authSubscription; // Explicitly type the subscription
 
   LoginCubit(this._authenticationCubit) : super(const LoginState()) {
     // Lắng nghe sự thay đổi trạng thái của AuthenticationCubit
     _authSubscription = _authenticationCubit.stream.listen((authState) {
-      if (authState is AuthenticationFailure) {
-        // Nếu Auth thất bại (ví dụ: sai pass), cập nhật LoginState
+      logger.info('authState: ${authState.error != null}');
+      // Kiểm tra lỗi trước
+      if (authState.error != null) {
+        // Nếu có lỗi trong AuthState, cập nhật LoginState
         emit(
           state.copyWith(
             status: FormSubmissionStatus.failure,
-            errorMessage: authState.message, // Lấy lỗi từ AuthState
+            errorMessage:
+                authState.error!.message, // Lấy lỗi từ AuthState.error
             clearErrorMessage: false,
           ),
         );
-      } else if (authState is AuthenticationLoading) {
-        // Nếu Auth đang loading (do LoginCubit gọi), LoginCubit cũng loading
-        // Tránh trường hợp này nếu việc loading được quản lý bởi AuthCubit từ nguồn khác
-        // Cân nhắc chỉ đặt loading khi loginSubmitted được gọi
-        // emit(state.copyWith(status: FormSubmissionStatus.loading));
-      } else if (authState is AuthenticationAuthenticated) {
-        // Nếu Auth thành công, Login cũng thành công
-        emit(state.copyWith(status: FormSubmissionStatus.success));
-      } else if (authState is AuthenticationUnauthenticated &&
-          state.status == FormSubmissionStatus.loading) {
-        // Nếu quay về Unauthenticated trong khi Login đang loading (có thể do lỗi mạng trong AuthCubit)
-        // Cập nhật trạng thái failure cho Login form
+      } else if (authState.isAuthenticated) {
+        // Nếu Auth thành công (isAuthenticated = true và không có lỗi)
+        // Cần xóa cả lỗi cũ nếu có
         emit(
           state.copyWith(
-            status: FormSubmissionStatus.failure,
-            errorMessage: 'Đã xảy ra lỗi không xác định.',
-            clearErrorMessage: false,
+            status: FormSubmissionStatus.success,
+            clearErrorMessage: true, // Explicitly clear error on success
           ),
         );
       }
+      // Không cần xử lý loading riêng ở đây vì LoginCubit tự quản lý loading state
+      // Không cần xử lý Unauthenticated riêng vì trạng thái failure đã bao gồm trường hợp này nếu có lỗi
     });
   }
 
@@ -91,8 +87,8 @@ class LoginCubit extends Cubit<LoginState> {
     );
     try {
       // Gọi hàm login của AuthenticationCubit
-      await _authenticationCubit.logIn(
-        username: state.username.value,
+      await _authenticationCubit.logInWithPhone(
+        phone: state.username.value,
         password: state.password.value,
       );
       // Kết quả thành công/thất bại sẽ được xử lý bởi StreamSubscription ở trên
