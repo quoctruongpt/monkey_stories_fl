@@ -6,16 +6,20 @@ class TextAndAction extends StatelessWidget {
   final String text;
   final String actionText;
   final VoidCallback onActionTap;
+  final TextAlign? textAlign;
+
   const TextAndAction({
     super.key,
     required this.text,
     required this.actionText,
     required this.onActionTap,
+    this.textAlign,
   });
 
   @override
   Widget build(BuildContext context) {
     return RichText(
+      textAlign: textAlign ?? TextAlign.center,
       text: TextSpan(
         style: Theme.of(
           context,

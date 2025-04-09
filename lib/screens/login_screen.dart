@@ -46,6 +46,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _usernameController;
+  late String Function(String key) translate =
+      AppLocalizations.of(context).translate;
 
   @override
   void initState() {
@@ -156,7 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: TextField(
                                     controller: _usernameController,
                                     decoration: InputDecoration(
-                                      labelText: 'Số điện thoại/Tên đăng nhập',
+                                      labelText: AppLocalizations.of(
+                                        context,
+                                      ).translate('login.username'),
                                       errorText:
                                           state.username.displayError != null
                                               ? AppLocalizations.of(
@@ -200,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   obscureText: !state.isPasswordVisible,
                                   decoration: InputDecoration(
-                                    labelText: 'Mật khẩu',
+                                    labelText: translate('login.password'),
                                     errorText:
                                         state.password.displayError != null
                                             ? AppLocalizations.of(
@@ -233,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     BlocBuilder<AppCubit, AppState>(
                                       builder: (context, state) {
                                         return Text(
-                                          'Device ID: ${state.deviceId}',
+                                          '${translate('login.device_id')}: ${state.deviceId}',
                                           style: Theme.of(
                                             context,
                                           ).textTheme.bodyLarge?.copyWith(
@@ -247,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         /* TODO: Navigate to Forgot Password */
                                       },
                                       child: Text(
-                                        "Quên mật khẩu?",
+                                        translate('login.forgot_password'),
                                         style: Theme.of(
                                           context,
                                         ).textTheme.bodyLarge?.copyWith(
@@ -275,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 const SizedBox(height: Spacing.md),
                                 AppButton.primary(
-                                  text: "Đăng nhập",
+                                  text: translate('login.act.title'),
                                   onPressed: _loginPressed,
                                   isFullWidth: true,
                                   disabled: !state.isValidForm,
@@ -285,8 +289,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 Center(
                                   child: TextAndAction(
-                                    text: 'Nếu bạn có mã kích hoạt, ',
-                                    actionText: 'Nhập tại đây.',
+                                    text: translate('login.active_code.desc'),
+                                    actionText: translate(
+                                      'login.active_code.act',
+                                    ),
                                     onActionTap: () {
                                       /* TODO: Handle activation code */
                                     },
@@ -309,9 +315,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-                          child: HorizontalLineText(text: "Hoặc đăng nhập với"),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Spacing.md,
+                          ),
+                          child: HorizontalLineText(
+                            text: translate('login.other_method'),
+                          ),
                         ),
 
                         const SizedBox(height: Spacing.xl),
@@ -356,8 +366,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         Center(
                           child: TextAndAction(
-                            text: 'Bạn chưa có tài khoản? ',
-                            actionText: 'Đăng ký',
+                            text: translate('login.sign_up.desc'),
+                            actionText: translate('login.sign_up.act'),
                             onActionTap: () {
                               /* TODO: Navigate to Register Screen */
                             },

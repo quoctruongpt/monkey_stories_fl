@@ -23,14 +23,13 @@ class AppLocalizations {
   }
 
   String translate(String key) {
-    final List<String> keys = key.split('.');
-    dynamic value = _localizedStrings;
-
-    for (String k in keys) {
-      value = value[k];
-      if (value == null) return key;
+    // Kiểm tra trực tiếp xem key có tồn tại trong map không
+    if (_localizedStrings.containsKey(key)) {
+      // Nếu có, trả về giá trị tương ứng
+      return _localizedStrings[key].toString();
+    } else {
+      // Nếu không tìm thấy, trả về key gốc (fallback)
+      return key;
     }
-
-    return value.toString();
   }
 }
