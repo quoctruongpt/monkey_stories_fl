@@ -1,5 +1,21 @@
 {
   "home": {
     "title": "Trang chủ"
+  },
+  "app": {
+    "account_dont_register": "Tài khoản chưa được đăng ký"
+  },
+  "validation": {
+    "password": {
+      "empty": "Mật khẩu không được để trống",
+      "too_short": "Mật khẩu phải có ít nhất 4 ký tự",
+      "too_long": "Mật khẩu không được vượt quá 30 ký tự",
+      "invalid_characters": "Mật khẩu không hợp lệ"
+    },
+    "username": {
+      "empty": "Số điện thoại không được để trống",
+      "invalid": "Số điện thoại không hợp lệ",
+      "length": "Số điện thoại cần nhập 6-15 chữ số"
+    }
   }
 }

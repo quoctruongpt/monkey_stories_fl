@@ -11,6 +11,7 @@ import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/unity.dart';
 import 'package:monkey_stories/models/unity_message.dart';
 import 'package:monkey_stories/models/unity_payload.dart';
+import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/widgets/button_widget.dart';
 
 final logger = Logger('HomeScreen');
@@ -132,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                context.read<AuthenticationCubit>().logOut();
+                context.read<AuthRepository>().logout();
                 context.go(AppRoutes.login);
               },
               child: const Text("logout"),

@@ -8,6 +8,7 @@ import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_state.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/utils/lottie_utils.dart';
@@ -16,6 +17,7 @@ import 'package:monkey_stories/widgets/horizontal_line_text.dart';
 import 'package:monkey_stories/widgets/loading_overlay.dart';
 import 'package:monkey_stories/widgets/social_login_button.dart';
 import 'package:monkey_stories/widgets/text_and_action.dart';
+import 'package:monkey_stories/repositories/auth_repository.dart';
 
 final logger = Logger('LoginScreen');
 
@@ -25,7 +27,11 @@ class LoginScreenProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(context.read<AuthenticationCubit>()),
+      create:
+          (context) => LoginCubit(
+            context.read<AuthenticationCubit>(),
+            context.read<AuthRepository>(),
+          ),
       child: const LoginScreen(),
     );
   }
@@ -81,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
             _handleLoginSuccess();
           } else if (state.status == FormSubmissionStatus.failure &&
               state.errorMessage != null) {
-            _handleLoginFailure(state.errorMessage!);
+            // _handleLoginFailure(state.errorMessage!);
           }
         },
         child: BlocBuilder<LoginCubit, LoginState>(
@@ -152,7 +158,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     decoration: InputDecoration(
                                       labelText: 'Số điện thoại/Tên đăng nhập',
                                       errorText:
-                                          state.username.displayError?.name,
+                                          state.username.displayError != null
+                                              ? AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                state.username.displayError ??
+                                                    '',
+                                              )
+                                              : null,
                                       suffixIcon:
                                           state.username.isNotValid &&
                                                   state
@@ -189,7 +202,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   decoration: InputDecoration(
                                     labelText: 'Mật khẩu',
                                     errorText:
-                                        state.password.displayError?.name,
+                                        state.password.displayError != null
+                                            ? AppLocalizations.of(
+                                              context,
+                                            ).translate(
+                                              state.password.displayError!,
+                                            )
+                                            : null,
                                     suffixIcon: IconButton(
                                       onPressed:
                                           context
@@ -239,8 +258,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
 
-                                const SizedBox(height: Spacing.md),
+                                if (state.errorMessage != null &&
+                                    state.errorMessage!.isNotEmpty)
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    ).translate(state.errorMessage!),
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge?.copyWith(
+                                      fontStyle: FontStyle.italic,
+                                      color: AppTheme.errorColor,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
 
+                                const SizedBox(height: Spacing.md),
                                 AppButton.primary(
                                   text: "Đăng nhập",
                                   onPressed: _loginPressed,

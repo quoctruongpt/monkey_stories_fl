@@ -64,6 +64,7 @@ class AppTheme {
         fontWeight: FontWeight.w800,
       ),
       labelLarge: TextStyle(fontSize: 14, color: textSecondaryColor),
+      labelMedium: TextStyle(fontSize: 12, color: textSecondaryColor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -94,7 +95,15 @@ class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: textGrayLightColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       hintStyle: const TextStyle(

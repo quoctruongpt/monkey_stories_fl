@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/models/api.dart';
+import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await _loadDeviceId();
 
       if (mounted) {
-        GoRouter.of(context).replace(AppRoutes.login);
+        _routeScreen();
       }
     } catch (e, stackTrace) {
       _logger.severe('Error during app initialization', e, stackTrace);
@@ -41,6 +42,15 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> _routeScreen() async {
+    final isLoggedIn = await context.read<AuthRepository>().isLoggedIn();
+    if (isLoggedIn) {
+      GoRouter.of(context).replace(AppRoutes.home);
+    } else {
+      GoRouter.of(context).replace(AppRoutes.login);
     }
   }
 

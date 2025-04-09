@@ -1,9 +1,6 @@
 import 'package:formz/formz.dart';
 
-// Định nghĩa các lỗi validation có thể xảy ra cho password
-enum PasswordValidationError { empty, tooShort, tooLong, invalidCharacters }
-
-class Password extends FormzInput<String, PasswordValidationError> {
+class Password extends FormzInput<String, String> {
   const Password.pure() : super.pure('');
   const Password.dirty([super.value = '']) : super.dirty();
 
@@ -16,18 +13,18 @@ class Password extends FormzInput<String, PasswordValidationError> {
   static final _passwordRegex = RegExp(r'^[a-zA-Z0-9!@#$%^&*()_+-=]*$');
 
   @override
-  PasswordValidationError? validator(String? value) {
+  String? validator(String? value) {
     if (value == null || value.isEmpty) {
-      return PasswordValidationError.empty;
+      return 'validation.password.empty';
     }
     if (value.length < minLength) {
-      return PasswordValidationError.tooShort;
+      return 'validation.password.too_short';
     }
     if (value.length > maxLength) {
-      return PasswordValidationError.tooLong;
+      return 'validation.password.too_long';
     }
     if (!_passwordRegex.hasMatch(value)) {
-      return PasswordValidationError.invalidCharacters;
+      return 'validation.password.invalid_characters';
     }
     return null; // Hợp lệ
   }

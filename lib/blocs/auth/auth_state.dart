@@ -2,21 +2,15 @@ part of 'auth_cubit.dart';
 
 class AuthState extends Equatable {
   final User? user;
-  final AuthError? error;
-  final bool isAuthenticated;
 
-  const AuthState({this.user, this.error, this.isAuthenticated = false});
+  const AuthState({this.user});
 
-  AuthState copyWith({User? user, AuthError? error, bool? isAuthenticated}) {
-    return AuthState(
-      user: user ?? this.user,
-      error: error,
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-    );
+  AuthState copyWith({User? user}) {
+    return AuthState(user: user);
   }
 
   @override
-  List<Object?> get props => [user, error];
+  List<Object?> get props => [user];
 }
 
 class AuthError {
