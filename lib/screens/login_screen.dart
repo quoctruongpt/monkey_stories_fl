@@ -385,7 +385,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 backgroundColor: Colors.blue.shade700,
                                 iconData: Icons.facebook,
                                 onPressed: () {
-                                  /* TODO: Handle Facebook Login */
+                                  context
+                                      .read<LoginCubit>()
+                                      .loginWithFacebook();
                                 },
                               ),
                             ),

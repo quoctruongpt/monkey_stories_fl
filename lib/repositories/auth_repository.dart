@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,7 +102,6 @@ class AuthRepository {
 
   Future<LoginResponseData?> loginWithApple() async {
     try {
-      logger.info('loginWithApple');
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -121,6 +121,31 @@ class AuthRepository {
       return _login(request);
     } catch (e) {
       logger.severe('loginWithApple error: $e');
+      rethrow;
+    }
+  }
+
+  Future<LoginResponseData?> loginWithFacebook() async {
+    try {
+      final LoginResult result = await FacebookAuth.instance.login(
+        permissions: ['email'],
+      );
+      if (result.status == LoginStatus.success) {
+        final token = (result.accessToken?.tokenString ?? '');
+        final userData = await FacebookAuth.instance.getUserData();
+        logger.info('token: $token');
+
+        final request = LoginRequestData(
+          loginType: LoginType.facebook,
+          token: token,
+          email: userData['email'],
+        );
+
+        return _login(request);
+      } else {
+        throw (result.message ?? 'Login failed');
+      }
+    } catch (e) {
       rethrow;
     }
   }
