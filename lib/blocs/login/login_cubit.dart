@@ -155,6 +155,29 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  void loginWithApple() async {
+    emit(
+      state.copyWith(
+        status: FormSubmissionStatus.loading,
+        clearErrorMessage: true,
+      ),
+    );
+
+    try {
+      final response = await _authRepository.loginWithApple();
+      if (response != null) {
+        emit(state.copyWith(status: FormSubmissionStatus.success));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: FormSubmissionStatus.failure,
+          errorMessageDialog: 'login.popup_error.apple',
+        ),
+      );
+    }
+  }
+
   void clearErrorDialog() {
     emit(state.copyWith(errorMessageDialog: null));
   }

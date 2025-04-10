@@ -12,6 +12,7 @@ import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/auth/user.dart';
 import 'package:monkey_stories/services/api/auth_api_service.dart';
 import 'package:logging/logging.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final logger = Logger('AuthRepository');
 
@@ -94,6 +95,32 @@ class AuthRepository {
       );
       return _login(request);
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<LoginResponseData?> loginWithApple() async {
+    try {
+      logger.info('loginWithApple');
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final token = credential.identityToken;
+
+      logger.info('credential: $token');
+
+      final request = LoginRequestData(
+        loginType: LoginType.apple,
+        token: token,
+        email: credential.email,
+      );
+
+      return _login(request);
+    } catch (e) {
+      logger.severe('loginWithApple error: $e');
       rethrow;
     }
   }

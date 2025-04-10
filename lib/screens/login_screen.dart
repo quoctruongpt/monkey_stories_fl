@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -399,15 +401,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             const SizedBox(width: Spacing.md),
-                            Expanded(
-                              child: SocialLoginButton(
-                                backgroundColor: Colors.black,
-                                iconData: Icons.apple,
-                                onPressed: () {
-                                  /* TODO: Handle Apple Login */
-                                },
-                              ),
-                            ),
+                            Platform.isIOS
+                                ? Expanded(
+                                  child: SocialLoginButton(
+                                    backgroundColor: Colors.black,
+                                    iconData: Icons.apple,
+                                    onPressed: () {
+                                      context
+                                          .read<LoginCubit>()
+                                          .loginWithApple();
+                                    },
+                                  ),
+                                )
+                                : const SizedBox.shrink(),
                           ],
                         ),
 
