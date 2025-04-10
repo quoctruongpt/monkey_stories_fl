@@ -18,6 +18,7 @@ import 'package:monkey_stories/widgets/loading_overlay.dart';
 import 'package:monkey_stories/widgets/social_login_button.dart';
 import 'package:monkey_stories/widgets/text_and_action.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
+import 'package:monkey_stories/widgets/notice_dialog.dart';
 
 final logger = Logger('LoginScreen');
 
@@ -46,6 +47,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _usernameController;
+  final FocusNode _passwordFocusNode = FocusNode();
   late String Function(String key) translate =
       AppLocalizations.of(context).translate;
 
@@ -80,17 +82,51 @@ class _LoginScreenState extends State<LoginScreen> {
     ).showSnackBar(SnackBar(content: Text(errorMessage)));
   }
 
+  void _handleMaxFailedAttempts() {
+    showCustomNoticeDialog(
+      context: context,
+      titleKey: 'login.popup_error.title',
+      messageKey: 'login.popup_error_pw.desc',
+      imageAsset: 'assets/images/monkey_sad.png',
+      primaryActionTextKey: 'login.popup_error_pw.act',
+      onPrimaryAction: () {
+        context.read<LoginCubit>().resetFailedAttempts();
+      },
+      secondaryActionTextKey: 'login.popup_error_pw.retry',
+      onSecondaryAction: () {
+        context.read<LoginCubit>().resetFailedAttempts();
+        FocusScope.of(context).requestFocus(_passwordFocusNode);
+        context.pop();
+      },
+      onClose: () {
+        context.read<LoginCubit>().resetFailedAttempts();
+      },
+      translate: translate,
+    );
+  }
+
+  void _listenLoginState(LoginState state) {
+    if (state.status == FormSubmissionStatus.success) {
+      _handleLoginSuccess();
+      return;
+    }
+    if (state.status == FormSubmissionStatus.failure &&
+        state.errorMessage != null) {
+      // _handleLoginFailure(state.errorMessage!);
+      return;
+    }
+    if (state.failedAttempts >= 5) {
+      _handleMaxFailedAttempts();
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardDismisser(
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
-          if (state.status == FormSubmissionStatus.success) {
-            _handleLoginSuccess();
-          } else if (state.status == FormSubmissionStatus.failure &&
-              state.errorMessage != null) {
-            // _handleLoginFailure(state.errorMessage!);
-          }
+          _listenLoginState(state);
         },
         child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
@@ -197,6 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(height: Spacing.md),
 
                                 TextField(
+                                  focusNode: _passwordFocusNode,
                                   onChanged: (value) {
                                     context.read<LoginCubit>().passwordChanged(
                                       value,

@@ -17,11 +17,8 @@ class Password extends FormzInput<String, String> {
     if (value == null || value.isEmpty) {
       return 'validation.password.empty';
     }
-    if (value.length < minLength) {
-      return 'validation.password.too_short';
-    }
-    if (value.length > maxLength) {
-      return 'validation.password.too_long';
+    if (value.length < minLength || value.length > maxLength) {
+      return 'validation.password.length';
     }
     if (!_passwordRegex.hasMatch(value)) {
       return 'validation.password.invalid_characters';

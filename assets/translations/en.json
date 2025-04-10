@@ -12,10 +12,16 @@
   "login.popup_error.title": "Notice",
   "login.popup_error.desc": "Sign in with Facebook failed.",
   "login.popup_error.act": "I got it",
-  "login.popup_error_pw.title": "You have entered the wrong password more than 5 times",
-  "login.popup_error_pw.desc": "Select \"Forgot password\" to recover it.",
-  "login.popup_error_pw.act": "Try again",
-  "login.phone.not_correct": "Invalid phone number",
-  "login.user_name.empty": "Please enter your phone number/username",
-  "login.password.empty": "Please enter your password"
+  "login.popup_error_pw.desc": "You have entered the wrong password more than 5 times\\nSelect \"Forgot password\" to recover it.",
+  "login.popup_error_pw.act": "",
+  "login.popup_error_pw.act2": "Try again",
+  "app.check_phone_error": "Invalid phone number",
+  "validation.username.invalid": "",
+  "validation.username.empty": "Please enter your phone number/username",
+  "validation.username.length": "",
+  "validation.password.empty": "Please enter your password",
+  "validation.password.length": "",
+  "validation.password.invalid_characters": "",
+  "app.pw_error": "",
+  "app.account_dont_register": ""
 }

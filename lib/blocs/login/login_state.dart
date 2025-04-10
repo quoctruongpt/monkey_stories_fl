@@ -8,6 +8,7 @@ enum FormSubmissionStatus {
   loading, // Đang gửi (ví dụ: gọi API)
   success, // Gửi thành công
   failure, // Gửi thất bại (lỗi validation hoặc lỗi từ backend)
+  maxAttemptsReached, // Thêm trạng thái mới khi đạt tối đa số lần thử
 }
 
 class LoginState extends Equatable {
@@ -17,6 +18,7 @@ class LoginState extends Equatable {
   final String? errorMessage; // Lỗi chung từ server (ví dụ: sai tài khoản)
   final bool isPasswordVisible;
   final bool isValidForm;
+  final int failedAttempts; // Thêm bộ đếm số lần thất bại
 
   const LoginState({
     this.username = const Username.pure(),
@@ -25,6 +27,7 @@ class LoginState extends Equatable {
     this.errorMessage,
     this.isPasswordVisible = false,
     this.isValidForm = false,
+    this.failedAttempts = 0, // Khởi tạo bộ đếm
   });
 
   // Hàm tiện ích để tạo bản sao của state với các giá trị được cập nhật
@@ -35,6 +38,7 @@ class LoginState extends Equatable {
     String? errorMessage,
     bool? isPasswordVisible,
     bool? isValidForm,
+    int? failedAttempts, // Thêm failedAttempts vào copyWith
     bool clearErrorMessage = false, // Thêm cờ để xóa lỗi
   }) {
     return LoginState(
@@ -43,6 +47,8 @@ class LoginState extends Equatable {
       status: status ?? this.status,
       isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
       isValidForm: isValidForm ?? this.isValidForm,
+      failedAttempts:
+          failedAttempts ?? this.failedAttempts, // Cập nhật failedAttempts
       errorMessage:
           clearErrorMessage ? null : errorMessage ?? this.errorMessage,
     );
@@ -56,5 +62,6 @@ class LoginState extends Equatable {
     errorMessage,
     isPasswordVisible,
     isValidForm,
+    failedAttempts, // Thêm failedAttempts vào props
   ];
 }
