@@ -77,18 +77,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLoginFailure(String errorMessage) {
+    void clearErrorDialog() {
+      context.read<LoginCubit>().clearErrorDialog();
+      context.pop();
+    }
+
     showCustomNoticeDialog(
       context: context,
       titleKey: 'login.popup_error.title',
       messageKey: errorMessage,
       imageAsset: 'assets/images/monkey_sad.png',
       primaryActionTextKey: 'login.popup_error.act',
-      onPrimaryAction: () {
-        context.read<LoginCubit>().resetFailedAttempts();
-      },
-      onClose: () {
-        context.read<LoginCubit>().resetFailedAttempts();
-      },
+      onPrimaryAction: clearErrorDialog,
+      onClose: clearErrorDialog,
       translate: translate,
     );
   }

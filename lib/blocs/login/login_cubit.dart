@@ -155,6 +155,10 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  void clearErrorDialog() {
+    emit(state.copyWith(errorMessageDialog: null));
+  }
+
   void togglePasswordVisibility() {
     emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
   }
