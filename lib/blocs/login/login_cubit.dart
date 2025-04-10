@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart'; // Import Auth Cubit
 import 'package:monkey_stories/blocs/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/auth.dart';
+import 'package:monkey_stories/models/api.dart';
+import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/validate/password.dart';
 import 'dart:async';
 
@@ -107,10 +110,21 @@ class LoginCubit extends Cubit<LoginState> {
         );
       }
     } catch (e) {
-      logger.severe('loginSubmitted error: $e');
-      if (e == AuthConstants.messagePwError) {
-        _incrementFailedAttempts();
+      logger.severe('loginSubmitted error: ${e}');
+      if (e is ApiResponse) {
+        if (e.code == AuthConstants.pwErrorCode) {
+          _incrementFailedAttempts();
+        }
+        emit(
+          state.copyWith(
+            status: FormSubmissionStatus.failure,
+            errorMessage: e.message,
+            clearErrorMessage: false,
+          ),
+        );
+        return;
       }
+
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,

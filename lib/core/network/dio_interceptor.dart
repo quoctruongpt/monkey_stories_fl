@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart'; // Để kiểm tra kIsWeb
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/app.dart';
+import 'package:monkey_stories/utils/language.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
@@ -45,6 +46,7 @@ class DioInterceptor extends Interceptor {
     String deviceInfoStr = '';
     String model = '';
     String systemVersion = '';
+    final String lang = await LanguageUtils.getLocaleCode();
 
     try {
       if (Platform.isAndroid) {
@@ -68,11 +70,6 @@ class DioInterceptor extends Interceptor {
       // Giữ giá trị mặc định 'unknown'
     }
 
-    // Lấy thông tin ngôn ngữ (ví dụ, cần điều chỉnh theo cách bạn quản lý ngôn ngữ)
-    // Giả sử bạn lấy từ AppCubit hoặc prefs
-    final String lang = prefs.getString(SharedPrefKeys.languageCode) ?? 'vi';
-    final int langId = (lang == 'vi') ? 1 : 2; // Ví dụ mapping đơn giản
-
     final commonParams = <String, dynamic>{
       'app_id': AppConstants.appId,
       'device_type': deviceType,
@@ -81,7 +78,6 @@ class DioInterceptor extends Interceptor {
       'device_id': deviceId,
       'info': deviceInfoStr,
       'lang': lang,
-      'lang_id': langId,
       if (accessToken != null && accessToken.isNotEmpty)
         'access_token': accessToken,
     };
@@ -97,31 +93,18 @@ class DioInterceptor extends Interceptor {
     // --- 1. Lấy thông tin chung từ hàm helper ---
     final commonParams = await _getCommonRequestData();
 
-    // --- 2. Thêm thông tin chung vào request ---
-    final method = options.method.toUpperCase();
-    if (method == 'GET') {
-      options.queryParameters.addAll(commonParams);
-    } else if (['POST', 'PUT', 'PATCH', 'DELETE'].contains(method)) {
-      if (options.data == null) {
-        options.data = commonParams;
-      } else if (options.data is Map<String, dynamic>) {
-        // Clone map gốc để tránh thay đổi trực tiếp nếu không muốn
-        final originalData = Map<String, dynamic>.from(options.data);
-        originalData.addAll(commonParams);
-        options.data = originalData;
-      } else {
-        // Nếu data không phải Map (ví dụ: FormData), thêm vào query params
-        _logger.warning(
-          'Request data is not a Map. Adding common params to query parameters instead.',
-        );
-        options.queryParameters.addAll(commonParams);
-      }
-    }
+    // --- 2. Luôn thêm thông tin chung vào queryParameters ---
+    options.queryParameters.addAll(commonParams);
+    _logger.info(
+      'Common params added to queryParameters: $commonParams',
+    ); // Ghi log để xác nhận
+
+    // --- 3. Ghi log dữ liệu body nếu có (không thay đổi) ---
     if (options.data != null) {
-      _logger.info('Final data: ${options.data}');
+      _logger.info('Request data: ${options.data}');
     }
 
-    // --- 3. Tiếp tục request ---
+    // --- 4. Tiếp tục request ---
     handler.next(options);
   }
 

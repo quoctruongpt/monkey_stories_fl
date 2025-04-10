@@ -87,7 +87,7 @@ class AuthRepository {
 
         return response.data;
       } else {
-        throw (response.message);
+        throw (response);
       }
     } catch (e) {
       rethrow;
