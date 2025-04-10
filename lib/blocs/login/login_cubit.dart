@@ -10,6 +10,8 @@ import 'dart:async';
 
 import 'package:monkey_stories/models/validate/username.dart'; // Import dart:async để sử dụng StreamSubscription
 import 'package:monkey_stories/repositories/auth_repository.dart';
+import 'package:monkey_stories/models/auth/login_data.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final logger = Logger('LoginCubit');
 
@@ -19,6 +21,120 @@ class LoginCubit extends Cubit<LoginState> {
 
   LoginCubit(this._authenticationCubit, this._authRepository)
     : super(const LoginState());
+
+  void loadLastLogin() async {
+    try {
+      final lastLogin = await _authRepository.getLastLogin();
+
+      if (lastLogin == null) {
+        return;
+      }
+
+      String? name;
+      switch (lastLogin.loginType) {
+        case LoginType.phone:
+          usernameChanged(lastLogin.phone ?? '');
+          break;
+        case LoginType.email:
+          final userGoogle = await _authRepository.getUserGoogle();
+          if (userGoogle != null) {
+            name = userGoogle.displayName;
+          } else if (lastLogin.email != null) {
+            usernameChanged(lastLogin.email ?? '');
+          }
+          break;
+        case LoginType.facebook:
+          final userFacebook = await _authRepository.getUserFacebook();
+          if (userFacebook != null) {
+            name = userFacebook['name'];
+          }
+          break;
+        case LoginType.apple:
+          if (lastLogin.appleId != null) {
+            final credentialState = await _authRepository
+                .getCredentialStateApple(lastLogin.appleId ?? '');
+            if (credentialState == CredentialState.authorized) {
+              name = lastLogin.name;
+            }
+          }
+        default:
+          return;
+      }
+
+      if (name != null) {
+        emit(
+          state.copyWith(
+            lastLogin: LastLoginInfo(
+              name: name,
+              loginType: lastLogin.loginType,
+              token: lastLogin.token,
+              appleId: lastLogin.appleId,
+              email: lastLogin.email,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      logger.severe('loadLastLogin error: ${e}');
+    }
+  }
+
+  void loginWithLastLogin() async {
+    final lastLogin = state.lastLogin;
+    final LoginType? loginType = lastLogin?.loginType;
+    if (lastLogin != null && loginType != null) {
+      emit(state.copyWith(status: FormSubmissionStatus.loading));
+      try {
+        LoginResponseData? response;
+        switch (lastLogin.loginType) {
+          case LoginType.email:
+            final userGoogle = await _authRepository.getUserGoogle();
+            final auth = await userGoogle?.authentication;
+            final token = auth?.accessToken;
+            final email = userGoogle?.email ?? '';
+            response = await _authRepository.loginWithLastLogin(
+              loginType,
+              email,
+              token ?? '',
+              '',
+              '',
+            );
+            break;
+          case LoginType.facebook:
+            final userFacebook = await _authRepository.getUserFacebook();
+            final token = await _authRepository.getOldFacebookToken();
+            final email = userFacebook?['email'];
+            response = await _authRepository.loginWithLastLogin(
+              loginType,
+              email ?? '',
+              token?.tokenString ?? '',
+              '',
+              '',
+            );
+            break;
+          case LoginType.apple:
+            response = await _authRepository.loginWithLastLogin(
+              loginType,
+              lastLogin.email ?? '',
+              lastLogin.token ?? '',
+              lastLogin.name ?? '',
+              lastLogin.appleId ?? '',
+            );
+            break;
+          default:
+            break;
+        }
+
+        if (response != null) {
+          emit(state.copyWith(status: FormSubmissionStatus.success));
+        } else {
+          emit(state.copyWith(status: FormSubmissionStatus.failure));
+        }
+      } catch (e) {
+        emit(state.copyWith(status: FormSubmissionStatus.failure));
+      }
+    }
+  }
 
   void usernameChanged(String value) {
     final username = Username.dirty(value);
@@ -49,8 +165,6 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> loginSubmitted() async {
-    logger.info('loginSubmitted: ${state.username} ${state.password}');
-
     if (!state.isValidForm) {
       emit(
         state.copyWith(

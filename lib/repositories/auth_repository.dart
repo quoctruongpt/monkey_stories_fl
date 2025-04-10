@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
+import 'package:monkey_stories/models/auth/last_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:monkey_stories/core/network/dio_config.dart';
@@ -17,7 +19,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 final logger = Logger('AuthRepository');
 
-GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
 
 class AuthRepository {
   static const String _accessTokenKey = SharedPrefKeys.token;
@@ -47,6 +49,40 @@ class AuthRepository {
     await prefs.setString(_accessTokenKey, accessToken);
     await prefs.setString(_refreshTokenKey, refreshToken);
     await prefs.setInt(_userIdKey, userId);
+  }
+
+  Future<void> _saveLastLogin(
+    LoginType loginType,
+    String? phone,
+    String? email,
+    String? appleId,
+    String? token,
+    String? name,
+  ) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final lastLogin = LastLogin(
+        loginType: loginType,
+        phone: phone,
+        email: email,
+        appleId: appleId,
+        token: token,
+        name: name,
+      );
+      await prefs.setString(
+        SharedPrefKeys.lastLogin,
+        jsonEncode(lastLogin.toJson()),
+      );
+    } catch (e) {
+      logger.severe('saveLastLogin error: $e');
+      // rethrow;
+    }
+  }
+
+  Future<LastLogin?> getLastLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastLogin = prefs.getString(SharedPrefKeys.lastLogin);
+    return lastLogin != null ? LastLogin.fromJson(jsonDecode(lastLogin)) : null;
   }
 
   // Đăng nhập với email
@@ -110,12 +146,14 @@ class AuthRepository {
       );
       final token = credential.identityToken;
 
-      logger.info('credential: $token');
+      logger.info('credential: ${credential}');
 
       final request = LoginRequestData(
         loginType: LoginType.apple,
         token: token,
         email: credential.email,
+        appleId: credential.userIdentifier,
+        name: credential.givenName ?? 'Apple',
       );
 
       return _login(request);
@@ -132,13 +170,12 @@ class AuthRepository {
       );
       if (result.status == LoginStatus.success) {
         final token = (result.accessToken?.tokenString ?? '');
-        final userData = await FacebookAuth.instance.getUserData();
-        logger.info('token: $token');
+        final userData = await getUserFacebook();
 
         final request = LoginRequestData(
           loginType: LoginType.facebook,
           token: token,
-          email: userData['email'],
+          email: userData?['email'],
         );
 
         return _login(request);
@@ -148,6 +185,40 @@ class AuthRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<LoginResponseData?> loginWithLastLogin(
+    LoginType loginType,
+    String email,
+    String token,
+    String name,
+    String appleId,
+  ) async {
+    final request = LoginRequestData(
+      loginType: loginType,
+      email: email,
+      token: token,
+      name: name,
+      appleId: appleId,
+    );
+
+    return _login(request);
+  }
+
+  Future<Map<String, dynamic>?> getUserFacebook() async {
+    return FacebookAuth.instance.getUserData();
+  }
+
+  Future<AccessToken?> getOldFacebookToken() async {
+    return FacebookAuth.instance.accessToken;
+  }
+
+  Future<GoogleSignInAccount?> getUserGoogle() async {
+    return _googleSignIn.signInSilently();
+  }
+
+  Future<CredentialState?> getCredentialStateApple(String appleId) async {
+    return SignInWithApple.getCredentialState(appleId);
   }
 
   // Hàm đăng nhập chung
@@ -163,6 +234,15 @@ class AuthRepository {
           response.data!.userId,
         );
 
+        await _saveLastLogin(
+          loginData.loginType,
+          loginData.phone,
+          loginData.email,
+          loginData.appleId,
+          loginData.token,
+          loginData.name,
+        );
+
         return response.data;
       } else {
         throw (response);
@@ -176,7 +256,6 @@ class AuthRepository {
   Future<void> logout() async {
     try {
       final token = await getAccessToken();
-      await _googleSignIn.signOut();
       if (token != null) {
         _dio.options.headers['Authorization'] = 'Bearer $token';
 

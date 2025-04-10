@@ -61,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _usernameController.addListener(() {
       context.read<LoginCubit>().usernameChanged(_usernameController.text);
     });
+    context.read<LoginCubit>().loadLastLogin();
   }
 
   @override
@@ -329,6 +330,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
 
                                 const SizedBox(height: Spacing.md),
+
                                 AppButton.primary(
                                   text: translate('login.act.title'),
                                   onPressed: _loginPressed,
@@ -336,7 +338,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                   disabled: !state.isValidForm,
                                 ),
 
-                                const SizedBox(height: 20),
+                                const SizedBox(height: Spacing.md),
+
+                                state.lastLogin?.name != null
+                                    ? AppButton.secondary(
+                                      text: state.lastLogin?.name ?? '',
+                                      onPressed:
+                                          context
+                                              .read<LoginCubit>()
+                                              .loginWithLastLogin,
+                                      isFullWidth: true,
+                                    )
+                                    : const SizedBox.shrink(),
+
+                                const SizedBox(height: Spacing.md),
 
                                 Center(
                                   child: TextAndAction(

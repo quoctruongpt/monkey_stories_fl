@@ -1,4 +1,5 @@
 import 'package:formz/formz.dart';
+import 'package:monkey_stories/models/validate/email.dart';
 
 class Username extends FormzInput<String, String> {
   // Constructor cho trạng thái "pure" (chưa chỉnh sửa)
@@ -18,12 +19,22 @@ class Username extends FormzInput<String, String> {
     if (value == null || value.isEmpty) {
       return 'validation.username.empty';
     }
-    if (value.length < minLength || value.length > maxLength) {
-      return 'validation.username.length';
+
+    // Kiểm tra xem là email hay username
+    if (value.contains('@')) {
+      // Nếu là email, sử dụng EmailValidator
+      final emailInput = EmailValidator.dirty(value);
+      return emailInput.error;
+    } else {
+      // Nếu là username
+      if (value.length < minLength || value.length > maxLength) {
+        return 'validation.username.length'; // Lỗi độ dài username
+      }
+      if (!_usernameRegex.hasMatch(value)) {
+        return 'validation.username.invalid'; // Lỗi định dạng username
+      }
     }
-    if (!_usernameRegex.hasMatch(value)) {
-      return 'validation.username.invalid';
-    }
+
     return null; // Hợp lệ
   }
 }

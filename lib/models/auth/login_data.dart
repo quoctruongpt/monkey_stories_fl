@@ -41,6 +41,8 @@ class LoginRequestData {
   final String? email;
   final String? password;
   final String? token;
+  final String? appleId;
+  final String? name;
   final LoginType loginType;
 
   LoginRequestData({
@@ -49,6 +51,8 @@ class LoginRequestData {
     this.password,
     required this.loginType,
     this.token,
+    this.appleId,
+    this.name,
   });
 
   Map<String, dynamic> toJson() {
@@ -58,6 +62,8 @@ class LoginRequestData {
       'password': password ?? '',
       'type': loginType.value,
       'access_token': token,
+      'apple_id': appleId,
+      'name': name,
     };
   }
 }

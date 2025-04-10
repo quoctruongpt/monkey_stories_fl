@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:monkey_stories/models/auth/last_login.dart';
 import 'package:monkey_stories/models/validate/password.dart';
 import 'package:monkey_stories/models/validate/username.dart';
 
@@ -11,6 +12,19 @@ enum FormSubmissionStatus {
   maxAttemptsReached, // Thêm trạng thái mới khi đạt tối đa số lần thử
 }
 
+class LastLoginInfo extends LastLogin {
+  final String? name;
+
+  LastLoginInfo({
+    this.name,
+    super.loginType,
+    super.phone,
+    super.email,
+    super.appleId,
+    super.token,
+  });
+}
+
 class LoginState extends Equatable {
   final Username username;
   final Password password;
@@ -20,6 +34,7 @@ class LoginState extends Equatable {
   final bool isValidForm;
   final int failedAttempts; // Thêm bộ đếm số lần thất bại
   final String? errorMessageDialog;
+  final LastLoginInfo? lastLogin;
 
   const LoginState({
     this.username = const Username.pure(),
@@ -30,6 +45,7 @@ class LoginState extends Equatable {
     this.isValidForm = false,
     this.failedAttempts = 0, // Khởi tạo bộ đếm
     this.errorMessageDialog,
+    this.lastLogin,
   });
 
   // Hàm tiện ích để tạo bản sao của state với các giá trị được cập nhật
@@ -43,6 +59,7 @@ class LoginState extends Equatable {
     int? failedAttempts, // Thêm failedAttempts vào copyWith
     bool clearErrorMessage = false, // Thêm cờ để xóa lỗi
     String? errorMessageDialog,
+    LastLoginInfo? lastLogin,
   }) {
     return LoginState(
       username: username ?? this.username,
@@ -58,6 +75,7 @@ class LoginState extends Equatable {
           clearErrorMessage
               ? null
               : errorMessageDialog ?? this.errorMessageDialog,
+      lastLogin: lastLogin ?? this.lastLogin,
     );
   }
 
