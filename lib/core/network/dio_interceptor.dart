@@ -35,7 +35,7 @@ class DioInterceptor extends Interceptor {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // Sử dụng SharedPrefKeys.accessToken nếu bạn đã định nghĩa nó
     final String? accessToken = prefs.getString(
-      'access_token',
+      SharedPrefKeys.token,
     ); // Hoặc SharedPrefKeys.accessToken
     String? deviceId = await _getDeviceId();
     String subversion = packageInfo.version;
@@ -78,8 +78,7 @@ class DioInterceptor extends Interceptor {
       'device_id': deviceId,
       'info': deviceInfoStr,
       'lang': lang,
-      if (accessToken != null && accessToken.isNotEmpty)
-        'access_token': accessToken,
+      if (accessToken != null && accessToken.isNotEmpty) 'token': accessToken,
     };
 
     return commonParams;

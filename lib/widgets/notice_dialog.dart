@@ -17,7 +17,7 @@ class NoticeDialog extends StatelessWidget {
   final bool isLottie;
   final String primaryActionTextKey;
   final VoidCallback? onPrimaryAction;
-  final String secondaryActionTextKey;
+  final String? secondaryActionTextKey;
   final VoidCallback? onSecondaryAction;
   final VoidCallback? onClose; // Callback cho nút X
   final TranslateFunction translate;
@@ -30,7 +30,7 @@ class NoticeDialog extends StatelessWidget {
     this.isLottie = false,
     required this.primaryActionTextKey,
     this.onPrimaryAction,
-    required this.secondaryActionTextKey,
+    this.secondaryActionTextKey,
     this.onSecondaryAction,
     this.onClose,
     required this.translate,
@@ -108,12 +108,14 @@ class NoticeDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: Spacing.md),
                 // Nút Secondary
-                AppButton.secondary(
-                  text: translate(secondaryActionTextKey),
-                  onPressed: onSecondaryAction ?? () {},
-                  isFullWidth: true,
-                  disabled: onSecondaryAction == null,
-                ),
+                secondaryActionTextKey != null
+                    ? AppButton.secondary(
+                      text: translate(secondaryActionTextKey!),
+                      onPressed: onSecondaryAction ?? () {},
+                      isFullWidth: true,
+                      disabled: onSecondaryAction == null,
+                    )
+                    : const SizedBox.shrink(),
               ],
             ),
           ),
@@ -146,7 +148,7 @@ Future<void> showCustomNoticeDialog({
   bool isLottie = false,
   required String primaryActionTextKey,
   VoidCallback? onPrimaryAction,
-  required String secondaryActionTextKey,
+  String? secondaryActionTextKey,
   VoidCallback? onSecondaryAction,
   VoidCallback? onClose,
   required TranslateFunction translate,

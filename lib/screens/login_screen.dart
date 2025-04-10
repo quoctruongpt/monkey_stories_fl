@@ -77,9 +77,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLoginFailure(String errorMessage) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(errorMessage)));
+    showCustomNoticeDialog(
+      context: context,
+      titleKey: 'login.popup_error.title',
+      messageKey: errorMessage,
+      imageAsset: 'assets/images/monkey_sad.png',
+      primaryActionTextKey: 'login.popup_error.act',
+      onPrimaryAction: () {
+        context.read<LoginCubit>().resetFailedAttempts();
+      },
+      onClose: () {
+        context.read<LoginCubit>().resetFailedAttempts();
+      },
+      translate: translate,
+    );
   }
 
   void _handleMaxFailedAttempts() {
@@ -111,8 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     if (state.status == FormSubmissionStatus.failure &&
-        state.errorMessage != null) {
-      // _handleLoginFailure(state.errorMessage!);
+        state.errorMessageDialog != null) {
+      _handleLoginFailure(state.errorMessageDialog!);
       return;
     }
     if (state.failedAttempts >= 5) {
@@ -381,7 +392,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 backgroundColor: Colors.white,
                                 googleIconAsset: 'assets/icons/svg/google.svg',
                                 onPressed: () {
-                                  /* TODO: Handle Google Login */
+                                  context.read<LoginCubit>().loginWithGoogle();
                                 },
                                 isGoogle: true,
                               ),

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:logging/logging.dart';
@@ -6,7 +5,6 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart'; // Import Auth Cubit
 import 'package:monkey_stories/blocs/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/auth.dart';
 import 'package:monkey_stories/models/api.dart';
-import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/validate/password.dart';
 import 'dart:async';
 
@@ -130,6 +128,28 @@ class LoginCubit extends Cubit<LoginState> {
           status: FormSubmissionStatus.failure,
           errorMessage: e.toString(),
           clearErrorMessage: false,
+        ),
+      );
+    }
+  }
+
+  void loginWithGoogle() async {
+    emit(
+      state.copyWith(
+        status: FormSubmissionStatus.loading,
+        clearErrorMessage: true,
+      ),
+    );
+    try {
+      final response = await _authRepository.loginWithGoogle();
+      if (response != null) {
+        emit(state.copyWith(status: FormSubmissionStatus.success));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: FormSubmissionStatus.failure,
+          errorMessageDialog: 'login.popup_error.google',
         ),
       );
     }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +14,8 @@ import 'package:monkey_stories/services/api/auth_api_service.dart';
 import 'package:logging/logging.dart';
 
 final logger = Logger('AuthRepository');
+
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
 class AuthRepository {
   static const String _accessTokenKey = SharedPrefKeys.token;
@@ -72,6 +75,29 @@ class AuthRepository {
     return _login(loginData);
   }
 
+  // Đăng nhập với Google
+  Future<LoginResponseData?> loginWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        throw ('Người dùng đã huỷ đăng nhập');
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final token = googleAuth.accessToken;
+      final request = LoginRequestData(
+        loginType: LoginType.email,
+        token: token,
+        email: googleUser.email,
+      );
+      return _login(request);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // Hàm đăng nhập chung
   Future<LoginResponseData?> _login(LoginRequestData loginData) async {
     try {
@@ -98,6 +124,7 @@ class AuthRepository {
   Future<void> logout() async {
     try {
       final token = await getAccessToken();
+      await _googleSignIn.signOut();
       if (token != null) {
         _dio.options.headers['Authorization'] = 'Bearer $token';
 

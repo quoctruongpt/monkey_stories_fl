@@ -39,22 +39,25 @@ class LoginResponseData {
 class LoginRequestData {
   final String? phone;
   final String? email;
-  final String password;
+  final String? password;
+  final String? token;
   final LoginType loginType;
 
   LoginRequestData({
     this.phone,
     this.email,
-    required this.password,
+    this.password,
     required this.loginType,
+    this.token,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'phone': phone ?? '',
       'email': email ?? '',
-      'password': password,
+      'password': password ?? '',
       'type': loginType.value,
+      'access_token': token,
     };
   }
 }

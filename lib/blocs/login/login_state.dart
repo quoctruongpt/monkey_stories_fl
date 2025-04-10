@@ -19,6 +19,7 @@ class LoginState extends Equatable {
   final bool isPasswordVisible;
   final bool isValidForm;
   final int failedAttempts; // Thêm bộ đếm số lần thất bại
+  final String? errorMessageDialog;
 
   const LoginState({
     this.username = const Username.pure(),
@@ -28,6 +29,7 @@ class LoginState extends Equatable {
     this.isPasswordVisible = false,
     this.isValidForm = false,
     this.failedAttempts = 0, // Khởi tạo bộ đếm
+    this.errorMessageDialog,
   });
 
   // Hàm tiện ích để tạo bản sao của state với các giá trị được cập nhật
@@ -40,6 +42,7 @@ class LoginState extends Equatable {
     bool? isValidForm,
     int? failedAttempts, // Thêm failedAttempts vào copyWith
     bool clearErrorMessage = false, // Thêm cờ để xóa lỗi
+    String? errorMessageDialog,
   }) {
     return LoginState(
       username: username ?? this.username,
@@ -51,6 +54,10 @@ class LoginState extends Equatable {
           failedAttempts ?? this.failedAttempts, // Cập nhật failedAttempts
       errorMessage:
           clearErrorMessage ? null : errorMessage ?? this.errorMessage,
+      errorMessageDialog:
+          clearErrorMessage
+              ? null
+              : errorMessageDialog ?? this.errorMessageDialog,
     );
   }
 
@@ -63,5 +70,6 @@ class LoginState extends Equatable {
     isPasswordVisible,
     isValidForm,
     failedAttempts, // Thêm failedAttempts vào props
+    errorMessageDialog,
   ];
 }
