@@ -69,16 +69,23 @@ platform :ios do
       build_number: new_build_number
     )
 
-    # Build ứng dụng
-    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    begin
+      # Build ứng dụng
+      build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
 
-    # Upload lên TestFlight
-    upload_to_testflight(
-      app_identifier: app_identifier # Cung cấp app_identifier nếu cần
-      # skip_waiting_for_build_processing: true # Tuỳ chọn, để lane hoàn thành nhanh hơn
-    )
+      # Upload lên TestFlight
+      upload_to_testflight(
+        app_identifier: app_identifier # Cung cấp app_identifier nếu cần
+        # skip_waiting_for_build_processing: true # Tuỳ chọn, để lane hoàn thành nhanh hơn
+      )
 
-    UI.success("Successfully uploaded build #{new_build_number} for version #{current_version_name} to TestFlight!")
+      # Chỉ thông báo thành công nếu cả build và upload không có lỗi
+      UI.success("Successfully uploaded build #{new_build_number} for version #{current_version_name} to TestFlight!")
+
+    rescue => ex # Bắt bất kỳ lỗi nào từ build_app hoặc upload_to_testflight
+      UI.user_error!("Error during build or upload: #{ex.message}")
+      # UI.user_error! sẽ tự động khiến lane thất bại với mã thoát khác 0
+    end
   end
   
   desc "Thay đổi version name"
