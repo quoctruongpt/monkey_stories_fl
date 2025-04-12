@@ -180,196 +180,186 @@ class _LoginScreenState extends State<LoginScreen> {
                         top: Spacing.xxl,
                       ),
                       child: Form(
-                        child: Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Lottie.asset(
-                                  'assets/lottie/monkey_hello.lottie',
-                                  decoder: customDecoder,
-                                  width: 151,
-                                  height: 169,
-                                ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Lottie.asset(
+                                'assets/lottie/monkey_hello.lottie',
+                                decoder: customDecoder,
+                                width: 151,
+                                height: 169,
+                              ),
 
-                                const SizedBox(height: Spacing.sm),
+                              const SizedBox(height: Spacing.sm),
 
-                                BlocListener<LoginCubit, LoginState>(
-                                  listener: (context, state) {
-                                    if (_usernameController.text !=
-                                        state.username.value) {
-                                      _usernameController.text =
-                                          state.username.value;
-                                      // Có thể cần di chuyển con trỏ về cuối
-                                      _usernameController.selection =
-                                          TextSelection.fromPosition(
-                                            TextPosition(
-                                              offset:
-                                                  _usernameController
-                                                      .text
-                                                      .length,
-                                            ),
-                                          );
-                                    }
-                                  },
-                                  child: TextField(
-                                    controller: _usernameController,
-                                    decoration: InputDecoration(
-                                      labelText: AppLocalizations.of(
-                                        context,
-                                      ).translate('login.username'),
-                                      errorText:
-                                          state.username.displayError != null
-                                              ? AppLocalizations.of(
-                                                context,
-                                              ).translate(
-                                                state.username.displayError ??
-                                                    '',
-                                              )
-                                              : null,
-                                      suffixIcon:
-                                          state.username.isNotValid &&
-                                                  state
-                                                      .username
-                                                      .value
-                                                      .isNotEmpty
-                                              ? IconButton(
-                                                onPressed: () {
-                                                  _usernameController.clear();
-                                                },
-                                                icon: const Icon(
-                                                  Icons.cancel,
-                                                  color:
-                                                      AppTheme
-                                                          .textSecondaryColor,
-                                                ),
-                                              )
-                                              : null,
-                                    ),
-                                  ),
-                                ),
-
-                                const SizedBox(height: Spacing.md),
-
-                                TextField(
-                                  focusNode: _passwordFocusNode,
-                                  onChanged: (value) {
-                                    context.read<LoginCubit>().passwordChanged(
-                                      value,
+                              BlocListener<LoginCubit, LoginState>(
+                                listener: (context, state) {
+                                  if (_usernameController.text !=
+                                      state.username.value) {
+                                    _usernameController.text =
+                                        state.username.value;
+                                    // Có thể cần di chuyển con trỏ về cuối
+                                    _usernameController
+                                        .selection = TextSelection.fromPosition(
+                                      TextPosition(
+                                        offset: _usernameController.text.length,
+                                      ),
                                     );
-                                  },
-                                  obscureText: !state.isPasswordVisible,
+                                  }
+                                },
+                                child: TextField(
+                                  controller: _usernameController,
                                   decoration: InputDecoration(
-                                    labelText: translate('login.password'),
+                                    labelText: AppLocalizations.of(
+                                      context,
+                                    ).translate('login.username'),
                                     errorText:
-                                        state.password.displayError != null
+                                        state.username.displayError != null
                                             ? AppLocalizations.of(
                                               context,
                                             ).translate(
-                                              state.password.displayError!,
+                                              state.username.displayError ?? '',
                                             )
                                             : null,
-                                    suffixIcon: IconButton(
-                                      onPressed:
-                                          context
-                                              .read<LoginCubit>()
-                                              .togglePasswordVisibility,
-                                      icon: Icon(
-                                        state.isPasswordVisible
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
+                                    suffixIcon:
+                                        state.username.isNotValid &&
+                                                state.username.value.isNotEmpty
+                                            ? IconButton(
+                                              onPressed: () {
+                                                _usernameController.clear();
+                                              },
+                                              icon: const Icon(
+                                                Icons.cancel,
+                                                color:
+                                                    AppTheme.textSecondaryColor,
+                                              ),
+                                            )
+                                            : null,
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: Spacing.md),
+
+                              TextField(
+                                focusNode: _passwordFocusNode,
+                                onChanged: (value) {
+                                  context.read<LoginCubit>().passwordChanged(
+                                    value,
+                                  );
+                                },
+                                obscureText: !state.isPasswordVisible,
+                                decoration: InputDecoration(
+                                  labelText: translate('login.password'),
+                                  errorText:
+                                      state.password.displayError != null
+                                          ? AppLocalizations.of(
+                                            context,
+                                          ).translate(
+                                            state.password.displayError!,
+                                          )
+                                          : null,
+                                  suffixIcon: IconButton(
+                                    onPressed:
+                                        context
+                                            .read<LoginCubit>()
+                                            .togglePasswordVisibility,
+                                    icon: Icon(
+                                      state.isPasswordVisible
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: AppTheme.textSecondaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: Spacing.sm),
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  BlocBuilder<AppCubit, AppState>(
+                                    builder: (context, state) {
+                                      return Text(
+                                        '${translate('login.device_id')}: ${state.deviceId}',
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge?.copyWith(
+                                          color: AppTheme.textGrayLightColor,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      /* TODO: Navigate to Forgot Password */
+                                    },
+                                    child: Text(
+                                      translate('login.forgot_password'),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyLarge?.copyWith(
                                         color: AppTheme.textSecondaryColor,
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
+                              ),
 
-                                const SizedBox(height: Spacing.sm),
-
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    BlocBuilder<AppCubit, AppState>(
-                                      builder: (context, state) {
-                                        return Text(
-                                          '${translate('login.device_id')}: ${state.deviceId}',
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodyLarge?.copyWith(
-                                            color: AppTheme.textGrayLightColor,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        /* TODO: Navigate to Forgot Password */
-                                      },
-                                      child: Text(
-                                        translate('login.forgot_password'),
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge?.copyWith(
-                                          color: AppTheme.textSecondaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                if (state.errorMessage != null &&
-                                    state.errorMessage!.isNotEmpty)
-                                  Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).translate(state.errorMessage!),
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelLarge?.copyWith(
-                                      fontStyle: FontStyle.italic,
-                                      color: AppTheme.errorColor,
-                                    ),
-                                    textAlign: TextAlign.center,
+                              if (state.errorMessage != null &&
+                                  state.errorMessage!.isNotEmpty)
+                                Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  ).translate(state.errorMessage!),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelLarge?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    color: AppTheme.errorColor,
                                   ),
-
-                                const SizedBox(height: Spacing.md),
-
-                                AppButton.primary(
-                                  text: translate('login.act.title'),
-                                  onPressed: _loginPressed,
-                                  isFullWidth: true,
-                                  disabled: !state.isValidForm,
+                                  textAlign: TextAlign.center,
                                 ),
 
-                                const SizedBox(height: Spacing.md),
+                              const SizedBox(height: Spacing.md),
 
-                                state.lastLogin?.name != null
-                                    ? AppButton.secondary(
-                                      text: state.lastLogin?.name ?? '',
-                                      onPressed:
-                                          context
-                                              .read<LoginCubit>()
-                                              .loginWithLastLogin,
-                                      isFullWidth: true,
-                                    )
-                                    : const SizedBox.shrink(),
+                              AppButton.primary(
+                                text: translate('login.act.title'),
+                                onPressed: _loginPressed,
+                                isFullWidth: true,
+                                disabled: !state.isValidForm,
+                              ),
 
-                                const SizedBox(height: Spacing.md),
+                              const SizedBox(height: Spacing.md),
 
-                                Center(
-                                  child: TextAndAction(
-                                    text: translate('login.active_code.desc'),
-                                    actionText: translate(
-                                      'login.active_code.act',
-                                    ),
-                                    onActionTap: () {
-                                      /* TODO: Handle activation code */
-                                    },
+                              state.lastLogin?.name != null
+                                  ? AppButton.secondary(
+                                    text: state.lastLogin?.name ?? '',
+                                    onPressed:
+                                        context
+                                            .read<LoginCubit>()
+                                            .loginWithLastLogin,
+                                    isFullWidth: true,
+                                  )
+                                  : const SizedBox.shrink(),
+
+                              const SizedBox(height: Spacing.md),
+
+                              Center(
+                                child: TextAndAction(
+                                  text: translate('login.active_code.desc'),
+                                  actionText: translate(
+                                    'login.active_code.act',
                                   ),
+                                  onActionTap: () {
+                                    /* TODO: Handle activation code */
+                                  },
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
