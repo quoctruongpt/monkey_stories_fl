@@ -14,6 +14,7 @@ class SignUpState extends Equatable {
   final bool isSignUpSuccess;
   final bool isSignUpLoading;
   final String? signUpErrorMessage;
+  final String? popupErrorMessage;
 
   const SignUpState({
     required this.step,
@@ -29,6 +30,7 @@ class SignUpState extends Equatable {
     this.isSignUpSuccess = false,
     this.isSignUpLoading = false,
     this.signUpErrorMessage,
+    this.popupErrorMessage,
   });
 
   SignUpState copyWith({
@@ -46,6 +48,7 @@ class SignUpState extends Equatable {
     bool? isSignUpSuccess,
     bool? isSignUpLoading,
     String? signUpErrorMessage,
+    String? popupErrorMessage,
   }) {
     return SignUpState(
       step: step ?? this.step,
@@ -71,6 +74,10 @@ class SignUpState extends Equatable {
           clearPhoneErrorMessage == true
               ? null
               : signUpErrorMessage ?? this.signUpErrorMessage,
+      popupErrorMessage:
+          clearPhoneErrorMessage == true
+              ? null
+              : popupErrorMessage ?? this.popupErrorMessage,
     );
   }
 
@@ -89,5 +96,6 @@ class SignUpState extends Equatable {
     isSignUpSuccess,
     isSignUpLoading,
     signUpErrorMessage,
+    popupErrorMessage,
   ];
 }

@@ -183,7 +183,6 @@ Future<void> showCustomNoticeDialog({
         onClose:
             onClose != null
                 ? () {
-                  Navigator.of(dialogContext).pop(); // Nút X luôn đóng dialog
                   onClose();
                 }
                 : () => Navigator.of(dialogContext).pop(), // Mặc định chỉ đóng

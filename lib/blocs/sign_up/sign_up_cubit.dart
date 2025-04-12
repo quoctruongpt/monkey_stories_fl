@@ -135,7 +135,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpPressed() async {
-    emit(state.copyWith(isSignUpLoading: true));
+    emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
     try {
       final response = await _authRepository.signUp(
         SignUpRequestData(
@@ -147,19 +147,8 @@ class SignUpCubit extends Cubit<SignUpState> {
       );
 
       if (response != null) {
-        final user = await _authRepository.getCurrentUser();
-
-        if (user != null) {
-          _authenticationCubit.saveUser(user);
-          emit(state.copyWith(isSignUpSuccess: true));
-        } else {
-          emit(
-            state.copyWith(
-              isSignUpSuccess: false,
-              signUpErrorMessage: 'Không thể lấy thông tin người dùng',
-            ),
-          );
-        }
+        await _getInfoUser();
+        emit(state.copyWith(isSignUpSuccess: true));
       }
     } catch (e) {
       if (e is ApiResponse) {
@@ -169,6 +158,75 @@ class SignUpCubit extends Cubit<SignUpState> {
       emit(state.copyWith(signUpErrorMessage: e.toString()));
     } finally {
       emit(state.copyWith(isSignUpLoading: false));
+    }
+  }
+
+  void signUpWithGoogle() async {
+    emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
+    try {
+      final response = await _authRepository.loginWithGoogle();
+      if (response != null) {
+        await _getInfoUser();
+        emit(state.copyWith(isSignUpSuccess: true));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isSignUpSuccess: false,
+          popupErrorMessage: 'login.popup_error.google',
+        ),
+      );
+    } finally {
+      emit(state.copyWith(isSignUpLoading: false));
+    }
+  }
+
+  void signUpWithFacebook() async {
+    emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
+    try {
+      final response = await _authRepository.loginWithFacebook();
+      if (response != null) {
+        await _getInfoUser();
+        emit(state.copyWith(isSignUpSuccess: true));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isSignUpSuccess: false,
+          popupErrorMessage: 'login.popup_error.facebook',
+        ),
+      );
+    } finally {
+      emit(state.copyWith(isSignUpLoading: false));
+    }
+  }
+
+  void signUpWithApple() async {
+    emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
+    try {
+      final response = await _authRepository.loginWithApple();
+      if (response != null) {
+        await _getInfoUser();
+        emit(state.copyWith(isSignUpSuccess: true));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isSignUpSuccess: false,
+          popupErrorMessage: 'login.popup_error.apple',
+        ),
+      );
+    } finally {
+      emit(state.copyWith(isSignUpLoading: false));
+    }
+  }
+
+  Future<void> _getInfoUser() async {
+    final user = await _authRepository.getCurrentUser();
+    if (user != null) {
+      _authenticationCubit.saveUser(user);
+    } else {
+      throw Exception('Không thể lấy thông tin người dùng');
     }
   }
 
@@ -182,5 +240,9 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void backToPhone() {
     emit(state.copyWith(step: StepSignUp.phone));
+  }
+
+  void clearPopupErrorMessage() {
+    emit(state.copyWith(popupErrorMessage: null));
   }
 }

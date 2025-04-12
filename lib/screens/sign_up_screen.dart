@@ -135,14 +135,42 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
+  void _handlePopupErrorMessage(String? errorMessage) {
+    void clearPopupErrorMessage() {
+      context.read<SignUpCubit>().clearPopupErrorMessage();
+      context.pop();
+    }
+
+    if (errorMessage != null) {
+      showCustomNoticeDialog(
+        context: context,
+        titleKey: 'Thông báo',
+        messageKey: errorMessage,
+        imageAsset: 'assets/images/monkey_sad.png',
+        primaryActionTextKey: 'Tôi đã hiểu',
+        translate: AppLocalizations.of(context).translate,
+        onPrimaryAction: clearPopupErrorMessage,
+        onClose: clearPopupErrorMessage,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final translate = AppLocalizations.of(context).translate;
 
     return BlocListener<SignUpCubit, SignUpState>(
-      listenWhen: (previous, current) => current.isSignUpSuccess == true,
+      listenWhen:
+          (previous, current) =>
+              current.isSignUpSuccess == true ||
+              current.popupErrorMessage != null &&
+                  current.popupErrorMessage != previous.popupErrorMessage,
       listener: (context, state) {
-        context.goNamed(AppRouteNames.home);
+        if (state.isSignUpSuccess == true) {
+          context.goNamed(AppRouteNames.home);
+        } else if (state.popupErrorMessage != null) {
+          _handlePopupErrorMessage(state.popupErrorMessage);
+        }
       },
 
       child: KeyboardDismisser(
@@ -361,11 +389,15 @@ class _SignUpState extends State<SignUp> {
                 child: FooterAuthentication(
                   textOnLine: translate('Hoặc đăng nhập với'),
                   onActionPress: () {},
-                  onApplePress: () {},
-                  onFacebookPress: () {
-                    _passwordFocusNode.requestFocus();
+                  onApplePress: () {
+                    context.read<SignUpCubit>().signUpWithApple();
                   },
-                  onGooglePress: () {},
+                  onFacebookPress: () {
+                    context.read<SignUpCubit>().signUpWithFacebook();
+                  },
+                  onGooglePress: () {
+                    context.read<SignUpCubit>().signUpWithGoogle();
+                  },
                   actionDescText: translate('Tôi đã có tài khoản. '),
                   actionText: translate('Đăng nhập'),
                 ),
