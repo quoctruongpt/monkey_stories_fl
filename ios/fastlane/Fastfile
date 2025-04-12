@@ -32,13 +32,53 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    # Lấy version code và version name
-    version_code = get_build_number(xcodeproj: "Runner.xcodeproj")
-    version_name = get_version_number(xcodeproj: "Runner.xcodeproj")
-    
-    increment_build_number(xcodeproj: "Runner.xcodeproj")
+    # Đảm bảo bạn đã cấu hình xác thực App Store Connect API Key
+    # Xem: https://docs.fastlane.tools/app-store-connect-api/
+    # app_store_connect_api_key(
+    #   key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+    #   issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+    #   key_filepath: ENV["APP_STORE_CONNECT_API_KEY_FILEPATH"],
+    #   duration: 1200, # Optional
+    #   in_house: false # Optional
+    # )
+
+    # Lấy version name hiện tại từ project
+    current_version_name = get_version_number(xcodeproj: "Runner.xcodeproj")
+
+    # Lấy build number mới nhất từ TestFlight cho version name này
+    # Đảm bảo biến môi trường APP_IDENTIFIER được đặt hoặc thay thế bằng Bundle ID của bạn
+    # app_identifier = ENV['APP_IDENTIFIER'] || UI.user_error!("APP_IDENTIFIER environment variable is not set.")
+    app_identifier = "com.earlystart.monkeyjunior.story" # <-- Thay thế bằng Bundle ID thực tế
+
+    latest_build = latest_testflight_build_number(
+      app_identifier: app_identifier,
+      version: current_version_name
+      # initial_build_number: 0 # Bạn có thể đặt giá trị khởi tạo nếu cần
+    )
+
+    # Tính build number mới (lớn hơn build mới nhất trên TestFlight)
+    new_build_number = latest_build + 1
+
+    UI.message("Current version: #{current_version_name}")
+    UI.message("Latest build on TestFlight: #{latest_build}")
+    UI.message("Setting new build number to: #{new_build_number}")
+
+    # Cập nhật build number trong project Xcode
+    increment_build_number(
+      xcodeproj: "Runner.xcodeproj",
+      build_number: new_build_number
+    )
+
+    # Build ứng dụng
     build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
-    upload_to_testflight
+
+    # Upload lên TestFlight
+    upload_to_testflight(
+      app_identifier: app_identifier # Cung cấp app_identifier nếu cần
+      # skip_waiting_for_build_processing: true # Tuỳ chọn, để lane hoàn thành nhanh hơn
+    )
+
+    UI.success("Successfully uploaded build #{new_build_number} for version #{current_version_name} to TestFlight!")
   end
   
   desc "Thay đổi version name"
