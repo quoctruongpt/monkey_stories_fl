@@ -5,10 +5,10 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart'; // Import Auth Cubit
 import 'package:monkey_stories/blocs/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/auth.dart';
 import 'package:monkey_stories/models/api.dart';
-import 'package:monkey_stories/models/validate/password.dart';
+import 'package:monkey_stories/utils/validate/password.dart';
 import 'dart:async';
 
-import 'package:monkey_stories/models/validate/username.dart'; // Import dart:async để sử dụng StreamSubscription
+import 'package:monkey_stories/utils/validate/username.dart'; // Import dart:async để sử dụng StreamSubscription
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -18,9 +18,13 @@ final logger = Logger('LoginCubit');
 class LoginCubit extends Cubit<LoginState> {
   final AuthenticationCubit _authenticationCubit;
   final AuthRepository _authRepository;
+  final String? initialUsername;
 
-  LoginCubit(this._authenticationCubit, this._authRepository)
-    : super(const LoginState());
+  LoginCubit(
+    this._authenticationCubit,
+    this._authRepository,
+    this.initialUsername,
+  ) : super(LoginState(username: Username.dirty(initialUsername ?? '')));
 
   void loadLastLogin() async {
     try {
@@ -33,7 +37,9 @@ class LoginCubit extends Cubit<LoginState> {
       String? name;
       switch (lastLogin.loginType) {
         case LoginType.phone:
-          usernameChanged(lastLogin.phone ?? '');
+          if (initialUsername == null) {
+            usernameChanged(lastLogin.phone ?? '');
+          }
           break;
         case LoginType.email:
           final userGoogle = await _authRepository.getUserGoogle();

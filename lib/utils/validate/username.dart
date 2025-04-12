@@ -1,5 +1,5 @@
 import 'package:formz/formz.dart';
-import 'package:monkey_stories/models/validate/email.dart';
+import 'package:monkey_stories/utils/validate/email.dart';
 
 class Username extends FormzInput<String, String> {
   // Constructor cho trạng thái "pure" (chưa chỉnh sửa)
@@ -12,7 +12,7 @@ class Username extends FormzInput<String, String> {
   static const int maxLength = 15;
 
   // Regex ví dụ (có thể điều chỉnh theo yêu cầu thực tế)
-  static final _usernameRegex = RegExp(r'^[a-zA-Z0-9_.]*$');
+  static final _usernameRegex = RegExp(r'^\+?[a-zA-Z0-9_.]*$');
 
   @override
   String? validator(String? value) {

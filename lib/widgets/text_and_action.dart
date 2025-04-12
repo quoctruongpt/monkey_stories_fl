@@ -28,9 +28,11 @@ class TextAndAction extends StatelessWidget {
           TextSpan(text: text),
           TextSpan(
             text: actionText,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyLarge?.copyWith(color: AppTheme.textBlueColor),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppTheme.textBlueColor,
+              decoration: TextDecoration.underline,
+              decorationColor: AppTheme.textBlueColor,
+            ),
             recognizer: TapGestureRecognizer()..onTap = onActionTap,
           ),
         ],

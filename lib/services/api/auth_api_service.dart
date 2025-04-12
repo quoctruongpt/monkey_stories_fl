@@ -4,6 +4,10 @@ import 'package:monkey_stories/core/network/api_endpoints.dart';
 import 'package:monkey_stories/core/network/dio_config.dart';
 import 'package:monkey_stories/models/api.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
+import 'package:monkey_stories/models/auth/sign_up_data.dart';
+import 'package:monkey_stories/utils/validate/phone.dart';
+
+final logger = Logger('AuthApiService');
 
 class AuthApiService {
   late final Dio _dio;
@@ -26,5 +30,49 @@ class AuthApiService {
       }
       return null;
     });
+  }
+
+  Future<ApiResponse<dynamic>> checkPhoneNumber(
+    PhoneNumberInput phoneNumber,
+    CancelToken? cancelToken,
+  ) async {
+    try {
+      final response = await _dio.post(
+        ApiEndpoints.checkPhoneNumber,
+        data: {
+          'country_code': phoneNumber.countryCode,
+          'phone': phoneNumber.phoneNumber,
+        },
+        cancelToken: cancelToken,
+      );
+
+      return ApiResponse.fromJson(response.data, (json) {
+        return null;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ApiResponse<SignUpResponseData?>> signUp(
+    SignUpRequestData request,
+  ) async {
+    try {
+      final response = await _dio.post(
+        ApiEndpoints.signUp,
+        data: request.toJson(),
+      );
+
+      return ApiResponse.fromJson(response.data, (json) {
+        logger.info(json is Map<String, dynamic>);
+        if (json is Map<String, dynamic>) {
+          return SignUpResponseData.fromJson(json);
+        }
+        return null;
+      });
+    } catch (e) {
+      logger.severe(e.toString());
+      rethrow;
+    }
   }
 }

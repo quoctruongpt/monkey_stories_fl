@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:monkey_stories/models/auth/last_login.dart';
-import 'package:monkey_stories/models/validate/password.dart';
-import 'package:monkey_stories/models/validate/username.dart';
+import 'package:monkey_stories/utils/validate/password.dart';
+import 'package:monkey_stories/utils/validate/username.dart';
 
 // Enum để biểu thị các trạng thái của việc gửi form
 enum FormSubmissionStatus {

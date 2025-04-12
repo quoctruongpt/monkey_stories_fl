@@ -9,6 +9,7 @@ import 'package:monkey_stories/models/orientation.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
 import 'package:monkey_stories/screens/login_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
+import 'package:monkey_stories/screens/sign_up_screen.dart';
 import 'package:monkey_stories/screens/splash_screen.dart';
 import 'package:monkey_stories/screens/unity_screen.dart';
 import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
@@ -20,6 +21,7 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: AppRoutes.splash,
+      name: AppRouteNames.splash,
       pageBuilder: (context, state) {
         context.read<OrientationCubit>().lockOrientation(
           context,
@@ -30,6 +32,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.home,
+      name: AppRouteNames.home,
       pageBuilder: (context, state) {
         context.read<OrientationCubit>().lockOrientation(
           context,
@@ -40,6 +43,7 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.result,
+      name: AppRouteNames.result,
       pageBuilder: (context, state) {
         context.read<OrientationCubit>().lockOrientation(
           context,
@@ -50,8 +54,8 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.unity,
+      name: AppRouteNames.unity,
       pageBuilder: (context, state) {
-        logger.info('build');
         context.read<OrientationCubit>().lockOrientation(
           context,
           AppOrientation.landscapeLeft,
@@ -65,14 +69,36 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.yearOfBirth,
+      name: AppRouteNames.yearOfBirth,
       pageBuilder: (context, state) {
         return const MaterialPage(child: YearOfBirthScreen());
       },
     ),
     GoRoute(
       path: AppRoutes.login,
+      name: AppRouteNames.login,
       pageBuilder: (context, state) {
-        return const MaterialPage(child: LoginScreenProvider());
+        context.read<OrientationCubit>().lockOrientation(
+          context,
+          AppOrientation.portrait,
+        );
+
+        final String? initialUsername = state.uri.queryParameters['username'];
+        return MaterialPage(
+          key: ValueKey('login-${initialUsername ?? ''}'),
+          child: LoginScreenProvider(initialUsername: initialUsername),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.signUp,
+      name: AppRouteNames.signUp,
+      pageBuilder: (context, state) {
+        context.read<OrientationCubit>().lockOrientation(
+          context,
+          AppOrientation.portrait,
+        );
+        return const MaterialPage(child: SignUpScreen());
       },
     ),
   ],

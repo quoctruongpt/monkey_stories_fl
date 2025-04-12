@@ -22,14 +22,14 @@ class AppLocalizations {
     return true;
   }
 
-  String translate(String key) {
+  String translate(String? key) {
     // Kiểm tra trực tiếp xem key có tồn tại trong map không
     if (_localizedStrings.containsKey(key)) {
       // Nếu có, trả về giá trị tương ứng
       return _localizedStrings[key].toString();
     } else {
       // Nếu không tìm thấy, trả về key gốc (fallback)
-      return key;
+      return key ?? '';
     }
   }
 }

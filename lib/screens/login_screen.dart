@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -15,9 +13,8 @@ import 'package:monkey_stories/core/navigation/app_routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/utils/lottie_utils.dart';
 import 'package:monkey_stories/widgets/button_widget.dart';
-import 'package:monkey_stories/widgets/horizontal_line_text.dart';
+import 'package:monkey_stories/widgets/footer_authentication.dart';
 import 'package:monkey_stories/widgets/loading_overlay.dart';
-import 'package:monkey_stories/widgets/social_login_button.dart';
 import 'package:monkey_stories/widgets/text_and_action.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/widgets/notice_dialog.dart';
@@ -25,7 +22,9 @@ import 'package:monkey_stories/widgets/notice_dialog.dart';
 final logger = Logger('LoginScreen');
 
 class LoginScreenProvider extends StatelessWidget {
-  const LoginScreenProvider({super.key});
+  const LoginScreenProvider({super.key, this.initialUsername});
+
+  final String? initialUsername;
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +33,17 @@ class LoginScreenProvider extends StatelessWidget {
           (context) => LoginCubit(
             context.read<AuthenticationCubit>(),
             context.read<AuthRepository>(),
+            initialUsername,
           ),
-      child: const LoginScreen(),
+      child: LoginScreen(initialUsername: initialUsername),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, this.initialUsername});
+
+  final String? initialUsername;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -134,6 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
       _handleMaxFailedAttempts();
       return;
     }
+  }
+
+  void _signUpPressed() {
+    context.push(AppRoutes.signUp);
   }
 
   @override
@@ -229,9 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       .isNotEmpty
                                               ? IconButton(
                                                 onPressed: () {
-                                                  context
-                                                      .read<LoginCubit>()
-                                                      .usernameChanged('');
+                                                  _usernameController.clear();
                                                 },
                                                 icon: const Icon(
                                                   Icons.cancel,
@@ -378,75 +382,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       bottom:
                           Spacing.md + MediaQuery.of(context).padding.bottom,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Spacing.md,
-                          ),
-                          child: HorizontalLineText(
-                            text: translate('login.other_method'),
-                          ),
-                        ),
-
-                        const SizedBox(height: Spacing.xl),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: SocialLoginButton(
-                                backgroundColor: Colors.blue.shade700,
-                                iconData: Icons.facebook,
-                                onPressed: () {
-                                  context
-                                      .read<LoginCubit>()
-                                      .loginWithFacebook();
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: Spacing.md),
-                            Expanded(
-                              child: SocialLoginButton(
-                                backgroundColor: Colors.white,
-                                googleIconAsset: 'assets/icons/svg/google.svg',
-                                onPressed: () {
-                                  context.read<LoginCubit>().loginWithGoogle();
-                                },
-                                isGoogle: true,
-                              ),
-                            ),
-                            const SizedBox(width: Spacing.md),
-                            Platform.isIOS
-                                ? Expanded(
-                                  child: SocialLoginButton(
-                                    backgroundColor: Colors.black,
-                                    iconData: Icons.apple,
-                                    onPressed: () {
-                                      context
-                                          .read<LoginCubit>()
-                                          .loginWithApple();
-                                    },
-                                  ),
-                                )
-                                : const SizedBox.shrink(),
-                          ],
-                        ),
-
-                        const SizedBox(height: Spacing.lg),
-
-                        Center(
-                          child: TextAndAction(
-                            text: translate('login.sign_up.desc'),
-                            actionText: translate('login.sign_up.act'),
-                            onActionTap: () {
-                              /* TODO: Navigate to Register Screen */
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                    child: FooterAuthentication(
+                      textOnLine: translate('login.other_method'),
+                      actionDescText: translate('login.sign_up.desc'),
+                      actionText: translate('login.sign_up.act'),
+                      onFacebookPress: () {
+                        context.read<LoginCubit>().loginWithFacebook();
+                      },
+                      onGooglePress: () {
+                        context.read<LoginCubit>().loginWithGoogle();
+                      },
+                      onApplePress: () {
+                        context.read<LoginCubit>().loginWithApple();
+                      },
+                      onActionPress: _signUpPressed,
                     ),
                   ),
                 ),
