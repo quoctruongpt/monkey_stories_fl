@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/core/navigation/route_observer.dart';
-import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/models/unity_message.dart';
+import 'package:monkey_stories/core1/constants/unity_constants.dart';
+import 'package:monkey_stories/core1/routes/routes.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 final logger = Logger('UnityScreen');
 
@@ -21,7 +21,7 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
   void initState() {
     super.initState();
     context.read<UnityCubit>().registerHandler(MessageTypes.closeUnity, (
-      UnityMessage message,
+      UnityMessageEntity message,
     ) async {
       context.pop();
       return null;
@@ -39,7 +39,7 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
 
   @override
   void didPush() {
-    final message = UnityMessage(
+    final message = const UnityMessageEntity(
       type: MessageTypes.openUnity,
       payload: {'destination': 'map_lesson'},
     );

@@ -8,7 +8,7 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/sign_up/sign_up_cubit.dart';
 import 'package:monkey_stories/core/constants/auth.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
-import 'package:monkey_stories/core/navigation/app_routes.dart';
+import 'package:monkey_stories/core1/constants/constants.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/utils/lottie_utils.dart';
@@ -125,7 +125,7 @@ class _SignUpState extends State<SignUp> {
           final encodedPhone = Uri.encodeComponent(
             '${context.read<SignUpCubit>().state.phone.value.countryCode}${_phoneController.text}',
           );
-          context.push('${AppRoutes.login}?username=$encodedPhone');
+          context.push('${AppRoutePaths.login}?username=$encodedPhone');
         },
         onSecondaryAction: () {
           context.pop();

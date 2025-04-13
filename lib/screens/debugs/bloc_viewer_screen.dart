@@ -4,8 +4,8 @@ import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/models/orientation.dart';
+import 'package:monkey_stories/core1/constants/unity_constants.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 class BlocViewerScreen extends StatefulWidget {
   const BlocViewerScreen({super.key});

@@ -9,7 +9,7 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_state.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
-import 'package:monkey_stories/core/navigation/app_routes.dart';
+import 'package:monkey_stories/core1/constants/constants.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/utils/lottie_utils.dart';
 import 'package:monkey_stories/widgets/button_widget.dart';
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLoginSuccess() {
-    context.go(AppRoutes.home);
+    context.go(AppRoutePaths.home);
   }
 
   void _handleLoginFailure(String errorMessage) {
@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _signUpPressed() {
-    context.push(AppRoutes.signUp);
+    context.push(AppRoutePaths.signUp);
   }
 
   @override

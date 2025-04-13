@@ -7,15 +7,16 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
-import 'package:monkey_stories/core/navigation/router.dart';
+import 'package:monkey_stories/core1/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
 import 'package:monkey_stories/services/logger_service.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
-import 'package:monkey_stories/widgets/unity_widget.dart';
 
 final logger = Logger('MyApp');
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => UnityCubit()),
+        BlocProvider(create: (_) => sl<UnityCubit>()),
         BlocProvider(create: (_) => OrientationCubit()),
         BlocProvider(create: (_) => AppCubit()),
         BlocProvider(create: (_) => DebugCubit()),
@@ -125,10 +126,14 @@ class _AppBuilderState extends State<AppBuilder>
 
         // Unity Widget sẽ đè lên UI khi cần thiết
         BlocBuilder<UnityCubit, UnityState>(
-          buildWhen:
-              (previous, current) =>
-                  previous.isUnityVisible != current.isUnityVisible,
+          buildWhen: (previous, current) {
+            logger.info(
+              'Unity state change: ${current.isUnityVisible} ${previous.isUnityVisible}',
+            );
+            return previous.isUnityVisible != current.isUnityVisible;
+          },
           builder: (context, state) {
+            logger.info('Unity state a: ${state.isUnityVisible}');
             return AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               left: state.isUnityVisible ? 0 : -size.width,

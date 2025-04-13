@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/models/orientation.dart';
-import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/models/unity_message.dart';
-import 'package:monkey_stories/models/unity_payload.dart';
+import 'package:monkey_stories/core1/constants/constants.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 part 'orientation_state.dart';
 
@@ -39,11 +38,10 @@ class OrientationCubit extends Cubit<OrientationState> {
   }
 
   void _lockOrientationUnity(BuildContext context, AppOrientation orientation) {
-    final UnityMessage<OrientationPayload> message =
-        UnityMessage<OrientationPayload>(
-          type: MessageTypes.orientation,
-          payload: OrientationPayload(orientation: orientation),
-        );
+    final UnityMessageEntity message = UnityMessageEntity(
+      type: MessageTypes.orientation,
+      payload: OrientationPayloadEntity(orientation: orientation),
+    );
     context.read<UnityCubit>().sendMessageToUnity(message);
   }
 }

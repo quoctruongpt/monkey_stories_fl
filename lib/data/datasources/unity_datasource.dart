@@ -3,24 +3,25 @@ import 'dart:convert';
 
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/models/unity_message.dart';
+import 'package:monkey_stories/core1/constants/unity_constants.dart';
+import 'package:monkey_stories/data/models/unity/unity_message_model.dart';
 import 'package:monkey_stories/utils/uuid.dart';
 
-final logger = Logger('UnityService');
-
-class UnityService {
+/// Data source để giao tiếp trực tiếp với Unity engine
+class UnityDataSource {
   static final Map<String, Completer<dynamic>> _messageQueue = {};
   static final Map<String, Timer> _timeoutTimers = {};
   static const int _timeoutDuration = 30000; // 30 seconds timeout
+  final Logger _logger = Logger('UnityDataSource');
 
-  static void sendToUnityWithoutResult(UnityMessage message) {
+  /// Gửi tin nhắn đến Unity mà không cần phản hồi
+  void sendToUnityWithoutResult(UnityMessageModel message) {
     final updatedMessage =
         message.id == null
             ? message.copyWith(id: generateShortId(), response: false)
             : message;
 
-    logger.info('sendToUnityWithoutResult ${updatedMessage.toString()}');
+    _logger.info('sendToUnityWithoutResult ${updatedMessage.toJsonString()}');
     sendToUnity(
       UnityGameObjects.reactNativeBridge,
       UnityMethodNames.requestUnityAction,
@@ -28,9 +29,10 @@ class UnityService {
     );
   }
 
-  static Future<dynamic> sendToUnityWithResponse(UnityMessage message) async {
+  /// Gửi tin nhắn đến Unity và đợi phản hồi
+  Future<dynamic> sendToUnityWithResponse(UnityMessageModel message) async {
     final String id = generateShortId();
-    final UnityMessage updatedMessage = message.copyWith(
+    final UnityMessageModel updatedMessage = message.copyWith(
       id: id,
       response: true,
     );
@@ -52,7 +54,7 @@ class UnityService {
     );
 
     try {
-      logger.info('sendToUnityWithResponse ${updatedMessage.toString()}');
+      _logger.info('sendToUnityWithResponse ${updatedMessage.toJsonString()}');
       // Send message to Unity
       sendToUnity(
         UnityGameObjects.reactNativeBridge,
@@ -68,10 +70,11 @@ class UnityService {
     return completer.future;
   }
 
-  static Future<bool> handleUnityMessage(String data) async {
+  /// Xử lý tin nhắn nhận được từ Unity
+  Future<bool> handleUnityMessage(String data) async {
     try {
       final Map<String, dynamic> message = jsonDecode(data);
-      logger.info('handleUnityMessage $data');
+      _logger.info('handleUnityMessage $data');
       final String? id = message['id'];
       final Map<String, dynamic>? payload =
           message['payload'] as Map<String, dynamic>?;
@@ -82,11 +85,13 @@ class UnityService {
       }
       return false;
     } catch (error) {
+      _logger.severe('Error handling Unity message: $error');
       return false;
     }
   }
 
-  static void _cleanupRequest(String id, {dynamic completeData}) {
+  /// Dọn dẹp tài nguyên sau khi xử lý tin nhắn
+  void _cleanupRequest(String id, {dynamic completeData}) {
     if (_messageQueue.containsKey(id)) {
       if (completeData != null) {
         if (completeData['success'] == true) {

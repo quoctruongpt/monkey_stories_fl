@@ -1,11 +1,14 @@
 part of 'unity_cubit.dart';
 
-class UnityState {
+class UnityState extends Equatable {
   final bool isUnityVisible;
 
-  UnityState({required this.isUnityVisible});
+  const UnityState({required this.isUnityVisible});
 
   UnityState copyWith({bool? isUnityVisible}) {
     return UnityState(isUnityVisible: isUnityVisible ?? this.isUnityVisible);
   }
+
+  @override
+  List<Object?> get props => [isUnityVisible];
 }

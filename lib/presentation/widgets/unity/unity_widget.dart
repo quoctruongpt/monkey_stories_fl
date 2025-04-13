@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
-import 'package:monkey_stories/models/unity_message.dart';
-import 'package:monkey_stories/models/unity_payload.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 final logger = Logger('UnityView');
 
@@ -41,14 +39,6 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
     await _unityCubit.handleUnityMessage(message);
   }
 
-  void _increment() {
-    final UnityMessage<CoinPayload> message = UnityMessage<CoinPayload>(
-      type: 'coin',
-      payload: CoinPayload(action: 'update', amount: 1),
-    );
-    _unityCubit.sendMessageToUnityWithResponse(message);
-  }
-
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
@@ -56,19 +46,7 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
     return Scaffold(
       body: BlocBuilder<UnityCubit, UnityState>(
         builder: (context, state) {
-          return Stack(
-            children: [
-              EmbedUnity(onMessageFromUnity: _handleUnityMessage),
-              Positioned(
-                bottom: 0,
-                child: Column(
-                  children: [
-                    FilledButton(onPressed: _increment, child: const Text('+')),
-                  ],
-                ),
-              ),
-            ],
-          );
+          return EmbedUnity(onMessageFromUnity: _handleUnityMessage);
         },
       ),
     );

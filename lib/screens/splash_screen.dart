@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monkey_stories/core/navigation/app_routes.dart';
+import 'package:monkey_stories/core1/constants/constants.dart';
 import 'package:monkey_stories/models/api.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,9 +48,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _routeScreen() async {
     final isLoggedIn = await context.read<AuthRepository>().isLoggedIn();
     if (isLoggedIn) {
-      GoRouter.of(context).replace(AppRoutes.home);
+      GoRouter.of(context).replace(AppRoutePaths.home);
     } else {
-      GoRouter.of(context).replace(AppRoutes.login);
+      GoRouter.of(context).replace(AppRoutePaths.login);
     }
   }
 

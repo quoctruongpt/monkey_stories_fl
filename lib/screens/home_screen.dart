@@ -4,12 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
-import 'package:monkey_stories/core/navigation/app_routes.dart';
-import 'package:monkey_stories/models/unity.dart';
-import 'package:monkey_stories/models/unity_message.dart';
-import 'package:monkey_stories/models/unity_payload.dart';
+import 'package:monkey_stories/core1/constants/constants.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 
 final logger = Logger('HomeScreen');
@@ -28,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _unityCubit = context.read<UnityCubit>();
-    _unityCubit.registerHandler('user', (UnityMessage message) async {
+    _unityCubit.registerHandler('user', (UnityMessageEntity message) async {
       return {'id': 1234, 'name': 'John Smith', 'avatar': ''};
     });
   }
@@ -40,17 +39,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openUnity() {
-    context.push(AppRoutes.unity);
+    context.push(AppRoutePaths.unity);
   }
 
   void _openResult() {
-    context.push(AppRoutes.result);
+    context.push(AppRoutePaths.result);
   }
 
   Future<void> _sendMessageToUnity() async {
-    final message = UnityMessage<CoinPayload>(
+    final message = const UnityMessageEntity(
       type: MessageTypes.coin,
-      payload: CoinPayload(action: 'get'),
+      payload: CoinPayloadEntity(action: 'get'),
     );
 
     try {
@@ -132,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 context.read<AuthRepository>().logout();
-                context.go(AppRoutes.login);
+                context.go(AppRoutePaths.login);
               },
               child: const Text("logout"),
             ),
