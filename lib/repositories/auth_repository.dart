@@ -12,7 +12,7 @@ import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:monkey_stories/core/network/dio_config.dart';
-import 'package:monkey_stories/models/api.dart';
+import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/auth/user.dart';
 import 'package:monkey_stories/services/api/auth_api_service.dart';

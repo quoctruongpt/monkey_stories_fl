@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
 import 'package:monkey_stories/screens/login_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
 import 'package:monkey_stories/screens/sign_up_screen.dart';
-import 'package:monkey_stories/screens/splash_screen.dart';
 import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
 
 final logger = Logger('router');

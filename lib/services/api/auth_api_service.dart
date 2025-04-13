@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/api_endpoints.dart';
 import 'package:monkey_stories/core/network/dio_config.dart';
-import 'package:monkey_stories/models/api.dart';
+import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/auth/sign_up_data.dart';
 import 'package:monkey_stories/core/validators/phone.dart';

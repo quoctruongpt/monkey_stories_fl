@@ -1,12 +1,12 @@
 part of 'app_cubit.dart';
 
-class AppState {
+class AppState extends Equatable {
   final bool isOrientationLoading;
   final String languageCode;
   final bool isDarkMode;
   final String? deviceId;
 
-  AppState({
+  const AppState({
     required this.isOrientationLoading,
     required this.isDarkMode,
     this.languageCode = 'vi',
@@ -26,4 +26,12 @@ class AppState {
       deviceId: deviceId ?? this.deviceId,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    isOrientationLoading,
+    languageCode,
+    isDarkMode,
+    deviceId,
+  ];
 }

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
-import 'package:monkey_stories/blocs/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_cubit.dart';
 import 'package:monkey_stories/blocs/login/login_state.dart';
