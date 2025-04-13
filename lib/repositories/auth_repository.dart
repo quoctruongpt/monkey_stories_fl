@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/models/auth/last_login.dart';
 import 'package:monkey_stories/models/auth/sign_up_data.dart';
-import 'package:monkey_stories/utils/validate/phone.dart';
+import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:monkey_stories/core/network/dio_config.dart';

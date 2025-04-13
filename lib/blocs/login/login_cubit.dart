@@ -3,12 +3,12 @@ import 'package:formz/formz.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart'; // Import Auth Cubit
 import 'package:monkey_stories/blocs/login/login_state.dart'; // Import Login State
-import 'package:monkey_stories/core/constants/auth.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/models/api.dart';
-import 'package:monkey_stories/utils/validate/password.dart';
+import 'package:monkey_stories/core/validators/password.dart';
 import 'dart:async';
 
-import 'package:monkey_stories/utils/validate/username.dart'; // Import dart:async để sử dụng StreamSubscription
+import 'package:monkey_stories/core/validators/username.dart'; // Import dart:async để sử dụng StreamSubscription
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';

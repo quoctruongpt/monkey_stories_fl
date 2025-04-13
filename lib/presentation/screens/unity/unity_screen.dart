@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core1/constants/unity_constants.dart';
-import 'package:monkey_stories/core1/routes/routes.dart';
+import 'package:monkey_stories/core/constants/unity_constants.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 

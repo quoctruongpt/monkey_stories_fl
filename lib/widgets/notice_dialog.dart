@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart'; // Cần import Lottie nếu dùng
 // import 'package:monkey_stories/blocs/login/login_cubit.dart'; // Không nên phụ thuộc trực tiếp vào Cubit ở đây
 import 'package:monkey_stories/core/theme/app_theme.dart'; // Cần cho Spacing
-import 'package:monkey_stories/utils/lottie_utils.dart'; // Cần cho customDecoder
+import 'package:monkey_stories/core/utils/lottie_utils.dart'; // Cần cho customDecoder
 import 'package:monkey_stories/widgets/button_widget.dart';
 // import 'package:provider/provider.dart'; // Không cần Provider ở đây
 

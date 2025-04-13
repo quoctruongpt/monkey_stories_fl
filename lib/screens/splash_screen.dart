@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monkey_stories/core1/constants/constants.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/models/api.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/blocs/app/app_cubit.dart';
 import 'package:monkey_stories/services/api/location_api_service.dart';
-import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

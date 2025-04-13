@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core1/constants/unity_constants.dart';
+import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/data/models/unity/unity_message_model.dart';
-import 'package:monkey_stories/utils/uuid.dart';
+import 'package:monkey_stories/core/utils/uuid.dart';
 
 /// Data source để giao tiếp trực tiếp với Unity engine
 class UnityDataSource {

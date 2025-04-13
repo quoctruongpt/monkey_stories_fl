@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core/network/api_endpoints.dart';
+import 'package:monkey_stories/core/constants/api_endpoints.dart';
 import 'package:monkey_stories/core/network/dio_config.dart';
 import 'package:monkey_stories/models/api.dart';
 import 'package:monkey_stories/models/location/register_location_data.dart';

@@ -1,5 +1,5 @@
 import 'package:formz/formz.dart';
-import 'package:monkey_stories/utils/validate/email.dart';
+import 'package:monkey_stories/core/validators/email.dart';
 
 class Username extends FormzInput<String, String> {
   // Constructor cho trạng thái "pure" (chưa chỉnh sửa)

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {

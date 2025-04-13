@@ -1,4 +1,4 @@
-import 'package:monkey_stories/core1/constants/unity_constants.dart';
+import 'package:monkey_stories/core/constants/unity_constants.dart';
 
 /// Lớp đóng gói thông tin định hướng màn hình
 /// Lưu ý: Giá trị enum được định nghĩa trong [AppOrientation]

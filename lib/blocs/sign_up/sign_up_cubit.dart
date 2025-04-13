@@ -8,8 +8,8 @@ import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/models/api.dart';
 import 'package:monkey_stories/models/auth/login_data.dart';
 import 'package:monkey_stories/models/auth/sign_up_data.dart';
-import 'package:monkey_stories/utils/validate/password.dart';
-import 'package:monkey_stories/utils/validate/phone.dart';
+import 'package:monkey_stories/core/validators/password.dart';
+import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/repositories/auth_repository.dart';
 part 'sign_up_state.dart';
 
