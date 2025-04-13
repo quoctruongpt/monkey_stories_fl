@@ -6,7 +6,6 @@ import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
-import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => sl<UnityCubit>()),
         BlocProvider(create: (_) => sl<AppCubit>()),
-        BlocProvider(create: (_) => OrientationCubit()),
         BlocProvider(create: (_) => DebugCubit()),
         BlocProvider(create: (_) => FloatButtonCubit()),
         RepositoryProvider(create: (_) => AuthRepository()),
@@ -158,7 +156,7 @@ class _AppBuilderState extends State<AppBuilder>
         // Orientation loading
         MultiBlocListener(
           listeners: [
-            BlocListener<OrientationCubit, OrientationState>(
+            BlocListener<AppCubit, AppState>(
               listenWhen:
                   (previous, current) =>
                       previous.orientation != current.orientation,

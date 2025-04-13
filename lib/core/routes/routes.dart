@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
@@ -22,10 +22,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.splash,
       name: AppRouteNames.splash,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.portrait,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
         return const MaterialPage(child: SplashScreen());
       },
     ),
@@ -33,10 +30,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.home,
       name: AppRouteNames.home,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.portrait,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
         return const MaterialPage(child: MyHomePage());
       },
     ),
@@ -44,10 +38,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.result,
       name: AppRouteNames.result,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.landscapeLeft,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.landscapeLeft);
         return const MaterialPage(child: ResultScreen());
       },
     ),
@@ -55,10 +46,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.unity,
       name: AppRouteNames.unity,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.landscapeLeft,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.landscapeLeft);
 
         return const MaterialPage(child: UnityScreen());
       },
@@ -78,10 +66,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.login,
       name: AppRouteNames.login,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.portrait,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
 
         final String? initialUsername = state.uri.queryParameters['username'];
         return MaterialPage(
@@ -94,10 +79,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.signUp,
       name: AppRouteNames.signUp,
       pageBuilder: (context, state) {
-        context.read<OrientationCubit>().lockOrientation(
-          context,
-          AppOrientation.portrait,
-        );
+        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
         return const MaterialPage(child: SignUpScreen());
       },
     ),

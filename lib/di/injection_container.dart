@@ -33,6 +33,11 @@ import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.da
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 
+import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
+import 'package:monkey_stories/data/repositories/system_settings_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
+import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
+
 /// Service locator instance
 final sl = GetIt.instance;
 
@@ -44,38 +49,26 @@ Future<void> init() async {
   sl.registerLazySingleton<Dio>(() => DioConfig.createDio());
 
   // App Level Bloc/Cubit
-  initAppFeatures();
-
-  // Khởi tạo dependencies cho Unity feature
-  initUnityFeature();
-
-  // Khởi tạo dependencies cho Splash/Auth/Device/Settings
-  initSplashFeatures();
-
-  // Trong tương lai có thể thêm các features khác
-  // await initAnotherFeature();
-}
-
-void initAppFeatures() {
-  // Presentation
   sl.registerLazySingleton(
     () => AppCubit(
       getLanguageUseCase: sl(),
       saveLanguageUseCase: sl(),
       getThemeUseCase: sl(),
       saveThemeUseCase: sl(),
+      setPreferredOrientationsUseCase: sl(),
+      unityCubit: sl(),
     ),
   );
 
-  // Use Cases
-  sl.registerLazySingleton(() => GetLanguageUseCase(sl()));
-  sl.registerLazySingleton(() => SaveLanguageUseCase(sl()));
-  sl.registerLazySingleton(() => GetThemeUseCase(sl()));
-  sl.registerLazySingleton(() => SaveThemeUseCase(sl()));
+  // Khởi tạo dependencies cho Unity feature
+  initUnityFeature();
+
+  // Khởi tạo dependencies cho các tính năng App khác
+  initAppFeatures();
 }
 
-/// Khởi tạo dependencies cho tính năng Splash/Auth/Device/Settings
-void initSplashFeatures() {
+/// Khởi tạo dependencies cho các tính năng App (Splash, Auth, Device, Settings, System)
+void initAppFeatures() {
   // Presentation
   sl.registerFactory(
     () => SplashCubit(
@@ -85,24 +78,30 @@ void initSplashFeatures() {
     ),
   );
 
-  // Use Cases - Auth & Device
+  // Use Cases - Auth & Device & Settings & System
   sl.registerLazySingleton(() => CheckAuthStatusUseCase(sl()));
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl()));
+  sl.registerLazySingleton(() => GetLanguageUseCase(sl()));
+  sl.registerLazySingleton(() => SaveLanguageUseCase(sl()));
+  sl.registerLazySingleton(() => GetThemeUseCase(sl()));
+  sl.registerLazySingleton(() => SaveThemeUseCase(sl()));
+  sl.registerLazySingleton(() => SetPreferredOrientationsUseCase(sl()));
 
-  // Repositories - Auth & Device
+  // Repositories - Auth & Device & Settings & System
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(localDataSource: sl()),
   );
   sl.registerLazySingleton<DeviceRepository>(
     () => DeviceRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
-
-  // Repository - Settings
   sl.registerLazySingleton<SettingsRepository>(
     () => SettingsRepositoryImpl(localDataSource: sl()),
   );
+  sl.registerLazySingleton<SystemSettingsRepository>(
+    () => SystemSettingsRepositoryImpl(dataSource: sl()),
+  );
 
-  // Data Sources - Auth & Device
+  // Data Sources - Auth & Device & Settings & System
   sl.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
@@ -112,10 +111,11 @@ void initSplashFeatures() {
   sl.registerLazySingleton<DeviceRemoteDataSource>(
     () => DeviceRemoteDataSourceImpl(dioClient: sl()),
   );
-
-  // Data Source - Settings
   sl.registerLazySingleton<SettingsLocalDataSource>(
     () => SettingsLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+  sl.registerLazySingleton<SystemSettingsDataSource>(
+    () => SystemSettingsDataSourceImpl(),
   );
 }
 
