@@ -147,7 +147,7 @@ class AppCubit extends Cubit<AppState> {
     _logger.fine('Sending orientation lock message to Unity: $orientation');
     final UnityMessageEntity message = UnityMessageEntity(
       type: MessageTypes.orientation,
-      payload: OrientationPayloadEntity(orientation: orientation),
+      payload: OrientationPayloadEntity(orientation: orientation).toMap(),
     );
     _unityCubit.sendMessageToUnity(message);
   }

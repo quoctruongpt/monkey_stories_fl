@@ -129,7 +129,6 @@ class _AppBuilderState extends State<AppBuilder>
             return previous.isUnityVisible != current.isUnityVisible;
           },
           builder: (context, state) {
-            logger.info('Unity state a: ${state.isUnityVisible}');
             return AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               left: state.isUnityVisible ? 0 : -size.width,
