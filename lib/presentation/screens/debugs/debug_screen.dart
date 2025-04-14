@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/models/language.dart';
-import 'package:monkey_stories/services/environment_service.dart';
+import 'package:monkey_stories/core/env/environment_service.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({super.key});

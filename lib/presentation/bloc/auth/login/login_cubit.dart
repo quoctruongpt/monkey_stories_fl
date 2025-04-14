@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -15,11 +14,12 @@ import 'package:monkey_stories/core/validators/password.dart';
 import 'dart:async';
 
 import 'package:monkey_stories/core/validators/username.dart';
+import 'package:monkey_stories/presentation/bloc/auth/user/user_cubit.dart';
 
 final logger = Logger('LoginCubit');
 
 class LoginCubit extends Cubit<LoginState> {
-  final AuthenticationCubit _authenticationCubit;
+  final UserCubit _userCubit;
   final LoginUsecase _loginUsecase;
   final LoginWithLastLoginUsecase _loginWithLastLoginUsecase;
   final GetLastLoginUsecase _getLastLoginUsecase;
@@ -28,12 +28,12 @@ class LoginCubit extends Cubit<LoginState> {
   UserSocialEntity? _lastLogin;
 
   LoginCubit({
-    required AuthenticationCubit authenticationCubit,
+    required UserCubit userCubit,
     required LoginUsecase loginUsecase,
     required LoginWithLastLoginUsecase loginWithLastLoginUsecase,
     required GetLastLoginUsecase getLastLoginUsecase,
     required GetUserSocialUsecase getUserSocialUsecase,
-  }) : _authenticationCubit = authenticationCubit,
+  }) : _userCubit = userCubit,
        _loginUsecase = loginUsecase,
        _loginWithLastLoginUsecase = loginWithLastLoginUsecase,
        _getLastLoginUsecase = getLastLoginUsecase,
@@ -42,6 +42,11 @@ class LoginCubit extends Cubit<LoginState> {
 
   void loadLastLogin(String? initialUsername) async {
     try {
+      if (initialUsername != null) {
+        usernameChanged(initialUsername);
+        return;
+      }
+
       final lastLogin = await _getLastLoginUsecase.call(NoParams());
       lastLogin.fold(
         (failure) {
@@ -94,7 +99,7 @@ class LoginCubit extends Cubit<LoginState> {
                   name: name,
                   loginType: lastLogin.loginType,
                   token: lastLogin.token,
-                  appleId: lastLogin.appleUserCredential,
+                  appleUserCredential: lastLogin.appleUserCredential,
                   email: lastLogin.email,
                 ),
               ),
@@ -171,9 +176,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> _login(LoginParams params) async {
-    logger.info('params: ${params}');
     final result = await _loginUsecase.call(params);
-    logger.info('result: ${result}');
     result.fold(
       (failure) {
         if (failure.code == AuthConstants.pwErrorCode) {

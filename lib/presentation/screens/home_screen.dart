@@ -9,7 +9,6 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
-import 'package:monkey_stories/repositories/auth_repository.dart';
 
 final logger = Logger('HomeScreen');
 

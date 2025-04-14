@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/models/auth/user.dart';
+import 'package:monkey_stories/data/models/auth/user.dart';
 
 part 'user_state.dart';
 

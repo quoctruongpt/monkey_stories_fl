@@ -12,11 +12,11 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/lottie_utils.dart';
-import 'package:monkey_stories/widgets/button_widget.dart';
-import 'package:monkey_stories/widgets/footer_authentication.dart';
-import 'package:monkey_stories/widgets/loading_overlay.dart';
-import 'package:monkey_stories/widgets/text_and_action.dart';
-import 'package:monkey_stories/widgets/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.dart';
+import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/text_and_action.dart';
+import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
 
 final logger = Logger('LoginScreen');
 

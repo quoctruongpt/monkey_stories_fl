@@ -1,10 +1,13 @@
 import 'package:get_it/get_it.dart';
-import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
+import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/auth/sign_up/sign_up_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/auth/user/user_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
@@ -83,17 +86,27 @@ void initAuthFeature() {
   sl.registerLazySingleton(() => LoginWithLastLoginUsecase(sl()));
   sl.registerLazySingleton(() => GetLastLoginUsecase(sl()));
   sl.registerLazySingleton(() => GetUserSocialUsecase(sl()));
+  sl.registerLazySingleton(() => CheckPhoneNumberUsecase(sl()));
+  sl.registerLazySingleton(() => SignUpUsecase(sl()));
   // Cubit
   sl.registerFactory(
     () => LoginCubit(
-      authenticationCubit: sl(),
+      userCubit: sl(),
       loginUsecase: sl(),
       loginWithLastLoginUsecase: sl(),
       getLastLoginUsecase: sl(),
       getUserSocialUsecase: sl(),
     ),
   );
-  sl.registerLazySingleton(() => AuthenticationCubit());
+  sl.registerLazySingleton(() => UserCubit());
+  sl.registerFactory(
+    () => SignUpCubit(
+      userCubit: sl(),
+      signUpUsecase: sl(),
+      loginUsecase: sl(),
+      checkPhoneNumberUsecase: sl(),
+    ),
+  );
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

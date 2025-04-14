@@ -11,9 +11,9 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
-import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
-import 'package:monkey_stories/services/logger_service.dart';
-import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
+import 'package:monkey_stories/presentation/screens/debugs/debug_navigator.dart';
+import 'package:monkey_stories/core/extensions/logger_service.dart';
+import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
 
 final logger = Logger('MyApp');
 

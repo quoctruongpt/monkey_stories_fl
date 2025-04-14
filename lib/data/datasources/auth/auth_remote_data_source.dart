@@ -5,7 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
-import 'package:monkey_stories/models/auth/login_data.dart';
+import 'package:monkey_stories/data/models/login_data.dart';
+import 'package:monkey_stories/data/models/sign_up_data.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 abstract class AuthRemoteDataSource {
@@ -25,6 +26,18 @@ abstract class AuthRemoteDataSource {
   Future<GoogleSignInAccount?> getUserGoogle();
 
   Future<CredentialState?> getCredentialStateApple(String appleId);
+
+  Future<ApiResponse<SignUpResponseData?>> signUp(
+    LoginType type,
+    String countryCode,
+    String phoneNumber,
+    String password,
+  );
+
+  Future<ApiResponse<Null>> checkPhoneNumber(
+    String countryCode,
+    String phoneNumber,
+  );
 }
 
 final logger = Logger('DeviceRemoteDataSourceImpl');
@@ -91,5 +104,65 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<CredentialState?> getCredentialStateApple(String appleId) async {
     return SignInWithApple.getCredentialState(appleId);
+  }
+
+  @override
+  Future<ApiResponse<SignUpResponseData?>> signUp(
+    LoginType type,
+    String countryCode,
+    String phoneNumber,
+    String password,
+  ) async {
+    try {
+      final response = await dioClient.post(
+        ApiEndpoints.signUp,
+        data: {
+          'type': type.value,
+          'country_code': countryCode,
+          'phone': phoneNumber,
+          'password': password,
+        },
+      );
+
+      return ApiResponse.fromJson(response.data, (json) {
+        if (json is Map<String, dynamic>) {
+          return SignUpResponseData.fromJson(json);
+        }
+        return null;
+      });
+    } on DioException catch (e) {
+      // Các lỗi khác
+      throw ServerException(message: e.message ?? 'Dio Error during login');
+    } catch (e) {
+      // Các lỗi khác
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<ApiResponse<Null>> checkPhoneNumber(
+    String countryCode,
+    String phoneNumber,
+  ) async {
+    try {
+      final response = await dioClient.post(
+        ApiEndpoints.checkPhoneNumber,
+        data: {'country_code': countryCode, 'phone': phoneNumber},
+      );
+
+      logger.info('response: ${response.data}');
+
+      return ApiResponse.fromJson(response.data, (json) {
+        return null;
+      });
+    } on DioException catch (e) {
+      // Các lỗi khác
+      throw ServerException(message: e.message ?? 'Dio Error during login');
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    } catch (e) {
+      // Các lỗi khác
+      throw ServerException(message: e.toString());
+    }
   }
 }

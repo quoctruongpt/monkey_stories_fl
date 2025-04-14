@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:monkey_stories/models/auth/last_login.dart';
+import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/username.dart';
 
@@ -12,15 +12,15 @@ enum FormSubmissionStatus {
   maxAttemptsReached, // Thêm trạng thái mới khi đạt tối đa số lần thử
 }
 
-class LastLoginInfo extends LastLogin {
+class LastLoginInfo extends LastLoginEntity {
   final String? name;
 
   LastLoginInfo({
     this.name,
-    super.loginType,
+    required super.loginType,
     super.phone,
     super.email,
-    super.appleId,
+    super.appleUserCredential,
     super.token,
   });
 }

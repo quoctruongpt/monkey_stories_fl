@@ -24,5 +24,16 @@ abstract class AuthRepository {
 
   Future<Either<Failure, UserSocialEntity?>> getUserSocial(LoginType type);
 
+  Future<Either<ServerFailureWithCode, bool>> signUp(
+    String countryCode,
+    String phoneNumber,
+    String password,
+  );
+
+  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
+    String countryCode,
+    String phoneNumber,
+  );
+
   // Future<Either<Failure, void>> logout();
 }

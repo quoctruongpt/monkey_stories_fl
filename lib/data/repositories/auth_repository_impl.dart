@@ -100,6 +100,57 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
+  @override
+  Future<Either<ServerFailureWithCode, bool>> signUp(
+    String countryCode,
+    String phoneNumber,
+    String password,
+  ) async {
+    final result = await remoteDataSource.signUp(
+      LoginType.phone,
+      countryCode,
+      phoneNumber,
+      password,
+    );
+
+    if (result.status == ApiStatus.success) {
+      await localDataSource.cacheToken(result.data?.accessToken ?? '');
+      await localDataSource.cacheRefreshToken(result.data?.refreshToken ?? '');
+      await localDataSource.cacheLastLogin(
+        LastLoginModel(
+          loginType: LoginType.phone,
+          phone: '$countryCode$phoneNumber',
+          isSocial: false,
+        ),
+      );
+
+      return const Right(true);
+    }
+
+    return Left(
+      ServerFailureWithCode(message: result.message, code: result.code),
+    );
+  }
+
+  @override
+  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
+    String countryCode,
+    String phoneNumber,
+  ) async {
+    final result = await remoteDataSource.checkPhoneNumber(
+      countryCode,
+      phoneNumber,
+    );
+
+    if (result.status == ApiStatus.success) {
+      return const Right(true);
+    }
+
+    return Left(
+      ServerFailureWithCode(message: result.message, code: result.code),
+    );
+  }
+
   Future<Either<ServerFailureWithCode, bool>> _callApiLogin(
     LoginType loginType,
     String? phone,
