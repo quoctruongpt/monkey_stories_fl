@@ -11,29 +11,27 @@ import 'package:monkey_stories/presentation/widgets/button_widget.dart';
 typedef TranslateFunction = String Function(String key);
 
 class NoticeDialog extends StatelessWidget {
-  final String titleKey;
-  final String messageKey;
+  final String titleText;
+  final String messageText;
   final String imageAsset; // Có thể là path ảnh hoặc Lottie
   final bool isLottie;
-  final String primaryActionTextKey;
+  final String primaryActionText;
   final VoidCallback? onPrimaryAction;
-  final String? secondaryActionTextKey;
+  final String? secondaryActionText;
   final VoidCallback? onSecondaryAction;
   final VoidCallback? onClose; // Callback cho nút X
-  final TranslateFunction translate;
 
   const NoticeDialog({
     super.key,
-    required this.titleKey,
-    required this.messageKey,
+    required this.titleText,
+    required this.messageText,
     required this.imageAsset,
     this.isLottie = false,
-    required this.primaryActionTextKey,
+    required this.primaryActionText,
     this.onPrimaryAction,
-    this.secondaryActionTextKey,
+    this.secondaryActionText,
     this.onSecondaryAction,
     this.onClose,
-    required this.translate,
   });
 
   @override
@@ -83,7 +81,7 @@ class NoticeDialog extends StatelessWidget {
                     ),
                 const SizedBox(height: Spacing.md),
                 Text(
-                  translate(titleKey),
+                  titleText,
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.w900,
                   ),
@@ -91,7 +89,7 @@ class NoticeDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: Spacing.md),
                 Text(
-                  translate(messageKey),
+                  messageText,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppTheme.textSecondaryColor,
@@ -101,16 +99,16 @@ class NoticeDialog extends StatelessWidget {
                 const SizedBox(height: Spacing.lg),
                 // Nút Primary
                 AppButton.primary(
-                  text: translate(primaryActionTextKey),
+                  text: primaryActionText,
                   onPressed: onPrimaryAction ?? () {},
                   isFullWidth: true,
                   disabled: onPrimaryAction == null,
                 ),
                 const SizedBox(height: Spacing.md),
                 // Nút Secondary
-                secondaryActionTextKey != null
+                secondaryActionText != null
                     ? AppButton.secondary(
-                      text: translate(secondaryActionTextKey!),
+                      text: secondaryActionText!,
                       onPressed: onSecondaryAction ?? () {},
                       isFullWidth: true,
                       disabled: onSecondaryAction == null,
@@ -142,16 +140,15 @@ class NoticeDialog extends StatelessWidget {
 // Hàm tiện ích để hiển thị dialog này
 Future<void> showCustomNoticeDialog({
   required BuildContext context,
-  required String titleKey,
-  required String messageKey,
+  required String titleText,
+  required String messageText,
   required String imageAsset,
   bool isLottie = false,
-  required String primaryActionTextKey,
+  required String primaryActionText,
   VoidCallback? onPrimaryAction,
-  String? secondaryActionTextKey,
+  String? secondaryActionText,
   VoidCallback? onSecondaryAction,
   VoidCallback? onClose,
-  required TranslateFunction translate,
 }) {
   return showDialog<void>(
     context: context,
@@ -160,11 +157,11 @@ Future<void> showCustomNoticeDialog({
       // Truyền các tham số và callback vào widget dialog
       // Sử dụng dialogContext để pop khi cần thiết bên trong các callback
       return NoticeDialog(
-        titleKey: titleKey,
-        messageKey: messageKey,
+        titleText: titleText,
+        messageText: messageText,
         imageAsset: imageAsset,
         isLottie: isLottie,
-        primaryActionTextKey: primaryActionTextKey,
+        primaryActionText: primaryActionText,
         onPrimaryAction:
             onPrimaryAction != null
                 ? () {
@@ -172,7 +169,7 @@ Future<void> showCustomNoticeDialog({
                   onPrimaryAction();
                 }
                 : null,
-        secondaryActionTextKey: secondaryActionTextKey,
+        secondaryActionText: secondaryActionText,
         onSecondaryAction:
             onSecondaryAction != null
                 ? () {
@@ -186,7 +183,6 @@ Future<void> showCustomNoticeDialog({
                   onClose();
                 }
                 : () => Navigator.of(dialogContext).pop(), // Mặc định chỉ đóng
-        translate: translate,
       );
     },
   );

@@ -111,12 +111,11 @@ class _SignUpState extends State<SignUp> {
     if (errorCode == AuthConstants.phoneExistCode) {
       showCustomNoticeDialog(
         context: context,
-        titleKey: 'Thông báo',
-        messageKey:
+        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        messageText:
             'Số điện thoại này đã được đăng ký với Monkey, ba mẹ hãy đăng nhập nhé.',
         imageAsset: 'assets/images/monkey_confused.png',
-        primaryActionTextKey: 'Đăng nhập',
-        translate: AppLocalizations.of(context).translate,
+        primaryActionText: AppLocalizations.of(context).translate('Đăng nhập'),
         onPrimaryAction: () {
           final encodedPhone = Uri.encodeComponent(
             '${context.read<SignUpCubit>().state.phone.value.countryCode}${_phoneController.text}',
@@ -126,7 +125,7 @@ class _SignUpState extends State<SignUp> {
         onSecondaryAction: () {
           context.pop();
         },
-        secondaryActionTextKey: 'Hủy',
+        secondaryActionText: AppLocalizations.of(context).translate('Hủy'),
       );
     }
   }
@@ -140,11 +139,12 @@ class _SignUpState extends State<SignUp> {
     if (errorMessage != null) {
       showCustomNoticeDialog(
         context: context,
-        titleKey: 'Thông báo',
-        messageKey: errorMessage,
+        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        messageText: errorMessage,
         imageAsset: 'assets/images/monkey_sad.png',
-        primaryActionTextKey: 'Tôi đã hiểu',
-        translate: AppLocalizations.of(context).translate,
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('Tôi đã hiểu'),
         onPrimaryAction: clearPopupErrorMessage,
         onClose: clearPopupErrorMessage,
       );

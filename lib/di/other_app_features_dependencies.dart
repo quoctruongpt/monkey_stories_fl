@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/device/device_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
@@ -16,6 +15,7 @@ import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.da
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/domain/repositories/auth_repository.dart';
@@ -32,6 +32,7 @@ void initOtherAppFeaturesDependencies() {
       checkAuthStatusUseCase: sl<CheckAuthStatusUseCase>(),
       registerDeviceUseCase: sl<RegisterDeviceUseCase>(),
       appCubit: sl<AppCubit>(),
+      userCubit: sl<UserCubit>(),
     ),
   );
 

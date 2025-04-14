@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart';
+import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
 
 // Đổi tên class thành SplashScreen
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+
+  void _onSplashError(BuildContext context) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: 'Lỗi',
+      messageText: 'Không thể kết nối',
+      imageAsset: 'assets/images/monkey_sad.png',
+      primaryActionText: 'OK',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,24 +37,21 @@ class SplashScreen extends StatelessWidget {
             GoRouter.of(context).replace(AppRoutePaths.login);
           } else if (state is SplashError) {
             // Optionally show an error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Error initializing: ${state.message}'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            // Maybe navigate to an error page or login page as fallback
-            GoRouter.of(context).replace(AppRoutePaths.login);
+            _onSplashError(context);
           }
         },
-        child: const Scaffold(
+        child: Scaffold(
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 20),
-                Text('Initializing...'),
+                const CircularProgressIndicator(),
+                const SizedBox(height: 20),
+                BlocBuilder<AppCubit, AppState>(
+                  builder: (context, state) {
+                    return Text('Device: ${state.deviceId}');
+                  },
+                ),
               ],
             ),
           ),

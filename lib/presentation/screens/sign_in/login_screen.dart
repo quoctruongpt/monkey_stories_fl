@@ -90,27 +90,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
     showCustomNoticeDialog(
       context: context,
-      titleKey: 'login.popup_error.title',
-      messageKey: errorMessage,
+      titleText: translate('login.popup_error.title'),
+      messageText: errorMessage,
       imageAsset: 'assets/images/monkey_sad.png',
-      primaryActionTextKey: 'login.popup_error.act',
+      primaryActionText: translate('login.popup_error.act'),
       onPrimaryAction: clearErrorDialog,
       onClose: clearErrorDialog,
-      translate: translate,
     );
   }
 
   void _handleMaxFailedAttempts() {
     showCustomNoticeDialog(
       context: context,
-      titleKey: 'login.popup_error.title',
-      messageKey: 'login.popup_error_pw.desc',
+      titleText: translate('login.popup_error.title'),
+      messageText: translate('login.popup_error_pw.desc'),
       imageAsset: 'assets/images/monkey_sad.png',
-      primaryActionTextKey: 'login.popup_error_pw.act',
+      primaryActionText: translate('login.popup_error_pw.act'),
       onPrimaryAction: () {
         context.read<LoginCubit>().resetFailedAttempts();
       },
-      secondaryActionTextKey: 'login.popup_error_pw.retry',
+      secondaryActionText: translate('login.popup_error_pw.retry'),
       onSecondaryAction: () {
         context.read<LoginCubit>().resetFailedAttempts();
         FocusScope.of(context).requestFocus(_passwordFocusNode);
@@ -119,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
       onClose: () {
         context.read<LoginCubit>().resetFailedAttempts();
       },
-      translate: translate,
     );
   }
 
