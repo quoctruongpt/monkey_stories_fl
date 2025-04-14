@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
@@ -78,9 +79,16 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Welcome to Monkey Stories!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                return Text(
+                  'Welcome to Monkey Stories! ${state.user?.name}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -129,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                // context.read<AuthRepository>().logout();
+                context.read<UserCubit>().logout();
                 context.go(AppRoutePaths.login);
               },
               child: const Text("logout"),

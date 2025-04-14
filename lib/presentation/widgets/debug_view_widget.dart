@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/core/env/environment_service.dart';
 
 class DebugViewWidget extends StatelessWidget {

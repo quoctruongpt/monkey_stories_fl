@@ -14,6 +14,7 @@ abstract class AuthLocalDataSource {
   Future<String?> getRefreshToken();
   Future<void> cacheLastLogin(LastLoginModel lastLogin);
   Future<LastLoginModel?> getLastLogin();
+  Future<void> clearAllData();
 }
 
 final logger = Logger('AuthLocalDataSourceImpl');
@@ -33,6 +34,22 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   Future<void> cacheToken(String token) async {
     try {
       await sharedPreferences.setString(SharedPrefKeys.token, token);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<void> clearAllData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final allKeys = prefs.getKeys();
+
+      for (final key in allKeys) {
+        if (!keysToKeep.contains(key)) {
+          await prefs.remove(key);
+        }
+      }
     } catch (e) {
       throw CacheException();
     }
@@ -89,7 +106,6 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
       if (lastLoginJson == null) {
         return null;
       }
-      logger.info('lastLoginJson: ${lastLoginJson}');
       return LastLoginModel.fromJson(jsonDecode(lastLoginJson));
     } catch (e) {
       throw CacheException();

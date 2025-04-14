@@ -35,5 +35,5 @@ abstract class AuthRepository {
     String phoneNumber,
   );
 
-  // Future<Either<Failure, void>> logout();
+  Future<Either<Failure, void>> logout();
 }

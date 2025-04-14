@@ -14,7 +14,7 @@ import 'package:monkey_stories/core/validators/password.dart';
 import 'dart:async';
 
 import 'package:monkey_stories/core/validators/username.dart';
-import 'package:monkey_stories/presentation/bloc/auth/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 final logger = Logger('LoginCubit');
 
@@ -120,7 +120,7 @@ class LoginCubit extends Cubit<LoginState> {
       try {
         final result = await _loginWithLastLoginUsecase.call(
           LoginWithLastLoginEntity(
-            loginType: lastLogin.loginType as LoginType,
+            loginType: lastLogin.loginType,
             email: _lastLogin?.email ?? '',
             token: _lastLogin?.token as String,
           ),
@@ -222,7 +222,8 @@ class LoginCubit extends Cubit<LoginState> {
           ),
         );
       },
-      (loginStatus) {
+      (loginStatus) async {
+        await _userCubit.loadUpdate();
         emit(state.copyWith(status: FormSubmissionStatus.success));
       },
     );

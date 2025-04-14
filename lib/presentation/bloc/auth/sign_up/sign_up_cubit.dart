@@ -11,7 +11,7 @@ import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
-import 'package:monkey_stories/presentation/bloc/auth/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'sign_up_state.dart';
 
@@ -167,7 +167,8 @@ class SignUpCubit extends Cubit<SignUpState> {
         (failure) {
           emit(state.copyWith(signUpErrorMessage: failure.message));
         },
-        (success) {
+        (success) async {
+          await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },
       );
@@ -190,7 +191,8 @@ class SignUpCubit extends Cubit<SignUpState> {
         (failure) {
           throw failure;
         },
-        (loginStatus) {
+        (loginStatus) async {
+          await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },
       );

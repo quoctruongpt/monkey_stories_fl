@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
-import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -26,8 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => sl<UnityCubit>()),
         BlocProvider(create: (_) => sl<AppCubit>()),
-        BlocProvider(create: (_) => DebugCubit()),
-        BlocProvider(create: (_) => FloatButtonCubit()),
+        BlocProvider(create: (_) => sl<DebugCubit>()),
+        BlocProvider(create: (_) => sl<FloatButtonCubit>()),
+        BlocProvider(create: (_) => sl<UserCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:

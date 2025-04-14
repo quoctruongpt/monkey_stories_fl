@@ -361,6 +361,16 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    try {
+      await localDataSource.clearAllData();
+      return const Right(null);
+    } catch (e) {
+      return const Left(ServerFailure(message: 'Đăng xuất thất bại'));
+    }
+  }
 }
 
 class SocialLoginData {

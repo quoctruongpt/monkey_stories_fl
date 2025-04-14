@@ -1,11 +1,11 @@
 part of 'user_cubit.dart';
 
 class UserState extends Equatable {
-  final User? user;
+  final UserEntity? user;
 
   const UserState({this.user});
 
-  UserState copyWith({User? user}) {
+  UserState copyWith({UserEntity? user}) {
     return UserState(user: user);
   }
 

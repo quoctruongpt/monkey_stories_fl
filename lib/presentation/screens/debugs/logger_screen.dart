@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/models/debug.dart';
 import 'package:share_plus/share_plus.dart';
 
