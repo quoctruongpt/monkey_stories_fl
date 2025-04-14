@@ -1,12 +1,28 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
-// Import Entities nếu cần (ví dụ: AuthToken, User)
+import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
+import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
+import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
 
 abstract class AuthRepository {
   // Trả về true nếu đã đăng nhập, false nếu chưa
   Future<Either<Failure, bool>> isLoggedIn();
 
-  // Các phương thức khác cho Auth (login, signup, logout...)
-  // Future<Either<Failure, User>> login(String email, String password);
+  Future<Either<ServerFailureWithCode, bool>> login(
+    LoginType loginType,
+    String? phone,
+    String? email,
+    String? password,
+  );
+
+  Future<Either<ServerFailureWithCode, bool>> loginWithLastLogin(
+    LoginWithLastLoginEntity params,
+  );
+
+  Future<Either<Failure, LastLoginEntity?>> getLastLogin();
+
+  Future<Either<Failure, UserSocialEntity?>> getUserSocial(LoginType type);
+
   // Future<Either<Failure, void>> logout();
 }

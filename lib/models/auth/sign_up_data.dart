@@ -1,4 +1,4 @@
-import 'package:monkey_stories/models/auth/login_data.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 
 class SignUpRequestData {
   final LoginType type;

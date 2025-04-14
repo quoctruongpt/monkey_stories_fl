@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
 import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
 import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
@@ -12,7 +11,6 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
-import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
 import 'package:monkey_stories/services/logger_service.dart';
 import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
@@ -30,8 +28,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<AppCubit>()),
         BlocProvider(create: (_) => DebugCubit()),
         BlocProvider(create: (_) => FloatButtonCubit()),
-        RepositoryProvider(create: (_) => AuthRepository()),
-        BlocProvider(create: (_) => AuthenticationCubit()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:

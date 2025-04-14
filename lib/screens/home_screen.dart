@@ -130,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () {
-                context.read<AuthRepository>().logout();
+                // context.read<AuthRepository>().logout();
                 context.go(AppRoutePaths.login);
               },
               child: const Text("logout"),

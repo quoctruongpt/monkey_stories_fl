@@ -18,6 +18,16 @@ class ServerFailure extends Failure {
   List<Object> get props => [message];
 }
 
+class ServerFailureWithCode extends Failure {
+  final int code;
+  final String message;
+
+  const ServerFailureWithCode({this.code = 200, this.message = 'Server Error'});
+
+  @override
+  List<Object> get props => [code, message];
+}
+
 // Lỗi từ Cache (ví dụ: SharedPreferences)
 class CacheFailure extends Failure {
   final String message;

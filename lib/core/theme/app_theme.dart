@@ -107,7 +107,7 @@ class AppTheme {
         borderSide: BorderSide(color: errorColor),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      hintStyle: const TextStyle(
+      hintStyle: TextStyle(
         fontSize: 20,
         color: textGrayLightColor,
         fontWeight: FontWeight.w800,

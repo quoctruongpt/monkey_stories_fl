@@ -7,7 +7,7 @@ import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
 import 'package:monkey_stories/screens/home_screen.dart';
-import 'package:monkey_stories/screens/login_screen.dart';
+import 'package:monkey_stories/presentation/screens/sign_in/login_screen.dart';
 import 'package:monkey_stories/screens/result_screen.dart';
 import 'package:monkey_stories/screens/sign_up_screen.dart';
 import 'package:monkey_stories/screens/year_ob_birth_screen.dart';
@@ -80,7 +80,8 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.signUp,
       pageBuilder: (context, state) {
         context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-        return const MaterialPage(child: SignUpScreen());
+        return const MaterialPage(child: Placeholder());
+        // return const MaterialPage(child: SignUpScreen());
       },
     ),
   ],

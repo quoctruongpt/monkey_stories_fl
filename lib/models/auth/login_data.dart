@@ -1,3 +1,5 @@
+import 'package:monkey_stories/core/constants/constants.dart';
+
 class LoginResponseData {
   final int userId;
   final String accessToken;
@@ -66,16 +68,4 @@ class LoginRequestData {
       'name': name,
     };
   }
-}
-
-enum LoginType {
-  facebook(1),
-  email(2),
-  phone(3),
-  skip(4),
-  userCrm(5),
-  apple(6);
-
-  final int value;
-  const LoginType(this.value);
 }

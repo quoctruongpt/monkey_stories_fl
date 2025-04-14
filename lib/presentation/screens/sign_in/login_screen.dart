@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
+import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
-import 'package:monkey_stories/blocs/login/login_cubit.dart';
-import 'package:monkey_stories/blocs/login/login_state.dart';
+import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -16,7 +16,6 @@ import 'package:monkey_stories/widgets/button_widget.dart';
 import 'package:monkey_stories/widgets/footer_authentication.dart';
 import 'package:monkey_stories/widgets/loading_overlay.dart';
 import 'package:monkey_stories/widgets/text_and_action.dart';
-import 'package:monkey_stories/repositories/auth_repository.dart';
 import 'package:monkey_stories/widgets/notice_dialog.dart';
 
 final logger = Logger('LoginScreen');
@@ -29,12 +28,7 @@ class LoginScreenProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => LoginCubit(
-            context.read<AuthenticationCubit>(),
-            context.read<AuthRepository>(),
-            initialUsername,
-          ),
+      create: (context) => sl<LoginCubit>(),
       child: LoginScreen(initialUsername: initialUsername),
     );
   }
@@ -63,7 +57,14 @@ class _LoginScreenState extends State<LoginScreen> {
     _usernameController.addListener(() {
       context.read<LoginCubit>().usernameChanged(_usernameController.text);
     });
-    context.read<LoginCubit>().loadLastLogin();
+
+    // Call loadLastLogin after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        // Check if the state is still mounted
+        context.read<LoginCubit>().loadLastLogin(widget.initialUsername);
+      }
+    });
   }
 
   @override

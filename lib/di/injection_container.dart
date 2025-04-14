@@ -1,4 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
+import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
@@ -38,6 +44,8 @@ import 'package:monkey_stories/data/repositories/system_settings_repository_impl
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
 
+import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
+
 /// Service locator instance
 final sl = GetIt.instance;
 
@@ -65,12 +73,47 @@ Future<void> init() async {
 
   // Khởi tạo dependencies cho các tính năng App khác
   initAppFeatures();
+
+  initAuthFeature();
+}
+
+void initAuthFeature() {
+  // UseCase
+  sl.registerLazySingleton(() => LoginUsecase(sl()));
+  sl.registerLazySingleton(() => LoginWithLastLoginUsecase(sl()));
+  sl.registerLazySingleton(() => GetLastLoginUsecase(sl()));
+  sl.registerLazySingleton(() => GetUserSocialUsecase(sl()));
+  // Cubit
+  sl.registerFactory(
+    () => LoginCubit(
+      authenticationCubit: sl(),
+      loginUsecase: sl(),
+      loginWithLastLoginUsecase: sl(),
+      getLastLoginUsecase: sl(),
+      getUserSocialUsecase: sl(),
+    ),
+  );
+  sl.registerLazySingleton(() => AuthenticationCubit());
+
+  // Repository
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(localDataSource: sl(), remoteDataSource: sl()),
+  );
+
+  // Data Source
+  sl.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(dioClient: sl()),
+  );
 }
 
 /// Khởi tạo dependencies cho các tính năng App (Splash, Auth, Device, Settings, System)
 void initAppFeatures() {
   // Presentation
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => SplashCubit(
       checkAuthStatusUseCase: sl(),
       registerDeviceUseCase: sl(),
@@ -87,10 +130,6 @@ void initAppFeatures() {
   sl.registerLazySingleton(() => SaveThemeUseCase(sl()));
   sl.registerLazySingleton(() => SetPreferredOrientationsUseCase(sl()));
 
-  // Repositories - Auth & Device & Settings & System
-  sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(localDataSource: sl()),
-  );
   sl.registerLazySingleton<DeviceRepository>(
     () => DeviceRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
@@ -99,11 +138,6 @@ void initAppFeatures() {
   );
   sl.registerLazySingleton<SystemSettingsRepository>(
     () => SystemSettingsRepositoryImpl(dataSource: sl()),
-  );
-
-  // Data Sources - Auth & Device & Settings & System
-  sl.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
   );
   sl.registerLazySingleton<DeviceLocalDataSource>(
     () => DeviceLocalDataSourceImpl(sharedPreferences: sl()),
