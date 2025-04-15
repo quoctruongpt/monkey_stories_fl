@@ -6,6 +6,8 @@ class AppTheme {
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color surfaceColor = Colors.white;
   static const Color successColor = Color(0xFF92C73D);
+  static const Color blueLightColor = Color(0xFFEDF9FF);
+  static const Color skyLightColor = Color(0xFFD2F1FF);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);
@@ -40,13 +42,13 @@ class AppTheme {
     ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
+        fontSize: 28,
+        fontWeight: FontWeight.w900,
         color: textColor,
       ),
       displayMedium: TextStyle(
         fontSize: 24,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w900,
         color: textColor,
       ),
       displaySmall: TextStyle(
@@ -77,6 +79,22 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.w800,
           color: textColor,
+          fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        side: const BorderSide(
+          color: AppTheme.buttonPrimaryDisabledBackground,
+          width: 2,
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: textSecondaryColor,
           fontFamily: 'Nunito',
         ),
       ),

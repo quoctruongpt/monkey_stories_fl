@@ -1,0 +1,210 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
+
+class CreateProfileLoadingScreen extends StatelessWidget {
+  const CreateProfileLoadingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<CreateProfileLoadingCubit>(),
+      child: const CreateProfileLoading(),
+    );
+  }
+}
+
+class CreateProfileLoading extends StatefulWidget {
+  const CreateProfileLoading({super.key});
+
+  @override
+  State<CreateProfileLoading> createState() => _CreateProfileLoadingState();
+}
+
+class _CreateProfileLoadingState extends State<CreateProfileLoading> {
+  @override
+  void initState() {
+    super.initState();
+    // Gọi startLoading khi màn hình được khởi tạo
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CreateProfileLoadingCubit>().startLoading();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(Spacing.md),
+          child:
+              BlocBuilder<CreateProfileLoadingCubit, CreateProfileLoadingState>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Spacing.lg,
+                        ),
+                        child: Text(
+                          'Monkey đang cập nhật dữ liệu học tập của bé',
+                          style: Theme.of(context).textTheme.displayLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      const SizedBox(height: 80),
+
+                      SizedBox(
+                        height: 216,
+                        width: 216,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: CircularProgressIndicator(
+                                value: state.progress,
+                                strokeWidth: 24,
+                                strokeCap: StrokeCap.round,
+                                backgroundColor: AppTheme.skyLightColor,
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                            Text(
+                              '${(state.progress * 100).toInt()}%',
+                              style: const TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.w900,
+                                color: AppTheme.primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 80),
+
+                      CreateProfileLoadingItem(
+                        title: 'Cập nhật thông tin tài khoản sử dụng',
+                        active: state.progress >= 0.25,
+                      ),
+                      CreateProfileLoadingItem(
+                        title: 'Cập nhật thông tin tài khoản sử dụng',
+                        active: state.progress >= 0.5,
+                      ),
+                      CreateProfileLoadingItem(
+                        title: 'Cập nhật thông tin tài khoản sử dụng',
+                        active: state.progress >= 0.75,
+                      ),
+                    ],
+                  );
+                },
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+class CreateProfileLoadingItem extends StatefulWidget {
+  const CreateProfileLoadingItem({
+    super.key,
+    required this.title,
+    this.active = false,
+  });
+
+  final String title;
+  final bool active;
+
+  @override
+  State<CreateProfileLoadingItem> createState() =>
+      _CreateProfileLoadingItemState();
+}
+
+class _CreateProfileLoadingItemState extends State<CreateProfileLoadingItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  bool _previousActive = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _previousActive = widget.active;
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.05),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.05, end: 1.0),
+        weight: 50,
+      ),
+    ]).animate(_controller);
+
+    // Kích hoạt animation nếu active = true ngay từ đầu
+    if (widget.active) {
+      _controller.forward();
+    }
+  }
+
+  @override
+  void didUpdateWidget(CreateProfileLoadingItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Kích hoạt animation khi active thay đổi từ false sang true
+    if (widget.active && !_previousActive) {
+      _controller.reset();
+      _controller.forward();
+    }
+
+    _previousActive = widget.active;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _scaleAnimation,
+      builder: (context, child) {
+        return Transform.scale(scale: _scaleAnimation.value, child: child);
+      },
+      child: Row(
+        children: [
+          Icon(
+            widget.active ? Icons.check_circle : Icons.check_circle_outline,
+            color:
+                widget.active ? AppTheme.primaryColor : AppTheme.textGrayColor,
+          ),
+          const SizedBox(width: Spacing.sm),
+          Text(
+            widget.title,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color:
+                  widget.active
+                      ? AppTheme.primaryColor
+                      : AppTheme.textGrayColor,
+            ),
+          ),
+          const SizedBox(width: Spacing.sm),
+        ],
+      ),
+    );
+  }
+}

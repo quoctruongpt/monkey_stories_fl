@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/unity_datasource.dart';
 import 'package:monkey_stories/data/repositories/unity_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/unity_repository.dart';

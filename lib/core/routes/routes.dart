@@ -4,13 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/screens/create_profile/choose_level.dart';
+import 'package:monkey_stories/presentation/screens/create_profile/choose_year_of_birth.dart';
+import 'package:monkey_stories/presentation/screens/create_profile/create_profile_loading.dart';
+import 'package:monkey_stories/presentation/screens/create_profile/input_name_screen.dart';
+import 'package:monkey_stories/presentation/screens/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
 import 'package:monkey_stories/presentation/screens/home_screen.dart';
 import 'package:monkey_stories/presentation/screens/sign_in/login_screen.dart';
 import 'package:monkey_stories/presentation/screens/result_screen.dart';
 import 'package:monkey_stories/presentation/screens/sign_up/sign_up_screen.dart';
-import 'package:monkey_stories/presentation/screens/year_ob_birth_screen.dart';
 
 final logger = Logger('router');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -26,6 +30,7 @@ final GoRouter router = GoRouter(
         return const MaterialPage(child: SplashScreen());
       },
     ),
+
     GoRoute(
       path: AppRoutePaths.home,
       name: AppRouteNames.home,
@@ -42,6 +47,7 @@ final GoRouter router = GoRouter(
         return const MaterialPage(child: ResultScreen());
       },
     ),
+
     GoRoute(
       path: AppRoutePaths.unity,
       name: AppRouteNames.unity,
@@ -55,13 +61,7 @@ final GoRouter router = GoRouter(
         return null;
       },
     ),
-    GoRoute(
-      path: AppRoutePaths.yearOfBirth,
-      name: AppRouteNames.yearOfBirth,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: YearOfBirthScreen());
-      },
-    ),
+
     GoRoute(
       path: AppRoutePaths.login,
       name: AppRouteNames.login,
@@ -75,12 +75,52 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+
     GoRoute(
       path: AppRoutePaths.signUp,
       name: AppRouteNames.signUp,
       pageBuilder: (context, state) {
         context.read<AppCubit>().setOrientation(AppOrientation.portrait);
         return const MaterialPage(child: SignUpScreen());
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.signUpSuccess,
+      name: AppRouteNames.signUpSuccess,
+      pageBuilder: (context, state) {
+        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
+        return const MaterialPage(child: SignUpSuccessScreen());
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.createProfileInputName,
+      name: AppRouteNames.createProfileInputName,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: CreateProfileInputNameScreen());
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.createProfileInputDateOfBirth,
+      name: AppRouteNames.createProfileInputDateOfBirth,
+      pageBuilder: (context, state) {
+        return const MaterialPage(
+          child: CreateProfileChooseYearOfBirthScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.createProfileChooseLevel,
+      name: AppRouteNames.createProfileChooseLevel,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: ChooseLevelScreen());
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.createProfileLoading,
+      name: AppRouteNames.createProfileLoading,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: CreateProfileLoadingScreen());
       },
     ),
   ],
