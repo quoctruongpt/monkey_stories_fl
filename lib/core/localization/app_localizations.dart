@@ -18,7 +18,7 @@ class AppLocalizations {
       'assets/translations/${locale.languageCode}.json',
     );
 
-    _localizedStrings = json.decode(jsonString);
+    _localizedStrings = jsonDecode(jsonString);
     return true;
   }
 

@@ -27,17 +27,17 @@ class PhoneValidator extends FormzInput<PhoneNumberInput, String> {
   @override
   String? validator(PhoneNumberInput value) {
     if (value.phoneNumber.isEmpty || value.countryCode.isEmpty) {
-      return 'Vui lòng nhập số điện thoại';
+      return 'validation.phone.empty';
     }
 
     // Kiểm tra độ dài số điện thoại (ví dụ: ít nhất 6 chữ số)
     if (value.phoneNumber.length < 6 || value.phoneNumber.length > 15) {
-      return 'Số điện thoại từ 6-15 ký tự';
+      return 'validation.phone.length';
     }
 
     final regex = RegExp(r'^\d+$');
     if (!regex.hasMatch(value.phoneNumber)) {
-      return 'Số điện thoại không hợp lệ';
+      return 'validation.phone.invalid';
     }
 
     return null;

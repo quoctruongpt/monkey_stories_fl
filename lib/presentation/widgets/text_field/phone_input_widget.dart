@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 
 class PhoneInputField extends StatelessWidget {
@@ -37,7 +38,11 @@ class PhoneInputField extends StatelessWidget {
           onChanged: onChanged,
           style: const TextStyle(fontSize: 20),
           decoration: InputDecoration(
-            hintText: hintText ?? 'Số điện thoại',
+            hintText:
+                hintText ??
+                AppLocalizations.of(
+                  context,
+                ).translate('sign_up.input_phone.hint'),
             errorText: errorText,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: Spacing.md),
@@ -142,7 +147,7 @@ class PhoneInputField extends StatelessWidget {
 
         isPhoneValid == true
             ? Text(
-              'Số điện thoại khả dụng',
+              AppLocalizations.of(context).translate('sign_up.phone.valid'),
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: AppTheme.successColor,
                 fontWeight: FontWeight.w700,
