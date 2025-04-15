@@ -70,7 +70,7 @@ final GoRouter router = GoRouter(
 
         final String? initialUsername = state.uri.queryParameters['username'];
         return MaterialPage(
-          key: ValueKey('login-${initialUsername ?? ''}'),
+          // key: ValueKey('login-${initialUsername ?? ''}'),
           child: LoginScreenProvider(initialUsername: initialUsername),
         );
       },

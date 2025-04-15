@@ -112,10 +112,13 @@ class _SignUpState extends State<SignUp> {
       showCustomNoticeDialog(
         context: context,
         titleText: AppLocalizations.of(context).translate('Thông báo'),
-        messageText:
-            'Số điện thoại này đã được đăng ký với Monkey, ba mẹ hãy đăng nhập nhé.',
+        messageText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.phone.exists.message'),
         imageAsset: 'assets/images/monkey_confused.png',
-        primaryActionText: AppLocalizations.of(context).translate('Đăng nhập'),
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.phone.exists.act'),
         onPrimaryAction: () {
           final encodedPhone = Uri.encodeComponent(
             '${context.read<SignUpCubit>().state.phone.value.countryCode}${_phoneController.text}',
@@ -125,7 +128,9 @@ class _SignUpState extends State<SignUp> {
         onSecondaryAction: () {
           context.pop();
         },
-        secondaryActionText: AppLocalizations.of(context).translate('Hủy'),
+        secondaryActionText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.phone.exists.act2'),
       );
     }
   }
@@ -139,12 +144,14 @@ class _SignUpState extends State<SignUp> {
     if (errorMessage != null) {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.popup.title'),
         messageText: errorMessage,
         imageAsset: 'assets/images/monkey_sad.png',
         primaryActionText: AppLocalizations.of(
           context,
-        ).translate('Tôi đã hiểu'),
+        ).translate('sign_up.phone.exists.act2'),
         onPrimaryAction: clearPopupErrorMessage,
         onClose: clearPopupErrorMessage,
       );
@@ -365,7 +372,7 @@ class _SignUpState extends State<SignUp> {
                                     state.isConfirmPasswordCorrect;
 
                         return AppButton.primary(
-                          text: translate('Tiếp tục'),
+                          text: translate('sign_up.act'),
                           onPressed: _handleContinue,
                           isFullWidth: true,
                           disabled: !enableContinueButton,
@@ -383,7 +390,7 @@ class _SignUpState extends State<SignUp> {
                   bottom: Spacing.md + MediaQuery.of(context).padding.bottom,
                 ),
                 child: FooterAuthentication(
-                  textOnLine: translate('Hoặc đăng nhập với'),
+                  textOnLine: translate('sign_up.other'),
                   onActionPress: () {
                     context.push(AppRoutePaths.login);
                   },
@@ -396,8 +403,8 @@ class _SignUpState extends State<SignUp> {
                   onGooglePress: () {
                     context.read<SignUpCubit>().signUpWithGoogle();
                   },
-                  actionDescText: translate('Tôi đã có tài khoản. '),
-                  actionText: translate('Đăng nhập'),
+                  actionDescText: translate('sign_up.have_account.desc'),
+                  actionText: translate('sign_up.have_account.act'),
                 ),
               ),
             ),
@@ -443,7 +450,10 @@ class PhoneInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Nhập số điện thoại', style: TextStyle(fontSize: 20)),
+        Text(
+          AppLocalizations.of(context).translate('sign_up.input_phone.label'),
+          style: const TextStyle(fontSize: 20),
+        ),
 
         const SizedBox(height: Spacing.md),
 
@@ -495,29 +505,40 @@ class PasswordInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Tạo mật khẩu', style: TextStyle(fontSize: 20)),
+        Text(
+          AppLocalizations.of(context).translate('sign_up.password.label'),
+          style: const TextStyle(fontSize: 20),
+        ),
         const SizedBox(height: Spacing.md),
         PasswordInputField(
           controller: controllerPassword,
           onChanged: onChangedPassword,
-          hintText: 'Mật khẩu',
+          hintText: AppLocalizations.of(
+            context,
+          ).translate('sign_up.password.hint'),
           obscureText: !isShowPassword,
           onObscureTextToggle: toggleShowPassword,
           errorText: passwordErrorText,
           isPasswordValid: isPasswordValid,
-          passwordValidText: 'Mật khẩu khả dụng',
+          passwordValidText: AppLocalizations.of(
+            context,
+          ).translate('sign_up.password.valid'),
           focusNode: focusNode,
         ),
         const SizedBox(height: Spacing.md),
         PasswordInputField(
           controller: controllerConfirmPassword,
           onChanged: onChangedConfirmPassword,
-          hintText: 'Nhập lại mật khẩu',
+          hintText: AppLocalizations.of(
+            context,
+          ).translate('sign_up.re_password.label'),
           obscureText: !isShowPassword,
           onObscureTextToggle: toggleShowPassword,
           errorText: confirmPasswordErrorText,
           isPasswordValid: isConfirmPasswordValid,
-          passwordValidText: 'Mật khẩu trùng khớp',
+          passwordValidText: AppLocalizations.of(
+            context,
+          ).translate('sign_up.re_password.valid'),
         ),
       ],
     );
