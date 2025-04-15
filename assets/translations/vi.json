@@ -1,5 +1,27 @@
 {
-  "home": {
-    "title": "Trang chủ"
-  }
+  "login.username": "Số điện thoại/Tên đăng nhập",
+  "login.password": "Mật khẩu",
+  "login.forgot_password": "Quên mật khẩu?",
+  "login.device_id": "ID thiết bị",
+  "login.act.title": "Đăng nhập",
+  "login.active_code.desc": "Nếu bạn có mã kích hoạt, ",
+  "login.active_code.act": "Nhập tại đây.",
+  "login.other_method": "Hoặc đăng nhập với",
+  "login.sign_up.desc": "Bạn chưa có tài khoản? ",
+  "login.sign_up.act": "Đăng ký",
+  "login.popup_error.title": "Thông báo",
+  "login.popup_error.desc": "Đăng nhập bằng Facebook thất bại",
+  "login.popup_error.act": "Tôi đã hiểu",
+  "login.popup_error_pw.desc": "Bạn đã nhập sai mật khẩu quá 5 lần.\nChọn \"Quên mật khẩu\" để khôi phục nhé.",
+  "login.popup_error_pw.act": "Quên mật khẩu",
+  "login.popup_error_pw.retry": "Thử lại",
+  "app.check_phone_error": "Số điện thoại không đúng",
+  "validation.username.invalid": "Số điện thoại không hợp lệ",
+  "validation.username.empty": "Vui lòng nhập số điện thoại/tên đăng nhập",
+  "validation.username.length": "Số điện thoại cần nhập 6 - 15 chữ số",
+  "validation.password.empty": "Vui lòng nhập mật khẩu",
+  "validation.password.length": "Vui lòng nhập mật khẩu từ 4-30 ký tự",
+  "validation.password.invalid_characters": "Mật khẩu không hợp lệ",
+  "app.pw_error": "Mật khẩu không chính xác",
+  "app.account_dont_register": "Tài khoản không tồn tại"
 }

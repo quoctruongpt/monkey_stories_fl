@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/blocs/app/app_cubit.dart';
-import 'package:monkey_stories/blocs/auth/auth_cubit.dart';
-import 'package:monkey_stories/blocs/debug/debug_cubit.dart';
-import 'package:monkey_stories/blocs/float_button/float_button_cubit.dart';
-import 'package:monkey_stories/blocs/orientation/orientation_cubit.dart';
-import 'package:monkey_stories/blocs/unity/unity_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/float_button/float_button_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations_delegate.dart';
-import 'package:monkey_stories/core/navigation/router.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/screens/debugs/debug_navigator.dart';
-import 'package:monkey_stories/services/logger_service.dart';
-import 'package:monkey_stories/widgets/orientation_loading_widget.dart';
-import 'package:monkey_stories/widgets/unity_widget.dart';
+import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
+import 'package:monkey_stories/presentation/screens/debugs/debug_navigator.dart';
+import 'package:monkey_stories/core/extensions/logger_service.dart';
+import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
 
 final logger = Logger('MyApp');
 
@@ -25,12 +25,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => UnityCubit()),
-        BlocProvider(create: (_) => OrientationCubit()),
-        BlocProvider(create: (_) => AppCubit()),
-        BlocProvider(create: (_) => DebugCubit()),
-        BlocProvider(create: (_) => FloatButtonCubit()),
-        BlocProvider(create: (_) => AuthenticationCubit()),
+        BlocProvider(create: (_) => sl<UnityCubit>()),
+        BlocProvider(create: (_) => sl<AppCubit>()),
+        BlocProvider(create: (_) => sl<DebugCubit>()),
+        BlocProvider(create: (_) => sl<FloatButtonCubit>()),
+        BlocProvider(create: (_) => sl<UserCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:
@@ -123,9 +122,12 @@ class _AppBuilderState extends State<AppBuilder>
 
         // Unity Widget sẽ đè lên UI khi cần thiết
         BlocBuilder<UnityCubit, UnityState>(
-          buildWhen:
-              (previous, current) =>
-                  previous.isUnityVisible != current.isUnityVisible,
+          buildWhen: (previous, current) {
+            logger.info(
+              'Unity state change: ${current.isUnityVisible} ${previous.isUnityVisible}',
+            );
+            return previous.isUnityVisible != current.isUnityVisible;
+          },
           builder: (context, state) {
             return AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
@@ -151,7 +153,7 @@ class _AppBuilderState extends State<AppBuilder>
         // Orientation loading
         MultiBlocListener(
           listeners: [
-            BlocListener<OrientationCubit, OrientationState>(
+            BlocListener<AppCubit, AppState>(
               listenWhen:
                   (previous, current) =>
                       previous.orientation != current.orientation,

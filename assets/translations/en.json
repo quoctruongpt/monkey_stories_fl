@@ -1,5 +1,27 @@
 {
-  "home": {
-    "title": "Home"
-  }
+  "login.username": "Phone number/Username",
+  "login.password": "Password ",
+  "login.forgot_password": "Forgot password?",
+  "login.device_id": "Device ID",
+  "login.act.title": "Sign in ",
+  "login.active_code.desc": "If you have an activation code, ",
+  "login.active_code.act": "Enter it here.",
+  "login.other_method": "Or sign in with ",
+  "login.sign_up.desc": "Don't have an account? ",
+  "login.sign_up.act": "Sign up",
+  "login.popup_error.title": "Notice",
+  "login.popup_error.desc": "Sign in with Facebook failed.",
+  "login.popup_error.act": "I got it",
+  "login.popup_error_pw.desc": "You have entered the wrong password more than 5 times\\nSelect \"Forgot password\" to recover it.",
+  "login.popup_error_pw.act": "",
+  "login.popup_error_pw.act2": "Try again",
+  "app.check_phone_error": "Invalid phone number",
+  "validation.username.invalid": "",
+  "validation.username.empty": "Please enter your phone number/username",
+  "validation.username.length": "",
+  "validation.password.empty": "Please enter your password",
+  "validation.password.length": "",
+  "validation.password.invalid_characters": "",
+  "app.pw_error": "",
+  "app.account_dont_register": ""
 }

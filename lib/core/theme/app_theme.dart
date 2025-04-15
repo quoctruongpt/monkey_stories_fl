@@ -5,6 +5,7 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF42A5F5);
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color surfaceColor = Colors.white;
+  static const Color successColor = Color(0xFF92C73D);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);
@@ -64,6 +65,7 @@ class AppTheme {
         fontWeight: FontWeight.w800,
       ),
       labelLarge: TextStyle(fontSize: 14, color: textSecondaryColor),
+      labelMedium: TextStyle(fontSize: 12, color: textSecondaryColor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -94,10 +96,18 @@ class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: textGrayLightColor),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      hintStyle: const TextStyle(
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      hintStyle: TextStyle(
         fontSize: 20,
         color: textGrayLightColor,
         fontWeight: FontWeight.w800,

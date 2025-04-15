@@ -47,5 +47,33 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>GIDClientID</key>
+	<string>518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- TODO Replace this value: -->
+				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+				<string>com.googleusercontent.apps.518533842801-htuivakbfj06u08rf3rlno2abqcll7id</string>
+				<string>com.earlystart.monkeyjunior.stories</string>
+				<string>fb520137134992261</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>520137134992261</string>
+	<key>FacebookClientToken</key>
+	<string>798e11b5f2d2d3ff8e6216d914e4b353</string>
+	<key>FacebookDisplayName</key>
+	<string>Monkey Stories</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>fbapi</string>
+	<string>fb-messenger-share-api</string>
+	</array>
 </dict>
 </plist>

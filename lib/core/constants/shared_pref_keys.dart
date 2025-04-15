@@ -6,4 +6,13 @@ class SharedPrefKeys {
   static const String deviceId = 'deviceId';
   static const String token = 'token';
   static const String refreshToken = 'refreshToken';
+  static const String userId = 'userId';
+  static const String lastLogin = 'lastLogin';
 }
+
+final keysToKeep = [
+  SharedPrefKeys.languageCode,
+  SharedPrefKeys.isDarkMode,
+  SharedPrefKeys.deviceId,
+  SharedPrefKeys.lastLogin,
+];
