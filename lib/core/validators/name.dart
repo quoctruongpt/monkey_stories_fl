@@ -10,6 +10,9 @@ class NameValidator extends FormzInput<String, String> {
     if (value == null || value.isEmpty) {
       return 'validation.name.empty';
     }
+    if (value.trim().isEmpty) {
+      return 'validation.name.invalid';
+    }
     if (value.length < 2 || value.length > 50) {
       return 'validation.name.length';
     }

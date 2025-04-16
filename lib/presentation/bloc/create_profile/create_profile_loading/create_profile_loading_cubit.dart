@@ -1,46 +1,60 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'dart:async';
+
+import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 part 'create_profile_loading_state.dart';
 
+final logger = Logger('CreateProfileLoadingCubit');
+
 class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
-  CreateProfileLoadingCubit()
-    : super(
-        const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
-      );
+  final CreateProfileUsecase _createProfileUsecase;
+
+  CreateProfileLoadingCubit({
+    required CreateProfileUsecase createProfileUsecase,
+  }) : _createProfileUsecase = createProfileUsecase,
+
+       super(
+         const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
+       );
 
   Timer? _progressTimer;
   Timer? _loadingTimer;
 
-  void startLoading() {
+  void startLoading(String name, int yearOfBirth) async {
     // Bắt đầu từ trạng thái init
     _updateLoadingProcess(LoadingProcess.init);
 
     // Danh sách các trạng thái theo thứ tự
-    final loadingSteps = [
-      LoadingProcess.createAccount,
-      LoadingProcess.createProfile,
-      LoadingProcess.updateSetting,
-      LoadingProcess.done,
-    ];
+    await _createProfile(name, yearOfBirth);
 
-    int currentStep = 0;
+    _updateLoadingProcess(LoadingProcess.done);
+  }
 
-    // Hủy timer cũ nếu có
-    _loadingTimer?.cancel();
+  Future<void> _createProfile(String name, int yearOfBirth) async {
+    try {
+      final result = await _createProfileUsecase.call(
+        CreateProfileUsecaseParams(name: name, yearOfBirth: yearOfBirth),
+      );
 
-    // Tạo timer mới để thay đổi loadingProcess mỗi 2 giây
-    _loadingTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (currentStep < loadingSteps.length) {
-        _updateLoadingProcess(loadingSteps[currentStep]);
-        currentStep++;
+      if (result.isLeft()) {
+        result.fold(
+          (failure) {
+            logger.severe('API error: ${failure.message}');
+            throw Exception(failure.message);
+          },
+          (_) {}, // Không cần xử lý trường hợp thành công ở đây
+        );
       } else {
-        // Đã hoàn thành tất cả các bước, hủy timer
-        timer.cancel();
-        _loadingTimer = null;
+        _updateLoadingProcess(LoadingProcess.createProfile);
       }
-    });
+    } catch (e) {
+      logger.severe('error: $e');
+      emit(state.copyWith(callApiProfileError: e.toString()));
+      rethrow; // Re-throw lỗi để có thể bắt ở tầng trên
+    }
   }
 
   void _updateLoadingProcess(LoadingProcess loadingProcess) {

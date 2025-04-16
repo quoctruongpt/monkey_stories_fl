@@ -104,8 +104,9 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.createProfileInputDateOfBirth,
       name: AppRouteNames.createProfileInputDateOfBirth,
       pageBuilder: (context, state) {
-        return const MaterialPage(
-          child: CreateProfileChooseYearOfBirthScreen(),
+        final String name = state.uri.queryParameters['name'] ?? '';
+        return MaterialPage(
+          child: CreateProfileChooseYearOfBirthScreen(name: name),
         );
       },
     ),
@@ -113,14 +114,33 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.createProfileChooseLevel,
       name: AppRouteNames.createProfileChooseLevel,
       pageBuilder: (context, state) {
-        return const MaterialPage(child: ChooseLevelScreen());
+        final String name = state.uri.queryParameters['name'] ?? '';
+        final int yearOfBirth = int.parse(
+          state.uri.queryParameters['yearOfBirth'] ?? '0',
+        );
+        return MaterialPage(
+          child: ChooseLevelScreen(name: name, yearOfBirth: yearOfBirth),
+        );
       },
     ),
     GoRoute(
       path: AppRoutePaths.createProfileLoading,
       name: AppRouteNames.createProfileLoading,
       pageBuilder: (context, state) {
-        return const MaterialPage(child: CreateProfileLoadingScreen());
+        final String name = state.uri.queryParameters['name'] ?? '';
+        final int yearOfBirth = int.parse(
+          state.uri.queryParameters['yearOfBirth'] ?? '0',
+        );
+        final int levelId = int.parse(
+          state.uri.queryParameters['levelId'] ?? '0',
+        );
+        return MaterialPage(
+          child: CreateProfileLoadingScreen(
+            name: name,
+            yearOfBirth: yearOfBirth,
+            levelId: levelId,
+          ),
+        );
       },
     ),
   ],

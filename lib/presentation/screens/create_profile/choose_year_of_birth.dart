@@ -10,22 +10,28 @@ import 'package:monkey_stories/presentation/widgets/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
 
 class CreateProfileChooseYearOfBirthScreen extends StatelessWidget {
-  const CreateProfileChooseYearOfBirthScreen({super.key});
+  const CreateProfileChooseYearOfBirthScreen({super.key, required this.name});
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<ChooseYearOfBirthCubit>(),
-      child: const ChooseYearOfBirthView(),
+      child: ChooseYearOfBirthView(name: name),
     );
   }
 }
 
 class ChooseYearOfBirthView extends StatelessWidget {
-  const ChooseYearOfBirthView({super.key});
+  const ChooseYearOfBirthView({super.key, required this.name});
+
+  final String name;
 
   void _onPressedContinue(BuildContext context) {
-    context.push(AppRoutePaths.createProfileChooseLevel);
+    context.push(
+      '${AppRoutePaths.createProfileChooseLevel}?name=$name&yearOfBirth=${context.read<ChooseYearOfBirthCubit>().state.yearSelected}',
+    );
   }
 
   @override

@@ -45,7 +45,9 @@ class _CreateProfileInputNameViewState
   @override
   Widget build(BuildContext context) {
     void handleContinue() {
-      context.push(AppRoutePaths.createProfileInputDateOfBirth);
+      context.push(
+        '${AppRoutePaths.createProfileInputDateOfBirth}?name=${_nameController.text.trim()}',
+      );
     }
 
     return Scaffold(

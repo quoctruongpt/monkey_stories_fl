@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/profile.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -9,23 +10,49 @@ import 'package:monkey_stories/presentation/widgets/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
 
+final logger = Logger('ChooseLevelScreen');
+
 class ChooseLevelScreen extends StatelessWidget {
-  const ChooseLevelScreen({super.key});
+  const ChooseLevelScreen({
+    super.key,
+    required this.name,
+    required this.yearOfBirth,
+  });
+
+  final String name;
+  final int yearOfBirth;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ChooseLevelCubit(),
-      child: const ChooseLevelView(),
+      child: ChooseLevelView(name: name, yearOfBirth: yearOfBirth),
     );
   }
 }
 
 class ChooseLevelView extends StatelessWidget {
-  const ChooseLevelView({super.key});
+  const ChooseLevelView({
+    super.key,
+    required this.name,
+    required this.yearOfBirth,
+  });
+
+  final String name;
+  final int yearOfBirth;
 
   void _onContinuePressed(BuildContext context) {
-    context.go(AppRoutePaths.createProfileLoading);
+    final uri = Uri(
+      path: AppRoutePaths.createProfileLoading,
+      queryParameters: {
+        'name': name,
+        'yearOfBirth': yearOfBirth.toString(),
+        'levelId':
+            context.read<ChooseLevelCubit>().state.levelSelected.toString(),
+      },
+    );
+
+    context.go(uri.toString());
   }
 
   @override
