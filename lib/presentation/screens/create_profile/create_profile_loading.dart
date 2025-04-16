@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
@@ -68,10 +69,14 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
   void _onError(String error) {
     showCustomNoticeDialog(
       context: context,
-      titleText: 'Thông báo',
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('create_profile.loading.error.title'),
       messageText: error,
       imageAsset: 'assets/images/monkey_sad.png',
-      primaryActionText: 'OK',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('create_profile.loading.error.act'),
       onPrimaryAction: () {
         context.go(AppRoutePaths.home);
         context.pop();
@@ -91,7 +96,8 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
             CreateProfileLoadingState
           >(
             listenWhen:
-                (previous, current) => current.callApiProfileError != null,
+                (previous, current) =>
+                    previous.callApiProfileError != current.callApiProfileError,
             listener: (context, state) {
               _onError(state.callApiProfileError!);
             },
@@ -113,7 +119,9 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
                         horizontal: Spacing.lg,
                       ),
                       child: Text(
-                        'Monkey đang cập nhật dữ liệu học tập của bé',
+                        AppLocalizations.of(
+                          context,
+                        ).translate('create_profile.loading.title'),
                         style: Theme.of(context).textTheme.displayLarge,
                         textAlign: TextAlign.center,
                       ),
@@ -153,15 +161,21 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
                     const SizedBox(height: 80),
 
                     CreateProfileLoadingItem(
-                      title: 'Cập nhật thông tin tài khoản sử dụng',
+                      title: AppLocalizations.of(
+                        context,
+                      ).translate('create_profile.loading.item.1'),
                       active: state.progress >= 0.25,
                     ),
                     CreateProfileLoadingItem(
-                      title: 'Cập nhật hồ sơ học tập',
+                      title: AppLocalizations.of(
+                        context,
+                      ).translate('create_profile.loading.item.2'),
                       active: state.progress >= 0.5,
                     ),
                     CreateProfileLoadingItem(
-                      title: 'Cập nhật thông tin gói học',
+                      title: AppLocalizations.of(
+                        context,
+                      ).translate('create_profile.loading.item.3'),
                       active: state.progress >= 0.75,
                     ),
                   ],

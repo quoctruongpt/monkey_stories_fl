@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/profile.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/app_bar_widget.dart';
@@ -71,8 +72,10 @@ class ChooseLevelView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const CreateProfileHeader(
-                      title: "Khả năng tiếng Anh hiện tại của bé?",
+                    CreateProfileHeader(
+                      title: AppLocalizations.of(
+                        context,
+                      ).translate('create_profile.level.title'),
                     ),
                     const SizedBox(height: Spacing.md),
                     BlocBuilder<ChooseLevelCubit, ChooseLevelState>(
@@ -115,7 +118,9 @@ class ChooseLevelView extends StatelessWidget {
                                         const SizedBox(width: Spacing.lg),
                                         Flexible(
                                           child: Text(
-                                            e.description,
+                                            AppLocalizations.of(
+                                              context,
+                                            ).translate(e.description),
                                             style: Theme.of(
                                               context,
                                             ).textTheme.bodyLarge?.copyWith(
@@ -142,7 +147,9 @@ class ChooseLevelView extends StatelessWidget {
             BlocBuilder<ChooseLevelCubit, ChooseLevelState>(
               builder: (context, state) {
                 return AppButton.primary(
-                  text: "Tiếp tục",
+                  text: AppLocalizations.of(
+                    context,
+                  ).translate('create_profile.level.act'),
                   onPressed: () => _onContinuePressed(context),
                   disabled: state.levelSelected == null,
                 );

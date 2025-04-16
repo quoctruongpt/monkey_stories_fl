@@ -67,7 +67,11 @@ class _CreateProfileInputNameViewState
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        const CreateProfileHeader(title: 'Tên của bé là?'),
+                        CreateProfileHeader(
+                          title: AppLocalizations.of(
+                            context,
+                          ).translate('create_profile.name.title'),
+                        ),
 
                         const SizedBox(height: Spacing.md),
 
@@ -77,7 +81,9 @@ class _CreateProfileInputNameViewState
                               controller: _nameController,
                               onChanged:
                                   context.read<InputNameCubit>().onChangeName,
-                              hintText: 'Tên',
+                              hintText: AppLocalizations.of(
+                                context,
+                              ).translate('create_profile.name.hint'),
                               isValid: state.name.isValid,
                               isShowIcon: !state.name.isPure,
                               errorText: AppLocalizations.of(
@@ -98,7 +104,9 @@ class _CreateProfileInputNameViewState
                 BlocBuilder<InputNameCubit, InputNameState>(
                   builder: (context, state) {
                     return AppButton.primary(
-                      text: "Tiếp tục",
+                      text: AppLocalizations.of(
+                        context,
+                      ).translate('create_profile.name.act'),
                       onPressed: handleContinue,
                       isFullWidth: true,
                       disabled: !state.name.isValid,

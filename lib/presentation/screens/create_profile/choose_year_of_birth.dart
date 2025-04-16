@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -50,7 +51,12 @@ class ChooseYearOfBirthView extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    CreateProfileHeader(title: '$name sinh vào năm nào?'),
+                    CreateProfileHeader(
+                      title: AppLocalizations.of(context).translate(
+                        'create_profile.year_of_birth.title',
+                        params: {'Name': name},
+                      ),
+                    ),
                     const SizedBox(height: Spacing.md),
                     BlocBuilder<ChooseYearOfBirthCubit, ChooseYearOfBirthState>(
                       builder: (context, state) {
@@ -93,7 +99,12 @@ class ChooseYearOfBirthView extends StatelessWidget {
                                     () => context
                                         .read<ChooseYearOfBirthCubit>()
                                         .onChangeYear(years[12]),
-                                    customText: 'Sinh trước năm ${years[12]}',
+                                    customText: AppLocalizations.of(
+                                      context,
+                                    ).translate(
+                                      'year.before',
+                                      params: {'year': years[12].toString()},
+                                    ),
                                   ),
                                 );
                               },
@@ -109,7 +120,9 @@ class ChooseYearOfBirthView extends StatelessWidget {
               BlocBuilder<ChooseYearOfBirthCubit, ChooseYearOfBirthState>(
                 builder: (context, state) {
                   return AppButton.primary(
-                    text: "Tiếp tục",
+                    text: AppLocalizations.of(
+                      context,
+                    ).translate('create_profile.year_of_birth.act'),
                     onPressed: () => _onPressedContinue(context),
                     disabled: state.yearSelected == null,
                   );

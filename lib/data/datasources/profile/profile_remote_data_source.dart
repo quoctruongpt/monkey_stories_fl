@@ -32,7 +32,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         'name': name,
         'year_of_birth': yearOfBirth,
         'path_avatar': avatarPath ?? '',
-        'file_avatar': avatarFile,
+        // 'file_avatar': avatarFile,
         'profile_id': id ?? '',
       },
     );
