@@ -6,10 +6,17 @@ class ProfileResponseModel {
 
   ProfileResponseModel({required this.id, this.avatarPath});
 
-  factory ProfileResponseModel.fromJson(Map<String, dynamic> json) {
+  static ProfileResponseModel? fromJson(dynamic json) {
+    // Xử lý trường hợp json là mảng rỗng
+    if (json is List) {
+      return null;
+    }
+
+    // Xử lý trường hợp json là Map
+    Map<String, dynamic> data = json as Map<String, dynamic>;
     return ProfileResponseModel(
-      id: json['profile_id'],
-      avatarPath: json['path_avatar'],
+      id: data['profile_id'],
+      avatarPath: data['path_avatar'],
     );
   }
 

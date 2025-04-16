@@ -5,6 +5,7 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
 
 class CreateProfileLoadingScreen extends StatelessWidget {
   const CreateProfileLoadingScreen({
@@ -60,82 +61,113 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
     });
   }
 
+  void _onSuccess() {
+    context.go(AppRoutePaths.home);
+  }
+
+  void _onError(String error) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: 'Thông báo',
+      messageText: error,
+      imageAsset: 'assets/images/monkey_sad.png',
+      primaryActionText: 'OK',
+      onPrimaryAction: () {
+        context.go(AppRoutePaths.home);
+        context.pop();
+      },
+      isCloseable: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(Spacing.md),
-          child: BlocConsumer<
+          child: BlocListener<
             CreateProfileLoadingCubit,
             CreateProfileLoadingState
           >(
+            listenWhen:
+                (previous, current) => current.callApiProfileError != null,
             listener: (context, state) {
-              if (state.progress >= 1) {
-                context.go(AppRoutePaths.home);
-              }
+              _onError(state.callApiProfileError!);
             },
-            builder: (context, state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: Spacing.lg),
-                    child: Text(
-                      'Monkey đang cập nhật dữ liệu học tập của bé',
-                      style: Theme.of(context).textTheme.displayLarge,
-                      textAlign: TextAlign.center,
+            child: BlocConsumer<
+              CreateProfileLoadingCubit,
+              CreateProfileLoadingState
+            >(
+              listener: (context, state) {
+                if (state.progress >= 1) {
+                  _onSuccess();
+                }
+              },
+              builder: (context, state) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Spacing.lg,
+                      ),
+                      child: Text(
+                        'Monkey đang cập nhật dữ liệu học tập của bé',
+                        style: Theme.of(context).textTheme.displayLarge,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 80),
+                    const SizedBox(height: 80),
 
-                  SizedBox(
-                    height: 216,
-                    width: 216,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          height: 200,
-                          child: CircularProgressIndicator(
-                            value: state.progress,
-                            strokeWidth: 24,
-                            strokeCap: StrokeCap.round,
-                            backgroundColor: AppTheme.skyLightColor,
-                            color: AppTheme.primaryColor,
+                    SizedBox(
+                      height: 216,
+                      width: 216,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: CircularProgressIndicator(
+                              value: state.progress,
+                              strokeWidth: 24,
+                              strokeCap: StrokeCap.round,
+                              backgroundColor: AppTheme.skyLightColor,
+                              color: AppTheme.primaryColor,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '${(state.progress * 100).toInt()}%',
-                          style: const TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.w900,
-                            color: AppTheme.primaryColor,
+                          Text(
+                            '${(state.progress * 100).toInt()}%',
+                            style: const TextStyle(
+                              fontSize: 48,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.primaryColor,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 80),
+                    const SizedBox(height: 80),
 
-                  CreateProfileLoadingItem(
-                    title: 'Cập nhật thông tin tài khoản sử dụng',
-                    active: state.progress >= 0.25,
-                  ),
-                  CreateProfileLoadingItem(
-                    title: 'Cập nhật hồ sơ học tập',
-                    active: state.progress >= 0.5,
-                  ),
-                  CreateProfileLoadingItem(
-                    title: 'Cập nhật thông tin gói học',
-                    active: state.progress >= 0.75,
-                  ),
-                ],
-              );
-            },
+                    CreateProfileLoadingItem(
+                      title: 'Cập nhật thông tin tài khoản sử dụng',
+                      active: state.progress >= 0.25,
+                    ),
+                    CreateProfileLoadingItem(
+                      title: 'Cập nhật hồ sơ học tập',
+                      active: state.progress >= 0.5,
+                    ),
+                    CreateProfileLoadingItem(
+                      title: 'Cập nhật thông tin gói học',
+                      active: state.progress >= 0.75,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

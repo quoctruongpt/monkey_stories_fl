@@ -4,7 +4,7 @@ import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/profile/update_profile_response.dart';
 
 abstract class ProfileRemoteDataSource {
-  Future<ApiResponse<ProfileResponseModel>> updateProfile(
+  Future<ApiResponse<ProfileResponseModel?>> updateProfile(
     String name,
     int yearOfBirth,
     String? avatarPath,
@@ -19,7 +19,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<ApiResponse<ProfileResponseModel>> updateProfile(
+  Future<ApiResponse<ProfileResponseModel?>> updateProfile(
     String name,
     int yearOfBirth,
     String? avatarPath,
@@ -32,14 +32,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         'name': name,
         'year_of_birth': yearOfBirth,
         'path_avatar': avatarPath ?? '',
-        // 'file_avatar': avatarFile,
+        'file_avatar': avatarFile,
         'profile_id': id ?? '',
       },
     );
 
     return ApiResponse.fromJson(
       response.data,
-      (json) => ProfileResponseModel.fromJson(json as Map<String, dynamic>),
+      (json) => ProfileResponseModel.fromJson(json),
     );
   }
 }

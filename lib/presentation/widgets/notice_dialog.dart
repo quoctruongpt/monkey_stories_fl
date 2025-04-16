@@ -20,6 +20,7 @@ class NoticeDialog extends StatelessWidget {
   final String? secondaryActionText;
   final VoidCallback? onSecondaryAction;
   final VoidCallback? onClose; // Callback cho nút X
+  final bool isCloseable;
 
   const NoticeDialog({
     super.key,
@@ -32,6 +33,7 @@ class NoticeDialog extends StatelessWidget {
     this.secondaryActionText,
     this.onSecondaryAction,
     this.onClose,
+    this.isCloseable = true,
   });
 
   @override
@@ -119,18 +121,20 @@ class NoticeDialog extends StatelessWidget {
           ),
 
           // Nút đóng (X)
-          Positioned(
-            right: -4, // Thêm padding từ mép dialog + padding container nút
-            top: -4, // Thêm margin top container + padding container nút
-            child: GestureDetector(
-              onTap: onClose ?? () => Navigator.of(context).pop(),
-              child: SvgPicture.asset(
-                'assets/icons/svg/X.svg',
-                width: 48,
-                height: 48,
-              ),
-            ),
-          ),
+          isCloseable
+              ? Positioned(
+                right: -4, // Thêm padding từ mép dialog + padding container nút
+                top: -4, // Thêm margin top container + padding container nút
+                child: GestureDetector(
+                  onTap: onClose ?? () => Navigator.of(context).pop(),
+                  child: SvgPicture.asset(
+                    'assets/icons/svg/X.svg',
+                    width: 48,
+                    height: 48,
+                  ),
+                ),
+              )
+              : const SizedBox.shrink(),
         ],
       ),
     );
@@ -149,6 +153,7 @@ Future<void> showCustomNoticeDialog({
   String? secondaryActionText,
   VoidCallback? onSecondaryAction,
   VoidCallback? onClose,
+  bool isCloseable = true,
 }) {
   return showDialog<void>(
     context: context,
@@ -183,6 +188,7 @@ Future<void> showCustomNoticeDialog({
                   onClose();
                 }
                 : () => Navigator.of(dialogContext).pop(), // Mặc định chỉ đóng
+        isCloseable: isCloseable,
       );
     },
   );

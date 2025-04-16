@@ -50,7 +50,7 @@ class ChooseYearOfBirthView extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    const CreateProfileHeader(title: 'Năm sinh của bé là?'),
+                    CreateProfileHeader(title: '$name sinh vào năm nào?'),
                     const SizedBox(height: Spacing.md),
                     BlocBuilder<ChooseYearOfBirthCubit, ChooseYearOfBirthState>(
                       builder: (context, state) {

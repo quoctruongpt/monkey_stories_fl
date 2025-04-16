@@ -24,13 +24,15 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
   Timer? _loadingTimer;
 
   void startLoading(String name, int yearOfBirth) async {
-    // Bắt đầu từ trạng thái init
-    _updateLoadingProcess(LoadingProcess.init);
+    try {
+      // Bắt đầu từ trạng thái init
+      _updateLoadingProcess(LoadingProcess.init);
 
-    // Danh sách các trạng thái theo thứ tự
-    await _createProfile(name, yearOfBirth);
+      // Danh sách các trạng thái theo thứ tự
+      await _createProfile(name, yearOfBirth);
 
-    _updateLoadingProcess(LoadingProcess.done);
+      _updateLoadingProcess(LoadingProcess.done);
+    } catch (e) {}
   }
 
   Future<void> _createProfile(String name, int yearOfBirth) async {

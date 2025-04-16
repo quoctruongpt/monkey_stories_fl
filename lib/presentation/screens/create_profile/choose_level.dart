@@ -68,68 +68,74 @@ class ChooseLevelView extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  const CreateProfileHeader(
-                    title: "Khả năng tiếng Anh hiện tại của bé?",
-                  ),
-                  const SizedBox(height: Spacing.md),
-                  BlocBuilder<ChooseLevelCubit, ChooseLevelState>(
-                    builder: (context, state) {
-                      return Column(
-                        children:
-                            onboardingLevels.map((e) {
-                              final isSelected = state.levelSelected == e.id;
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const CreateProfileHeader(
+                      title: "Khả năng tiếng Anh hiện tại của bé?",
+                    ),
+                    const SizedBox(height: Spacing.md),
+                    BlocBuilder<ChooseLevelCubit, ChooseLevelState>(
+                      builder: (context, state) {
+                        return Column(
+                          children:
+                              onboardingLevels.map((e) {
+                                final isSelected = state.levelSelected == e.id;
 
-                              return Container(
-                                margin: const EdgeInsets.only(
-                                  bottom: Spacing.sm,
-                                ),
-                                width: double.infinity,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    context
-                                        .read<ChooseLevelCubit>()
-                                        .onPressedLevel(e.id);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: Spacing.lg,
-                                      vertical: Spacing.md,
-                                    ),
-                                    side: BorderSide(
-                                      color:
-                                          isSelected
-                                              ? AppTheme.primaryColor
-                                              : AppTheme
-                                                  .buttonPrimaryDisabledBackground,
-                                      width: 2,
-                                    ),
+                                return Container(
+                                  margin: const EdgeInsets.only(
+                                    bottom: Spacing.sm,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      DifficultyLevel(difficulty: e.difficulty),
-                                      const SizedBox(width: Spacing.lg),
-                                      Text(
-                                        e.description,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge?.copyWith(
-                                          color:
-                                              isSelected
-                                                  ? AppTheme.primaryColor
-                                                  : AppTheme.textColor,
-                                        ),
+                                  width: double.infinity,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      context
+                                          .read<ChooseLevelCubit>()
+                                          .onPressedLevel(e.id);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: Spacing.lg,
+                                        vertical: Spacing.md,
                                       ),
-                                    ],
+                                      side: BorderSide(
+                                        color:
+                                            isSelected
+                                                ? AppTheme.primaryColor
+                                                : AppTheme
+                                                    .buttonPrimaryDisabledBackground,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        DifficultyLevel(
+                                          difficulty: e.difficulty,
+                                        ),
+                                        const SizedBox(width: Spacing.lg),
+                                        Flexible(
+                                          child: Text(
+                                            e.description,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodyLarge?.copyWith(
+                                              color:
+                                                  isSelected
+                                                      ? AppTheme.primaryColor
+                                                      : AppTheme.textColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                      );
-                    },
-                  ),
-                ],
+                                );
+                              }).toList(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
 
