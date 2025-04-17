@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 class Language {
   final String code;
   final String name;
@@ -11,6 +13,7 @@ class Language {
 }
 
 class Languages {
+  static String defaultLanguage = 'en';
   static const List<Language> supportedLanguages = [
     Language(code: 'en', name: 'English', localName: 'English'),
     Language(code: 'vi', name: 'Vietnamese', localName: 'Tiếng Việt'),
@@ -21,5 +24,9 @@ class Languages {
       (language) => language.code == code,
       orElse: () => supportedLanguages.first,
     );
+  }
+
+  static List<Locale> getSupportedLocales() {
+    return supportedLanguages.map((language) => Locale(language.code)).toList();
   }
 }

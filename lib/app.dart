@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: const [Locale('en'), Locale('vi')],
+            supportedLocales: Languages.getSupportedLocales(),
             locale: Locale(state.languageCode),
             builder: (context, child) {
               return AppBuilder(child: child);

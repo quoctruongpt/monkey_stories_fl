@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'dart:ui';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
@@ -54,14 +55,25 @@ class AppCubit extends Cubit<AppState> {
     final langResult = await _getLanguageUseCase.call(NoParams());
     final themeResult = await _getThemeUseCase.call(NoParams());
 
-    String initialLanguage = 'vi';
+    String initialLanguage = Languages.defaultLanguage;
     bool initialIsDarkMode = false;
 
-    langResult.fold(
-      (failure) =>
-          _logger.warning('Failed to load language: ${failure.displayMessage}'),
-      (languageCode) => initialLanguage = languageCode,
-    );
+    langResult.fold((failure) {
+      _logger.warning(
+        'Failed to load saved language: ${failure.displayMessage}. Trying device language.',
+      );
+      final deviceLanguage = PlatformDispatcher.instance.locale.languageCode;
+      if (Languages.supportedLanguages.any(
+        (language) => language.code == deviceLanguage,
+      )) {
+        initialLanguage = deviceLanguage;
+        _logger.info('Using device language: $deviceLanguage');
+        _saveLanguageUseCase.call(initialLanguage);
+      } else {
+        initialLanguage = Languages.defaultLanguage;
+        _saveLanguageUseCase.call(initialLanguage);
+      }
+    }, (languageCode) => initialLanguage = languageCode);
 
     themeResult.fold(
       (failure) =>

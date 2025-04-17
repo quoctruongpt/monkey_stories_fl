@@ -4,7 +4,7 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 
 abstract class SettingsLocalDataSource {
-  Future<String> getLanguage();
+  Future<String?> getLanguage();
   Future<void> saveLanguage(String languageCode);
 
   Future<ThemeMode> getTheme();
@@ -17,12 +17,12 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   SettingsLocalDataSourceImpl({required this.sharedPreferences});
 
   @override
-  Future<String> getLanguage() async {
+  Future<String?> getLanguage() async {
     try {
       final languageCode = sharedPreferences.getString(
         SharedPrefKeys.languageCode,
       );
-      return languageCode ?? 'vi'; // Trả về default 'vi' nếu null
+      return languageCode; // Trả về default 'vi' nếu null
     } catch (e) {
       throw CacheException(message: 'Failed to get language code');
     }

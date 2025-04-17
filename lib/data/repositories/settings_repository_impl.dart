@@ -14,7 +14,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<Either<Failure, String>> getLanguage() async {
     try {
       final language = await localDataSource.getLanguage();
-      return Right(language);
+      if (language != null) {
+        return Right(language);
+      } else {
+        return const Left(CacheFailure(message: 'Language not found'));
+      }
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message));
     }

@@ -1,3 +1,4 @@
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageUtils {
@@ -6,7 +7,7 @@ class LanguageUtils {
     // Giả sử bạn lưu mã ngôn ngữ với key 'language_code'
     final languageCode =
         prefs.getString('language_code') ??
-        'en'; // Mặc định là 'en' nếu không tìm thấy
+        Languages.defaultLanguage; // Mặc định là 'en' nếu không tìm thấy
 
     switch (languageCode) {
       case 'vi':
