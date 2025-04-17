@@ -5,14 +5,14 @@ class AppState extends Equatable {
   final String languageCode;
   final bool isDarkMode;
   final String? deviceId;
-  final AppOrientation orientation;
+  final AppOrientation? orientation;
 
   const AppState({
     required this.isOrientationLoading,
     required this.isDarkMode,
     this.languageCode = 'vi',
     this.deviceId,
-    this.orientation = AppOrientation.portrait,
+    this.orientation,
   });
 
   AppState copyWith({

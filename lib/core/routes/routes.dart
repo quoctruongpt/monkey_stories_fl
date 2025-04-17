@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/choose_level.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/create_profile_loading.dart';
@@ -16,6 +14,7 @@ import 'package:monkey_stories/presentation/screens/home_screen.dart';
 import 'package:monkey_stories/presentation/screens/sign_in/login_screen.dart';
 import 'package:monkey_stories/presentation/screens/result_screen.dart';
 import 'package:monkey_stories/presentation/screens/sign_up/sign_up_screen.dart';
+import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 
 final logger = Logger('router');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
@@ -26,57 +25,55 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoutePaths.splash,
       name: AppRouteNames.splash,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-        return const MaterialPage(child: SplashScreen());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: SplashScreen(),
+        );
       },
     ),
 
     GoRoute(
       path: AppRoutePaths.home,
       name: AppRouteNames.home,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-        return const MaterialPage(child: MyHomePage());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: MyHomePage(),
+        );
       },
     ),
     GoRoute(
       path: AppRoutePaths.result,
       name: AppRouteNames.result,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.landscapeLeft);
-        return const MaterialPage(child: ResultScreen());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.landscapeLeft,
+          child: ResultScreen(),
+        );
       },
     ),
 
     GoRoute(
       path: AppRoutePaths.unity,
       name: AppRouteNames.unity,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.landscapeLeft);
-
-        return const MaterialPage(child: UnityScreen());
-      },
-      redirect: (context, state) {
-        logger.info('redirect');
-        return null;
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.landscapeLeft,
+          child: UnityScreen(),
+        );
       },
     ),
 
     GoRoute(
       path: AppRoutePaths.login,
       name: AppRouteNames.login,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-
+      builder: (context, state) {
         final String? initialUsername = state.uri.queryParameters['username'];
         final String? initialPassword = state.uri.queryParameters['password'];
-        return MaterialPage(
-          // key: ValueKey('login-${initialUsername ?? ''}'),
-          child: LoginScreenProvider(
-            initialUsername: initialUsername,
-            initialPassword: initialPassword,
-          ),
+        return LoginScreenProvider(
+          initialUsername: initialUsername,
+          initialPassword: initialPassword,
         );
       },
     ),
@@ -84,33 +81,41 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoutePaths.signUp,
       name: AppRouteNames.signUp,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-        return const MaterialPage(child: SignUpScreen());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: SignUpScreen(),
+        );
       },
     ),
     GoRoute(
       path: AppRoutePaths.signUpSuccess,
       name: AppRouteNames.signUpSuccess,
-      pageBuilder: (context, state) {
-        context.read<AppCubit>().setOrientation(AppOrientation.portrait);
-        return const MaterialPage(child: SignUpSuccessScreen());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: SignUpSuccessScreen(),
+        );
       },
     ),
 
     GoRoute(
       path: AppRoutePaths.createProfileInputName,
       name: AppRouteNames.createProfileInputName,
-      pageBuilder: (context, state) {
-        return const MaterialPage(child: CreateProfileInputNameScreen());
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: CreateProfileInputNameScreen(),
+        );
       },
     ),
     GoRoute(
       path: AppRoutePaths.createProfileInputDateOfBirth,
       name: AppRouteNames.createProfileInputDateOfBirth,
-      pageBuilder: (context, state) {
+      builder: (context, state) {
         final String name = state.uri.queryParameters['name'] ?? '';
-        return MaterialPage(
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
           child: CreateProfileChooseYearOfBirthScreen(name: name),
         );
       },
@@ -118,12 +123,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoutePaths.createProfileChooseLevel,
       name: AppRouteNames.createProfileChooseLevel,
-      pageBuilder: (context, state) {
+      builder: (context, state) {
         final String name = state.uri.queryParameters['name'] ?? '';
         final int yearOfBirth = int.parse(
           state.uri.queryParameters['yearOfBirth'] ?? '0',
         );
-        return MaterialPage(
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
           child: ChooseLevelScreen(name: name, yearOfBirth: yearOfBirth),
         );
       },
@@ -131,7 +137,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: AppRoutePaths.createProfileLoading,
       name: AppRouteNames.createProfileLoading,
-      pageBuilder: (context, state) {
+      builder: (context, state) {
         final String name = state.uri.queryParameters['name'] ?? '';
         final int yearOfBirth = int.parse(
           state.uri.queryParameters['yearOfBirth'] ?? '0',
@@ -139,7 +145,8 @@ final GoRouter router = GoRouter(
         final int levelId = int.parse(
           state.uri.queryParameters['levelId'] ?? '0',
         );
-        return MaterialPage(
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
           child: CreateProfileLoadingScreen(
             name: name,
             yearOfBirth: yearOfBirth,

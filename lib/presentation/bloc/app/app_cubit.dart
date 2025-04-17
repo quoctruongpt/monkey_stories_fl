@@ -44,7 +44,6 @@ class AppCubit extends Cubit<AppState> {
            isOrientationLoading: false,
            isDarkMode: false,
            languageCode: 'vi',
-           orientation: AppOrientation.portrait,
          ),
        ) {
     _loadInitialSettings();

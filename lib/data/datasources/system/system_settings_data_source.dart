@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:monkey_stories/core/error/exceptions.dart';
 
 abstract class SystemSettingsDataSource {
   Future<void> setPreferredOrientations(List<DeviceOrientation> orientations);

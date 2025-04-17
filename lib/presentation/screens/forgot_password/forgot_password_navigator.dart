@@ -11,6 +11,7 @@ import 'package:monkey_stories/presentation/screens/forgot_password/input_new_pa
 import 'package:monkey_stories/presentation/screens/forgot_password/input_otp_fp.dart';
 import 'package:monkey_stories/presentation/screens/forgot_password/input_phone_fp.dart';
 import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 
 class ForgotPasswordNavigator extends StatelessWidget {
   const ForgotPasswordNavigator({super.key, required this.child});
@@ -62,27 +63,47 @@ final ShellRoute forgotPasswordRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.chooseMethodFp,
       name: AppRouteNames.chooseMethodFp,
-      builder: (context, state) => const ChooseMethodFp(),
+      builder:
+          (context, state) => const OrientationWrapper(
+            orientation: AppOrientation.portrait,
+            child: ChooseMethodFp(),
+          ),
     ),
     GoRoute(
       path: AppRoutePaths.inputPhoneFp,
       name: AppRouteNames.inputPhoneFp,
-      builder: (context, state) => const InputPhoneFp(),
+      builder:
+          (context, state) => const OrientationWrapper(
+            orientation: AppOrientation.portrait,
+            child: InputPhoneFp(),
+          ),
     ),
     GoRoute(
       path: AppRoutePaths.inputOtpFp,
       name: AppRouteNames.inputOtpFp,
-      builder: (context, state) => const InputOtpFp(),
+      builder:
+          (context, state) => const OrientationWrapper(
+            orientation: AppOrientation.portrait,
+            child: InputOtpFp(),
+          ),
     ),
     GoRoute(
       path: AppRoutePaths.inputNewPasswordFp,
       name: AppRouteNames.inputNewPasswordFp,
-      builder: (context, state) => const InputNewPasswordFp(),
+      builder:
+          (context, state) => const OrientationWrapper(
+            orientation: AppOrientation.portrait,
+            child: InputNewPasswordFp(),
+          ),
     ),
     GoRoute(
       path: AppRoutePaths.forgotPasswordSuccess,
       name: AppRouteNames.forgotPasswordSuccess,
-      builder: (context, state) => const ForgotPasswordSuccessScreen(),
+      builder:
+          (context, state) => const OrientationWrapper(
+            orientation: AppOrientation.portrait,
+            child: ForgotPasswordSuccessScreen(),
+          ),
     ),
   ],
 );

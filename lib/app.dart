@@ -156,6 +156,7 @@ class _AppBuilderState extends State<AppBuilder>
             BlocListener<AppCubit, AppState>(
               listenWhen:
                   (previous, current) =>
+                      previous.orientation != null &&
                       previous.orientation != current.orientation,
               listener: (context, state) {
                 context.read<AppCubit>().showLoading();

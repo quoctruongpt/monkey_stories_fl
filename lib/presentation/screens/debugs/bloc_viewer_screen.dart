@@ -137,6 +137,9 @@ class OrientationCubitViewer extends StatelessWidget {
           case AppOrientation.landscapeRight:
             orientationText = 'Landscape Right';
             break;
+          default:
+            orientationText = 'Unknown';
+            break;
         }
 
         return _buildStateView([
