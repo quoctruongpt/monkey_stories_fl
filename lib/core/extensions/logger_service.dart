@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/models/debug.dart';
+import 'package:monkey_stories/core/constants/debug.dart';
 
 class Logging {
   // Biến để lưu trữ tham chiếu đến DebugCubit

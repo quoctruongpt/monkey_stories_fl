@@ -22,14 +22,17 @@ class AppLocalizations {
     return true;
   }
 
-  String translate(String? key) {
-    // Kiểm tra trực tiếp xem key có tồn tại trong map không
-    if (_localizedStrings.containsKey(key)) {
-      // Nếu có, trả về giá trị tương ứng
-      return _localizedStrings[key].toString();
-    } else {
-      // Nếu không tìm thấy, trả về key gốc (fallback)
-      return key ?? '';
+  String translate(String? key, {Map<String, String>? params}) {
+    if (key == null) return '';
+
+    var translation = _localizedStrings[key]?.toString() ?? key;
+
+    if (params != null) {
+      params.forEach((paramKey, paramValue) {
+        translation = translation.replaceAll('{{${paramKey}}}', paramValue);
+      });
     }
+
+    return translation;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:monkey_stories/models/debug.dart';
+import 'package:monkey_stories/core/constants/debug.dart';
 
 part 'debug_state.dart';
 

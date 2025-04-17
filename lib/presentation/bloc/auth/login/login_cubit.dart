@@ -154,7 +154,6 @@ class LoginCubit extends Cubit<LoginState> {
     emit(
       state.copyWith(
         username: username,
-        status: FormSubmissionStatus.initial,
         clearErrorMessage: true,
         isValidForm: isValid,
       ),
@@ -168,14 +167,13 @@ class LoginCubit extends Cubit<LoginState> {
     emit(
       state.copyWith(
         password: password,
-        status: FormSubmissionStatus.initial,
         clearErrorMessage: true,
         isValidForm: isValid,
       ),
     );
   }
 
-  Future<void> _login(LoginParams params) async {
+  Future<void> login(LoginParams params) async {
     final result = await _loginUsecase.call(params);
     result.fold(
       (failure) {
@@ -254,7 +252,7 @@ class LoginCubit extends Cubit<LoginState> {
       final password = state.password.value;
       final isEmail = username.contains('@');
 
-      await _login(
+      await login(
         LoginParams(
           loginType: isEmail ? LoginType.email : LoginType.phone,
           phone: isEmail ? '' : username,
@@ -283,7 +281,7 @@ class LoginCubit extends Cubit<LoginState> {
       ),
     );
     try {
-      await _login(const LoginParams(loginType: LoginType.email));
+      await login(const LoginParams(loginType: LoginType.email));
     } catch (e) {
       emit(
         state.copyWith(
@@ -303,7 +301,7 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     try {
-      await _login(const LoginParams(loginType: LoginType.apple));
+      await login(const LoginParams(loginType: LoginType.apple));
     } catch (e) {
       emit(
         state.copyWith(
@@ -323,7 +321,7 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     try {
-      await _login(const LoginParams(loginType: LoginType.facebook));
+      await login(const LoginParams(loginType: LoginType.facebook));
     } catch (e) {
       emit(
         state.copyWith(

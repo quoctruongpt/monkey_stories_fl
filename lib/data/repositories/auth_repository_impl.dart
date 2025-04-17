@@ -10,7 +10,11 @@ import 'package:monkey_stories/data/models/auth/last_login_model.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
+import 'package:monkey_stories/domain/entities/auth/verify_otp_entity.dart';
 import 'package:monkey_stories/domain/repositories/auth_repository.dart';
+import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
@@ -370,6 +374,70 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       return const Left(ServerFailure(message: 'Đăng xuất thất bại'));
     }
+  }
+
+  @override
+  Future<Either<ServerFailureWithCode, String>> sendOtp(
+    SendOtpParams params,
+  ) async {
+    final result = await remoteDataSource.sendOtp(
+      params.type,
+      params.countryCode,
+      params.phone,
+      params.email,
+    );
+
+    if (result.status == ApiStatus.success) {
+      return Right(result.data?.otp ?? '');
+    }
+
+    return Left(
+      ServerFailureWithCode(message: result.message, code: result.code),
+    );
+  }
+
+  @override
+  Future<Either<ServerFailureWithCode, VerifyOtpEntity>> verifyOtp(
+    VerifyOtpParams params,
+  ) async {
+    final result =
+        params.type == ForgotPasswordType.phone
+            ? await remoteDataSource.verifyOtpWithPhone(
+              params.otp,
+              params.phone ?? '',
+              params.countryCode ?? '',
+            )
+            : await remoteDataSource.verifyOtpWithEmail(
+              params.otp,
+              params.email ?? '',
+            );
+
+    if (result.status == ApiStatus.success) {
+      return Right(result.data?.toEntity() ?? VerifyOtpEntity());
+    }
+
+    return Left(
+      ServerFailureWithCode(message: result.message, code: result.code),
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> changePassword(
+    ChangePasswordParams params,
+  ) async {
+    final result = await remoteDataSource.changePassword(
+      params.email,
+      params.phone,
+      params.countryCode,
+      params.password,
+      params.tokenChangePassword,
+    );
+
+    if (result.status == ApiStatus.success) {
+      return const Right(null);
+    }
+
+    return Left(ServerFailure(message: result.message));
   }
 }
 

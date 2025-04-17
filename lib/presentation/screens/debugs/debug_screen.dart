@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
-import 'package:monkey_stories/models/language.dart';
+import 'package:monkey_stories/core/constants/language.dart';
 import 'package:monkey_stories/core/env/environment_service.dart';
 
 class DebugScreen extends StatelessWidget {

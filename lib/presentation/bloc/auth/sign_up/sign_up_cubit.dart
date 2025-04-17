@@ -131,7 +131,7 @@ class SignUpCubit extends Cubit<SignUpState> {
             phoneNumber: state.phone.value.phoneNumber,
           ),
         );
-        logger.info('response: $response');
+
         response.fold(
           (failure) {
             emit(
@@ -165,9 +165,15 @@ class SignUpCubit extends Cubit<SignUpState> {
 
       response.fold(
         (failure) {
-          emit(state.copyWith(signUpErrorMessage: failure.message));
+          emit(
+            state.copyWith(
+              signUpErrorMessage: failure.message,
+              isSignUpLoading: false,
+            ),
+          );
         },
         (success) async {
+          logger.info('success');
           await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },
@@ -175,10 +181,9 @@ class SignUpCubit extends Cubit<SignUpState> {
     } catch (e) {
       if (e is ApiResponse) {
         emit(state.copyWith(signUpErrorMessage: e.message));
-        return;
+      } else {
+        emit(state.copyWith(signUpErrorMessage: e.toString()));
       }
-      emit(state.copyWith(signUpErrorMessage: e.toString()));
-    } finally {
       emit(state.copyWith(isSignUpLoading: false));
     }
   }
@@ -193,10 +198,11 @@ class SignUpCubit extends Cubit<SignUpState> {
         },
         (loginStatus) async {
           await _userCubit.loadUpdate();
-          emit(state.copyWith(isSignUpSuccess: true));
+          emit(state.copyWith(isSignUpSuccess: true, isSignUpLoading: false));
         },
       );
     } catch (e) {
+      emit(state.copyWith(isSignUpLoading: false));
       switch (params.loginType) {
         case LoginType.facebook:
           emit(
@@ -229,9 +235,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           break;
       }
 
-      emit(state.copyWith(isSignUpSuccess: false, popupErrorMessage: 'error'));
-    } finally {
-      emit(state.copyWith(isSignUpLoading: false));
+      emit(state.copyWith(popupErrorMessage: 'error'));
     }
   }
 

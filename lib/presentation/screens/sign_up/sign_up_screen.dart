@@ -14,6 +14,7 @@ import 'package:monkey_stories/presentation/widgets/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/text_field/password_input_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 
@@ -170,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                   current.popupErrorMessage != previous.popupErrorMessage,
       listener: (context, state) {
         if (state.isSignUpSuccess == true) {
-          context.goNamed(AppRouteNames.home);
+          context.goNamed(AppRouteNames.signUpSuccess);
         } else if (state.popupErrorMessage != null) {
           _handlePopupErrorMessage(state.popupErrorMessage);
         }
