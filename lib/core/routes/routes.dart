@@ -8,6 +8,7 @@ import 'package:monkey_stories/presentation/screens/create_profile/choose_level.
 import 'package:monkey_stories/presentation/screens/create_profile/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/create_profile_loading.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/input_name_screen.dart';
+import 'package:monkey_stories/presentation/screens/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/screens/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
@@ -69,9 +70,13 @@ final GoRouter router = GoRouter(
         context.read<AppCubit>().setOrientation(AppOrientation.portrait);
 
         final String? initialUsername = state.uri.queryParameters['username'];
+        final String? initialPassword = state.uri.queryParameters['password'];
         return MaterialPage(
           // key: ValueKey('login-${initialUsername ?? ''}'),
-          child: LoginScreenProvider(initialUsername: initialUsername),
+          child: LoginScreenProvider(
+            initialUsername: initialUsername,
+            initialPassword: initialPassword,
+          ),
         );
       },
     ),
@@ -143,5 +148,7 @@ final GoRouter router = GoRouter(
         );
       },
     ),
+
+    forgotPasswordRoutes,
   ],
 );

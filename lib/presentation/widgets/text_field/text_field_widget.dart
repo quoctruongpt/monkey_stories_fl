@@ -8,12 +8,13 @@ class TextFieldWidget extends StatelessWidget {
     required this.onChanged,
     this.errorText,
     this.hintText,
-    this.obscureText = true,
+    this.obscureText = false,
     this.suffixIcon,
     this.isValid,
     this.validText,
     this.focusNode,
     this.textCapitalization,
+    this.labelText,
   });
 
   final TextEditingController? controller;
@@ -26,6 +27,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? validText;
   final FocusNode? focusNode;
   final TextCapitalization? textCapitalization;
+  final String? labelText;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class TextFieldWidget extends StatelessWidget {
           obscureText: obscureText ?? true,
           style: const TextStyle(fontSize: 20),
           decoration: InputDecoration(
+            labelText: labelText,
             hintText: hintText,
             errorText: errorText,
             suffixIcon: suffixIcon,

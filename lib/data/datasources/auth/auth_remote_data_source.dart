@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
+import 'package:monkey_stories/data/models/auth/forgot_password_model.dart';
 import 'package:monkey_stories/data/models/login_data.dart';
 import 'package:monkey_stories/data/models/sign_up_data.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -37,6 +38,32 @@ abstract class AuthRemoteDataSource {
   Future<ApiResponse<Null>> checkPhoneNumber(
     String countryCode,
     String phoneNumber,
+  );
+
+  Future<ApiResponse<Null>> sendOtp(
+    ForgotPasswordType type,
+    String? countryCode,
+    String? phone,
+    String? email,
+  );
+
+  Future<ApiResponse<VerifyOtpResponseModel?>> verifyOtpWithEmail(
+    String otp,
+    String email,
+  );
+
+  Future<ApiResponse<VerifyOtpResponseModel?>> verifyOtpWithPhone(
+    String otp,
+    String phone,
+    String countryCode,
+  );
+
+  Future<ApiResponse<Null>> changePassword(
+    String? email,
+    String? phone,
+    String? countryCode,
+    String password,
+    String tokenChangePassword,
   );
 }
 
@@ -164,5 +191,82 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Các lỗi khác
       throw ServerException(message: e.toString());
     }
+  }
+
+  @override
+  Future<ApiResponse<Null>> sendOtp(
+    ForgotPasswordType type,
+    String? countryCode,
+    String? phone,
+    String? email,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.sendOtp,
+      data: {
+        'type': type.value,
+        'country_code': countryCode ?? '',
+        'phone': phone ?? '',
+        'email': email ?? '',
+      },
+    );
+
+    return ApiResponse.fromJson(response.data, (json) {
+      return null;
+    });
+  }
+
+  @override
+  Future<ApiResponse<VerifyOtpResponseModel?>> verifyOtpWithEmail(
+    String otp,
+    String email,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.verifyOtpWithEmail,
+      data: {'code': otp, 'email': email},
+    );
+
+    return ApiResponse.fromJson(response.data, (json) {
+      return VerifyOtpResponseModel.fromJson(json);
+    });
+  }
+
+  @override
+  Future<ApiResponse<VerifyOtpResponseModel?>> verifyOtpWithPhone(
+    String otp,
+    String phone,
+    String countryCode,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.verifyOtpWithPhone,
+      data: {'code': otp, 'phone': phone, 'country_code': countryCode},
+    );
+
+    return ApiResponse.fromJson(response.data, (json) {
+      return VerifyOtpResponseModel.fromJson(json);
+    });
+  }
+
+  @override
+  Future<ApiResponse<Null>> changePassword(
+    String? email,
+    String? phone,
+    String? countryCode,
+    String password,
+    String tokenChangePassword,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.changePassword,
+      data: {
+        'email': email ?? '',
+        'phone': phone ?? '',
+        'country_code': countryCode ?? '',
+        'password': password,
+        'token_to_change_pw': tokenChangePassword,
+      },
+    );
+
+    return ApiResponse.fromJson(response.data, (json) {
+      return null;
+    });
   }
 }

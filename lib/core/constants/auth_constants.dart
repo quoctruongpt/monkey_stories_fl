@@ -3,6 +3,8 @@ class AuthConstants {
 
   static const int phoneExistCode = 201;
   static const int pwErrorCode = 202;
+  static const int userNotFoundCode = 201;
+  static const int manyRequestOtp = 202;
 }
 
 enum LoginType {
@@ -22,4 +24,12 @@ enum LoginType {
       orElse: () => LoginType.phone,
     );
   }
+}
+
+enum ForgotPasswordType {
+  phone(1),
+  email(2);
+
+  final int value;
+  const ForgotPasswordType(this.value);
 }

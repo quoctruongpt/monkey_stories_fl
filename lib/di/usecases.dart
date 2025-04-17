@@ -1,5 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 // Auth & Account Usecases
@@ -54,7 +57,9 @@ void initUsecaseDependencies() {
     () => CheckAuthStatusUseCase(sl<AuthRepository>()),
   ); // Used by Splash
   sl.registerLazySingleton(() => GetLoadUpdateUsecase(sl<AccountRepository>()));
-
+  sl.registerLazySingleton(() => SendOtpUsecase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => VerifyOtpUsecase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => ChangePasswordUsecase(sl<AuthRepository>()));
   // Other App Features (Device, Settings, System)
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl<DeviceRepository>()));
   sl.registerLazySingleton(() => GetLanguageUseCase(sl<SettingsRepository>()));

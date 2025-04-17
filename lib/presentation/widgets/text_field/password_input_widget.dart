@@ -14,6 +14,7 @@ class PasswordInputField extends StatelessWidget {
     this.onObscureTextToggle,
     this.isPasswordValid = false,
     this.focusNode,
+    this.labelText,
   });
 
   final TextEditingController? controller;
@@ -25,7 +26,7 @@ class PasswordInputField extends StatelessWidget {
   final VoidCallback? onObscureTextToggle;
   final bool isPasswordValid;
   final FocusNode? focusNode;
-
+  final String? labelText;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,8 +36,9 @@ class PasswordInputField extends StatelessWidget {
           focusNode: focusNode,
           controller: controller,
           onChanged: onChanged,
-          errorText: errorText,
+          errorText: errorText?.isEmpty == true ? null : errorText,
           hintText: hintText,
+          labelText: labelText,
           obscureText: obscureText ?? true,
           isValid: isPasswordValid,
           validText: passwordValidText,

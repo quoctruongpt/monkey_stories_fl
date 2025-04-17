@@ -21,23 +21,32 @@ import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
 final logger = Logger('LoginScreen');
 
 class LoginScreenProvider extends StatelessWidget {
-  const LoginScreenProvider({super.key, this.initialUsername});
+  const LoginScreenProvider({
+    super.key,
+    this.initialUsername,
+    this.initialPassword,
+  });
 
   final String? initialUsername;
+  final String? initialPassword;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<LoginCubit>(),
-      child: LoginScreen(initialUsername: initialUsername),
+      child: LoginScreen(
+        initialUsername: initialUsername,
+        initialPassword: initialPassword,
+      ),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, this.initialUsername});
+  const LoginScreen({super.key, this.initialUsername, this.initialPassword});
 
   final String? initialUsername;
+  final String? initialPassword;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -45,6 +54,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _usernameController;
+  late TextEditingController _passwordController;
   final FocusNode _passwordFocusNode = FocusNode();
   late String Function(String key) translate =
       AppLocalizations.of(context).translate;
@@ -58,11 +68,22 @@ class _LoginScreenState extends State<LoginScreen> {
       context.read<LoginCubit>().usernameChanged(_usernameController.text);
     });
 
+    _passwordController = TextEditingController(text: widget.initialPassword);
+    _passwordController.addListener(() {
+      context.read<LoginCubit>().passwordChanged(_passwordController.text);
+    });
+
     // Call loadLastLogin after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         // Check if the state is still mounted
         context.read<LoginCubit>().loadLastLogin(widget.initialUsername);
+        context.read<LoginCubit>().passwordChanged(
+          widget.initialPassword ?? '',
+        );
+        if (widget.initialPassword != null && widget.initialUsername != null) {
+          _loginPressed();
+        }
       }
     });
   }
@@ -70,6 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     _usernameController.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -142,6 +165,10 @@ class _LoginScreenState extends State<LoginScreen> {
     context.push(AppRoutePaths.signUp);
   }
 
+  void _forgotPasswordPressed() {
+    context.push(AppRoutePaths.chooseMethodFp);
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardDismisser(
@@ -160,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: BlocBuilder<LoginCubit, LoginState>(
             builder: (context, state) {
               final isLoading = state.status == FormSubmissionStatus.loading;
+              logger.info('state: $isLoading');
 
               return Stack(
                 children: [
@@ -260,6 +288,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 TextField(
                                   focusNode: _passwordFocusNode,
+                                  controller: _passwordController,
                                   onChanged: (value) {
                                     context.read<LoginCubit>().passwordChanged(
                                       value,
@@ -310,9 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       },
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        /* TODO: Navigate to Forgot Password */
-                                      },
+                                      onPressed: _forgotPasswordPressed,
                                       child: Text(
                                         translate('login.forgot_password'),
                                         style: Theme.of(

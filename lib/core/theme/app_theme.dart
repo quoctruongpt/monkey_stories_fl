@@ -41,6 +41,11 @@ class AppTheme {
       elevation: 0,
     ),
     textTheme: const TextTheme(
+      titleMedium: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
       displayLarge: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.w900,
@@ -90,12 +95,37 @@ class AppTheme {
           color: AppTheme.buttonPrimaryDisabledBackground,
           width: 2,
         ),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         textStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w800,
           color: textSecondaryColor,
           fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: backgroundColor,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: backgroundColor,
+          fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          color: textSecondaryColor,
+          fontFamily: 'Nunito',
+          decoration: TextDecoration.underline,
         ),
       ),
     ),

@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -23,6 +26,7 @@ import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 // Other App Features Usecases and Blocs/Cubits
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -114,6 +118,14 @@ void initBlocDependencies() {
       saveThemeUseCase: sl<SaveThemeUseCase>(),
       setPreferredOrientationsUseCase: sl<SetPreferredOrientationsUseCase>(),
       unityCubit: sl<UnityCubit>(), // UnityCubit is now also registered here
+    ),
+  );
+
+  sl.registerFactory(
+    () => ForgotPasswordCubit(
+      verifyOtpUsecase: sl<VerifyOtpUsecase>(),
+      sendOtpUsecase: sl<SendOtpUsecase>(),
+      changePasswordUsecase: sl<ChangePasswordUsecase>(),
     ),
   );
 
