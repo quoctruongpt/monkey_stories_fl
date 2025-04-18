@@ -33,6 +33,7 @@ class EnvironmentService {
   /// Thay đổi môi trường và reload ứng dụng
   Future<void> changeEnvironment(String env) async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     await prefs.setString(_envKey, env);
     currentEnvironment = env;
     await dotenv.load(fileName: '.env.$env');

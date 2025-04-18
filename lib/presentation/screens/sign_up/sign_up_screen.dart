@@ -16,7 +16,6 @@ import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart
 import 'package:monkey_stories/presentation/widgets/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/password_input_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
-import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

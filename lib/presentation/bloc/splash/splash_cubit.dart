@@ -44,15 +44,12 @@ class SplashCubit extends Cubit<SplashState> {
       await deviceResult.fold(
         (failure) async {
           // Lỗi đăng ký device
-          _logger.warning(
-            'Failed to register device during splash: ${failure.displayMessage}',
-          );
+
           final errorState = SplashError(
             'Device registration failed: ${failure.displayMessage}',
           );
 
           emit(errorState); // Phát trạng thái lỗi và dừng
-          // Không cần return vì đây là nhánh cuối cùng của fold trong trường hợp lỗi
         },
         (deviceId) async {
           // Đăng ký device thành công
@@ -66,9 +63,6 @@ class SplashCubit extends Cubit<SplashState> {
 
           finalState = await authResult.fold(
             (authFailure) {
-              _logger.warning(
-                'Failed to check auth status during splash: ${authFailure.displayMessage}',
-              );
               return SplashError(
                 'Auth check failed: ${authFailure.displayMessage}. Please login again.',
               );
