@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/success_screen.dart';
@@ -36,8 +35,11 @@ class ForgotPasswordSuccessScreen extends StatelessWidget {
       body: SuccessScreen(
         title: AppLocalizations.of(
           context,
-        ).translate('Cập nhật mật khẩu thành công'),
+        ).translate('app.forgot_password.success'),
         onPressed: () => _onContinue(context),
+        buttonText: AppLocalizations.of(
+          context,
+        ).translate('app.forgot_password.success_button'),
       ),
     );
   }

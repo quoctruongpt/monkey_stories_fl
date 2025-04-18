@@ -14,16 +14,17 @@ class ForgotPasswordHeader extends StatelessWidget {
         Image.asset('assets/images/monkey_ask.png', width: 116, height: 154),
         const SizedBox(height: Spacing.sm),
         Text(
-          AppLocalizations.of(context).translate('Quên mật khẩu'),
+          AppLocalizations.of(context).translate('app.forgot_password.title'),
           style: Theme.of(context).textTheme.displayMedium,
         ),
         const SizedBox(height: Spacing.sm),
 
         Text(
           description,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: AppTheme.textSecondaryColor),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: AppTheme.textSecondaryColor,
+            fontWeight: FontWeight.w700,
+          ),
           textAlign: TextAlign.center,
         ),
 

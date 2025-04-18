@@ -52,7 +52,7 @@ class InputNewPasswordFp extends StatelessWidget {
                           Text(
                             AppLocalizations.of(
                               context,
-                            ).translate('Cập nhật mật khẩu'),
+                            ).translate('app.forgot_password.new_password'),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
                           const SizedBox(height: Spacing.xxl),
@@ -62,9 +62,9 @@ class InputNewPasswordFp extends StatelessWidget {
                                 context
                                     .read<ForgotPasswordCubit>()
                                     .passwordChanged,
-                            labelText: AppLocalizations.of(
-                              context,
-                            ).translate('Mật khẩu'),
+                            labelText: AppLocalizations.of(context).translate(
+                              'app.forgot_password.new_password.label',
+                            ),
                             errorText: AppLocalizations.of(
                               context,
                             ).translate(state.password.displayError),
@@ -80,9 +80,9 @@ class InputNewPasswordFp extends StatelessWidget {
                                 context
                                     .read<ForgotPasswordCubit>()
                                     .confirmPasswordChanged,
-                            labelText: AppLocalizations.of(
-                              context,
-                            ).translate('Nhập lại mật khẩu'),
+                            labelText: AppLocalizations.of(context).translate(
+                              'app.forgot_password.re_new_password.label',
+                            ),
                             errorText: AppLocalizations.of(
                               context,
                             ).translate(state.confirmPassword.displayError),
@@ -98,7 +98,9 @@ class InputNewPasswordFp extends StatelessWidget {
                   ),
 
                   AppButton.primary(
-                    text: AppLocalizations.of(context).translate('Cập nhật'),
+                    text: AppLocalizations.of(
+                      context,
+                    ).translate('app.forgot_password.update_password'),
                     onPressed: () => _onUpdatePassword(context),
                     disabled:
                         !state.password.isValid ||

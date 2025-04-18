@@ -9,10 +9,12 @@ class SuccessScreen extends StatelessWidget {
   const SuccessScreen({
     super.key,
     required this.title,
+    this.buttonText,
     required this.onPressed,
   });
 
   final String title;
+  final String? buttonText;
   final VoidCallback onPressed;
 
   @override
@@ -48,9 +50,11 @@ class SuccessScreen extends StatelessWidget {
               ),
             ),
             AppButton.primary(
-              text: AppLocalizations.of(
-                context,
-              ).translate('sign_up_success.act'),
+              text:
+                  buttonText ??
+                  AppLocalizations.of(
+                    context,
+                  ).translate('sign_up_success.action'),
               onPressed: onPressed,
               isFullWidth: true,
             ),

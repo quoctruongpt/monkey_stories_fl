@@ -49,12 +49,16 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
   void _showNotRegisteredDialog(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate("Thông báo"),
-      messageText: AppLocalizations.of(context).translate(
-        "Số điện thoại chưa được đăng ký với Monkey, vui lòng thử lại",
-      ),
-      imageAsset: "assets/images/monkey_notice.png",
-      primaryActionText: AppLocalizations.of(context).translate("Thử lại"),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.notice'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.phone_not_registered'),
+      imageAsset: 'assets/images/monkey_notice.png',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.try_again'),
       onPrimaryAction: () {
         context.read<ForgotPasswordCubit>().hideNotRegisteredDialog();
         context.pop();
@@ -96,7 +100,16 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                         children: [
                           ForgotPasswordHeader(
                             description: AppLocalizations.of(context).translate(
-                              'Ba mẹ đừng lo lắng, hãy nhập ${state.method == ForgotPasswordType.phone ? 'số điện thoại' : 'địa chỉ email'} để Monkey hỗ trợ khôi phục mật khẩu nhé.',
+                              'app.forgot_password.input',
+                              params: {
+                                'method': AppLocalizations.of(
+                                  context,
+                                ).translate(
+                                  state.method == ForgotPasswordType.phone
+                                      ? 'app.forgot_password.input_phone'
+                                      : 'app.forgot_password.input_email',
+                                ),
+                              },
                             ),
                           ),
 
@@ -129,7 +142,6 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                                 ).translate(state.email.displayError),
                                 hintText: 'abc@gmail.com',
                                 obscureText: false,
-                                // labelText: 'Email',
                               ),
 
                           Text(
@@ -143,7 +155,9 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                   ),
 
                   AppButton.primary(
-                    text: AppLocalizations.of(context).translate('Gửi OTP'),
+                    text: AppLocalizations.of(
+                      context,
+                    ).translate('app.forgot_password.send_otp'),
                     onPressed: () => _onPressed(context),
                     disabled:
                         state.method == ForgotPasswordType.phone

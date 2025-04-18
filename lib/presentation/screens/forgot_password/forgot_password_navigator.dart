@@ -22,11 +22,15 @@ class ForgotPasswordNavigator extends StatelessWidget {
     showCustomNoticeDialog(
       context: context,
       imageAsset: 'assets/images/max_1h.png',
-      titleText: AppLocalizations.of(context).translate('Thông báo'),
-      messageText: AppLocalizations.of(context).translate(
-        'Bạn đã thực hiện gửi lại quá 3 lần.\nVui lòng trở lại sau 1 giờ để tiếp tục.',
-      ),
-      primaryActionText: AppLocalizations.of(context).translate('Tôi đã hiểu'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.notice'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.otp_block_dialog'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.forgot_password.i_understand'),
       onPrimaryAction: () {
         context.read<ForgotPasswordCubit>().hideOtpBlockDialog();
         context.pop();

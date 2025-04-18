@@ -27,9 +27,9 @@ class ChooseMethodFp extends StatelessWidget {
         child: Column(
           children: [
             ForgotPasswordHeader(
-              description: AppLocalizations.of(context).translate(
-                'Ba mẹ muốn nhận mã để đặt lại mật khẩu theo hình thức nào?',
-              ),
+              description: AppLocalizations.of(
+                context,
+              ).translate('app.forgot_password.choose_method'),
             ),
 
             FilledButton(
@@ -38,7 +38,9 @@ class ChooseMethodFp extends StatelessWidget {
                 backgroundColor: AppTheme.successColor,
               ),
               child: ContentButton(
-                text: AppLocalizations.of(context).translate('Gửi mã qua SMS'),
+                text: AppLocalizations.of(
+                  context,
+                ).translate('app.forgot_password.sms'),
                 icon: Icons.phone,
               ),
             ),
@@ -46,7 +48,9 @@ class ChooseMethodFp extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(Spacing.md),
               child: HorizontalLineText(
-                text: AppLocalizations.of(context).translate('Hoặc'),
+                text: AppLocalizations.of(
+                  context,
+                ).translate('app.forgot_password.or'),
               ),
             ),
 
@@ -58,7 +62,7 @@ class ChooseMethodFp extends StatelessWidget {
               child: ContentButton(
                 text: AppLocalizations.of(
                   context,
-                ).translate('Gửi mã qua Email'),
+                ).translate('app.forgot_password.email'),
                 icon: Icons.email,
               ),
             ),

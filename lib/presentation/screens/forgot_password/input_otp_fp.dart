@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -33,14 +34,16 @@ class _InputOtpFpState extends State<InputOtpFp> {
     } else {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate("Thông báo"),
-        messageText: AppLocalizations.of(context).translate(
-          "Bạn đã nhập sai mã OTP quá 5 lần. Vui lòng quay trở lại sau 5 phút.",
-        ),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('app.forgot_password.notice'),
+        messageText: AppLocalizations.of(
+          context,
+        ).translate('app.forgot_password.otp_wrong_5_times'),
         imageAsset: 'assets/images/max_5m.png',
         primaryActionText: AppLocalizations.of(
           context,
-        ).translate("Tôi đã hiểu"),
+        ).translate('app.forgot_password.i_understand'),
         onPrimaryAction: () {
           context.pop();
         },
@@ -92,14 +95,25 @@ class _InputOtpFpState extends State<InputOtpFp> {
                           Text(
                             AppLocalizations.of(
                               context,
-                            ).translate('Xác nhận OTP'),
+                            ).translate('app.forgot_password.confirm_otp'),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
                           const SizedBox(height: Spacing.sm),
 
                           Text(
                             AppLocalizations.of(context).translate(
-                              'Monkey đã gửi mã OTP đến số điện thoại ${state.phone.value.countryCode} ${state.phone.value.phoneNumber}',
+                              'app.forgot_password.confirm_otp_description',
+                              params: {
+                                'phone':
+                                    '${state.phone.value.countryCode} ${state.phone.value.phoneNumber}',
+                                'method': AppLocalizations.of(
+                                  context,
+                                ).translate(
+                                  state.method == ForgotPasswordType.phone
+                                      ? 'app.forgot_password.input_phone'
+                                      : 'app.forgot_password.input_email',
+                                ),
+                              },
                             ),
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(color: AppTheme.textSecondaryColor),
@@ -142,7 +156,9 @@ class _InputOtpFpState extends State<InputOtpFp> {
                   ),
 
                   AppButton.primary(
-                    text: AppLocalizations.of(context).translate('Xác nhận'),
+                    text: AppLocalizations.of(
+                      context,
+                    ).translate('app.forgot_password.confirm_otp.confirm'),
                     onPressed: () => _onConfirmPressed(context),
                     disabled: !state.otp.isValid || state.isLoading,
                     isLoading: state.isLoading,
@@ -154,7 +170,13 @@ class _InputOtpFpState extends State<InputOtpFp> {
                             : null,
                     child: Text(
                       AppLocalizations.of(context).translate(
-                        'Gửi lại OTP ${state.otpResendTime > 0 ? '(${state.otpResendTime}s)' : ''}',
+                        'app.forgot_password.confirm_otp.resend_otp',
+                        params: {
+                          'time':
+                              state.otpResendTime > 0
+                                  ? '(${state.otpResendTime}s)'
+                                  : '',
+                        },
                       ),
                     ),
                   ),
