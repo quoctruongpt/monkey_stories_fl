@@ -41,14 +41,6 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final orientation = MediaQuery.of(context).orientation;
-    logger.info(orientation);
-    return Scaffold(
-      body: BlocBuilder<UnityCubit, UnityState>(
-        builder: (context, state) {
-          return EmbedUnity(onMessageFromUnity: _handleUnityMessage);
-        },
-      ),
-    );
+    return Scaffold(body: EmbedUnity(onMessageFromUnity: _handleUnityMessage));
   }
 }

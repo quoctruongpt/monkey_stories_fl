@@ -130,13 +130,13 @@ class _AppBuilderState extends State<AppBuilder>
             return previous.isUnityVisible != current.isUnityVisible;
           },
           builder: (context, state) {
-            return AnimatedPositioned(
+            return AnimatedOpacity(
+              opacity: state.isUnityVisible ? 1 : 0,
               duration: const Duration(milliseconds: 300),
-              left: state.isUnityVisible ? 0 : -size.width,
-              top: 0,
-              right: state.isUnityVisible ? 0 : size.width,
-              bottom: 0,
-              child: const UnityView(),
+              child: IgnorePointer(
+                ignoring: !state.isUnityVisible,
+                child: const UnityView(),
+              ),
             );
           },
         ),

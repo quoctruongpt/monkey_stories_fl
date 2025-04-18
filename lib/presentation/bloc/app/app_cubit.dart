@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -148,7 +150,9 @@ class AppCubit extends Cubit<AppState> {
       },
       (_) {
         _logger.info('Orientation set successfully via SystemChrome.');
-        _sendOrientationToUnity(orientation);
+        if (Platform.isAndroid) {
+          _sendOrientationToUnity(orientation);
+        }
         emit(state.copyWith(orientation: orientation));
       },
     );
