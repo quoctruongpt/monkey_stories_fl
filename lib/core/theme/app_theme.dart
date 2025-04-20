@@ -15,6 +15,7 @@ class AppTheme {
   static const Color textGrayColor = Color(0xFFA3A3A3);
   static const Color textGrayLightColor = Color(0xFFAFAFAF);
   static const Color textBlueColor = Color(0xFF3393FF);
+  static const Color textPrimaryColor = Color(0xFF00BBFF);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);
@@ -43,6 +44,11 @@ class AppTheme {
     textTheme: const TextTheme(
       titleMedium: TextStyle(
         fontSize: 36,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 32,
         fontWeight: FontWeight.w800,
         color: textColor,
       ),

@@ -7,6 +7,7 @@ import 'package:monkey_stories/presentation/screens/create_profile/choose_year_o
 import 'package:monkey_stories/presentation/screens/create_profile/create_profile_loading.dart';
 import 'package:monkey_stories/presentation/screens/create_profile/input_name_screen.dart';
 import 'package:monkey_stories/presentation/screens/forgot_password/forgot_password_navigator.dart';
+import 'package:monkey_stories/presentation/screens/intro_screen.dart';
 import 'package:monkey_stories/presentation/screens/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
@@ -22,6 +23,17 @@ final GoRouter router = GoRouter(
   observers: [routeObserver],
   initialLocation: AppRoutePaths.splash,
   routes: <RouteBase>[
+    GoRoute(
+      path: AppRoutePaths.intro,
+      name: AppRouteNames.intro,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: IntroScreen(),
+        );
+      },
+    ),
+
     GoRoute(
       path: AppRoutePaths.splash,
       name: AppRouteNames.splash,

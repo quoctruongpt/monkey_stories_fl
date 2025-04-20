@@ -17,6 +17,7 @@ class AppRoutePaths {
   static const String inputOtpFp = '/input_otp_fp';
   static const String inputNewPasswordFp = '/input_new_password_fp';
   static const String forgotPasswordSuccess = '/forgot_password_success';
+  static const String intro = '/intro';
 }
 
 class AppRouteNames {
@@ -38,4 +39,5 @@ class AppRouteNames {
   static const String inputOtpFp = 'input_otp_fp';
   static const String inputNewPasswordFp = 'input_new_password_fp';
   static const String forgotPasswordSuccess = 'forgot_password_success';
+  static const String intro = 'intro';
 }

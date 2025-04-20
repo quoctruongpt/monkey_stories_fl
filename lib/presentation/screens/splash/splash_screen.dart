@@ -33,7 +33,7 @@ class SplashScreen extends StatelessWidget {
             GoRouter.of(context).replace(AppRoutePaths.home);
           } else if (state is SplashUnauthenticated) {
             // Navigate to Login and replace splash route
-            GoRouter.of(context).replace(AppRoutePaths.login);
+            GoRouter.of(context).replace(AppRoutePaths.intro);
           } else if (state is SplashError) {
             // Optionally show an error message
             _onSplashError(context);
