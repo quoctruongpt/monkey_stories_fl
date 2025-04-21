@@ -3,7 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/lottie_utils.dart';
-import 'package:monkey_stories/presentation/widgets/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({

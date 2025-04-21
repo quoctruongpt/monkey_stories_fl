@@ -27,6 +27,7 @@ import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -127,6 +128,10 @@ void initBlocDependencies() {
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
     ),
+  );
+
+  sl.registerFactory(
+    () => OnboardingCubit(getLanguageUseCase: sl<GetLanguageUseCase>()),
   );
 
   // Add other Bloc/Cubit registrations here...
