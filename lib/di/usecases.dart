@@ -44,6 +44,10 @@ import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_useca
 import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_with_response_usecase.dart';
 import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.dart';
 
+// Kinesis Usecases
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+
 final sl = GetIt.instance;
 
 void initUsecaseDependencies() {
@@ -110,6 +114,11 @@ void initUsecaseDependencies() {
 
   // Course
   sl.registerLazySingleton(() => ActiveCourseUsecase(sl<CourseRepository>()));
+
+  // Kinesis
+  sl.registerLazySingleton(
+    () => PutSettingKinesisUsecase(sl<KinesisRepository>()),
+  );
 
   // Add other usecase registrations here...
 }

@@ -7,6 +7,8 @@ import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/core/constants/kinesis.dart';
 
 part 'profile_state.dart';
 
@@ -17,16 +19,18 @@ class ProfileCubit extends Cubit<ProfileState> {
   final CreateProfileUsecase _createProfileUsecase;
   final GetCurrentProfileUsecase _getCurrentProfileUsecase;
   final ActiveCourseUsecase _activeCourseUsecase;
-
+  final PutSettingKinesisUsecase _putSettingKinesisUsecase;
   ProfileCubit({
     required GetListProfileUsecase getListProfileUsecase,
     required CreateProfileUsecase createProfileUsecase,
     required GetCurrentProfileUsecase getCurrentProfileUsecase,
     required ActiveCourseUsecase activeCourseUsecase,
+    required PutSettingKinesisUsecase putSettingKinesisUsecase,
   }) : _getListProfileUsecase = getListProfileUsecase,
        _createProfileUsecase = createProfileUsecase,
        _getCurrentProfileUsecase = getCurrentProfileUsecase,
        _activeCourseUsecase = activeCourseUsecase,
+       _putSettingKinesisUsecase = putSettingKinesisUsecase,
        super(const ProfileState());
 
   Future<void> getCurrentProfile() async {
@@ -47,9 +51,13 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  Future<void> addProfile(String name, int yearOfBirth) async {
+  Future<void> addProfile(String name, int yearOfBirth, int levelId) async {
     final result = await _createProfileUsecase.call(
-      CreateProfileUsecaseParams(name: name, yearOfBirth: yearOfBirth),
+      CreateProfileUsecaseParams(
+        name: name,
+        yearOfBirth: yearOfBirth,
+        levelId: levelId,
+      ),
     );
 
     if (result.isRight()) {
@@ -57,6 +65,13 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (profile != null) {
         await _activeCourseUsecase.call(profile.id);
+        await _putSettingKinesisUsecase.call(
+          PutSettingKinesisUsecaseParams(
+            partitionKey: profile.id.toString(),
+            eventName: KinesisEventName.changeLevel,
+            data: profile.toJson(),
+          ),
+        );
         emit(
           state.copyWith(
             status: ProfileStatus.loaded,

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
@@ -36,6 +37,9 @@ import 'package:monkey_stories/domain/repositories/system_settings_repository.da
 import 'package:monkey_stories/data/datasources/unity_datasource.dart';
 import 'package:monkey_stories/data/repositories/unity_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/unity_repository.dart';
+
+import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -94,6 +98,13 @@ void initRepositoryDependencies() {
   // Course
   sl.registerLazySingleton<CourseRepository>(
     () => CourseRepositoryImpl(courseRemoteData: sl<CourseRemoteData>()),
+  );
+
+  // Kinesis
+  sl.registerLazySingleton<KinesisRepository>(
+    () => KinesisRepositoryImpl(
+      kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
+    ),
   );
 
   // Add other repository registrations here...

@@ -53,6 +53,9 @@ import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
 
+// Kinesis Usecases
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+
 final sl = GetIt.instance;
 
 void initBlocDependencies() {
@@ -157,6 +160,7 @@ void initBlocDependencies() {
       createProfileUsecase: sl<CreateProfileUsecase>(),
       getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
       activeCourseUsecase: sl<ActiveCourseUsecase>(),
+      putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
     ),
   );
 

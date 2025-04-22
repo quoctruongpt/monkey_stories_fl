@@ -71,7 +71,11 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
       _updateLoadingProcess(OnboardingProgress.createAccount);
 
-      await _profileCubit.addProfile(state.name ?? '', state.yearSelected ?? 0);
+      await _profileCubit.addProfile(
+        state.name ?? '',
+        state.yearSelected ?? 0,
+        state.levelId ?? 0,
+      );
 
       _updateLoadingProcess(OnboardingProgress.createProfile);
 

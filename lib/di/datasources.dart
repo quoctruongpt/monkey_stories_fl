@@ -1,6 +1,8 @@
+import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
@@ -77,6 +79,11 @@ void initDatasourceDependencies() {
   // Course
   sl.registerLazySingleton<CourseRemoteData>(
     () => CourseRemoteDataImpl(dio: sl<Dio>()),
+  );
+
+  // Kinesis
+  sl.registerLazySingleton<KinesisRemoteDataSource>(
+    () => KinesisRemoteDataSourceImpl(kinesisClient: sl<Kinesis>()),
   );
 
   // Add other datasource registrations here...

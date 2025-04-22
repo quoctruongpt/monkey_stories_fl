@@ -6,6 +6,7 @@ abstract class ProfileRepository {
   Future<Either<ServerFailureWithCode, ProfileEntity>> createProfile(
     String name,
     int yearOfBirth,
+    int levelId,
   );
 
   Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile();

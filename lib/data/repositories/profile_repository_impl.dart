@@ -19,6 +19,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   Future<Either<ServerFailureWithCode, ProfileEntity>> createProfile(
     String name,
     int yearOfBirth,
+    int levelId,
   ) async {
     final response = await profileRemoteDataSource.updateProfile(
       name,
@@ -27,6 +28,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
       null,
       null,
     );
+
+    // await kinesisRemoteDataSource.pushEvent(
+    //   'profile',
+    //   {
+    //     'name': name,
+    //     'yearOfBirth': yearOfBirth,
+    //   },
+    // );
 
     if (response.status == ApiStatus.success) {
       await profileLocalDataSource.addProfile(

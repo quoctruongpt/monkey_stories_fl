@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'dart:async';
 
-import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 
 part 'create_profile_loading_state.dart';
@@ -22,21 +21,21 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
 
   Timer? _progressTimer;
 
-  void startLoading(String name, int yearOfBirth) async {
+  void startLoading(String name, int yearOfBirth, int levelId) async {
     try {
       // Bắt đầu từ trạng thái init
       _updateLoadingProcess(LoadingProcess.init);
 
       // Danh sách các trạng thái theo thứ tự
-      await _createProfile(name, yearOfBirth);
+      await _createProfile(name, yearOfBirth, levelId);
 
       _updateLoadingProcess(LoadingProcess.done);
     } catch (e) {}
   }
 
-  Future<void> _createProfile(String name, int yearOfBirth) async {
+  Future<void> _createProfile(String name, int yearOfBirth, int levelId) async {
     try {
-      await _profileCubit.addProfile(name, yearOfBirth);
+      await _profileCubit.addProfile(name, yearOfBirth, levelId);
 
       _updateLoadingProcess(LoadingProcess.createProfile);
     } catch (e) {

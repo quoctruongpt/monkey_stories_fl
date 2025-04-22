@@ -59,6 +59,7 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
       context.read<CreateProfileLoadingCubit>().startLoading(
         widget.name,
         widget.yearOfBirth,
+        widget.levelId,
       );
     });
   }
