@@ -9,6 +9,8 @@ class SharedPrefKeys {
   static const String userId = 'userId';
   static const String lastLogin = 'lastLogin';
   static const String leaveContact = 'leaveContact';
+  static const String profileList = 'profileList';
+  static const String currentProfile = 'currentProfile';
 }
 
 final keysToKeep = [

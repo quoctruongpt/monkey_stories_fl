@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
@@ -40,6 +41,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(
       profileRemoteDataSource: sl<ProfileRemoteDataSource>(),
+      profileLocalDataSource: sl<ProfileLocalDataSource>(),
     ),
   );
 

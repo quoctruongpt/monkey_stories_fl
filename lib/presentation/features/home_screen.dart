@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
@@ -76,73 +77,95 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(AppLocalizations.of(context).translate('home.title')),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            BlocBuilder<UserCubit, UserState>(
-              builder: (context, state) {
-                return Text(
-                  'Welcome to Monkey Stories! ${state.user?.name}',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openUnity,
-              child: const Text('Open Unity'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _sendMessageToUnity,
-              child: const Text('Send Message to Unity'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openResult,
-              child: const Text('Open Result'),
-            ),
-            BlocBuilder<AppCubit, AppState>(
-              builder: (context, state) {
-                return ElevatedButton(
-                  onPressed: () {
-                    context.read<AppCubit>().changeLanguage('vi');
-                  },
-                  child: const Text('vi'),
-                );
-              },
-            ),
-            BlocBuilder<AppCubit, AppState>(
-              builder: (context, state) {
-                return ElevatedButton(
-                  onPressed: () {
-                    context.read<AppCubit>().changeLanguage('en');
-                  },
-                  child: const Text('en'),
-                );
-              },
-            ),
-            BlocBuilder<DebugCubit, DebugState>(
-              builder: (context, state) {
-                return ElevatedButton(
-                  onPressed: () {
-                    context.read<DebugCubit>().toggleModeDebug();
-                  },
-                  child: const Text('debug'),
-                );
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<UserCubit>().logout();
-                context.go(AppRoutePaths.login);
-              },
-              child: const Text("logout"),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              BlocBuilder<UserCubit, UserState>(
+                builder: (context, state) {
+                  return Text(
+                    'Welcome to Monkey Stories! ${state.user?.name}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+              BlocBuilder<ProfileCubit, ProfileState>(
+                builder: (context, state) {
+                  return Column(
+                    children:
+                        state.profiles
+                            .map(
+                              (profile) => Container(
+                                width: 100,
+                                height: 100,
+                                color:
+                                    state.currentProfile?.id == profile.id
+                                        ? Colors.red
+                                        : Colors.blue,
+                                child: Text(profile.name),
+                              ),
+                            )
+                            .toList(),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _openUnity,
+                child: const Text('Open Unity'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _sendMessageToUnity,
+                child: const Text('Send Message to Unity'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _openResult,
+                child: const Text('Open Result'),
+              ),
+              BlocBuilder<AppCubit, AppState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      context.read<AppCubit>().changeLanguage('vi');
+                    },
+                    child: const Text('vi'),
+                  );
+                },
+              ),
+              BlocBuilder<AppCubit, AppState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      context.read<AppCubit>().changeLanguage('en');
+                    },
+                    child: const Text('en'),
+                  );
+                },
+              ),
+              BlocBuilder<DebugCubit, DebugState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      context.read<DebugCubit>().toggleModeDebug();
+                    },
+                    child: const Text('debug'),
+                  );
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<UserCubit>().logout();
+                  context.go(AppRoutePaths.login);
+                },
+                child: const Text("logout"),
+              ),
+            ],
+          ),
         ),
       ),
     );

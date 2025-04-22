@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/core/utils/profile.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'onboarding_state.dart';
@@ -14,7 +14,7 @@ part 'onboarding_state.dart';
 class OnboardingCubit extends Cubit<OnboardingState> {
   final GetLanguageUseCase _getLanguageUseCase;
   final SignUpSkipUsecase _signUpSkipUsecase;
-  final CreateProfileUsecase _createProfileUsecase;
+  final ProfileCubit _profileCubit;
 
   final UserCubit _userCubit;
 
@@ -23,12 +23,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   OnboardingCubit({
     required GetLanguageUseCase getLanguageUseCase,
     required SignUpSkipUsecase signUpSkipUsecase,
-    required CreateProfileUsecase createProfileUsecase,
     required UserCubit userCubit,
+    required ProfileCubit profileCubit,
   }) : _getLanguageUseCase = getLanguageUseCase,
        _signUpSkipUsecase = signUpSkipUsecase,
-       _createProfileUsecase = createProfileUsecase,
        _userCubit = userCubit,
+       _profileCubit = profileCubit,
        super(const OnboardingState()) {
     emit(state.copyWith(years: ProfileUtil.getNearYears()));
     initialName();
@@ -71,24 +71,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
       _updateLoadingProcess(OnboardingProgress.createAccount);
 
-      final createProfileResult = await _createProfileUsecase.call(
-        CreateProfileUsecaseParams(
-          name: state.name ?? '',
-          yearOfBirth: state.yearSelected ?? 0,
-        ),
-      );
-
-      if (createProfileResult.isLeft()) {
-        emit(
-          state.copyWith(
-            error: OnboardingError(
-              message: 'create profile failed',
-              onboardingProgress: OnboardingProgress.createProfile,
-            ),
-          ),
-        );
-        return;
-      }
+      await _profileCubit.addProfile(state.name ?? '', state.yearSelected ?? 0);
 
       _updateLoadingProcess(OnboardingProgress.createProfile);
 

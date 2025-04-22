@@ -8,6 +8,7 @@ import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart'
 import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/validators/password.dart';
@@ -24,6 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginWithLastLoginUsecase _loginWithLastLoginUsecase;
   final GetLastLoginUsecase _getLastLoginUsecase;
   final GetUserSocialUsecase _getUserSocialUsecase;
+  final ProfileCubit _profileCubit;
 
   UserSocialEntity? _lastLogin;
 
@@ -33,11 +35,13 @@ class LoginCubit extends Cubit<LoginState> {
     required LoginWithLastLoginUsecase loginWithLastLoginUsecase,
     required GetLastLoginUsecase getLastLoginUsecase,
     required GetUserSocialUsecase getUserSocialUsecase,
+    required ProfileCubit profileCubit,
   }) : _userCubit = userCubit,
        _loginUsecase = loginUsecase,
        _loginWithLastLoginUsecase = loginWithLastLoginUsecase,
        _getLastLoginUsecase = getLastLoginUsecase,
        _getUserSocialUsecase = getUserSocialUsecase,
+       _profileCubit = profileCubit,
        super(const LoginState(username: Username.dirty('')));
 
   void loadLastLogin(String? initialUsername) async {
@@ -222,6 +226,7 @@ class LoginCubit extends Cubit<LoginState> {
       },
       (loginStatus) async {
         await _userCubit.loadUpdate();
+        await _profileCubit.getListProfile();
         emit(state.copyWith(status: FormSubmissionStatus.success));
       },
     );

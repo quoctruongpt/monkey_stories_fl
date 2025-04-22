@@ -26,6 +26,8 @@ import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart'; // Used by Splash
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
@@ -95,6 +97,14 @@ void initUsecaseDependencies() {
 
   // Onboarding
   sl.registerLazySingleton(() => SignUpSkipUsecase(sl<AuthRepository>()));
+
+  // Profile
+  sl.registerLazySingleton(
+    () => GetListProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetCurrentProfileUsecase(sl<ProfileRepository>()),
+  );
 
   // Add other usecase registrations here...
 }

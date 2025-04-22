@@ -32,7 +32,11 @@ class _OnboardLoadingState extends State<OnboardLoading> {
       imageAsset: 'assets/images/monkey_sad.png',
       primaryActionText: 'Tôi đã hiểu',
       onPrimaryAction: () {
-        context.go(AppRoutePaths.intro);
+        if (error.onboardingProgress == OnboardingProgress.createAccount) {
+          context.go(AppRoutePaths.intro);
+        } else {
+          context.go(AppRoutePaths.home);
+        }
       },
       isCloseable: false,
     );

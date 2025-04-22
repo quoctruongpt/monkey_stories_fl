@@ -19,6 +19,7 @@ class ApiEndpoints {
 
   // Profile
   static const String updateProfile = '/app/api/v3/account/update-profile';
+  static const String getListProfile = '/app/api/v3/account/profile-list';
 
   // Leave Contact
   static const String saveContact = '/app/api/v2/account/order-register-custom';

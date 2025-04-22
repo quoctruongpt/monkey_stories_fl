@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/core/error/failures.dart';
@@ -16,6 +17,7 @@ class SplashCubit extends Cubit<SplashState> {
   final RegisterDeviceUseCase _registerDeviceUseCase; // Assuming this exists
   final AppCubit _appCubit; // Thêm dependency AppCubit
   final UserCubit _userCubit; // Thêm dependency UserCubit
+  final ProfileCubit _profileCubit; // Thêm dependency ProfileCubit
 
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 3;
@@ -25,10 +27,12 @@ class SplashCubit extends Cubit<SplashState> {
     required RegisterDeviceUseCase registerDeviceUseCase,
     required AppCubit appCubit, // Inject AppCubit
     required UserCubit userCubit, // Inject UserCubit
+    required ProfileCubit profileCubit, // Inject ProfileCubit
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit, // Gán AppCubit
        _userCubit = userCubit, // Gán UserCubit
+       _profileCubit = profileCubit, // Gán ProfileCubit
        super(SplashInitial());
 
   Future<void> initializeApp() async {
@@ -113,6 +117,7 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<SplashState> _handleLogicAuthenticated() async {
     await _userCubit.loadUpdate();
+    await _profileCubit.getListProfile();
     return SplashAuthenticated();
   }
 

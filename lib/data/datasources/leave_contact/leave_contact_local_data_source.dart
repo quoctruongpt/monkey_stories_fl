@@ -8,6 +8,7 @@ abstract class LeaveContactLocalDataSource {
   Future<void> saveContact(ContactLocalModel contact);
   Future<ContactLocalModel> getContact();
   Future<bool> isContactSaved();
+  Future<void> clearContact();
 }
 
 class LeaveContactLocalDataSourceImpl extends LeaveContactLocalDataSource {
@@ -33,5 +34,10 @@ class LeaveContactLocalDataSourceImpl extends LeaveContactLocalDataSource {
   Future<bool> isContactSaved() async {
     final contact = sharedPreferences.getString(SharedPrefKeys.leaveContact);
     return contact != null;
+  }
+
+  @override
+  Future<void> clearContact() async {
+    await sharedPreferences.remove(SharedPrefKeys.leaveContact);
   }
 }

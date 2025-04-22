@@ -4,21 +4,21 @@ import 'package:logging/logging.dart';
 import 'dart:async';
 
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 
 part 'create_profile_loading_state.dart';
 
 final logger = Logger('CreateProfileLoadingCubit');
 
 class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
-  final CreateProfileUsecase _createProfileUsecase;
+  final ProfileCubit _profileCubit;
 
-  CreateProfileLoadingCubit({
-    required CreateProfileUsecase createProfileUsecase,
-  }) : _createProfileUsecase = createProfileUsecase,
+  CreateProfileLoadingCubit({required ProfileCubit profileCubit})
+    : _profileCubit = profileCubit,
 
-       super(
-         const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
-       );
+      super(
+        const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
+      );
 
   Timer? _progressTimer;
 
@@ -36,21 +36,9 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
 
   Future<void> _createProfile(String name, int yearOfBirth) async {
     try {
-      final result = await _createProfileUsecase.call(
-        CreateProfileUsecaseParams(name: name, yearOfBirth: yearOfBirth),
-      );
+      await _profileCubit.addProfile(name, yearOfBirth);
 
-      if (result.isLeft()) {
-        result.fold(
-          (failure) {
-            logger.severe('API error: ${failure.message}');
-            throw Exception(failure.message);
-          },
-          (_) {}, // Không cần xử lý trường hợp thành công ở đây
-        );
-      } else {
-        _updateLoadingProcess(LoadingProcess.createProfile);
-      }
+      _updateLoadingProcess(LoadingProcess.createProfile);
     } catch (e) {
       logger.severe('error: $e');
       emit(state.copyWith(callApiProfileError: e.toString()));

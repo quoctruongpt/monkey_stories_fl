@@ -5,6 +5,9 @@ import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
@@ -61,9 +64,7 @@ void initBlocDependencies() {
   sl.registerFactory(() => ChooseYearOfBirthCubit());
   sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(
-    () => CreateProfileLoadingCubit(
-      createProfileUsecase: sl<CreateProfileUsecase>(),
-    ),
+    () => CreateProfileLoadingCubit(profileCubit: sl<ProfileCubit>()),
   );
 
   // Auth & Account Blocs/Cubits
@@ -71,6 +72,7 @@ void initBlocDependencies() {
     () => UserCubit(
       logoutUsecase: sl<LogoutUsecase>(),
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
   sl.registerFactory(
@@ -80,6 +82,7 @@ void initBlocDependencies() {
       loginWithLastLoginUsecase: sl<LoginWithLastLoginUsecase>(),
       getLastLoginUsecase: sl<GetLastLoginUsecase>(),
       getUserSocialUsecase: sl<GetUserSocialUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
   sl.registerFactory(
@@ -98,6 +101,7 @@ void initBlocDependencies() {
       registerDeviceUseCase: sl<RegisterDeviceUseCase>(),
       appCubit: sl<AppCubit>(),
       userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
 
@@ -137,13 +141,21 @@ void initBlocDependencies() {
     () => OnboardingCubit(
       getLanguageUseCase: sl<GetLanguageUseCase>(),
       signUpSkipUsecase: sl<SignUpSkipUsecase>(),
-      createProfileUsecase: sl<CreateProfileUsecase>(),
       userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
 
   sl.registerFactory(
     () => LeaveContactCubit(saveContactUsecase: sl<SaveContactUsecase>()),
+  );
+
+  sl.registerLazySingleton(
+    () => ProfileCubit(
+      getListProfileUsecase: sl<GetListProfileUsecase>(),
+      createProfileUsecase: sl<CreateProfileUsecase>(),
+      getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
+    ),
   );
 
   // Add other Bloc/Cubit registrations here...
