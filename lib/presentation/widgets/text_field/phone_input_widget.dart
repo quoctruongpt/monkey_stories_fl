@@ -43,7 +43,7 @@ class PhoneInputField extends StatelessWidget {
                 AppLocalizations.of(
                   context,
                 ).translate('sign_up.input_phone.hint'),
-            errorText: errorText,
+            errorText: errorText?.isEmpty == true ? null : errorText,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: Spacing.md),
               child: IntrinsicWidth(

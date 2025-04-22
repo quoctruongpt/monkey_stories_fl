@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 // Auth & Account Usecases
@@ -83,6 +85,11 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(() => RegisterHandlerUseCase(sl<UnityRepository>()));
   sl.registerLazySingleton(
     () => UnregisterHandlerUseCase(sl<UnityRepository>()),
+  );
+
+  // Leave Contact
+  sl.registerLazySingleton(
+    () => SaveContactUsecase(sl<LeaveContactRepository>()),
   );
 
   // Add other usecase registrations here...

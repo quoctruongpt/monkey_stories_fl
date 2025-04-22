@@ -1,6 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
+import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 
 // Auth Datasources & Repositories
@@ -72,6 +76,14 @@ void initRepositoryDependencies() {
   // Unity
   sl.registerLazySingleton<UnityRepository>(
     () => UnityRepositoryImpl(dataSource: sl<UnityDataSource>()),
+  );
+
+  // Leave Contact
+  sl.registerLazySingleton<LeaveContactRepository>(
+    () => LeaveContactRepositoryImpl(
+      remoteDataSource: sl<LeaveContactRemoteDataSource>(),
+      localDataSource: sl<LeaveContactLocalDataSource>(),
+    ),
   );
 
   // Add other repository registrations here...

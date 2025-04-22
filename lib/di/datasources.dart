@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,6 +55,16 @@ void initDatasourceDependencies() {
 
   // Unity
   sl.registerLazySingleton(() => UnityDataSource());
+
+  // Leave Contact
+  sl.registerLazySingleton<LeaveContactRemoteDataSource>(
+    () => LeaveContactRemoteDataSourceImpl(dio: sl<Dio>()),
+  );
+  sl.registerLazySingleton<LeaveContactLocalDataSource>(
+    () => LeaveContactLocalDataSourceImpl(
+      sharedPreferences: sl<SharedPreferences>(),
+    ),
+  );
 
   // Add other datasource registrations here...
 }

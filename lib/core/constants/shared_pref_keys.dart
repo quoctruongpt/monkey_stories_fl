@@ -8,6 +8,7 @@ class SharedPrefKeys {
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
   static const String lastLogin = 'lastLogin';
+  static const String leaveContact = 'leaveContact';
 }
 
 final keysToKeep = [
