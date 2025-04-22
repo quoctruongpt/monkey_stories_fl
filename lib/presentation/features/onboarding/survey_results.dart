@@ -13,7 +13,7 @@ class SurveyResults extends StatelessWidget {
   const SurveyResults({super.key});
 
   void _onContinuePressed(BuildContext context) {
-    context.push(AppRoutePaths.obdPurchase);
+    context.go(AppRoutePaths.onboardLoading);
   }
 
   @override

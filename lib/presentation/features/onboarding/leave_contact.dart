@@ -17,7 +17,7 @@ class LeaveContact extends StatelessWidget {
   const LeaveContact({super.key});
 
   void _onSuccess(BuildContext context) {
-    context.go(AppRoutePaths.onboardLoading);
+    context.go(AppRoutePaths.obdPurchase);
   }
 
   void _onError(BuildContext context, String message) {
@@ -27,7 +27,7 @@ class LeaveContact extends StatelessWidget {
   }
 
   void _onSkip(BuildContext context) {
-    context.go(AppRoutePaths.onboardLoading);
+    context.go(AppRoutePaths.obdPurchase);
   }
 
   @override
