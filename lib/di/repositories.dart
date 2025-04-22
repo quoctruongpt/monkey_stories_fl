@@ -1,10 +1,13 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
+import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 
@@ -86,6 +89,11 @@ void initRepositoryDependencies() {
       remoteDataSource: sl<LeaveContactRemoteDataSource>(),
       localDataSource: sl<LeaveContactLocalDataSource>(),
     ),
+  );
+
+  // Course
+  sl.registerLazySingleton<CourseRepository>(
+    () => CourseRepositoryImpl(courseRemoteData: sl<CourseRemoteData>()),
   );
 
   // Add other repository registrations here...

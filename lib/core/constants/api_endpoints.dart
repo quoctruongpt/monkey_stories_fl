@@ -23,4 +23,7 @@ class ApiEndpoints {
 
   // Leave Contact
   static const String saveContact = '/app/api/v2/account/order-register-custom';
+
+  // Course
+  static const String activeCourse = '/app/api/v1/account/active-course';
 }
