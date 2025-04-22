@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
@@ -133,7 +134,12 @@ void initBlocDependencies() {
   );
 
   sl.registerFactory(
-    () => OnboardingCubit(getLanguageUseCase: sl<GetLanguageUseCase>()),
+    () => OnboardingCubit(
+      getLanguageUseCase: sl<GetLanguageUseCase>(),
+      signUpSkipUsecase: sl<SignUpSkipUsecase>(),
+      createProfileUsecase: sl<CreateProfileUsecase>(),
+      userCubit: sl<UserCubit>(),
+    ),
   );
 
   sl.registerFactory(

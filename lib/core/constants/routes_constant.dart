@@ -28,6 +28,7 @@ class AppRoutePaths {
   static const String surveyResults = '/survey_results';
   static const String obdPurchase = '/obd_purchase';
   static const String leaveContact = '/leave_contact';
+  static const String onboardLoading = '/onboard_loading';
 }
 
 class AppRouteNames {
@@ -60,4 +61,5 @@ class AppRouteNames {
   static const String surveyResults = 'survey_results';
   static const String obdPurchase = 'obd_purchase';
   static const String leaveContact = 'leave_contact';
+  static const String onboardLoading = 'onboard_loading';
 }

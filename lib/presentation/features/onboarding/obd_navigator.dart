@@ -9,6 +9,7 @@ import 'package:monkey_stories/presentation/features/onboarding/choose_level.dar
 import 'package:monkey_stories/presentation/features/onboarding/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/features/onboarding/leave_contact.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_purchase.dart';
+import 'package:monkey_stories/presentation/features/onboarding/onboard_loading.dart';
 import 'package:monkey_stories/presentation/features/onboarding/survey_results.dart';
 import 'package:monkey_stories/presentation/features/onboarding/suggested_level.dart';
 
@@ -63,6 +64,11 @@ final ShellRoute obdRoutes = ShellRoute(
       path: AppRoutePaths.leaveContact,
       name: AppRouteNames.leaveContact,
       builder: (context, state) => const LeaveContact(),
+    ),
+    GoRoute(
+      path: AppRoutePaths.onboardLoading,
+      name: AppRouteNames.onboardLoading,
+      builder: (context, state) => const OnboardLoading(),
     ),
   ],
 );

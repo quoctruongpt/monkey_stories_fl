@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/create_profile_loading_view.dart';
 
 class CreateProfileLoadingScreen extends StatelessWidget {
   const CreateProfileLoadingScreen({
@@ -111,75 +112,7 @@ class _CreateProfileLoadingState extends State<CreateProfileLoading> {
                 }
               },
               builder: (context, state) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Spacing.lg,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(
-                          context,
-                        ).translate('create_profile.loading.title'),
-                        style: Theme.of(context).textTheme.displayLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-
-                    const SizedBox(height: 80),
-
-                    SizedBox(
-                      height: 216,
-                      width: 216,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 200,
-                            height: 200,
-                            child: CircularProgressIndicator(
-                              value: state.progress,
-                              strokeWidth: 24,
-                              strokeCap: StrokeCap.round,
-                              backgroundColor: AppTheme.skyLightColor,
-                              color: AppTheme.primaryColor,
-                            ),
-                          ),
-                          Text(
-                            '${(state.progress * 100).toInt()}%',
-                            style: const TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w900,
-                              color: AppTheme.primaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 80),
-
-                    CreateProfileLoadingItem(
-                      title: AppLocalizations.of(
-                        context,
-                      ).translate('create_profile.loading.item.1'),
-                      active: state.progress >= 0.25,
-                    ),
-                    CreateProfileLoadingItem(
-                      title: AppLocalizations.of(
-                        context,
-                      ).translate('create_profile.loading.item.2'),
-                      active: state.progress >= 0.5,
-                    ),
-                    CreateProfileLoadingItem(
-                      title: AppLocalizations.of(
-                        context,
-                      ).translate('create_profile.loading.item.3'),
-                      active: state.progress >= 0.75,
-                    ),
-                  ],
-                );
+                return CreateProfileLoadingView(progress: state.progress);
               },
             ),
           ),

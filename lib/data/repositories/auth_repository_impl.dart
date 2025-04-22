@@ -106,15 +106,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<ServerFailureWithCode, bool>> signUp(
-    String countryCode,
-    String phoneNumber,
-    String password,
+    String? countryCode,
+    String? phoneNumber,
+    String? password,
+    LoginType signUpType,
   ) async {
     final result = await remoteDataSource.signUp(
-      LoginType.phone,
-      countryCode,
-      phoneNumber,
-      password,
+      signUpType,
+      countryCode ?? '',
+      phoneNumber ?? '',
+      password ?? '',
     );
 
     if (result.status == ApiStatus.success) {
@@ -122,7 +123,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.cacheRefreshToken(result.data?.refreshToken ?? '');
       await localDataSource.cacheLastLogin(
         LastLoginModel(
-          loginType: LoginType.phone,
+          loginType: signUpType,
           phone: '$countryCode$phoneNumber',
           isSocial: false,
         ),

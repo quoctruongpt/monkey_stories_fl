@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/repositories/auth_repository.dart';
@@ -15,6 +16,7 @@ class SignUpUsecase extends UseCase<bool, SignUpParams> {
       params.countryCode,
       params.phoneNumber,
       params.password,
+      LoginType.phone,
     );
   }
 }

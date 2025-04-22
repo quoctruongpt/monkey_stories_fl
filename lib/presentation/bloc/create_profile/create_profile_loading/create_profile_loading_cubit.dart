@@ -21,7 +21,6 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
        );
 
   Timer? _progressTimer;
-  Timer? _loadingTimer;
 
   void startLoading(String name, int yearOfBirth) async {
     try {
@@ -67,9 +66,6 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
     switch (loadingProcess) {
       case LoadingProcess.init:
         targetProgress = 0.1;
-        break;
-      case LoadingProcess.createAccount:
-        targetProgress = 0.25;
         break;
       case LoadingProcess.createProfile:
         targetProgress = 0.5;
@@ -118,7 +114,6 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
   @override
   Future<void> close() {
     _progressTimer?.cancel();
-    _loadingTimer?.cancel();
     return super.close();
   }
 }

@@ -17,13 +17,17 @@ class LeaveContact extends StatelessWidget {
   const LeaveContact({super.key});
 
   void _onSuccess(BuildContext context) {
-    context.go(AppRoutePaths.home);
+    context.go(AppRoutePaths.onboardLoading);
   }
 
   void _onError(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
+  }
+
+  void _onSkip(BuildContext context) {
+    context.go(AppRoutePaths.onboardLoading);
   }
 
   @override
@@ -49,7 +53,9 @@ class LeaveContact extends StatelessWidget {
                 appBar: AppBarWidget(
                   actions: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _onSkip(context);
+                      },
                       child: Text(
                         AppLocalizations.of(
                           context,
