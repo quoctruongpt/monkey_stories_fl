@@ -6,6 +6,7 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item.dart';
 import 'package:monkey_stories/presentation/widgets/purchase_footer.dart';
+import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 
 class ObdPurchase extends StatelessWidget {
   const ObdPurchase({super.key});
@@ -75,7 +76,14 @@ class ObdPurchase extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
               child: PurchaseFooter(
-                onPressed: () {},
+                onPressed: () {
+                  showVerifyDialog(
+                    context: context,
+                    onSuccess: () {
+                      // context.pop();
+                    },
+                  );
+                },
                 onRestorePressed: () {},
                 onTermsPressed: () {},
               ),

@@ -22,7 +22,7 @@ final logger = Logger('router');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GoRouter router = GoRouter(
   observers: [routeObserver],
-  initialLocation: AppRoutePaths.splash,
+  initialLocation: AppRoutePaths.obdPurchase,
   routes: <RouteBase>[
     GoRoute(
       path: AppRoutePaths.intro,

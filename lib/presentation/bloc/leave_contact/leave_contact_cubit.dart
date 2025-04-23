@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 
@@ -39,6 +40,10 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
         ContactParams(
           phone: state.phone.value.phoneNumber,
           countryCode: state.phone.value.countryCode,
+          // productId: AppConstants.courseId.toString(),
+          // utmMedium: 'app',
+          // utmCampaign: 'app',
+          // profileId: 1234,
         ),
       );
 

@@ -55,6 +55,7 @@ import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations
 
 // Kinesis Usecases
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -163,6 +164,8 @@ void initBlocDependencies() {
       putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
     ),
   );
+
+  sl.registerFactory(() => VerifyParentCubit());
 
   // Add other Bloc/Cubit registrations here...
 }
