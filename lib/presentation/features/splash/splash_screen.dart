@@ -25,12 +25,12 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<SplashCubit>()..initializeApp(),
+      create: (_) => sl<SplashCubit>()..runApp(),
       child: BlocListener<SplashCubit, SplashState>(
         listener: (context, state) {
           if (state is SplashAuthenticated) {
             // Navigate to Home and replace splash route
-            GoRouter.of(context).replace(AppRoutePaths.home);
+            GoRouter.of(context).replace(AppRoutePaths.obdPurchase);
           } else if (state is SplashUnauthenticated) {
             // Navigate to Login and replace splash route
             GoRouter.of(context).replace(AppRoutePaths.intro);

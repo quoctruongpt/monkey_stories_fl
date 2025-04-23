@@ -11,6 +11,8 @@ class SharedPrefKeys {
   static const String leaveContact = 'leaveContact';
   static const String profileList = 'profileList';
   static const String currentProfile = 'currentProfile';
+  static const String countryCode = 'countryCode';
+  static const String purchasedProducts = 'purchasedProducts';
 }
 
 final keysToKeep = [
@@ -18,4 +20,6 @@ final keysToKeep = [
   SharedPrefKeys.isDarkMode,
   SharedPrefKeys.deviceId,
   SharedPrefKeys.lastLogin,
+  SharedPrefKeys.countryCode,
+  SharedPrefKeys.purchasedProducts,
 ];

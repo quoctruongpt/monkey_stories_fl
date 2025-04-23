@@ -9,20 +9,20 @@ class PurchaseFooter extends StatelessWidget {
     required this.onPressed,
     required this.onRestorePressed,
     required this.onTermsPressed,
+    required this.description,
   });
 
   final VoidCallback onPressed;
   final VoidCallback onRestorePressed;
   final VoidCallback onTermsPressed;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          AppLocalizations.of(
-            context,
-          ).translate('699.000đ/ năm sau 7 ngày dùng thử'),
+          description,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppTheme.azureColor,
             fontWeight: FontWeight.w600,

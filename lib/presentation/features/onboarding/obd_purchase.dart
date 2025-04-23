@@ -1,12 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/di/usecases.dart';
+import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item.dart';
 import 'package:monkey_stories/presentation/widgets/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
+
+class ObdPurchaseProvider extends StatelessWidget {
+  const ObdPurchaseProvider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<PurchasedViewCubit>()..getOnboardingPackages(),
+      child: const ObdPurchase(),
+    );
+  }
+}
 
 class ObdPurchase extends StatelessWidget {
   const ObdPurchase({super.key});
@@ -59,12 +75,28 @@ class ObdPurchase extends StatelessWidget {
                   ),
                   const SizedBox(height: Spacing.xxl),
 
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-                    child: PackageItem(
-                      price: '1.399.000 VND/Năm',
-                      isRecommended: true,
-                      isSelected: true,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+                    child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
+                      builder: (context, state) {
+                        return Column(
+                          children:
+                              state.packages
+                                  .map(
+                                    (e) => PackageItemView(
+                                      price: e.localPrice,
+                                      priceForOneMonth: e.localPriceForOneMonth,
+                                      originalPrice: e.localOriginalPrice,
+                                      isRecommended:
+                                          e.type == PackageType.oneYear,
+                                      isSelected:
+                                          e.id == state.selectedPackage?.id,
+                                      type: e.type,
+                                    ),
+                                  )
+                                  .toList(),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -75,17 +107,24 @@ class ObdPurchase extends StatelessWidget {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-              child: PurchaseFooter(
-                onPressed: () {
-                  showVerifyDialog(
-                    context: context,
-                    onSuccess: () {
-                      // context.pop();
+              child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
+                builder: (context, state) {
+                  return PurchaseFooter(
+                    description: AppLocalizations.of(context).translate(
+                      '${state.selectedPackage?.localPrice}/ ${state.selectedPackage?.type.value} sau 7 ngày dùng thử',
+                    ),
+                    onPressed: () {
+                      showVerifyDialog(
+                        context: context,
+                        onSuccess: () {
+                          // context.pop();
+                        },
+                      );
                     },
+                    onRestorePressed: () {},
+                    onTermsPressed: () {},
                   );
                 },
-                onRestorePressed: () {},
-                onTermsPressed: () {},
               ),
             ),
           ],

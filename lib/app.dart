@@ -12,6 +12,7 @@ import 'package:monkey_stories/core/localization/app_localizations_delegate.dart
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
 import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<FloatButtonCubit>()),
         BlocProvider(create: (_) => sl<UserCubit>()),
         BlocProvider(create: (_) => sl<ProfileCubit>()..getCurrentProfile()),
+        BlocProvider(create: (_) => sl<PurchasedCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:

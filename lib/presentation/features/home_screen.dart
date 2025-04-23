@@ -10,6 +10,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 final logger = Logger('HomeScreen');
@@ -131,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, state) {
                   return ElevatedButton(
                     onPressed: () {
-                      context.read<AppCubit>().changeLanguage('vi');
+                      context.read<PurchasedCubit>().test();
                     },
                     child: const Text('vi'),
                   );

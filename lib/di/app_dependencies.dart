@@ -1,5 +1,6 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
@@ -25,5 +26,10 @@ Future<void> initCoreAppDependencies() async {
         secretKey: dotenv.env['KINESIS_SECRET_ACCESS_KEY']!,
       ),
     ),
+  );
+
+  // Đăng ký singleton cho FlutterInappPurchase
+  sl.registerLazySingleton<FlutterInappPurchase>(
+    () => FlutterInappPurchase.instance,
   );
 }

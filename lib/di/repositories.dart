@@ -5,9 +5,11 @@ import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_loca
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/purchased_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
@@ -28,6 +30,7 @@ import 'package:monkey_stories/data/repositories/device_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/device_repository.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/repositories/settings_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
 import 'package:monkey_stories/data/repositories/system_settings_repository_impl.dart';
@@ -40,6 +43,7 @@ import 'package:monkey_stories/domain/repositories/unity_repository.dart';
 
 import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
+import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 
 final sl = GetIt.instance;
 
@@ -62,6 +66,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<AccountRepository>(
     () => AccountRepositoryImpl(
       accountRemoteDataSource: sl<AccountRemoteDataSource>(),
+      systemLocalDataSource: sl<SystemLocalDataSource>(),
     ),
   );
 
@@ -70,6 +75,7 @@ void initRepositoryDependencies() {
     () => DeviceRepositoryImpl(
       remoteDataSource: sl<DeviceRemoteDataSource>(),
       localDataSource: sl<DeviceLocalDataSource>(),
+      systemLocalDataSource: sl<SystemLocalDataSource>(),
     ),
   );
   sl.registerLazySingleton<SettingsRepository>(
@@ -104,6 +110,13 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<KinesisRepository>(
     () => KinesisRepositoryImpl(
       kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
+    ),
+  );
+
+  // Purchased
+  sl.registerLazySingleton<PurchasedRepository>(
+    () => PurchasedRepositoryImpl(
+      remoteDataSource: sl<PurchasedRemoteDataSource>(),
     ),
   );
 

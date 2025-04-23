@@ -9,15 +9,17 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart'; // Assuming this exists
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
-  final RegisterDeviceUseCase _registerDeviceUseCase; // Assuming this exists
-  final AppCubit _appCubit; // Thêm dependency AppCubit
-  final UserCubit _userCubit; // Thêm dependency UserCubit
-  final ProfileCubit _profileCubit; // Thêm dependency ProfileCubit
+  final RegisterDeviceUseCase _registerDeviceUseCase;
+  final AppCubit _appCubit;
+  final UserCubit _userCubit;
+  final ProfileCubit _profileCubit;
+  final PurchasedCubit _purchasedCubit;
 
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 3;
@@ -25,17 +27,25 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({
     required CheckAuthStatusUseCase checkAuthStatusUseCase,
     required RegisterDeviceUseCase registerDeviceUseCase,
-    required AppCubit appCubit, // Inject AppCubit
-    required UserCubit userCubit, // Inject UserCubit
-    required ProfileCubit profileCubit, // Inject ProfileCubit
+    required AppCubit appCubit,
+    required UserCubit userCubit,
+    required ProfileCubit profileCubit,
+    required PurchasedCubit purchasedCubit,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
-       _appCubit = appCubit, // Gán AppCubit
-       _userCubit = userCubit, // Gán UserCubit
-       _profileCubit = profileCubit, // Gán ProfileCubit
+       _appCubit = appCubit,
+       _userCubit = userCubit,
+       _profileCubit = profileCubit,
+       _purchasedCubit = purchasedCubit,
        super(SplashInitial());
 
-  Future<void> initializeApp() async {
+  Future<void> runApp() async {
+    _initializeApp();
+    await _purchasedCubit.initialPurchased();
+    await _purchasedCubit.getProducts();
+  }
+
+  Future<void> _initializeApp() async {
     emit(SplashLoading());
     final startTime = DateTime.now(); // Ghi lại thời gian bắt đầu
 

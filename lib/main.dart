@@ -13,11 +13,11 @@ Future<void> main() async {
 
   // Khởi tạo environment service
   await EnvironmentService().initialize();
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: HydratedStorageDirectory(
-      (await getTemporaryDirectory()).path,
-    ),
+
+  final storage = HydratedStorageDirectory(
+    (await getTemporaryDirectory()).path,
   );
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: storage);
 
   // Khởi tạo dependency injection
   await di.init();

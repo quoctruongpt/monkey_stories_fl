@@ -58,7 +58,7 @@ final ShellRoute obdRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.obdPurchase,
       name: AppRouteNames.obdPurchase,
-      builder: (context, state) => const ObdPurchase(),
+      builder: (context, state) => const ObdPurchaseProvider(),
     ),
     GoRoute(
       path: AppRoutePaths.leaveContact,

@@ -45,53 +45,50 @@ class ChooseYearOfBirthView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: Spacing.md),
-                    Column(
-                      children: [
-                        GridView.count(
-                          crossAxisCount: 4,
-                          shrinkWrap: true,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          childAspectRatio: 1.3,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        const crossAxisCount = 4;
+                        const spacing = Spacing.sm;
+                        final totalSpacing = spacing * (crossAxisCount - 1);
+                        final itemWidth =
+                            (constraints.maxWidth - totalSpacing) /
+                            crossAxisCount;
+
+                        return Wrap(
+                          spacing: spacing,
+                          runSpacing: spacing,
                           children: List.generate(
                             12,
-                            (index) => _buildYearButton(
-                              context,
-                              years[index],
-                              yearSelected == years[index],
-                              () => onChangeYear(years[index]),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        LayoutBuilder(
-                          builder: (context, constraints) {
-                            final buttonWidth =
-                                (constraints.maxWidth - (12 * 3)) / 4;
-                            final buttonHeight = buttonWidth / 1.3;
-
-                            return SizedBox(
-                              width: double.infinity,
-                              height: buttonHeight,
+                            (index) => SizedBox(
+                              width: itemWidth,
                               child: _buildYearButton(
                                 context,
-                                years[12],
-                                yearSelected == years[12],
-                                () => onChangeYear(years[12]),
-                                customText: AppLocalizations.of(
-                                  context,
-                                ).translate(
-                                  'year.before',
-                                  params: {'year': years[12].toString()},
-                                ),
+                                years[index],
+                                yearSelected == years[index],
+                                () => onChangeYear(years[index]),
                               ),
-                            );
-                          },
-                        ),
-
-                        const CreateProfileFooter(),
-                      ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
+                    const SizedBox(height: 16),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: _buildYearButton(
+                        context,
+                        years[12],
+                        yearSelected == years[12],
+                        () => onChangeYear(years[12]),
+                        customText: AppLocalizations.of(context).translate(
+                          'year.before',
+                          params: {'year': years[12].toString()},
+                        ),
+                      ),
+                    ),
+
+                    const CreateProfileFooter(),
                   ],
                 ),
               ),
@@ -127,7 +124,10 @@ class ChooseYearOfBirthView extends StatelessWidget {
                   : AppTheme.buttonPrimaryDisabledBackground,
           width: 2,
         ),
-        padding: const EdgeInsets.all(Spacing.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: Spacing.sm,
+          vertical: Spacing.md,
+        ),
         backgroundColor:
             isSelected ? AppTheme.blueLightColor : Colors.transparent,
       ),

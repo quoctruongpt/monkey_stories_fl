@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 
-class PackageItem extends StatelessWidget {
-  const PackageItem({
+class PackageItemView extends StatelessWidget {
+  const PackageItemView({
     super.key,
     required this.price,
+    required this.priceForOneMonth,
+    required this.originalPrice,
+    required this.type,
     this.isRecommended = false,
     this.isSelected = false,
   });
 
   final String price;
+  final String priceForOneMonth;
+  final String originalPrice;
+  final PackageType type;
   final bool? isRecommended;
   final bool? isSelected;
 
@@ -34,7 +41,7 @@ class PackageItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.of(context).translate('1.399.000 VND/Năm'),
+                '$originalPrice/${AppLocalizations.of(context).translate(type.value)}',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -46,7 +53,7 @@ class PackageItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate('1.399.000 VND/Năm'),
+                    '$price/${AppLocalizations.of(context).translate(type.value)}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
@@ -54,7 +61,7 @@ class PackageItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    AppLocalizations.of(context).translate('1.399.000 VND/Năm'),
+                    '$priceForOneMonth/${AppLocalizations.of(context).translate(PackageType.oneMonth.value)}',
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,

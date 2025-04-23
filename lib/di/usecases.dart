@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
@@ -30,6 +31,7 @@ import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.da
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
@@ -47,6 +49,9 @@ import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.
 // Kinesis Usecases
 import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+
+// Purchased Usecases
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -120,5 +125,10 @@ void initUsecaseDependencies() {
     () => PutSettingKinesisUsecase(sl<KinesisRepository>()),
   );
 
+  // Purchased
+  sl.registerLazySingleton(() => GetProductsUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => InitialPurchasedUsecase(sl<PurchasedRepository>()),
+  );
   // Add other usecase registrations here...
 }

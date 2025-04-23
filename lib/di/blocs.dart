@@ -8,6 +8,8 @@ import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecas
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -35,6 +37,7 @@ import 'package:monkey_stories/domain/usecases/device/register_device_usecase.da
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -56,6 +59,7 @@ import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations
 // Kinesis Usecases
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -107,6 +111,7 @@ void initBlocDependencies() {
       appCubit: sl<AppCubit>(),
       userCubit: sl<UserCubit>(),
       profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
     ),
   );
 
@@ -166,6 +171,17 @@ void initBlocDependencies() {
   );
 
   sl.registerFactory(() => VerifyParentCubit());
+
+  sl.registerLazySingleton(
+    () => PurchasedCubit(
+      initialPurchasedUsecase: sl<InitialPurchasedUsecase>(),
+      getProductsUsecase: sl<GetProductsUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => PurchasedViewCubit(purchasedCubit: sl<PurchasedCubit>()),
+  );
 
   // Add other Bloc/Cubit registrations here...
 }

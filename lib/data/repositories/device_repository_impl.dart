@@ -4,6 +4,7 @@ import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/device/device_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 // Import network info if needed
 // import 'package:monkey_stories/core/network/network_info.dart';
 import 'package:monkey_stories/domain/repositories/device_repository.dart';
@@ -13,11 +14,13 @@ final logger = Logger('DeviceRepositoryImpl');
 class DeviceRepositoryImpl implements DeviceRepository {
   final DeviceRemoteDataSource remoteDataSource;
   final DeviceLocalDataSource localDataSource;
+  final SystemLocalDataSource systemLocalDataSource;
   // final NetworkInfo networkInfo;
 
   DeviceRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.systemLocalDataSource,
     // required this.networkInfo,
   });
 
@@ -47,9 +50,14 @@ class DeviceRepositoryImpl implements DeviceRepository {
     // if (await networkInfo.isConnected) { ... } else { return Left(NetworkFailure()); }
     try {
       logger.info('registerDevice');
-      final remoteDeviceId = await remoteDataSource.registerDevice();
+      final result = await remoteDataSource.registerDevice();
+
+      final remoteDeviceId = result.deviceId;
+      final countryCode = result.countryCode;
+
       // 3. Cache the new device ID
       await localDataSource.cacheDeviceId(remoteDeviceId);
+      systemLocalDataSource.cacheCountryCode(countryCode);
       return Right(remoteDeviceId);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
