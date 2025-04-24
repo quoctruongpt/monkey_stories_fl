@@ -44,7 +44,7 @@ class VerifyDialog extends StatelessWidget {
                         Text(
                           AppLocalizations.of(
                             context,
-                          ).translate('Để tiếp tục, vui lòng nhập:'),
+                          ).translate('app.verify.title'),
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(color: AppTheme.textSecondaryColor),
                         ),

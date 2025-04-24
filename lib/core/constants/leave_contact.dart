@@ -10,10 +10,10 @@ class LeaveContactRoleItem {
 final List<LeaveContactRoleItem> leaveContactRoles = [
   const LeaveContactRoleItem(
     value: LeaveContactRole.Student,
-    label: 'Học sinh',
+    label: 'app.popup_c3.role.student',
   ),
   const LeaveContactRoleItem(
     value: LeaveContactRole.Parent,
-    label: 'Phụ huynh',
+    label: 'app.popup_c3.role.parent',
   ),
 ];

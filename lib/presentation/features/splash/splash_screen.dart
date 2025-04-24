@@ -33,14 +33,16 @@ class SplashScreen extends StatelessWidget {
       case SplashNeedCreateAccount():
         showCustomNoticeDialog(
           context: context,
-          titleText: AppLocalizations.of(context).translate('Thông báo'),
-          messageText: AppLocalizations.of(context).translate(
-            'Gói mua đã được kích hoạt. Ba mẹ vui lòng tạo tài khoản để sử dụng.',
-          ),
+          titleText: AppLocalizations.of(
+            context,
+          ).translate('app.obd_payment.created_account.title'),
+          messageText: AppLocalizations.of(
+            context,
+          ).translate('app.obd_payment.created_account.desc'),
           imageAsset: 'assets/images/max_warning.png',
           primaryActionText: AppLocalizations.of(
             context,
-          ).translate('Tạo tài khoản'),
+          ).translate('app.obd_payment.created_account.act'),
           onPrimaryAction: () {
             context.read<UserCubit>().togglePurchasing();
             context.replace(AppRoutePaths.signUp);

@@ -13,12 +13,14 @@ class PurchaseFooter extends StatelessWidget {
     required this.onRestorePressed,
     required this.onTermsPressed,
     required this.description,
+    required this.actionText,
   });
 
   final VoidCallback onPressed;
   final VoidCallback onRestorePressed;
   final VoidCallback onTermsPressed;
   final String description;
+  final String actionText;
 
   void _onTermsPressed(BuildContext context) {
     showTermsBottomSheet(context);
@@ -42,10 +44,7 @@ class PurchaseFooter extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Spacing.sm),
-        AppButton.primary(
-          text: AppLocalizations.of(context).translate('Mua ngay'),
-          onPressed: onPressed,
-        ),
+        AppButton.primary(text: actionText, onPressed: onPressed),
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(

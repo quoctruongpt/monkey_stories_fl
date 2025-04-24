@@ -20,14 +20,16 @@ class LeaveContactDialog extends StatelessWidget {
     Navigator.of(context).pop();
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Đăng ký thành công'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.popup_c3.title.success'),
       messageText: AppLocalizations.of(
         context,
-      ).translate('Monkey sẽ liên hệ tư vấn trong vòng 24h'),
+      ).translate('app.popup_c3.desc.success'),
       imageAsset: 'assets/images/max_liked.png',
       primaryActionText: AppLocalizations.of(
         context,
-      ).translate('Bắt đầu học thử'),
+      ).translate('app.popup_c3.act.success'),
       titleColor: AppTheme.successColor,
       onPrimaryAction: onSuccess,
     );
@@ -36,12 +38,16 @@ class LeaveContactDialog extends StatelessWidget {
   void _onError(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Đăng ký thất bại'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.popup_c3.title.fail'),
       messageText: AppLocalizations.of(
         context,
-      ).translate('Monkey sẽ liên hệ tư vấn trong vòng 24h'),
+      ).translate('app.popup_c3.desc.fail'),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Thử lại'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.popup_c3.act.fail'),
       onPrimaryAction: () {
         context.pop();
       },
@@ -95,7 +101,9 @@ class LeaveContactDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of(context).translate('Bạn cần hỗ trợ?'),
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.popup_c3.title'),
                       style: Theme.of(context).textTheme.displayMedium
                           ?.copyWith(fontWeight: FontWeight.w900),
                       textAlign: TextAlign.center,
@@ -104,7 +112,7 @@ class LeaveContactDialog extends StatelessWidget {
                     Text(
                       AppLocalizations.of(
                         context,
-                      ).translate('Hãy để Monkey giúp bạn nhé!'),
+                      ).translate('app.popup_c3.desc'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.textSecondaryColor,
@@ -121,12 +129,12 @@ class LeaveContactDialog extends StatelessWidget {
                         border: const OutlineInputBorder(),
                         labelText: AppLocalizations.of(
                           context,
-                        ).translate('Vai trò'),
+                        ).translate('app.popup_c3.role.label'),
                       ),
                       hint: Text(
                         AppLocalizations.of(
                           context,
-                        ).translate('Phụ huynh/ Học sinh'),
+                        ).translate('app.popup_c3.role.hint'),
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: AppTheme.textGrayLightColor,
                         ),
@@ -136,7 +144,11 @@ class LeaveContactDialog extends StatelessWidget {
                           leaveContactRoles.map((LeaveContactRoleItem role) {
                             return DropdownMenuItem<LeaveContactRole>(
                               value: role.value,
-                              child: Text(role.label),
+                              child: Text(
+                                AppLocalizations.of(
+                                  context,
+                                ).translate(role.label),
+                              ),
                             );
                           }).toList(),
                       onChanged: (value) {
@@ -149,7 +161,7 @@ class LeaveContactDialog extends StatelessWidget {
                     PhoneInputField(
                       labelText: AppLocalizations.of(
                         context,
-                      ).translate('Số điện thoại'),
+                      ).translate('app.popup_c3.phone.title'),
                       onChanged: (value) {
                         context.read<LeaveContactCubit>().phoneChanged(value);
                       },
@@ -173,7 +185,7 @@ class LeaveContactDialog extends StatelessWidget {
                     AppButton.primary(
                       text: AppLocalizations.of(
                         context,
-                      ).translate('hỗ trợ tôi'),
+                      ).translate('app.popup_c3.act'),
                       onPressed: () {
                         context.read<LeaveContactCubit>().submit();
                       },

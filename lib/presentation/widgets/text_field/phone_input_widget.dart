@@ -52,6 +52,11 @@ class PhoneInputField extends StatelessWidget {
               fontSize: fontSize,
               color: AppTheme.textGrayLightColor,
             ),
+            labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppTheme.textGrayColor,
+              fontWeight: FontWeight.w800,
+              fontSize: fontSize,
+            ),
             errorText: errorText?.isEmpty == true ? null : errorText,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: Spacing.md),

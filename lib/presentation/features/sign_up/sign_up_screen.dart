@@ -113,7 +113,9 @@ class _SignUpState extends State<SignUp> {
     if (errorCode == AuthConstants.phoneExistCode) {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.popup.title'),
         messageText: AppLocalizations.of(
           context,
         ).translate('sign_up.phone.exists.message'),
@@ -164,16 +166,25 @@ class _SignUpState extends State<SignUp> {
     if (context.read<UserCubit>().state.isPurchasing) {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.popup.title'),
         messageText: AppLocalizations.of(context).translate(
-          'Ba mẹ sẽ mất đi hồ sơ học ${context.read<ProfileCubit>().state.currentProfile?.name}, ba mẹ có muốn đăng nhập không?',
+          'app.signup.login.warning',
+          params: {
+            'name': context.read<ProfileCubit>().state.currentProfile?.name,
+          },
         ),
         imageAsset: 'assets/images/monkey_confused.png',
-        primaryActionText: AppLocalizations.of(context).translate('Đăng nhập'),
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.phone.exists.act'),
         onPrimaryAction: () {
           context.push(AppRoutePaths.login);
         },
-        secondaryActionText: AppLocalizations.of(context).translate('Hủy'),
+        secondaryActionText: AppLocalizations.of(
+          context,
+        ).translate('sign_up.phone.exists.act2'),
         onSecondaryAction: () {
           context.pop();
         },
