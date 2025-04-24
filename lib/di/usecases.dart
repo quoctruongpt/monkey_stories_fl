@@ -32,6 +32,8 @@ import 'package:monkey_stories/domain/usecases/device/register_device_usecase.da
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
@@ -52,6 +54,10 @@ import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_useca
 
 // Purchased Usecases
 import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -129,6 +135,22 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(() => GetProductsUsecase(sl<PurchasedRepository>()));
   sl.registerLazySingleton(
     () => InitialPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(() => PurchaseUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => ListenToPurchaseErrorsUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => DisposePurchasedUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => ListenToPurchaseUpdatesUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => VerifyPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => RestorePurchasedUsecase(sl<PurchasedRepository>()),
   );
   // Add other usecase registrations here...
 }

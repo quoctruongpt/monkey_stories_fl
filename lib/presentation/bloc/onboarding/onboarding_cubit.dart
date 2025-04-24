@@ -87,7 +87,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
         state.copyWith(
           error: OnboardingError(
             message: 'error',
-            onboardingProgress: OnboardingProgress.done,
+            onboardingProgress: state.onboardingProgress,
           ),
         ),
       );

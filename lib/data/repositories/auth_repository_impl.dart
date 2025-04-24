@@ -110,12 +110,14 @@ class AuthRepositoryImpl implements AuthRepository {
     String? phoneNumber,
     String? password,
     LoginType signUpType,
+    bool isUpgrade,
   ) async {
     final result = await remoteDataSource.signUp(
       signUpType,
       countryCode ?? '',
       phoneNumber ?? '',
       password ?? '',
+      isUpgrade,
     );
 
     if (result.status == ApiStatus.success) {

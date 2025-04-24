@@ -23,7 +23,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   final SignUpUsecase _signUpUsecase;
   final LoginUsecase _loginUsecase;
   final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
+
   final UserCubit _userCubit;
+
   Timer? _debounce;
   CancelToken? _cancelCheckPhoneNumberToken;
 
@@ -160,6 +162,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           countryCode: state.phone.value.countryCode,
           phoneNumber: state.phone.value.phoneNumber,
           password: state.password.value,
+          isUpgrade: _userCubit.state.user?.loginType == LoginType.skip,
         ),
       );
 
@@ -173,7 +176,9 @@ class SignUpCubit extends Cubit<SignUpState> {
           );
         },
         (success) async {
-          logger.info('success');
+          if (_userCubit.state.isPurchasing) {
+            _userCubit.togglePurchasing();
+          }
           await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },

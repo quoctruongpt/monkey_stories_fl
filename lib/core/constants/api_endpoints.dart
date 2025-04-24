@@ -26,4 +26,7 @@ class ApiEndpoints {
 
   // Course
   static const String activeCourse = '/app/api/v1/account/active-course';
+
+  // Purchased
+  static const String verifyPurchase = '/device/api/v1/payinapp/verify-store';
 }

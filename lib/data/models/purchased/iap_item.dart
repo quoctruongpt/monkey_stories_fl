@@ -18,6 +18,7 @@ class IAPItemFlutter {
     final countryCode = await systemLocalDataSource.getCountryCode();
     final appliedSaleOff = localPackage.getSaleOff(countryCode);
     final originalPrice = price / (1 - appliedSaleOff);
+    final canUseTrial = _canUserUseTrial(localPackage.type, item);
 
     return PurchasedPackage(
       id: item.productId ?? '',
@@ -37,6 +38,7 @@ class IAPItemFlutter {
       type: localPackage.type, // Provide a non-null default value
       isSubscription: localPackage.isSubscription,
       appliedSaleOff: appliedSaleOff,
+      canUseTrial: canUseTrial,
     );
   }
 
@@ -65,5 +67,20 @@ class IAPItemFlutter {
     } catch (_) {
       return 0;
     }
+  }
+
+  bool _canUserUseTrial(PackageType type, IAPItem item) {
+    if (type == PackageType.lifetime) return false;
+
+    // iOS trial
+    final isIOSFreeTrial = item.introductoryPricePaymentModeIOS == 'FREETRIAL';
+
+    // Android: dùng thử nếu có introductoryPrice rõ ràng
+    final hasIntroductoryPrice =
+        item.introductoryPrice != null &&
+        item.introductoryPrice!.isNotEmpty &&
+        item.introductoryPrice != '0.0';
+
+    return isIOSFreeTrial || hasIntroductoryPrice;
   }
 }

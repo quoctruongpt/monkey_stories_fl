@@ -96,6 +96,7 @@ void initDatasourceDependencies() {
     () => PurchasedRemoteDataSourceImpl(
       flutterInappPurchase: sl<FlutterInappPurchase>(),
       systemLocalDataSource: sl<SystemLocalDataSource>(),
+      dio: sl<Dio>(),
     ),
   );
 

@@ -13,6 +13,8 @@ enum PackageType {
   }
 }
 
+enum PurchasedStatus { notEnrolled, trial, active, expired }
+
 class SaleOff {
   final double? vn;
   final double? us;

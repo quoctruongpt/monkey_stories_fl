@@ -21,6 +21,7 @@ class NoticeDialog extends StatelessWidget {
   final VoidCallback? onSecondaryAction;
   final VoidCallback? onClose; // Callback cho nút X
   final bool isCloseable;
+  final Color? titleColor;
 
   const NoticeDialog({
     super.key,
@@ -34,6 +35,7 @@ class NoticeDialog extends StatelessWidget {
     this.onSecondaryAction,
     this.onClose,
     this.isCloseable = true,
+    this.titleColor,
   });
 
   @override
@@ -86,6 +88,7 @@ class NoticeDialog extends StatelessWidget {
                   titleText,
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.w900,
+                    color: titleColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -154,6 +157,7 @@ Future<void> showCustomNoticeDialog({
   VoidCallback? onSecondaryAction,
   VoidCallback? onClose,
   bool isCloseable = true,
+  Color? titleColor,
 }) {
   return showDialog<void>(
     context: context,
@@ -189,6 +193,7 @@ Future<void> showCustomNoticeDialog({
                 }
                 : () => Navigator.of(dialogContext).pop(), // Mặc định chỉ đóng
         isCloseable: isCloseable,
+        titleColor: titleColor,
       );
     },
   );

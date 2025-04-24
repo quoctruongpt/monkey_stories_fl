@@ -8,6 +8,8 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/sign_up/sign_up_cubit.dart';
 import 'package:monkey_stories/core/utils/lottie_utils.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
@@ -156,6 +158,29 @@ class _SignUpState extends State<SignUp> {
         onClose: clearPopupErrorMessage,
       );
     }
+  }
+
+  void _onLoginPressed(BuildContext context) {
+    if (context.read<UserCubit>().state.isPurchasing) {
+      showCustomNoticeDialog(
+        context: context,
+        titleText: AppLocalizations.of(context).translate('Thông báo'),
+        messageText: AppLocalizations.of(context).translate(
+          'Ba mẹ sẽ mất đi hồ sơ học ${context.read<ProfileCubit>().state.currentProfile?.name}, ba mẹ có muốn đăng nhập không?',
+        ),
+        imageAsset: 'assets/images/monkey_confused.png',
+        primaryActionText: AppLocalizations.of(context).translate('Đăng nhập'),
+        onPrimaryAction: () {
+          context.push(AppRoutePaths.login);
+        },
+        secondaryActionText: AppLocalizations.of(context).translate('Hủy'),
+        onSecondaryAction: () {
+          context.pop();
+        },
+      );
+      return;
+    }
+    context.push(AppRoutePaths.login);
   }
 
   @override
@@ -391,9 +416,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 child: FooterAuthentication(
                   textOnLine: translate('sign_up.other'),
-                  onActionPress: () {
-                    context.push(AppRoutePaths.login);
-                  },
+                  onActionPress: () => _onLoginPressed(context),
                   onApplePress: () {
                     context.read<SignUpCubit>().signUpWithApple();
                   },

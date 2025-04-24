@@ -25,6 +25,7 @@ class _OnboardLoadingState extends State<OnboardLoading> {
   }
 
   void _onError(OnboardingError error) {
+    print('Error obd: ${error.onboardingProgress}');
     showCustomNoticeDialog(
       context: context,
       titleText: 'Lỗi',
@@ -32,7 +33,7 @@ class _OnboardLoadingState extends State<OnboardLoading> {
       imageAsset: 'assets/images/monkey_sad.png',
       primaryActionText: 'Tôi đã hiểu',
       onPrimaryAction: () {
-        if (error.onboardingProgress == OnboardingProgress.createAccount) {
+        if (error.onboardingProgress == OnboardingProgress.init) {
           context.go(AppRoutePaths.intro);
         } else {
           context.go(AppRoutePaths.home);

@@ -11,5 +11,5 @@ abstract class ProfileRepository {
 
   Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile();
 
-  Future<Either<CacheFailure, int>> getCurrentProfile();
+  Future<Either<CacheFailure, int?>> getCurrentProfile();
 }

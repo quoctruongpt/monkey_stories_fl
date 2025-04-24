@@ -29,14 +29,6 @@ class ProfileRepositoryImpl extends ProfileRepository {
       null,
     );
 
-    // await kinesisRemoteDataSource.pushEvent(
-    //   'profile',
-    //   {
-    //     'name': name,
-    //     'yearOfBirth': yearOfBirth,
-    //   },
-    // );
-
     if (response.status == ApiStatus.success) {
       await profileLocalDataSource.addProfile(
         response.data!.toEntity(name, yearOfBirth),
@@ -67,7 +59,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<CacheFailure, int>> getCurrentProfile() async {
+  Future<Either<CacheFailure, int?>> getCurrentProfile() async {
     try {
       final response = await profileLocalDataSource.getCurrentProfile();
       return right(response);

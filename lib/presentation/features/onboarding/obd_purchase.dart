@@ -6,10 +6,12 @@ import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/usecases.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item.dart';
-import 'package:monkey_stories/presentation/widgets/purchase_footer.dart';
+import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 
 class ObdPurchaseProvider extends StatelessWidget {
@@ -33,103 +35,131 @@ class ObdPurchase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        showBackButton: false,
-        actions: [
-          IconButton(
-            onPressed: () => _onXPressed(context),
-            icon: const Icon(Icons.clear, color: AppTheme.textColor, size: 40),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBarWidget(
+            showBackButton: false,
+            actions: [
+              IconButton(
+                onPressed: () => _onXPressed(context),
+                icon: const Icon(
+                  Icons.clear,
+                  color: AppTheme.textColor,
+                  size: 40,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: Spacing.lg),
-        child: Column(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(
-                      context,
-                    ).translate('app.obd_purchase.title'),
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      color: AppTheme.azureColor,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: Spacing.md),
-
-                  Flexible(
-                    child: Image.asset('assets/images/obd_purchase.png'),
-                  ),
-                  const SizedBox(height: Spacing.lg),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: Spacing.lg),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
                     children: [
-                      Image.asset('assets/images/editor_choice.png'),
-                      const SizedBox(width: Spacing.lg),
-                      Image.asset('assets/images/app_of_the_day.png'),
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        ).translate('app.obd_purchase.title'),
+                        style: Theme.of(context).textTheme.displayLarge
+                            ?.copyWith(color: AppTheme.azureColor),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: Spacing.md),
+
+                      Flexible(
+                        child: Image.asset('assets/images/obd_purchase.png'),
+                      ),
+                      const SizedBox(height: Spacing.lg),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/editor_choice.png'),
+                          const SizedBox(width: Spacing.lg),
+                          Image.asset('assets/images/app_of_the_day.png'),
+                        ],
+                      ),
+                      const SizedBox(height: Spacing.xxl),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Spacing.md,
+                        ),
+                        child: BlocBuilder<
+                          PurchasedViewCubit,
+                          PurchasedViewState
+                        >(
+                          builder: (context, state) {
+                            return Column(
+                              children:
+                                  state.packages
+                                      .map(
+                                        (e) => PackageItemView(
+                                          price: e.localPrice,
+                                          priceForOneMonth:
+                                              e.localPriceForOneMonth,
+                                          originalPrice: e.localOriginalPrice,
+                                          isRecommended:
+                                              e.type == PackageType.oneYear,
+                                          isSelected:
+                                              e.id == state.selectedPackage?.id,
+                                          type: e.type,
+                                        ),
+                                      )
+                                      .toList(),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: Spacing.xxl),
+                ),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-                    child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
-                      builder: (context, state) {
-                        return Column(
-                          children:
-                              state.packages
-                                  .map(
-                                    (e) => PackageItemView(
-                                      price: e.localPrice,
-                                      priceForOneMonth: e.localPriceForOneMonth,
-                                      originalPrice: e.localOriginalPrice,
-                                      isRecommended:
-                                          e.type == PackageType.oneYear,
-                                      isSelected:
-                                          e.id == state.selectedPackage?.id,
-                                      type: e.type,
-                                    ),
-                                  )
-                                  .toList(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                const SizedBox(height: Spacing.md),
 
-            const SizedBox(height: Spacing.md),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-              child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
-                builder: (context, state) {
-                  return PurchaseFooter(
-                    description: AppLocalizations.of(context).translate(
-                      '${state.selectedPackage?.localPrice}/ ${state.selectedPackage?.type.value} sau 7 ngày dùng thử',
-                    ),
-                    onPressed: () {
-                      showVerifyDialog(
-                        context: context,
-                        onSuccess: () {
-                          // context.pop();
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+                  child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
+                    builder: (context, state) {
+                      return PurchaseFooter(
+                        description:
+                            state.selectedPackage?.canUseTrial == true
+                                ? AppLocalizations.of(context).translate(
+                                  '${state.selectedPackage?.localPrice}/ ${state.selectedPackage?.type.value} sau 7 ngày dùng thử',
+                                )
+                                : AppLocalizations.of(context).translate(
+                                  '${state.selectedPackage?.localPrice}/ ${state.selectedPackage?.type.value}',
+                                ),
+                        onPressed: () {
+                          showVerifyDialog(
+                            context: context,
+                            onSuccess: () {
+                              context.read<PurchasedCubit>().purchase(
+                                state.selectedPackage!,
+                              );
+                            },
+                          );
                         },
+                        onRestorePressed: () {},
+                        onTermsPressed: () {},
                       );
                     },
-                    onRestorePressed: () {},
-                    onTermsPressed: () {},
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+
+        BlocBuilder<PurchasedCubit, PurchasedState>(
+          builder: (context, state) {
+            return state.isPurchasing
+                ? const LoadingOverlay()
+                : const SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 }

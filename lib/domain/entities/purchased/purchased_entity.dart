@@ -10,6 +10,7 @@ class PurchasedPackage extends PackageItem {
   final String currency;
   final String priceDisplay;
   final double appliedSaleOff;
+  final bool canUseTrial;
 
   PurchasedPackage({
     required this.price,
@@ -26,6 +27,7 @@ class PurchasedPackage extends PackageItem {
     required this.localOriginalPrice,
     required this.localPriceForOneMonth,
     required this.appliedSaleOff,
+    required this.canUseTrial,
   });
 
   factory PurchasedPackage.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class PurchasedPackage extends PackageItem {
       saleOff: SaleOff.fromJson(json['saleOff']),
       type: PackageType.fromValue(json['type']),
       isSubscription: json['isSubscription'],
+      canUseTrial: json['canUseTrial'],
     );
   }
 
@@ -63,6 +66,23 @@ class PurchasedPackage extends PackageItem {
       'saleOff': saleOff.toJson(),
       'type': type.value,
       'isSubscription': isSubscription,
+      'canUseTrial': canUseTrial,
     };
   }
+}
+
+class PurchasedItemFlutter {
+  final String productId;
+  final String transactionId;
+  final DateTime transactionDate;
+  final String transactionReceipt;
+  final String purchaseToken;
+
+  PurchasedItemFlutter({
+    required this.productId,
+    required this.transactionId,
+    required this.transactionDate,
+    required this.transactionReceipt,
+    required this.purchaseToken,
+  });
 }

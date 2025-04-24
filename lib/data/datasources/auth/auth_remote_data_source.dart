@@ -33,6 +33,7 @@ abstract class AuthRemoteDataSource {
     String countryCode,
     String phoneNumber,
     String password,
+    bool isUpgrade,
   );
 
   Future<ApiResponse<Null>> checkPhoneNumber(
@@ -139,6 +140,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String countryCode,
     String phoneNumber,
     String password,
+    bool isUpgrade,
   ) async {
     try {
       final response = await dioClient.post(
@@ -148,6 +150,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'country_code': countryCode,
           'phone': phoneNumber,
           'password': password,
+          'is_upgrade': isUpgrade,
         },
       );
 

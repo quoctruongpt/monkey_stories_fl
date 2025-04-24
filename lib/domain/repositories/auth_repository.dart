@@ -33,6 +33,7 @@ abstract class AuthRepository {
     String? phoneNumber,
     String? password,
     LoginType signUpType,
+    bool isUpgrade,
   );
 
   Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(

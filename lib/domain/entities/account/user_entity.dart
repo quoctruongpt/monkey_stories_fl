@@ -23,4 +23,35 @@ class UserEntity {
     this.country,
     this.phoneInfo,
   });
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    return UserEntity(
+      userId: json['userId'],
+      maxProfile: json['maxProfile'],
+      loginType: LoginType.fromValue(json['loginType']),
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      avatar: json['avatar'],
+      country: json['country'],
+      phoneInfo:
+          json['phoneInfo'] != null
+              ? PhoneEntity.fromJson(json['phoneInfo'])
+              : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'maxProfile': maxProfile,
+      'loginType': loginType.value,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'avatar': avatar,
+      'country': country,
+      'phoneInfo': phoneInfo?.toJson(),
+    };
+  }
 }

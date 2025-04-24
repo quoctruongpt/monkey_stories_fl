@@ -13,6 +13,8 @@ class SplashLoading extends SplashState {}
 
 class SplashAuthenticated extends SplashState {}
 
+class SplashNeedCreateAccount extends SplashState {}
+
 class SplashUnauthenticated extends SplashState {}
 
 class SplashError extends SplashState {

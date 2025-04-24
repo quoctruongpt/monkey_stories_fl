@@ -8,6 +8,7 @@ class AppTheme {
   static const Color successColor = Color(0xFF92C73D);
   static const Color blueLightColor = Color(0xFFEDF9FF);
   static const Color skyLightColor = Color(0xFFD2F1FF);
+  static const Color lightGrayColor = Color(0xFFD9D9D9);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);

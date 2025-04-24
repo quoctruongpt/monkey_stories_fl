@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/success_screen.dart';
 
 class SignUpSuccessScreen extends StatelessWidget {
@@ -10,7 +12,11 @@ class SignUpSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void handleContinue() {
-      context.push(AppRoutePaths.createProfileInputName);
+      if (context.read<ProfileCubit>().state.profiles.isEmpty) {
+        context.push(AppRoutePaths.createProfileInputName);
+      } else {
+        context.push(AppRoutePaths.home);
+      }
     }
 
     return Scaffold(

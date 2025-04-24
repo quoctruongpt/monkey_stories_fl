@@ -1,16 +1,26 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/constants/leave_contact.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 part 'leave_contact_state.dart';
 
 class LeaveContactCubit extends Cubit<LeaveContactState> {
   final SaveContactUsecase _saveContactUsecase;
-  LeaveContactCubit({required SaveContactUsecase saveContactUsecase})
-    : _saveContactUsecase = saveContactUsecase,
-      super(const LeaveContactState());
+  final ProfileCubit _profileCubit;
+  final PurchasedCubit _purchasedCubit;
+
+  LeaveContactCubit({
+    required SaveContactUsecase saveContactUsecase,
+    required ProfileCubit profileCubit,
+    required PurchasedCubit purchasedCubit,
+  }) : _saveContactUsecase = saveContactUsecase,
+       _profileCubit = profileCubit,
+       _purchasedCubit = purchasedCubit,
+       super(const LeaveContactState());
 
   void countryCodeChanged(String countryCode) {
     final phone = PhoneValidator.dirty(
@@ -32,6 +42,10 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     emit(state.copyWith(phone: phone));
   }
 
+  void roleChanged(LeaveContactRole? role) {
+    emit(state.copyWith(role: role));
+  }
+
   Future<void> submit() async {
     emit(state.copyWith(isSubmitting: true, clearErrorMessage: true));
 
@@ -40,10 +54,11 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
         ContactParams(
           phone: state.phone.value.phoneNumber,
           countryCode: state.phone.value.countryCode,
-          // productId: AppConstants.courseId.toString(),
-          // utmMedium: 'app',
-          // utmCampaign: 'app',
-          // profileId: 1234,
+          productId: _purchasedCubit.state.purchasingItem?.id,
+          utmMedium: 'app',
+          utmCampaign: 'app',
+          profileId: _profileCubit.state.currentProfile?.id,
+          role: state.role,
         ),
       );
 

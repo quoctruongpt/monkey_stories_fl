@@ -17,11 +17,16 @@ import 'package:monkey_stories/presentation/features/sign_in/login_screen.dart';
 import 'package:monkey_stories/presentation/features/result_screen.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
+import 'package:monkey_stories/presentation/features/purchased_success.dart';
 
 final logger = Logger('router');
+
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 final GoRouter router = GoRouter(
   observers: [routeObserver],
+  navigatorKey: navigatorKey,
   initialLocation: AppRoutePaths.splash,
   routes: <RouteBase>[
     GoRoute(
@@ -165,6 +170,17 @@ final GoRouter router = GoRouter(
             yearOfBirth: yearOfBirth,
             levelId: levelId,
           ),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.purchasedSuccess,
+      name: AppRouteNames.purchasedSuccess,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: PurchasedSuccessScreen(),
         );
       },
     ),

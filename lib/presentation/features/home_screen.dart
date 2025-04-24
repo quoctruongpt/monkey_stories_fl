@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               BlocBuilder<UserCubit, UserState>(
                 builder: (context, state) {
                   return Text(
-                    'Welcome to Monkey Stories! ${state.user?.name}',
+                    'Welcome to Monkey Stories! ${state.user?.name} ${state.purchasedInfo?.isPurchased}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, state) {
                   return ElevatedButton(
                     onPressed: () {
-                      context.read<PurchasedCubit>().test();
+                      context.read<PurchasedCubit>().getProducts();
                     },
                     child: const Text('vi'),
                   );

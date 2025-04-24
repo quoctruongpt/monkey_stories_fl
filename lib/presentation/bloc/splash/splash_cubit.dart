@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
@@ -128,6 +129,14 @@ class SplashCubit extends Cubit<SplashState> {
   Future<SplashState> _handleLogicAuthenticated() async {
     await _userCubit.loadUpdate();
     await _profileCubit.getListProfile();
+
+    final user = _userCubit.state.user;
+    final purchasedInfo = _userCubit.state.purchasedInfo;
+
+    if (user?.loginType == LoginType.skip && purchasedInfo?.isActive == true) {
+      return SplashNeedCreateAccount();
+    }
+
     return SplashAuthenticated();
   }
 

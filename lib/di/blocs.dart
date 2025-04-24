@@ -8,8 +8,13 @@ import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecas
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -60,6 +65,7 @@ import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -91,6 +97,7 @@ void initBlocDependencies() {
       loginWithLastLoginUsecase: sl<LoginWithLastLoginUsecase>(),
       getLastLoginUsecase: sl<GetLastLoginUsecase>(),
       getUserSocialUsecase: sl<GetUserSocialUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
       profileCubit: sl<ProfileCubit>(),
     ),
   );
@@ -157,7 +164,11 @@ void initBlocDependencies() {
   );
 
   sl.registerFactory(
-    () => LeaveContactCubit(saveContactUsecase: sl<SaveContactUsecase>()),
+    () => LeaveContactCubit(
+      saveContactUsecase: sl<SaveContactUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
+    ),
   );
 
   sl.registerLazySingleton(
@@ -176,6 +187,13 @@ void initBlocDependencies() {
     () => PurchasedCubit(
       initialPurchasedUsecase: sl<InitialPurchasedUsecase>(),
       getProductsUsecase: sl<GetProductsUsecase>(),
+      purchaseUsecase: sl<PurchaseUsecase>(),
+      listenToPurchaseErrorsUseCase: sl<ListenToPurchaseErrorsUseCase>(),
+      disposePurchasedUseCase: sl<DisposePurchasedUseCase>(),
+      listenToPurchaseUpdatesUseCase: sl<ListenToPurchaseUpdatesUseCase>(),
+      verifyPurchasedUsecase: sl<VerifyPurchasedUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
+      userCubit: sl<UserCubit>(),
     ),
   );
 

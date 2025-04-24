@@ -11,6 +11,6 @@ class SignUpSkipUsecase extends UseCase<bool, NoParams> {
 
   @override
   Future<Either<ServerFailureWithCode, bool>> call(NoParams params) async {
-    return repository.signUp(null, null, null, LoginType.skip);
+    return repository.signUp(null, null, null, LoginType.skip, false);
   }
 }

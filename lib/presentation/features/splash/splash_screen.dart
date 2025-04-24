@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart';
@@ -22,23 +24,40 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
+  void _handleListener(BuildContext context, SplashState state) {
+    switch (state) {
+      case SplashAuthenticated():
+        GoRouter.of(context).replace(AppRoutePaths.home);
+      case SplashUnauthenticated():
+        GoRouter.of(context).replace(AppRoutePaths.intro);
+      case SplashNeedCreateAccount():
+        showCustomNoticeDialog(
+          context: context,
+          titleText: AppLocalizations.of(context).translate('Thông báo'),
+          messageText: AppLocalizations.of(context).translate(
+            'Gói mua đã được kích hoạt. Ba mẹ vui lòng tạo tài khoản để sử dụng.',
+          ),
+          imageAsset: 'assets/images/max_warning.png',
+          primaryActionText: AppLocalizations.of(
+            context,
+          ).translate('Tạo tài khoản'),
+          onPrimaryAction: () {
+            context.read<UserCubit>().togglePurchasing();
+            context.replace(AppRoutePaths.signUp);
+          },
+          isCloseable: false,
+        );
+      case SplashError():
+        _onSplashError(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<SplashCubit>()..runApp(),
       child: BlocListener<SplashCubit, SplashState>(
-        listener: (context, state) {
-          if (state is SplashAuthenticated) {
-            // Navigate to Home and replace splash route
-            GoRouter.of(context).replace(AppRoutePaths.obdPurchase);
-          } else if (state is SplashUnauthenticated) {
-            // Navigate to Login and replace splash route
-            GoRouter.of(context).replace(AppRoutePaths.intro);
-          } else if (state is SplashError) {
-            // Optionally show an error message
-            _onSplashError(context);
-          }
-        },
+        listener: _handleListener,
         child: Scaffold(
           body: Center(
             child: Column(

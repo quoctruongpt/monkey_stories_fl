@@ -36,7 +36,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> getCurrentProfile() async {
     final result = await _getCurrentProfileUsecase.call(NoParams());
     result.fold((failure) => {}, (profileId) {
-      selectProfile(profileId);
+      logger.info('getCurrentProfile profileId: $profileId');
+      if (profileId != null) {
+        selectProfile(profileId);
+      }
     });
   }
 
@@ -88,9 +91,19 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void selectProfile(int profileId) {
-    final profile = state.profiles.firstWhere(
-      (profile) => profile.id == profileId,
-    );
-    emit(state.copyWith(currentProfile: profile));
+    ProfileEntity? profile;
+    try {
+      profile = state.profiles.firstWhere((profile) => profile.id == profileId);
+      emit(state.copyWith(currentProfile: profile));
+    } catch (e) {
+      // Log the error if no profile is found
+      logger.warning(
+        'Profile with id $profileId not found in state.profiles. Error: $e',
+      );
+      // Optionally, handle the state differently, e.g., emit an error state or do nothing.
+      // For now, we'll just log and not change the state if the profile isn't found.
+      return; // Exit the function
+    }
+    // If found, emit the state with the selected profile
   }
 }

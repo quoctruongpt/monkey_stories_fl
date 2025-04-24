@@ -29,6 +29,8 @@ class AppRoutePaths {
   static const String obdPurchase = '/obd_purchase';
   static const String leaveContact = '/leave_contact';
   static const String onboardLoading = '/onboard_loading';
+
+  static const String purchasedSuccess = '/purchased_success';
 }
 
 class AppRouteNames {
@@ -62,4 +64,6 @@ class AppRouteNames {
   static const String obdPurchase = 'obd_purchase';
   static const String leaveContact = 'leave_contact';
   static const String onboardLoading = 'onboard_loading';
+
+  static const String purchasedSuccess = 'purchased_success';
 }

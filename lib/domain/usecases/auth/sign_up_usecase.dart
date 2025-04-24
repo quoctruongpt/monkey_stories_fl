@@ -17,6 +17,7 @@ class SignUpUsecase extends UseCase<bool, SignUpParams> {
       params.phoneNumber,
       params.password,
       LoginType.phone,
+      params.isUpgrade,
     );
   }
 }
@@ -25,11 +26,13 @@ class SignUpParams extends Equatable {
   final String countryCode;
   final String phoneNumber;
   final String password;
+  final bool isUpgrade;
 
   const SignUpParams({
     required this.countryCode,
     required this.phoneNumber,
     required this.password,
+    this.isUpgrade = false,
   });
 
   @override
