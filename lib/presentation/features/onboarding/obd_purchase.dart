@@ -68,9 +68,7 @@ class ObdPurchase extends StatelessWidget {
                       ),
                       const SizedBox(height: Spacing.md),
 
-                      Flexible(
-                        child: Image.asset('assets/images/obd_purchase.png'),
-                      ),
+                      const Flexible(child: ObdPurchaseImageText()),
                       const SizedBox(height: Spacing.lg),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -182,6 +180,99 @@ class ObdPurchase extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class ObdPurchaseImageText extends StatelessWidget {
+  const ObdPurchaseImageText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = constraints.maxHeight;
+
+        return Stack(
+          children: [
+            // Ảnh nền
+            Image.asset('assets/images/obd_purchase_bg.png'),
+
+            // Text "truyện tranh"
+            Positioned(
+              top: height * 0.14,
+              left: width * 0.1,
+              child: Transform.rotate(
+                angle: -16 * 3.14159265 / 180,
+                child: SizedBox(
+                  width: width * 0.16,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.obd_purchase.comic'),
+                      style: TextStyle(
+                        fontSize: width * 0.03, // co theo chiều ngang
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Text "trò chơi"
+            Positioned(
+              top: height * 0.155,
+              right: width * 0.07,
+              child: Transform.rotate(
+                angle: 16 * 3.14159265 / 180,
+                child: SizedBox(
+                  width: width * 0.14,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.obd_purchase.game'),
+                      style: TextStyle(
+                        fontSize: width * 0.03,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Text "Sách nói"
+            Positioned(
+              bottom: height * 0.03,
+              right: width * 0.14,
+              child: SizedBox(
+                width: width * 0.14,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    AppLocalizations.of(
+                      context,
+                    ).translate('app.obd_purchase.book'),
+                    style: TextStyle(
+                      fontSize: width * 0.03,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.azureColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
