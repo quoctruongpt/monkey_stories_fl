@@ -136,7 +136,7 @@ class ObdPurchase extends StatelessWidget {
                                   },
                                 )
                                 : AppLocalizations.of(context).translate(
-                                  'app.obd_payment.desc.trial',
+                                  'app.obd_payment.desc.not_trial',
                                   params: {
                                     'price': state.selectedPackage?.localPrice,
                                     'time': AppLocalizations.of(
@@ -184,24 +184,44 @@ class ObdPurchase extends StatelessWidget {
   }
 }
 
-class ObdPurchaseImageText extends StatelessWidget {
+class ObdPurchaseImageText extends StatefulWidget {
   const ObdPurchaseImageText({super.key});
+
+  @override
+  State<ObdPurchaseImageText> createState() => _ObdPurchaseImageTextState();
+}
+
+class _ObdPurchaseImageTextState extends State<ObdPurchaseImageText> {
+  double width = 0;
+  double height = 0;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final height = constraints.maxHeight;
-
         return Stack(
           children: [
             // Ảnh nền
-            Image.asset('assets/images/obd_purchase_bg.png'),
+            Image.asset(
+              'assets/images/obd_purchase_bg.png',
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final RenderBox? renderBox =
+                      context.findRenderObject() as RenderBox?;
+                  if (renderBox != null) {
+                    setState(() {
+                      width = renderBox.size.width;
+                      height = renderBox.size.height;
+                    });
+                  }
+                });
+                return child;
+              },
+            ),
 
             // Text "truyện tranh"
             Positioned(
-              top: height * 0.14,
+              top: height * 0.2,
               left: width * 0.1,
               child: Transform.rotate(
                 angle: -16 * 3.14159265 / 180,
@@ -226,7 +246,7 @@ class ObdPurchaseImageText extends StatelessWidget {
 
             // Text "trò chơi"
             Positioned(
-              top: height * 0.155,
+              top: height * 0.23,
               right: width * 0.07,
               child: Transform.rotate(
                 angle: 16 * 3.14159265 / 180,
@@ -252,7 +272,7 @@ class ObdPurchaseImageText extends StatelessWidget {
             // Text "Sách nói"
             Positioned(
               bottom: height * 0.03,
-              right: width * 0.14,
+              right: width * 0.13,
               child: SizedBox(
                 width: width * 0.14,
                 child: FittedBox(
