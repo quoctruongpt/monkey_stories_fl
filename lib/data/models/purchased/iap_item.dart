@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/utils/number.dart';
@@ -72,15 +74,17 @@ class IAPItemFlutter {
   bool _canUserUseTrial(PackageType type, IAPItem item) {
     if (type == PackageType.lifetime) return false;
 
-    // iOS trial
-    final isIOSFreeTrial = item.introductoryPricePaymentModeIOS == 'FREETRIAL';
+    if (Platform.isIOS) {
+      return item.introductoryPricePaymentModeIOS == 'FREETRIAL';
+    }
 
-    // Android: dùng thử nếu có introductoryPrice rõ ràng
-    final hasIntroductoryPrice =
-        item.introductoryPrice != null &&
-        item.introductoryPrice!.isNotEmpty &&
-        item.introductoryPrice != '0.0';
-
-    return isIOSFreeTrial || hasIntroductoryPrice;
+    return item.subscriptionOffersAndroid?.any(
+          (offer) =>
+              offer.pricingPhases?.any(
+                (phase) => phase.price != null && phase.price == '0.0',
+              ) ??
+              false,
+        ) ??
+        false;
   }
 }

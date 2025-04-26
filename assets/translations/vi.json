@@ -54,6 +54,7 @@
   "create_profile.year_of_birth.title": "{{Name}} sinh vào năm nào?",
   "year.before": "Sinh trước năm {{year}}",
   "create_profile.year_of_birth.act": "Tiếp tục",
+  "sign_up_success.action": "Tiếp tục",
   "create_profile.level.title": "Khả năng tiếng Anh hiện tại của bé?",
   "create_profile.level.act": "Tiếp tục",
   "create_profile.level.a": "Bé chưa biết gì về tiếng Anh",
