@@ -22,6 +22,10 @@ class IntroScreen extends StatelessWidget {
     context.push(AppRoutePaths.chooseLanguage);
   }
 
+  void _onPressedActiveCode(BuildContext context) {
+    context.push(AppRoutePaths.inputLicense);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,7 +139,7 @@ class IntroScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: Spacing.md),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => _onPressedActiveCode(context),
                         child: Text(
                           AppLocalizations.of(
                             context,

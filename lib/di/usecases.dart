@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
@@ -151,6 +153,11 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => RestorePurchasedUsecase(sl<PurchasedRepository>()),
+  );
+
+  // Active license
+  sl.registerLazySingleton(
+    () => VerifyLicenseCodeUseCase(sl<ActiveLicenseRepository>()),
   );
   // Add other usecase registrations here...
 }

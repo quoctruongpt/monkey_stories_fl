@@ -15,7 +15,6 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
 import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';

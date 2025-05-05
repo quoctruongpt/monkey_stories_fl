@@ -29,4 +29,8 @@ class ApiEndpoints {
 
   // Purchased
   static const String verifyPurchase = '/device/api/v1/payinapp/verify-store';
+
+  // Active license
+  static const String verifyLicenseCode =
+      'app/api/v1/account/verify-license-code';
 }

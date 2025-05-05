@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/features/active_license/active_license_navigator.dart';
 import 'package:monkey_stories/presentation/features/create_profile/choose_level.dart';
 import 'package:monkey_stories/presentation/features/create_profile/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/features/create_profile/create_profile_loading.dart';
@@ -188,5 +189,6 @@ final GoRouter router = GoRouter(
     forgotPasswordRoutes,
 
     obdRoutes,
+    activeLicenseRoutes,
   ],
 );

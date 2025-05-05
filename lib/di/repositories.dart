@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
@@ -6,10 +7,12 @@ import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remo
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/purchased_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
@@ -117,6 +120,13 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<PurchasedRepository>(
     () => PurchasedRepositoryImpl(
       remoteDataSource: sl<PurchasedRemoteDataSource>(),
+    ),
+  );
+
+  // Active license
+  sl.registerLazySingleton<ActiveLicenseRepository>(
+    () => ActiveLicenseRepositoryImpl(
+      activeLicenseRemoteDataSource: sl<ActiveLicenseRemoteDataSource>(),
     ),
   );
 

@@ -134,7 +134,7 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textSecondaryColor,
           fontFamily: 'Nunito',
-          decoration: TextDecoration.underline,
+          decoration: TextDecoration.none,
         ),
       ),
     ),

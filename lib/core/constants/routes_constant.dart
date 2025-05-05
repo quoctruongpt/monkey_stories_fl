@@ -31,6 +31,17 @@ class AppRoutePaths {
   static const String onboardLoading = '/onboard_loading';
 
   static const String purchasedSuccess = '/purchased_success';
+
+  static const String inputLicense = '/input_license';
+  static const String lastLoginInfo = '/last_login_info';
+  static const String activeLicenseInputPhone = '/active_license_input_phone';
+  static const String activeLicenseCreatePassword =
+      '/active_license_create_password';
+  static const String activeLicenseInputPassword =
+      '/active_license_input_password';
+  static const String activeLicenseInputOtp = '/active_license_input_otp';
+  static const String activeLicensePhoneInfo = '/active_license_phone_info';
+  static const String activeLicenseSuccess = '/active_license_success';
 }
 
 class AppRouteNames {
@@ -66,4 +77,15 @@ class AppRouteNames {
   static const String onboardLoading = 'onboard_loading';
 
   static const String purchasedSuccess = 'purchased_success';
+
+  static const String inputLicense = 'input_license';
+  static const String lastLoginInfo = 'last_login_info';
+  static const String activeLicenseInputPhone = 'active_license_input_phone';
+  static const String activeLicenseCreatePassword =
+      'active_license_create_password';
+  static const String activeLicenseInputPassword =
+      'active_license_input_password';
+  static const String activeLicenseInputOtp = 'active_license_input_otp';
+  static const String activeLicensePhoneInfo = 'active_license_phone_info';
+  static const String activeLicenseSuccess = 'active_license_success';
 }

@@ -44,7 +44,8 @@ class TextFieldWidget extends StatelessWidget {
           decoration: InputDecoration(
             labelText: labelText,
             hintText: hintText,
-            errorText: errorText,
+            errorText:
+                errorText != null && errorText!.isEmpty ? null : errorText,
             suffixIcon: suffixIcon,
             border: const OutlineInputBorder(
               borderSide: BorderSide(color: AppTheme.textGrayLightColor),

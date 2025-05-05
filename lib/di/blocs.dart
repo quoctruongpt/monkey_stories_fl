@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
@@ -16,6 +17,7 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updat
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
@@ -199,6 +201,12 @@ void initBlocDependencies() {
 
   sl.registerFactory(
     () => PurchasedViewCubit(purchasedCubit: sl<PurchasedCubit>()),
+  );
+
+  sl.registerFactory(
+    () => ActiveLicenseCubit(
+      verifyLicenseCodeUseCase: sl<VerifyLicenseCodeUseCase>(),
+    ),
   );
 
   // Add other Bloc/Cubit registrations here...
