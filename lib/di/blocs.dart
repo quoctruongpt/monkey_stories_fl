@@ -206,6 +206,7 @@ void initBlocDependencies() {
   sl.registerFactory(
     () => ActiveLicenseCubit(
       verifyLicenseCodeUseCase: sl<VerifyLicenseCodeUseCase>(),
+      checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
     ),
   );
 

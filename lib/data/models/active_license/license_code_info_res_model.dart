@@ -1,4 +1,4 @@
-import 'package:monkey_stories/data/models/active_license/account_info_res_model.dart';
+import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
 import 'package:monkey_stories/data/models/active_license/package_info_res_model.dart';
 import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
 

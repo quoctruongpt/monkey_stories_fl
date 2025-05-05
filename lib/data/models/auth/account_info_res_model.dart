@@ -16,7 +16,7 @@ class AccountInfoResModel {
       oldAccessToken: json['old_access_token'],
       userInfo: UserInfoResModel.fromJson(json['user_info']),
       profiles:
-          json['list_profile']
+          (json['list_profile'] as List<dynamic>)
               .map((item) => ProfileInfoResModel.fromJson(item))
               .toList(),
     );
@@ -47,9 +47,9 @@ class UserInfoResModel {
   factory UserInfoResModel.fromJson(Map<String, dynamic> json) {
     return UserInfoResModel(
       id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
     );
   }
 
@@ -65,7 +65,7 @@ class ProfileInfoResModel {
   ProfileInfoResModel({required this.id, required this.name});
 
   factory ProfileInfoResModel.fromJson(Map<String, dynamic> json) {
-    return ProfileInfoResModel(id: json['id'], name: json['name']);
+    return ProfileInfoResModel(id: json['id'], name: json['name'] ?? '');
   }
 
   ProfileInfoEntity toEntity() {

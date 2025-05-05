@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/validators/license_code.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
+import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
+import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 
 part 'active_license_state.dart';
 
@@ -12,10 +14,13 @@ final logger = Logger('ActiveLicenseCubit');
 
 class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
   final VerifyLicenseCodeUseCase _verifyLicenseCodeUseCase;
+  final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
 
   ActiveLicenseCubit({
     required VerifyLicenseCodeUseCase verifyLicenseCodeUseCase,
+    required CheckPhoneNumberUsecase checkPhoneNumberUsecase,
   }) : _verifyLicenseCodeUseCase = verifyLicenseCodeUseCase,
+       _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
        super(const ActiveLicenseState());
 
   void showScanner() {
@@ -62,6 +67,10 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     emit(state.copyWith(clearVerifyError: true));
   }
 
+  void clearPhoneError() {
+    emit(state.copyWith(clearPhoneError: true));
+  }
+
   void phoneChanged(String phone) {
     emit(
       state.copyWith(
@@ -86,5 +95,39 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
         ),
       ),
     );
+  }
+
+  Future<void> checkPhoneNumber() async {
+    emit(
+      state.copyWith(
+        isLoading: true,
+        clearPhoneInfo: true,
+        clearPhoneError: true,
+      ),
+    );
+    try {
+      final result = await _checkPhoneNumberUsecase.call(
+        CheckPhoneNumberParams(
+          countryCode: state.phone.value.countryCode,
+          phoneNumber: state.phone.value.phoneNumber,
+        ),
+      );
+
+      result.fold(
+        (phoneInfo) {
+          emit(
+            state.copyWith(phoneInfo: phoneInfo.data, isNewPhoneValid: false),
+          );
+        },
+        (success) {
+          emit(state.copyWith(isNewPhoneValid: true));
+        },
+      );
+    } catch (e) {
+      logger.severe(e);
+      emit(state.copyWith(checkPhoneError: 'error'));
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 }

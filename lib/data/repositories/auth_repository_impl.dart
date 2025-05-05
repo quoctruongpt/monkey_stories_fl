@@ -6,7 +6,9 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
+import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
 import 'package:monkey_stories/data/models/auth/last_login_model.dart';
+import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -140,10 +142,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
-    String countryCode,
-    String phoneNumber,
-  ) async {
+  Future<Either<ServerFailureWithCode<AccountInfoEntity?>, bool>>
+  checkPhoneNumber(String countryCode, String phoneNumber) async {
     final result = await remoteDataSource.checkPhoneNumber(
       countryCode,
       phoneNumber,
@@ -154,7 +154,12 @@ class AuthRepositoryImpl implements AuthRepository {
     }
 
     return Left(
-      ServerFailureWithCode(message: result.message, code: result.code),
+      ServerFailureWithCode<AccountInfoEntity?>(
+        message: result.message,
+        code: result.code,
+        data:
+            result.data is AccountInfoResModel ? result.data!.toEntity() : null,
+      ),
     );
   }
 

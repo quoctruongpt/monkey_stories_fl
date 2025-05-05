@@ -2,11 +2,16 @@ part of 'active_license_cubit.dart';
 
 class ActiveLicenseState extends Equatable {
   final bool isShowScanner;
-  final LicenseCodeValidator licenseCode;
   final bool isLoading;
+
+  final LicenseCodeValidator licenseCode;
   final String? verifyLicenseError;
   final LicenseCodeInfoEntity? licenseInfo;
+
   final PhoneValidator phone;
+  final AccountInfoEntity? phoneInfo;
+  final bool? isNewPhoneValid;
+  final String? checkPhoneError;
 
   const ActiveLicenseState({
     this.isShowScanner = false,
@@ -15,6 +20,9 @@ class ActiveLicenseState extends Equatable {
     this.verifyLicenseError,
     this.licenseInfo,
     this.phone = const PhoneValidator.pure(),
+    this.phoneInfo,
+    this.isNewPhoneValid,
+    this.checkPhoneError,
   });
 
   ActiveLicenseState copyWith({
@@ -25,6 +33,11 @@ class ActiveLicenseState extends Equatable {
     LicenseCodeInfoEntity? licenseInfo,
     bool? clearVerifyError,
     PhoneValidator? phone,
+    AccountInfoEntity? phoneInfo,
+    bool? isNewPhoneValid,
+    bool? clearPhoneInfo,
+    String? checkPhoneError,
+    bool? clearPhoneError,
   }) {
     return ActiveLicenseState(
       isShowScanner: isShowScanner ?? this.isShowScanner,
@@ -36,6 +49,15 @@ class ActiveLicenseState extends Equatable {
               : verifyLicenseError ?? this.verifyLicenseError,
       licenseInfo: licenseInfo ?? this.licenseInfo,
       phone: phone ?? this.phone,
+      phoneInfo: clearPhoneInfo == true ? null : phoneInfo ?? this.phoneInfo,
+      isNewPhoneValid:
+          clearPhoneInfo == true
+              ? null
+              : isNewPhoneValid ?? this.isNewPhoneValid,
+      checkPhoneError:
+          clearPhoneError == true
+              ? null
+              : checkPhoneError ?? this.checkPhoneError,
     );
   }
 
@@ -47,5 +69,8 @@ class ActiveLicenseState extends Equatable {
     verifyLicenseError,
     licenseInfo,
     phone,
+    phoneInfo,
+    isNewPhoneValid,
+    checkPhoneError,
   ];
 }

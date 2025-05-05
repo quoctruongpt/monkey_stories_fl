@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -36,10 +37,8 @@ abstract class AuthRepository {
     bool isUpgrade,
   );
 
-  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
-    String countryCode,
-    String phoneNumber,
-  );
+  Future<Either<ServerFailureWithCode<AccountInfoEntity?>, bool>>
+  checkPhoneNumber(String countryCode, String phoneNumber);
 
   Future<Either<Failure, void>> logout();
 
