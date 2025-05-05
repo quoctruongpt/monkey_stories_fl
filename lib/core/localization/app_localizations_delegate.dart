@@ -1,5 +1,6 @@
 // lib/core/localization/app_localizations_delegate.dart
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -7,7 +8,9 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'vi'].contains(locale.languageCode);
+    return Languages.supportedLanguages.any(
+      (language) => language.code == locale.languageCode,
+    );
   }
 
   @override

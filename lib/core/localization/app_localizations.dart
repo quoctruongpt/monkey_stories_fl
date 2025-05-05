@@ -18,19 +18,24 @@ class AppLocalizations {
       'assets/translations/${locale.languageCode}.json',
     );
 
-    _localizedStrings = json.decode(jsonString);
+    _localizedStrings = jsonDecode(jsonString);
     return true;
   }
 
-  String translate(String key) {
-    final List<String> keys = key.split('.');
-    dynamic value = _localizedStrings;
+  String translate(String? key, {Map<String, String?>? params}) {
+    if (key == null) return '';
 
-    for (String k in keys) {
-      value = value[k];
-      if (value == null) return key;
+    var translation = _localizedStrings[key]?.toString() ?? key;
+
+    if (params != null) {
+      params.forEach((paramKey, paramValue) {
+        translation = translation.replaceAll(
+          '{{${paramKey}}}',
+          paramValue ?? '',
+        );
+      });
     }
 
-    return value.toString();
+    return translation;
   }
 }

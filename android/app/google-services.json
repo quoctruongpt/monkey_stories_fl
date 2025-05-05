@@ -1,0 +1,152 @@
+{
+  "project_info": {
+    "project_number": "518533842801",
+    "firebase_url": "https://mj-stories-169807.firebaseio.com",
+    "project_id": "mj-stories-169807",
+    "storage_bucket": "mj-stories-169807.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518533842801:android:dc610ed5e3a491b5",
+        "android_client_info": {
+          "package_name": "com.earlystart.android.monkeyjunior.story"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518533842801-2p7p2k05h4dh1bdel16g32d3rlh7cg7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "c24bbbe9ad99946022246614cca8db237f5c4fdb"
+          }
+        },
+        {
+          "client_id": "518533842801-7gj5t8hd8u2gov0bk1selnnfhaug2lj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "37bc5e7cf2c9dc1f895576f8956d95e32511c39e"
+          }
+        },
+        {
+          "client_id": "518533842801-9gdnk0k67euhjafssgme1c53enef2tak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "7a6dbf2a0f0ea0c9c486bfc6bb78b6b7b281724f"
+          }
+        },
+        {
+          "client_id": "518533842801-bbodnsvq4unofdmariud8b9ugp501a6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "9e46e9e070a3db5d14770c3701eedf0226c02be2"
+          }
+        },
+        {
+          "client_id": "518533842801-f24dr6bvgaj2snsj6v79r3lueui93f0p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "3cdead7b23449a7dec945b5fb51d15041255a86d"
+          }
+        },
+        {
+          "client_id": "518533842801-foo8g79rls15qgjoh84r62i1fvh4239j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "518e8e911b4f422d74274087cd5e88ed5f35b2df"
+          }
+        },
+        {
+          "client_id": "518533842801-hbr8sr21l07p9r6ctods7qcvd26bukme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "1f1824523f57f8cb07dd5d6573f3a81564e26d02"
+          }
+        },
+        {
+          "client_id": "518533842801-jc72d8gprabc1cup5bb3rakc16dibfjs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "7a1b1ff2de01e6d692613b75dbe1de9f2826231c"
+          }
+        },
+        {
+          "client_id": "518533842801-k8lm00f67btjkg29v1d3c6n3gv38i0um.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "1fb49579aaeb25bea6e0c55b13cc8c118ac8c7ee"
+          }
+        },
+        {
+          "client_id": "518533842801-l3rjglf332sfdudoadtmk21qorkiq6go.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "7ca945e4649e463016cbf4a59c427e01a9a5d276"
+          }
+        },
+        {
+          "client_id": "518533842801-l9hmj9d714bogv9jv4tq78tsk466tsc9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "179649d34495887c9e8231f1359db5f3b93d280a"
+          }
+        },
+        {
+          "client_id": "518533842801-s6loma7vn1dpvnpn7qq44dsgv7fuu3jn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "21d4fb8a252b6716115ebdaba2268d357747a6f7"
+          }
+        },
+        {
+          "client_id": "518533842801-u3gantkm9tp8pden3uq4bjvcnvcu4a0v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "198311f29eb04a062f8bb9375ed05a301d212d50"
+          }
+        },
+        {
+          "client_id": "518533842801-lu80s0fntoma1kns3q82s880eohe7phl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK_heLfw8j--4QysHHChAYTInra-JDnvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518533842801-89bhn341sjtmf45lcta96fjm2q8u24pq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.earlystart.monkeyjunior.story",
+                "app_store_id": "1236664909"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,10 @@ class AppTheme {
   static const Color secondaryColor = Color(0xFF42A5F5);
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color surfaceColor = Colors.white;
+  static const Color successColor = Color(0xFF92C73D);
+  static const Color blueLightColor = Color(0xFFEDF9FF);
+  static const Color skyLightColor = Color(0xFFD2F1FF);
+  static const Color lightGrayColor = Color(0xFFD9D9D9);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);
@@ -12,6 +16,9 @@ class AppTheme {
   static const Color textGrayColor = Color(0xFFA3A3A3);
   static const Color textGrayLightColor = Color(0xFFAFAFAF);
   static const Color textBlueColor = Color(0xFF3393FF);
+  static const Color textPrimaryColor = Color(0xFF00BBFF);
+  static const Color azureColor = Color(0xFF00AAFF);
+  static const Color pinkColor = Color(0xFFFF6CA5);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);
@@ -38,14 +45,24 @@ class AppTheme {
       elevation: 0,
     ),
     textTheme: const TextTheme(
-      displayLarge: TextStyle(
+      titleMedium: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      titleSmall: TextStyle(
         fontSize: 32,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      displayLarge: TextStyle(
+        fontSize: 28,
+        fontWeight: FontWeight.w900,
         color: textColor,
       ),
       displayMedium: TextStyle(
         fontSize: 24,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w900,
         color: textColor,
       ),
       displaySmall: TextStyle(
@@ -64,6 +81,7 @@ class AppTheme {
         fontWeight: FontWeight.w800,
       ),
       labelLarge: TextStyle(fontSize: 14, color: textSecondaryColor),
+      labelMedium: TextStyle(fontSize: 12, color: textSecondaryColor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -76,6 +94,47 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textColor,
           fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        side: const BorderSide(
+          color: AppTheme.buttonPrimaryDisabledBackground,
+          width: 2,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: textSecondaryColor,
+          fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: backgroundColor,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: backgroundColor,
+          fontFamily: 'Nunito',
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          color: textSecondaryColor,
+          fontFamily: 'Nunito',
+          decoration: TextDecoration.underline,
         ),
       ),
     ),
@@ -94,10 +153,18 @@ class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey),
+        borderSide: BorderSide(color: textGrayLightColor),
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      hintStyle: const TextStyle(
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+      hintStyle: TextStyle(
         fontSize: 20,
         color: textGrayLightColor,
         fontWeight: FontWeight.w800,
