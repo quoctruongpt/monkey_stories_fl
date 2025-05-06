@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/constants/unity_constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/features/active_license/create_password.dart';
@@ -13,6 +14,7 @@ import 'package:monkey_stories/presentation/features/active_license/input_phone.
 import 'package:monkey_stories/presentation/features/active_license/last_login_info.dart';
 import 'package:monkey_stories/presentation/features/active_license/phone_info.dart';
 import 'package:monkey_stories/presentation/features/active_license/success.dart';
+import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 
 class ActiveLicenseNavigator extends StatelessWidget {
@@ -26,9 +28,51 @@ class ActiveLicenseNavigator extends StatelessWidget {
       orientation: AppOrientation.portrait,
       child: BlocProvider(
         create: (context) => sl<ActiveLicenseCubit>(),
-        child: child,
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.linkAccountError != null &&
+                      current.linkAccountError != previous.linkAccountError,
+              listener: _linkAccountErrorListener,
+            ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen: (previous, current) => current.isSuccess == true,
+              listener: _linkAccountSuccessListener,
+            ),
+          ],
+          child: child,
+        ),
       ),
     );
+  }
+
+  void _linkAccountErrorListener(
+    BuildContext context,
+    ActiveLicenseState state,
+  ) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(context).translate('Lỗi'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate(state.linkAccountError),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(context).translate('Ok'),
+      isCloseable: false,
+      onPrimaryAction: () {
+        context.pop();
+        context.go(AppRoutePaths.inputLicense);
+      },
+    );
+  }
+
+  void _linkAccountSuccessListener(
+    BuildContext context,
+    ActiveLicenseState state,
+  ) {
+    context.go(AppRoutePaths.activeLicenseSuccess);
   }
 }
 

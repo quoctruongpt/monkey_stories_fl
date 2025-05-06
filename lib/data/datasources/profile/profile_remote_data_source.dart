@@ -42,7 +42,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
     return ApiResponse.fromJson(
       response.data,
-      (json) => ProfileResponseModel.fromJson(json),
+      (json, res) => ProfileResponseModel.fromJson(json),
     );
   }
 
@@ -50,7 +50,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<ApiResponse<List<GetProfileResponse>>> getListProfile() async {
     final response = await dio.get(ApiEndpoints.getListProfile);
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       if (json is Map<String, dynamic>) {
         final list = json['profile_list'] as List?;
         return list

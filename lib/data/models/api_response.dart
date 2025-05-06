@@ -18,7 +18,7 @@ class ApiResponse<T> {
   /// Requires a `fromJsonT` function to parse the generic `data` field.
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
-    T Function(Object? json) fromJsonT,
+    T Function(Object? json, Map<String, dynamic> response) fromJsonT,
   ) {
     return ApiResponse<T>(
       // Parse status string using the enum's factory, handle potential null
@@ -29,7 +29,7 @@ class ApiResponse<T> {
           json['code'] as int? ??
           -1, // Default to -1 or another indicator if null
       // Use the provided function to parse the generic data
-      data: fromJsonT(json['data']),
+      data: fromJsonT(json['data'], json),
     );
   }
 }

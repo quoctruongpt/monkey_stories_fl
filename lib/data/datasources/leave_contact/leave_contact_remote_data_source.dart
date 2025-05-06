@@ -19,7 +19,7 @@ class LeaveContactRemoteDataSourceImpl extends LeaveContactRemoteDataSource {
       data: params.toJson(),
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return null;
     });
   }

@@ -22,7 +22,7 @@ class CourseRemoteDataImpl extends CourseRemoteData {
       data: {'profile_id': profileId, 'course_id': AppConstants.courseId},
     );
 
-    final data = ApiResponse.fromJson(response.data, (json) => null);
+    final data = ApiResponse.fromJson(response.data, (json, res) => null);
 
     if (data.status == ApiStatus.success) {
       return right(true);

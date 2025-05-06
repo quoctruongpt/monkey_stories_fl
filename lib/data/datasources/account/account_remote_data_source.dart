@@ -18,7 +18,8 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
     return ApiResponse.fromJson(
       response.data,
-      (json) => LoadUpdateResponseModel.fromJson(json as Map<String, dynamic>),
+      (json, res) =>
+          LoadUpdateResponseModel.fromJson(json as Map<String, dynamic>),
     );
   }
 }

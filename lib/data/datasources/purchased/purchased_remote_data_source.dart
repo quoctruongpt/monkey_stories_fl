@@ -176,7 +176,7 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
         'currency_code': currency,
       },
     );
-    return ApiResponse.fromJson(response.data, (json) => null);
+    return ApiResponse.fromJson(response.data, (json, res) => null);
   }
 
   // Khôi phục mua hàng

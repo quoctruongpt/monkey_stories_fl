@@ -33,4 +33,6 @@ class ApiEndpoints {
   // Active license
   static const String verifyLicenseCode =
       'app/api/v1/account/verify-license-code';
+  static const String linkCodToAccount =
+      'app/api/v1/account/link-user-crm-to-account';
 }

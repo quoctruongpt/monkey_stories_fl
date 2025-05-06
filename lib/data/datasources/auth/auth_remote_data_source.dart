@@ -100,7 +100,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             ).toJson(),
       );
 
-      return ApiResponse.fromJson(response.data, (json) {
+      return ApiResponse.fromJson(response.data, (json, res) {
         if (json is Map<String, dynamic>) {
           return LoginResponseData.fromJson(json);
         }
@@ -155,7 +155,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
       );
 
-      return ApiResponse.fromJson(response.data, (json) {
+      return ApiResponse.fromJson(response.data, (json, res) {
         if (json is Map<String, dynamic>) {
           return SignUpResponseData.fromJson(json);
         }
@@ -181,7 +181,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: {'country_code': countryCode, 'phone': phoneNumber},
       );
 
-      return ApiResponse.fromJson(response.data, (json) {
+      return ApiResponse.fromJson(response.data, (json, res) {
         return json is Map<String, dynamic>
             ? AccountInfoResModel.fromJson(json)
             : null;
@@ -215,7 +215,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return null;
     });
   }
@@ -230,7 +230,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       data: {'code': otp, 'email': email},
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return VerifyOtpResponseModel.fromJson(json);
     });
   }
@@ -246,7 +246,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       data: {'code': otp, 'phone': phone, 'country_code': countryCode},
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return VerifyOtpResponseModel.fromJson(json);
     });
   }
@@ -270,7 +270,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return null;
     });
   }

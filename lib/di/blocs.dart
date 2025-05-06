@@ -69,6 +69,8 @@ import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cub
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
 
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+
 final sl = GetIt.instance;
 
 void initBlocDependencies() {
@@ -207,6 +209,10 @@ void initBlocDependencies() {
     () => ActiveLicenseCubit(
       verifyLicenseCodeUseCase: sl<VerifyLicenseCodeUseCase>(),
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      signUpUsecase: sl<SignUpUsecase>(),
+      linkCodToThisAccountUseCase: sl<LinkCodToThisAccountUseCase>(),
+      userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
 

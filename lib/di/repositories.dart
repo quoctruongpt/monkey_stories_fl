@@ -127,6 +127,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<ActiveLicenseRepository>(
     () => ActiveLicenseRepositoryImpl(
       activeLicenseRemoteDataSource: sl<ActiveLicenseRemoteDataSource>(),
+      authLocalDataSource: sl<AuthLocalDataSource>(),
     ),
   );
 

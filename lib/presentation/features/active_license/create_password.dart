@@ -60,17 +60,29 @@ class ActiveLicenseCreatePassword extends StatelessWidget {
                           const SizedBox(height: Spacing.lg),
 
                           TextFieldWidget(
-                            onChanged: (value) {},
+                            onChanged:
+                                context
+                                    .read<ActiveLicenseCubit>()
+                                    .passwordChanged,
                             labelText: AppLocalizations.of(
                               context,
                             ).translate('Tạo mật khẩu'),
+                            errorText: AppLocalizations.of(
+                              context,
+                            ).translate(state.password.displayError),
                           ),
                           const SizedBox(height: Spacing.md),
                           TextFieldWidget(
-                            onChanged: (value) {},
+                            onChanged:
+                                context
+                                    .read<ActiveLicenseCubit>()
+                                    .rePasswordChanged,
                             labelText: AppLocalizations.of(
                               context,
                             ).translate('Nhập lại mật khẩu'),
+                            errorText: AppLocalizations.of(
+                              context,
+                            ).translate(state.rePassword.displayError),
                           ),
 
                           const Spacer(),
@@ -82,8 +94,10 @@ class ActiveLicenseCreatePassword extends StatelessWidget {
                             onPressed:
                                 context
                                     .read<ActiveLicenseCubit>()
-                                    .checkPhoneNumber,
-                            disabled: state.phone.isNotValid,
+                                    .createPasswordPressed,
+                            disabled:
+                                state.password.isNotValid ||
+                                state.rePassword.isNotValid,
                           ),
                         ],
                       ),
