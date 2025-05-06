@@ -49,4 +49,13 @@ abstract class AuthRepository {
   );
 
   Future<Either<Failure, void>> changePassword(ChangePasswordParams params);
+
+  Future<Either<Failure, void>> cacheDataLogin({
+    required String accessToken,
+    required String refreshToken,
+    required LoginType loginType,
+    String? phone,
+    String? email,
+    required bool isSocial,
+  });
 }

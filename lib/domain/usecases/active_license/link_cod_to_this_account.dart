@@ -16,6 +16,7 @@ class LinkCodToThisAccountUseCase
   ) async {
     final response = await _activeLicenseRepository.linkCodToThisAccount(
       params.newAccessToken,
+      params.checkWarning,
     );
 
     if (response.status == ApiStatus.success) {
@@ -30,6 +31,10 @@ class LinkCodToThisAccountUseCase
 
 class LinkCodToThisAccountParams {
   final String newAccessToken;
+  final bool checkWarning;
 
-  LinkCodToThisAccountParams({required this.newAccessToken});
+  LinkCodToThisAccountParams({
+    required this.newAccessToken,
+    this.checkWarning = false,
+  });
 }

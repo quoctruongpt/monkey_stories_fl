@@ -9,5 +9,12 @@ abstract class ActiveLicenseRepository {
 
   Future<ApiResponse<LinkAccountResModel?>> linkCodToThisAccount(
     String newAccessToken,
+    bool checkWarning,
   );
+
+  Future<ApiResponse<LinkAccountResModel?>> linkCodToAccount({
+    required String oldAccessToken,
+    required String newAccessToken,
+    bool checkWarning = false,
+  });
 }

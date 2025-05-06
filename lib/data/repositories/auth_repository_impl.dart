@@ -181,23 +181,46 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     if (result.status == ApiStatus.success) {
-      await localDataSource.cacheToken(result.data?.accessToken ?? '');
-      await localDataSource.cacheRefreshToken(result.data?.refreshToken ?? '');
-      await localDataSource.cacheLastLogin(
-        LastLoginModel(
-          loginType: loginType,
-          phone: phone,
-          email: email,
-          isSocial: password == null,
-        ),
+      await cacheDataLogin(
+        accessToken: result.data?.accessToken ?? '',
+        refreshToken: result.data?.refreshToken ?? '',
+        loginType: loginType,
+        phone: phone,
+        email: email,
+        isSocial: password == null,
       );
-
       return const Right(true);
     }
 
     return Left(
       ServerFailureWithCode(message: result.message, code: result.code),
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> cacheDataLogin({
+    required String accessToken,
+    required String refreshToken,
+    required LoginType loginType,
+    String? phone,
+    String? email,
+    required bool isSocial,
+  }) async {
+    try {
+      await localDataSource.cacheToken(accessToken);
+      await localDataSource.cacheRefreshToken(refreshToken);
+      await localDataSource.cacheLastLogin(
+        LastLoginModel(
+          loginType: loginType,
+          phone: phone,
+          email: email,
+          isSocial: isSocial,
+        ),
+      );
+      return const Right(null);
+    } catch (e) {
+      return const Left(CacheFailure());
+    }
   }
 
   Future<SocialLoginData> _loginWithGoogle() async {

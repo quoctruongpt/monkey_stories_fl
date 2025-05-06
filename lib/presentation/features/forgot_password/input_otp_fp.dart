@@ -6,13 +6,12 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/validators/otp.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
-const length = 4;
 
 class InputOtpFp extends StatefulWidget {
   const InputOtpFp({super.key});
@@ -124,7 +123,7 @@ class _InputOtpFpState extends State<InputOtpFp> {
 
                           PinCodeTextField(
                             appContext: context,
-                            length: length,
+                            length: otpLength,
                             onChanged:
                                 context.read<ForgotPasswordCubit>().otpChanged,
                             textStyle: Theme.of(context).textTheme.titleMedium,

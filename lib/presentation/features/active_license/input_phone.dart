@@ -112,7 +112,7 @@ class ActiveLicenseInputPhone extends StatelessWidget {
     if (state.isNewPhoneValid == true) {
       context.push(AppRoutePaths.activeLicenseCreatePassword);
     } else if (state.phoneInfo != null) {
-      context.push(AppRoutePaths.activeLicensePhoneInfo);
+      context.go(AppRoutePaths.activeLicensePhoneInfo);
     }
   }
 

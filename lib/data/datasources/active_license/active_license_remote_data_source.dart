@@ -12,6 +12,7 @@ abstract class ActiveLicenseRemoteDataSource {
   Future<ApiResponse<LinkAccountResModel?>> linkCodToAccount({
     required String oldAccessToken,
     required String newAccessToken,
+    bool checkWarning = false,
   });
 }
 
@@ -42,20 +43,23 @@ class ActiveLicenseRemoteDataSourceImpl
   Future<ApiResponse<LinkAccountResModel?>> linkCodToAccount({
     required String oldAccessToken,
     required String newAccessToken,
+    bool checkWarning = false,
   }) async {
     final response = await dio.post(
       ApiEndpoints.linkCodToAccount,
       data: {
         'old_access_token': oldAccessToken,
         'new_access_token': newAccessToken,
-        'check_warning': true,
+        'check_warning': checkWarning,
       },
+      queryParameters: {'token': oldAccessToken},
     );
 
     return ApiResponse.fromJson(
       response.data,
       (json, res) =>
-          json is Map<String, dynamic>
+          res['status'] == ApiStatus.success.value &&
+                  json is Map<String, dynamic>
               ? LinkAccountResModel.fromJson(json)
               : null,
     );

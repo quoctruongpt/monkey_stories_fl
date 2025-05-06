@@ -41,6 +41,14 @@ class ActiveLicenseNavigator extends StatelessWidget {
               listenWhen: (previous, current) => current.isSuccess == true,
               listener: _linkAccountSuccessListener,
             ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.isShowMergeToLifetimeAccountWarning == true &&
+                      current.isShowMergeToLifetimeAccountWarning !=
+                          previous.isShowMergeToLifetimeAccountWarning,
+              listener: _showMergeToLifetimeAccountWarningListener,
+            ),
           ],
           child: child,
         ),
@@ -64,6 +72,7 @@ class ActiveLicenseNavigator extends StatelessWidget {
       onPrimaryAction: () {
         context.pop();
         context.go(AppRoutePaths.inputLicense);
+        context.read<ActiveLicenseCubit>().clearLinkAccountError();
       },
     );
   }
@@ -73,6 +82,26 @@ class ActiveLicenseNavigator extends StatelessWidget {
     ActiveLicenseState state,
   ) {
     context.go(AppRoutePaths.activeLicenseSuccess);
+  }
+
+  void _showMergeToLifetimeAccountWarningListener(
+    BuildContext context,
+    ActiveLicenseState state,
+  ) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(context).translate('Thông báo'),
+      messageText: AppLocalizations.of(context).translate(
+        'Tài khoản của bạn muốn kết nối đã được kích hoạt gói trọn đời. Vui lòng sử dụng tài khoản khác để tiếp tục.',
+      ),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(context).translate('Tiếp tục'),
+      isCloseable: false,
+      onPrimaryAction: () {
+        context.read<ActiveLicenseCubit>().closeMergeToLifetimeAccountWarning();
+        context.pop();
+      },
+    );
   }
 }
 

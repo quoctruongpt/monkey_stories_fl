@@ -9,7 +9,6 @@ import 'package:monkey_stories/presentation/bloc/active_license/active_license_c
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
-import 'package:monkey_stories/presentation/widgets/text_field/password_input_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 
 class ActiveLicenseCreatePassword extends StatelessWidget {

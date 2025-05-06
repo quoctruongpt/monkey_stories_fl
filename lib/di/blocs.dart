@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
@@ -211,8 +212,12 @@ void initBlocDependencies() {
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
       signUpUsecase: sl<SignUpUsecase>(),
       linkCodToThisAccountUseCase: sl<LinkCodToThisAccountUseCase>(),
+      linkCodToAccountUseCase: sl<LinkCodToAccountUseCase>(),
+      loginUsecase: sl<LoginUsecase>(),
       userCubit: sl<UserCubit>(),
       profileCubit: sl<ProfileCubit>(),
+      sendOtpUsecase: sl<SendOtpUsecase>(),
+      verifyOtpUsecase: sl<VerifyOtpUsecase>(),
     ),
   );
 

@@ -244,8 +244,8 @@ class _InputLicenseState extends State<InputLicense> {
   }
 
   void _successListener(BuildContext context, ActiveLicenseState state) {
-    if (state.licenseInfo?.accountInfo != null && false) {
-      context.push(AppRoutePaths.lastLoginInfo);
+    if (state.licenseInfo?.accountInfo != null) {
+      context.go(AppRoutePaths.lastLoginInfo);
     } else {
       context.go(AppRoutePaths.activeLicenseInputPhone);
     }

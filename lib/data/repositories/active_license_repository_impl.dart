@@ -24,12 +24,27 @@ class ActiveLicenseRepositoryImpl implements ActiveLicenseRepository {
   @override
   Future<ApiResponse<LinkAccountResModel?>> linkCodToThisAccount(
     String newAccessToken,
+    bool checkWarning,
   ) async {
     final oldAccessToken = await authLocalDataSource.getToken();
 
     return activeLicenseRemoteDataSource.linkCodToAccount(
       oldAccessToken: oldAccessToken ?? '',
       newAccessToken: newAccessToken,
+      checkWarning: checkWarning,
+    );
+  }
+
+  @override
+  Future<ApiResponse<LinkAccountResModel?>> linkCodToAccount({
+    required String oldAccessToken,
+    required String newAccessToken,
+    bool checkWarning = false,
+  }) async {
+    return activeLicenseRemoteDataSource.linkCodToAccount(
+      oldAccessToken: oldAccessToken,
+      newAccessToken: newAccessToken,
+      checkWarning: checkWarning,
     );
   }
 }

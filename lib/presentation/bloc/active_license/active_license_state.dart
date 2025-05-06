@@ -16,6 +16,12 @@ class ActiveLicenseState extends Equatable {
   final String? checkPhoneError;
   final Password password;
   final ConfirmedPassword rePassword;
+  final String? loginError;
+  final OtpValidator otp;
+  final int otpResendTime;
+  final String? sendOtpError;
+  final PositionShowWarning showMergeLifetimeWarning;
+  final bool isShowMergeToLifetimeAccountWarning;
 
   const ActiveLicenseState({
     this.isShowScanner = false,
@@ -31,6 +37,12 @@ class ActiveLicenseState extends Equatable {
     this.rePassword = const ConfirmedPassword.pure(),
     this.isSuccess = false,
     this.linkAccountError,
+    this.loginError,
+    this.otp = const OtpValidator.pure(),
+    this.otpResendTime = 0,
+    this.sendOtpError,
+    this.showMergeLifetimeWarning = PositionShowWarning.none,
+    this.isShowMergeToLifetimeAccountWarning = false,
   });
 
   ActiveLicenseState copyWith({
@@ -50,6 +62,15 @@ class ActiveLicenseState extends Equatable {
     ConfirmedPassword? rePassword,
     bool? isSuccess,
     String? linkAccountError,
+    String? loginError,
+    bool? clearLoginError,
+    OtpValidator? otp,
+    int? otpResendTime,
+    String? sendOtpError,
+    bool? clearSendOtpError,
+    bool? clearLinkAccountError,
+    PositionShowWarning? showMergeLifetimeWarning,
+    bool? isShowMergeToLifetimeAccountWarning,
   }) {
     return ActiveLicenseState(
       isShowScanner: isShowScanner ?? this.isShowScanner,
@@ -73,7 +94,21 @@ class ActiveLicenseState extends Equatable {
       password: password ?? this.password,
       rePassword: rePassword ?? this.rePassword,
       isSuccess: isSuccess ?? this.isSuccess,
-      linkAccountError: linkAccountError ?? this.linkAccountError,
+      linkAccountError:
+          clearLinkAccountError == true
+              ? null
+              : linkAccountError ?? this.linkAccountError,
+      loginError:
+          clearLoginError == true ? null : loginError ?? this.loginError,
+      otp: otp ?? this.otp,
+      otpResendTime: otpResendTime ?? this.otpResendTime,
+      sendOtpError:
+          clearSendOtpError == true ? null : sendOtpError ?? this.sendOtpError,
+      showMergeLifetimeWarning:
+          showMergeLifetimeWarning ?? this.showMergeLifetimeWarning,
+      isShowMergeToLifetimeAccountWarning:
+          isShowMergeToLifetimeAccountWarning ??
+          this.isShowMergeToLifetimeAccountWarning,
     );
   }
 
@@ -92,5 +127,11 @@ class ActiveLicenseState extends Equatable {
     rePassword,
     isSuccess,
     linkAccountError,
+    loginError,
+    otp,
+    otpResendTime,
+    sendOtpError,
+    showMergeLifetimeWarning,
+    isShowMergeToLifetimeAccountWarning,
   ];
 }

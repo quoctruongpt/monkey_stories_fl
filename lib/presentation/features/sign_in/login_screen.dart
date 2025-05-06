@@ -398,7 +398,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'login.active_code.act',
                                     ),
                                     onActionTap: () {
-                                      /* TODO: Handle activation code */
+                                      context.push(AppRoutePaths.inputLicense);
                                     },
                                   ),
                                 ),
