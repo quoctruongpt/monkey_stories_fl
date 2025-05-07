@@ -6,7 +6,9 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/permission.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
@@ -57,6 +59,15 @@ class _InputLicenseState extends State<InputLicense> {
                     current.licenseInfo != null &&
                     current.licenseInfo != previous.licenseInfo,
             listener: _successListener,
+          ),
+          BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+            listenWhen:
+                (previous, current) =>
+                    current.showMergeLifetimeWarning ==
+                        PositionShowWarning.inputLicense &&
+                    current.showMergeLifetimeWarning !=
+                        previous.showMergeLifetimeWarning,
+            listener: _showMergeLifetimeWarningListener,
           ),
         ],
         child: BlocBuilder<ActiveLicenseCubit, ActiveLicenseState>(
@@ -126,11 +137,11 @@ class _InputLicenseState extends State<InputLicense> {
                           AppButton.primary(
                             text: AppLocalizations.of(
                               context,
-                            ).translate('Hoàn thành'),
+                            ).translate('Tiếp tục'),
                             onPressed:
                                 context
                                     .read<ActiveLicenseCubit>()
-                                    .verifyLicenseCode,
+                                    .handlePressedContinueLicense,
                             disabled: state.licenseCode.isNotValid,
                           ),
                         ],
@@ -244,11 +255,41 @@ class _InputLicenseState extends State<InputLicense> {
   }
 
   void _successListener(BuildContext context, ActiveLicenseState state) {
-    if (state.licenseInfo?.accountInfo != null) {
-      context.go(AppRoutePaths.lastLoginInfo);
+    final user = context.read<UserCubit>().state.user;
+
+    if (user == null || user.loginType == LoginType.skip) {
+      if (state.licenseInfo?.accountInfo != null) {
+        context.go(AppRoutePaths.lastLoginInfo);
+      } else {
+        context.go(AppRoutePaths.activeLicenseInputPhone);
+      }
     } else {
-      context.go(AppRoutePaths.activeLicenseInputPhone);
+      context.read<ActiveLicenseCubit>().activateLicenseWithCurrentAccount(
+        PositionShowWarning.inputLicense,
+        true,
+      );
     }
+  }
+
+  void _showMergeLifetimeWarningListener(
+    BuildContext context,
+    ActiveLicenseState state,
+  ) {
+    showPopupWarningMergeLifetimeToPaid(
+      context: context,
+      onContinue: () {
+        context.read<ActiveLicenseCubit>().activateLicenseWithCurrentAccount(
+          PositionShowWarning.inputLicense,
+          false,
+        );
+        context.read<ActiveLicenseCubit>().closeMergeLifetimeWarning();
+        context.pop();
+      },
+      onCancel: () {
+        context.read<ActiveLicenseCubit>().closeMergeLifetimeWarning();
+        context.pop();
+      },
+    );
   }
 }
 

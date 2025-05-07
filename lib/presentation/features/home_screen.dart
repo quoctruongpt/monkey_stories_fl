@@ -120,33 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _sendMessageToUnity,
-                child: const Text('Send Message to Unity'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _openResult,
-                child: const Text('Open Result'),
-              ),
-              BlocBuilder<AppCubit, AppState>(
-                builder: (context, state) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      context.read<PurchasedCubit>().getProducts();
-                    },
-                    child: const Text('vi'),
-                  );
+                onPressed: () {
+                  context.push(AppRoutePaths.inputLicense);
                 },
-              ),
-              BlocBuilder<AppCubit, AppState>(
-                builder: (context, state) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      context.read<AppCubit>().changeLanguage('en');
-                    },
-                    child: const Text('en'),
-                  );
-                },
+                child: const Text('Nhập mã kích hoạt'),
               ),
               BlocBuilder<DebugCubit, DebugState>(
                 builder: (context, state) {

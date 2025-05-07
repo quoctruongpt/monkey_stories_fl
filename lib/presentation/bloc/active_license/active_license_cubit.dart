@@ -28,7 +28,13 @@ part 'active_license_state.dart';
 final logger = Logger('ActiveLicenseCubit');
 const otpResendTime = 60;
 
-enum PositionShowWarning { none, lastLoginAccount, inputPhone, inputOtp }
+enum PositionShowWarning {
+  none,
+  inputLicense,
+  lastLoginAccount,
+  inputPhone,
+  inputOtp,
+}
 
 class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
   final VerifyLicenseCodeUseCase _verifyLicenseCodeUseCase;
@@ -85,30 +91,6 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
 
   bool checkValidLicense(String value) {
     return LicenseCodeValidator.dirty(value).isValid;
-  }
-
-  Future<void> verifyLicenseCode() async {
-    emit(state.copyWith(isLoading: true));
-
-    try {
-      final result = await _verifyLicenseCodeUseCase.call(
-        VerifyLicenseCodeParams(licenseCode: state.licenseCode.value),
-      );
-
-      result.fold(
-        (error) {
-          emit(state.copyWith(verifyLicenseError: error.message));
-        },
-        (info) {
-          emit(state.copyWith(licenseInfo: info));
-        },
-      );
-    } catch (e) {
-      logger.severe(e);
-      emit(state.copyWith(verifyLicenseError: 'error'));
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
   }
 
   void clearVerifyError() {
@@ -180,6 +162,71 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     );
   }
 
+  void handlePressedContinueLicense() {
+    verifyLicenseCode();
+  }
+
+  Future<void> activateLicenseWithCurrentAccount(
+    PositionShowWarning position,
+    bool checkWarning,
+  ) async {
+    logger.info('checkWarning: $checkWarning');
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final linkAccountResult = await _linkCodToThisAccountUseCase.call(
+        LinkCodToThisAccountParams(
+          newAccessToken: state.licenseInfo!.newAccessToken,
+          checkWarning: checkWarning,
+        ),
+      );
+
+      if (linkAccountResult.isRight()) {
+        emit(state.copyWith(isSuccess: true));
+      } else {
+        final failure = linkAccountResult.swap().getOrElse(
+          (e) => throw Exception(),
+        );
+        if (failure.code == ActiveLicenseCode.mergeLifetimeToPaid) {
+          emit(state.copyWith(showMergeLifetimeWarning: position));
+        } else if (failure.code == ActiveLicenseCode.mergeToLifetimeAccount) {
+          emit(state.copyWith(isShowMergeToLifetimeAccountWarning: true));
+        } else {
+          emit(state.copyWith(linkAccountError: failure.message));
+        }
+      }
+    } catch (e) {
+      logger.severe(e);
+      emit(state.copyWith(linkAccountError: 'error'));
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> verifyLicenseCode() async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final result = await _verifyLicenseCodeUseCase.call(
+        VerifyLicenseCodeParams(licenseCode: state.licenseCode.value),
+      );
+
+      result.fold(
+        (error) {
+          emit(state.copyWith(verifyLicenseError: error.message));
+        },
+        (info) {
+          emit(state.copyWith(licenseInfo: info));
+        },
+      );
+    } catch (e) {
+      logger.severe(e);
+      emit(state.copyWith(verifyLicenseError: 'error'));
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
   Future<void> checkPhoneNumber() async {
     emit(
       state.copyWith(
@@ -228,21 +275,10 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
       );
 
       if (signUpResult.isRight()) {
-        final linkAccountResult = await _linkCodToThisAccountUseCase.call(
-          LinkCodToThisAccountParams(
-            newAccessToken: state.licenseInfo!.newAccessToken,
-            checkWarning: false,
-          ),
+        await activateLicenseWithCurrentAccount(
+          PositionShowWarning.none,
+          false,
         );
-
-        if (linkAccountResult.isRight()) {
-          emit(state.copyWith(isSuccess: true));
-        } else {
-          final failure = linkAccountResult.swap().getOrElse(
-            (e) => throw Exception(),
-          );
-          emit(state.copyWith(linkAccountError: failure.message));
-        }
 
         return;
       }
@@ -310,31 +346,10 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
       );
 
       if (loginResult.isRight()) {
-        final linkAccountResult = await _linkCodToThisAccountUseCase.call(
-          LinkCodToThisAccountParams(
-            newAccessToken: state.licenseInfo!.newAccessToken,
-            checkWarning: checkWarning,
-          ),
+        await activateLicenseWithCurrentAccount(
+          PositionShowWarning.inputPhone,
+          checkWarning,
         );
-
-        if (linkAccountResult.isRight()) {
-          emit(state.copyWith(isSuccess: true));
-        } else {
-          final failure = linkAccountResult.swap().getOrElse(
-            (e) => throw Exception(),
-          );
-          if (failure.code == ActiveLicenseCode.mergeLifetimeToPaid) {
-            emit(
-              state.copyWith(
-                showMergeLifetimeWarning: PositionShowWarning.inputPhone,
-              ),
-            );
-          } else if (failure.code == ActiveLicenseCode.mergeToLifetimeAccount) {
-            emit(state.copyWith(isShowMergeToLifetimeAccountWarning: true));
-          } else {
-            emit(state.copyWith(linkAccountError: failure.message));
-          }
-        }
       } else {
         final failure = loginResult.swap().getOrElse((e) => throw Exception());
         emit(state.copyWith(loginError: failure.message));
