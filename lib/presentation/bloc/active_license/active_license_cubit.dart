@@ -265,12 +265,13 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     emit(state.copyWith(isLoading: true));
 
     try {
+      final user = _userCubit.state.user;
       final signUpResult = await _signUpUsecase.call(
         SignUpParams(
           countryCode: state.phone.value.countryCode,
           phoneNumber: state.phone.value.phoneNumber,
           password: state.password.value,
-          isUpgrade: false,
+          isUpgrade: user?.loginType == LoginType.skip,
         ),
       );
 

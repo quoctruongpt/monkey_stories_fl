@@ -28,6 +28,11 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
 
     logger.info('packages: $packages');
 
-    emit(state.copyWith(packages: packages, selectedPackage: packages.first));
+    emit(
+      state.copyWith(
+        packages: packages,
+        selectedPackage: packages.isNotEmpty ? packages.first : null,
+      ),
+    );
   }
 }

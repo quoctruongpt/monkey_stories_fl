@@ -258,7 +258,8 @@ class _InputLicenseState extends State<InputLicense> {
     final user = context.read<UserCubit>().state.user;
 
     if (user == null || user.loginType == LoginType.skip) {
-      if (state.licenseInfo?.accountInfo != null) {
+      if (state.licenseInfo?.accountInfo != null &&
+          user?.loginType != LoginType.skip) {
         context.go(AppRoutePaths.lastLoginInfo);
       } else {
         context.go(AppRoutePaths.activeLicenseInputPhone);
