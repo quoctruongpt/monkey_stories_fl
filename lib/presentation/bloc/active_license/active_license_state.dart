@@ -3,8 +3,11 @@ part of 'active_license_cubit.dart';
 class ActiveLicenseState extends Equatable {
   final bool isShowScanner;
   final bool isLoading;
+  // isSuccess là trạng thái khi kích hoạt thành công
   final bool isSuccess;
   final String? linkAccountError;
+  // isDone là trạng thái khi hoàn tất các bước kích hoạt, bao gồm cả cập nhật thông tin user và profile
+  final bool isDone;
 
   final LicenseCodeValidator licenseCode;
   final String? verifyLicenseError;
@@ -43,6 +46,7 @@ class ActiveLicenseState extends Equatable {
     this.sendOtpError,
     this.showMergeLifetimeWarning = PositionShowWarning.none,
     this.isShowMergeToLifetimeAccountWarning = false,
+    this.isDone = false,
   });
 
   ActiveLicenseState copyWith({
@@ -71,6 +75,7 @@ class ActiveLicenseState extends Equatable {
     bool? clearLinkAccountError,
     PositionShowWarning? showMergeLifetimeWarning,
     bool? isShowMergeToLifetimeAccountWarning,
+    bool? isDone,
   }) {
     return ActiveLicenseState(
       isShowScanner: isShowScanner ?? this.isShowScanner,
@@ -109,6 +114,7 @@ class ActiveLicenseState extends Equatable {
       isShowMergeToLifetimeAccountWarning:
           isShowMergeToLifetimeAccountWarning ??
           this.isShowMergeToLifetimeAccountWarning,
+      isDone: isDone ?? this.isDone,
     );
   }
 
@@ -133,5 +139,6 @@ class ActiveLicenseState extends Equatable {
     sendOtpError,
     showMergeLifetimeWarning,
     isShowMergeToLifetimeAccountWarning,
+    isDone,
   ];
 }

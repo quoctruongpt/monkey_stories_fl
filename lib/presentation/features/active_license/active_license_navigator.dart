@@ -49,6 +49,10 @@ class ActiveLicenseNavigator extends StatelessWidget {
                           previous.isShowMergeToLifetimeAccountWarning,
               listener: _showMergeToLifetimeAccountWarningListener,
             ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen: (previous, current) => current.isDone == true,
+              listener: _handleSuccessListener,
+            ),
           ],
           child: child,
         ),
@@ -102,6 +106,10 @@ class ActiveLicenseNavigator extends StatelessWidget {
         context.pop();
       },
     );
+  }
+
+  void _handleSuccessListener(BuildContext context, ActiveLicenseState state) {
+    context.go(AppRoutePaths.home);
   }
 }
 

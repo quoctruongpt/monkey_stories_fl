@@ -11,11 +11,13 @@ class SuccessScreen extends StatelessWidget {
     required this.title,
     this.buttonText,
     required this.onPressed,
+    this.descriptionWidget,
   });
 
   final String title;
   final String? buttonText;
   final VoidCallback onPressed;
+  final Widget? descriptionWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class SuccessScreen extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
+                  if (descriptionWidget != null) descriptionWidget!,
                   const SizedBox(height: 80),
                   Transform.scale(
                     scale: 1.3,

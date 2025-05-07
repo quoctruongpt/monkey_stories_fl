@@ -18,7 +18,6 @@ class VerifyLicenseCodeUseCase
     final response = await _activeLicenseRepository.verifyLicenseCode(
       params.licenseCode,
     );
-    print('ActiveLicenseCubit ${response}');
 
     if (response.status == ApiStatus.success) {
       return right(response.data!);

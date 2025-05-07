@@ -454,4 +454,18 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
       emit(state.copyWith(isLoading: false));
     }
   }
+
+  Future<void> handleSuccess() async {
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      await _userCubit.loadUpdate();
+      await _profileCubit.getListProfile();
+      emit(state.copyWith(isDone: true));
+    } catch (e) {
+      logger.severe(e);
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
 }
