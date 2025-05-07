@@ -36,60 +36,62 @@ class ChooseYearOfBirthView extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                    CreateProfileHeader(
-                      title: AppLocalizations.of(context).translate(
-                        'create_profile.year_of_birth.title',
-                        params: {'Name': name},
-                      ),
-                    ),
-                    const SizedBox(height: Spacing.md),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        const crossAxisCount = 4;
-                        const spacing = Spacing.sm;
-                        final totalSpacing = spacing * (crossAxisCount - 1);
-                        final itemWidth =
-                            (constraints.maxWidth - totalSpacing) /
-                            crossAxisCount;
-
-                        return Wrap(
-                          spacing: spacing,
-                          runSpacing: spacing,
-                          children: List.generate(
-                            12,
-                            (index) => SizedBox(
-                              width: itemWidth,
-                              child: _buildYearButton(
-                                context,
-                                years[index],
-                                yearSelected == years[index],
-                                () => onChangeYear(years[index]),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: _buildYearButton(
-                        context,
-                        years[12],
-                        yearSelected == years[12],
-                        () => onChangeYear(years[12]),
-                        customText: AppLocalizations.of(context).translate(
-                          'year.before',
-                          params: {'year': years[12].toString()},
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      CreateProfileHeader(
+                        title: AppLocalizations.of(context).translate(
+                          'create_profile.year_of_birth.title',
+                          params: {'Name': name},
                         ),
                       ),
-                    ),
+                      const SizedBox(height: Spacing.md),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          const crossAxisCount = 4;
+                          const spacing = Spacing.sm;
+                          final totalSpacing = spacing * (crossAxisCount - 1);
+                          final itemWidth =
+                              (constraints.maxWidth - totalSpacing) /
+                              crossAxisCount;
 
-                    const CreateProfileFooter(),
-                  ],
+                          return Wrap(
+                            spacing: spacing,
+                            runSpacing: spacing,
+                            children: List.generate(
+                              12,
+                              (index) => SizedBox(
+                                width: itemWidth,
+                                child: _buildYearButton(
+                                  context,
+                                  years[index],
+                                  yearSelected == years[index],
+                                  () => onChangeYear(years[index]),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 16),
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: _buildYearButton(
+                          context,
+                          years[12],
+                          yearSelected == years[12],
+                          () => onChangeYear(years[12]),
+                          customText: AppLocalizations.of(context).translate(
+                            'year.before',
+                            params: {'year': years[12].toString()},
+                          ),
+                        ),
+                      ),
+
+                      const CreateProfileFooter(),
+                    ],
+                  ),
                 ),
               ),
 

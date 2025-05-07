@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showCustomNoticeDialog(
       context: context,
       titleText: translate('login.popup_error.title'),
-      messageText: errorMessage,
+      messageText: translate(errorMessage),
       imageAsset: 'assets/images/monkey_sad.png',
       primaryActionText: translate('login.popup_error.act'),
       onPrimaryAction: clearErrorDialog,
