@@ -87,9 +87,9 @@ class _InputLicenseState extends State<InputLicense> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('Nhập mã kích hoạt'),
+                            AppLocalizations.of(context).translate(
+                              'app.active_license.input_license.title',
+                            ),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
 
@@ -125,9 +125,9 @@ class _InputLicenseState extends State<InputLicense> {
                             child: TextButton(
                               onPressed: () => _handleShowScanner(context),
                               child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                ).translate('Quét mã QR'),
+                                AppLocalizations.of(context).translate(
+                                  'app.active_license.input_license.scan_qr_code',
+                                ),
                               ),
                             ),
                           ),
@@ -135,9 +135,9 @@ class _InputLicenseState extends State<InputLicense> {
                           const Spacer(),
 
                           AppButton.primary(
-                            text: AppLocalizations.of(
-                              context,
-                            ).translate('Tiếp tục'),
+                            text: AppLocalizations.of(context).translate(
+                              'app.active_license.input_license.continue',
+                            ),
                             onPressed:
                                 context
                                     .read<ActiveLicenseCubit>()
@@ -218,10 +218,12 @@ class _InputLicenseState extends State<InputLicense> {
     _cameraController.stop();
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Mã không hợp lệ'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.input_license.invalid_code'),
       messageText: AppLocalizations.of(
         context,
-      ).translate('Vui lòng thực hiện lại thao tác'),
+      ).translate('app.active_license.input_license.please_try_again'),
       imageAsset: 'assets/images/monkey_confused.png',
       primaryActionText: AppLocalizations.of(context).translate('Ok'),
       onPrimaryAction: () {
@@ -240,12 +242,16 @@ class _InputLicenseState extends State<InputLicense> {
   void _errorListener(BuildContext context, ActiveLicenseState state) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Lỗi'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.error'),
       messageText: AppLocalizations.of(
         context,
       ).translate(state.verifyLicenseError ?? ''),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Đóng'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.close'),
       isCloseable: false,
       onPrimaryAction: () {
         context.pop();

@@ -12,13 +12,13 @@ class LicenseCodeValidator extends FormzInput<String, String> {
   @override
   String? validator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Vui lòng nhập mã kích hoạt';
+      return 'app.license.empty';
     }
     if (value.length != 10) {
-      return 'Mã kích hoạt phải bao gồm 10 ký tự';
+      return 'app.license.length';
     }
     if (!_licenseCodeRegex.hasMatch(value)) {
-      return 'Mã kích hoạt chỉ chấp nhận chữ và số';
+      return 'app.license.invalid';
     }
     return null;
   }

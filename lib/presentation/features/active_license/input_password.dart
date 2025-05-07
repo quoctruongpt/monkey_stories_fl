@@ -70,9 +70,9 @@ class _ActiveLicenseInputPasswordState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('Nhập mật khẩu'),
+                            AppLocalizations.of(context).translate(
+                              'app.active_license.input_password.title',
+                            ),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
 
@@ -89,9 +89,9 @@ class _ActiveLicenseInputPasswordState
                                 context
                                     .read<ActiveLicenseCubit>()
                                     .passwordChanged,
-                            labelText: AppLocalizations.of(
-                              context,
-                            ).translate('Mật khẩu'),
+                            labelText: AppLocalizations.of(context).translate(
+                              'app.active_license.input_password.hint',
+                            ),
                             errorText: AppLocalizations.of(
                               context,
                             ).translate(state.password.displayError),
@@ -108,9 +108,9 @@ class _ActiveLicenseInputPasswordState
                                 context.read<ActiveLicenseCubit>().sendOtp();
                               },
                               child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                ).translate('Xác nhận qua OTP'),
+                                AppLocalizations.of(context).translate(
+                                  'app.active_license.input_password.otp',
+                                ),
                               ),
                             ),
                           ),
@@ -120,7 +120,7 @@ class _ActiveLicenseInputPasswordState
                           AppButton.primary(
                             text: AppLocalizations.of(
                               context,
-                            ).translate('Hoàn thành'),
+                            ).translate('app.active_license.finish'),
                             onPressed: () {
                               context
                                   .read<ActiveLicenseCubit>()
@@ -149,10 +149,14 @@ class _ActiveLicenseInputPasswordState
     if (state.loginError != null) {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate('Lỗi'),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('app.active_license.error'),
         messageText: state.loginError ?? '',
         imageAsset: 'assets/images/monkey_confused.png',
-        primaryActionText: AppLocalizations.of(context).translate('Đóng'),
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('app.active_license.close'),
         onPrimaryAction: () {
           context.pop();
           context.read<ActiveLicenseCubit>().clearLoginError();

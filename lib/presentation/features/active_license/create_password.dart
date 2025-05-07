@@ -58,9 +58,9 @@ class _ActiveLicenseCreatePasswordState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('Tạo mật khẩu'),
+                            AppLocalizations.of(context).translate(
+                              'app.active_license.create_password.title',
+                            ),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
 
@@ -77,9 +77,9 @@ class _ActiveLicenseCreatePasswordState
                                 context
                                     .read<ActiveLicenseCubit>()
                                     .passwordChanged,
-                            labelText: AppLocalizations.of(
-                              context,
-                            ).translate('Tạo mật khẩu'),
+                            labelText: AppLocalizations.of(context).translate(
+                              'app.active_license.create_password.hint',
+                            ),
                             errorText: AppLocalizations.of(
                               context,
                             ).translate(state.password.displayError),
@@ -90,9 +90,9 @@ class _ActiveLicenseCreatePasswordState
                                 context
                                     .read<ActiveLicenseCubit>()
                                     .rePasswordChanged,
-                            labelText: AppLocalizations.of(
-                              context,
-                            ).translate('Nhập lại mật khẩu'),
+                            labelText: AppLocalizations.of(context).translate(
+                              'app.active_license.create_password.hint',
+                            ),
                             errorText: AppLocalizations.of(
                               context,
                             ).translate(state.rePassword.displayError),
@@ -103,7 +103,7 @@ class _ActiveLicenseCreatePasswordState
                           AppButton.primary(
                             text: AppLocalizations.of(
                               context,
-                            ).translate('Hoàn thành'),
+                            ).translate('app.active_license.finish'),
                             onPressed:
                                 context
                                     .read<ActiveLicenseCubit>()

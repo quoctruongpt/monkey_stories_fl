@@ -72,7 +72,9 @@ class ActiveLicenseNavigator extends StatelessWidget {
   ) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Lỗi'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.error'),
       messageText: AppLocalizations.of(
         context,
       ).translate(state.linkAccountError),
@@ -100,12 +102,16 @@ class ActiveLicenseNavigator extends StatelessWidget {
   ) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Thông báo'),
-      messageText: AppLocalizations.of(context).translate(
-        'Tài khoản của bạn muốn kết nối đã được kích hoạt gói trọn đời. Vui lòng sử dụng tài khoản khác để tiếp tục.',
-      ),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.warning'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.warning_merge_to_lifetime_account'),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Tiếp tục'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.input_license.continue'),
       isCloseable: false,
       onPrimaryAction: () {
         context.read<ActiveLicenseCubit>().closeMergeToLifetimeAccountWarning();

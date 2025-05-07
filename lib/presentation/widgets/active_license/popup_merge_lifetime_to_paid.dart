@@ -9,13 +9,19 @@ void showPopupWarningMergeLifetimeToPaid({
 }) {
   showCustomNoticeDialog(
     context: context,
-    titleText: AppLocalizations.of(context).translate('Thông báo'),
-    messageText: AppLocalizations.of(context).translate(
-      'Tài khoản ba mẹ đang còn hạn sử dụng. Ba mẹ vẫn muốn kết nối với tài khoản này chứ?',
-    ),
+    titleText: AppLocalizations.of(
+      context,
+    ).translate('app.active_license.warning'),
+    messageText: AppLocalizations.of(
+      context,
+    ).translate('app.active_license.warning_merge_to_paid_account'),
     imageAsset: 'assets/images/monkey_confused.png',
-    primaryActionText: AppLocalizations.of(context).translate('Tiếp tục'),
-    secondaryActionText: AppLocalizations.of(context).translate('Hủy'),
+    primaryActionText: AppLocalizations.of(
+      context,
+    ).translate('app.active_license.input_license.continue'),
+    secondaryActionText: AppLocalizations.of(
+      context,
+    ).translate('app.active_license.cancel'),
     isCloseable: false,
     onPrimaryAction: onContinue,
     onSecondaryAction: onCancel,

@@ -19,7 +19,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBarWidget(
-            title: AppLocalizations.of(context).translate('Liên kết tài khoản'),
+            title: AppLocalizations.of(
+              context,
+            ).translate('app.active_license.last_login_info.title'),
           ),
           body: SafeArea(
             child: Padding(
@@ -31,9 +33,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate(
-                      'Tài khoản này đã được liên kết trước đó. Ba mẹ có muốn kích hoạt gói học trên tài khoản này không?',
-                    ),
+                    AppLocalizations.of(
+                      context,
+                    ).translate('app.active_license.phone_info.desc'),
                   ),
 
                   const SizedBox(height: Spacing.xxl),
@@ -68,7 +70,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                                     ),
                                     label: AppLocalizations.of(
                                       context,
-                                    ).translate('Họ và tên'),
+                                    ).translate(
+                                      'app.active_license.last_login_info.name',
+                                    ),
                                     value: state.phoneInfo?.userInfo.name ?? '',
                                   )
                                   : const SizedBox.shrink(),
@@ -84,7 +88,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                                     ),
                                     label: AppLocalizations.of(
                                       context,
-                                    ).translate('Email'),
+                                    ).translate(
+                                      'app.active_license.last_login_info.email',
+                                    ),
                                     value:
                                         state.phoneInfo?.userInfo.email ?? '',
                                   )
@@ -102,7 +108,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                                     ),
                                     label: AppLocalizations.of(
                                       context,
-                                    ).translate('SDT'),
+                                    ).translate(
+                                      'app.active_license.last_login_info.phone',
+                                    ),
                                     value:
                                         state.phoneInfo?.userInfo.phone ?? '',
                                   )
@@ -129,9 +137,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                                 vertical: Spacing.sm,
                               ),
                               child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                ).translate('Thông tin tài khoản'),
+                                AppLocalizations.of(context).translate(
+                                  'app.active_license.last_login_info.account_info',
+                                ),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -214,9 +222,9 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                                 vertical: Spacing.sm,
                               ),
                               child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                ).translate('Hồ sơ học tập'),
+                                AppLocalizations.of(context).translate(
+                                  'app.active_license.last_login_info.profile',
+                                ),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -229,18 +237,18 @@ class ActiveLicensePhoneInfo extends StatelessWidget {
                   const Spacer(),
 
                   AppButton.primary(
-                    text: AppLocalizations.of(
-                      context,
-                    ).translate('Liên kết với tài khoản này'),
+                    text: AppLocalizations.of(context).translate(
+                      'app.active_license.last_login_info.link_account',
+                    ),
                     onPressed: () {
                       context.push(AppRoutePaths.activeLicenseInputPassword);
                     },
                   ),
                   const SizedBox(height: Spacing.md),
                   AppButton.secondary(
-                    text: AppLocalizations.of(
-                      context,
-                    ).translate('Sử dụng tài khoản khác'),
+                    text: AppLocalizations.of(context).translate(
+                      'app.active_license.last_login_info.use_other_account',
+                    ),
                     onPressed: () {
                       context.replace(AppRoutePaths.activeLicenseInputPhone);
                     },

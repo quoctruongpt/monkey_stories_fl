@@ -70,7 +70,7 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
                           Text(
                             AppLocalizations.of(
                               context,
-                            ).translate('Xác nhận OTP'),
+                            ).translate('app.active_license.input_otp.title'),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
 
@@ -78,7 +78,7 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
 
                           Text(
                             AppLocalizations.of(context).translate(
-                              'Nhập mã OTP được gửi về số điện thoại:',
+                              'app.active_license.input_otp.phone_number',
                             ),
                             style: const TextStyle(
                               color: AppTheme.textSecondaryColor,
@@ -130,9 +130,9 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
                                             .sendOtp();
                                       },
                                       child: Text(
-                                        AppLocalizations.of(
-                                          context,
-                                        ).translate('Gửi lại'),
+                                        AppLocalizations.of(context).translate(
+                                          'app.active_license.input_otp.resend',
+                                        ),
                                       ),
                                     )
                                     : null,
@@ -143,7 +143,7 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
                           AppButton.primary(
                             text: AppLocalizations.of(
                               context,
-                            ).translate('Hoàn thành'),
+                            ).translate('app.active_license.finish'),
                             onPressed: () {
                               context.read<ActiveLicenseCubit>().verifyOtp(
                                 true,
@@ -172,10 +172,14 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
     if (state.sendOtpError != null) {
       showCustomNoticeDialog(
         context: context,
-        titleText: AppLocalizations.of(context).translate('Lỗi'),
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('app.active_license.error'),
         messageText: state.sendOtpError ?? '',
         imageAsset: 'assets/images/monkey_confused.png',
-        primaryActionText: AppLocalizations.of(context).translate('Đóng'),
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('app.active_license.close'),
         onPrimaryAction: () {
           context.pop();
           context.read<ActiveLicenseCubit>().clearSendOtpError();

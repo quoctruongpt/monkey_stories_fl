@@ -32,7 +32,7 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
               appBar: AppBarWidget(
                 title: AppLocalizations.of(
                   context,
-                ).translate('Liên kết tài khoản'),
+                ).translate('app.active_license.last_login_info.title'),
               ),
               body: SafeArea(
                 child: Padding(
@@ -44,9 +44,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        AppLocalizations.of(context).translate(
-                          'Ba mẹ có muốn kích hoạt gói học trên tài khoản này không?',
-                        ),
+                        AppLocalizations.of(
+                          context,
+                        ).translate('app.active_license.last_login_info.desc'),
                       ),
 
                       const SizedBox(height: Spacing.xxl),
@@ -91,7 +91,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                                         ),
                                         label: AppLocalizations.of(
                                           context,
-                                        ).translate('Họ và tên'),
+                                        ).translate(
+                                          'app.active_license.last_login_info.name',
+                                        ),
                                         value:
                                             state
                                                 .licenseInfo!
@@ -118,7 +120,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                                         ),
                                         label: AppLocalizations.of(
                                           context,
-                                        ).translate('Email'),
+                                        ).translate(
+                                          'app.active_license.last_login_info.email',
+                                        ),
                                         value:
                                             state
                                                 .licenseInfo!
@@ -146,7 +150,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                                         ),
                                         label: AppLocalizations.of(
                                           context,
-                                        ).translate('SDT'),
+                                        ).translate(
+                                          'app.active_license.last_login_info.phone',
+                                        ),
                                         value:
                                             state
                                                 .licenseInfo!
@@ -177,9 +183,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                                     vertical: Spacing.sm,
                                   ),
                                   child: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).translate('Thông tin tài khoản'),
+                                    AppLocalizations.of(context).translate(
+                                      'app.active_license.last_login_info.account_info',
+                                    ),
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -266,9 +272,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                                     vertical: Spacing.sm,
                                   ),
                                   child: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).translate('Hồ sơ học tập'),
+                                    AppLocalizations.of(context).translate(
+                                      'app.active_license.last_login_info.profile',
+                                    ),
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -281,7 +287,7 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                       const SizedBox(height: Spacing.lg),
                       Text(
                         AppLocalizations.of(context).translate(
-                          '* Tài khoản này được ghi nhận đã đăng nhập lần cuối trên thiết bị của bạn.',
+                          'app.active_license.last_login_info.last_login_desc',
                         ),
                         style: const TextStyle(
                           fontSize: 14,
@@ -293,9 +299,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                       const Spacer(),
 
                       AppButton.primary(
-                        text: AppLocalizations.of(
-                          context,
-                        ).translate('Liên kết với tài khoản này'),
+                        text: AppLocalizations.of(context).translate(
+                          'app.active_license.last_login_info.link_account',
+                        ),
                         onPressed: () {
                           context
                               .read<ActiveLicenseCubit>()
@@ -304,9 +310,9 @@ class ActiveLicenseLastLoginInfo extends StatelessWidget {
                       ),
                       const SizedBox(height: Spacing.md),
                       AppButton.secondary(
-                        text: AppLocalizations.of(
-                          context,
-                        ).translate('Sử dụng tài khoản khác'),
+                        text: AppLocalizations.of(context).translate(
+                          'app.active_license.last_login_info.use_other_account',
+                        ),
                         onPressed: () {
                           context.push(AppRoutePaths.activeLicenseInputPhone);
                         },

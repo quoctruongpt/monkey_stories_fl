@@ -66,7 +66,7 @@ class _ActiveLicenseInputPhoneState extends State<ActiveLicenseInputPhone> {
                           Text(
                             AppLocalizations.of(
                               context,
-                            ).translate('Nhập số điện thoại'),
+                            ).translate('app.active_license.input_phone.title'),
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
 
@@ -94,9 +94,9 @@ class _ActiveLicenseInputPhoneState extends State<ActiveLicenseInputPhone> {
                           const Spacer(),
 
                           AppButton.primary(
-                            text: AppLocalizations.of(
-                              context,
-                            ).translate('Tiếp tục'),
+                            text: AppLocalizations.of(context).translate(
+                              'app.active_license.input_phone.continue',
+                            ),
                             onPressed:
                                 context
                                     .read<ActiveLicenseCubit>()
@@ -131,12 +131,16 @@ class _ActiveLicenseInputPhoneState extends State<ActiveLicenseInputPhone> {
   void _errorListener(BuildContext context, ActiveLicenseState state) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Lỗi'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.error'),
       messageText: AppLocalizations.of(
         context,
       ).translate(state.checkPhoneError ?? ''),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Đóng'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.close'),
       isCloseable: false,
       onPrimaryAction: () {
         context.pop();

@@ -11,13 +11,13 @@ class OtpValidator extends FormzInput<String, String> {
   @override
   String? validator(String value) {
     if (value.isEmpty) {
-      return 'Vui lòng nhập OTP';
+      return 'app.otp.empty';
     }
     if (value.length != otpLength) {
-      return 'OTP phải có $otpLength chữ số';
+      return 'app.otp.length';
     }
     if (!_otpRegex.hasMatch(value)) {
-      return 'OTP không hợp lệ';
+      return 'app.otp.invalid';
     }
     return null;
   }

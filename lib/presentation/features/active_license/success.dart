@@ -19,14 +19,14 @@ class ActiveLicenseSuccess extends StatelessWidget {
               body: SuccessScreen(
                 title: AppLocalizations.of(
                   context,
-                ).translate('Kích hoạt thành công'),
+                ).translate('app.active_license.success.title'),
                 descriptionWidget: Column(
                   children: [
                     const SizedBox(height: Spacing.lg),
                     Text(
                       AppLocalizations.of(
                         context,
-                      ).translate('Chúc mừng ba mẹ đã kích hoạt khóa học'),
+                      ).translate('app.active_license.success.desc'),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.textSecondaryColor,
                       ),
@@ -43,7 +43,7 @@ class ActiveLicenseSuccess extends StatelessWidget {
                 ),
                 buttonText: AppLocalizations.of(
                   context,
-                ).translate('Hoàn thành'),
+                ).translate('app.active_license.finish'),
                 onPressed: () {
                   context.read<ActiveLicenseCubit>().handleSuccess();
                 },
