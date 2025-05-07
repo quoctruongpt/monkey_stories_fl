@@ -22,6 +22,14 @@ class ActiveLicenseRepositoryImpl implements ActiveLicenseRepository {
   }
 
   @override
+  Future<ApiResponse<LicenseCodeInfoEntity?>> verifyCodUserCrm(
+    String username,
+    String password,
+  ) {
+    return activeLicenseRemoteDataSource.verifyCodUserCrm(username, password);
+  }
+
+  @override
   Future<ApiResponse<LinkAccountResModel?>> linkCodToThisAccount(
     String newAccessToken,
     bool checkWarning,

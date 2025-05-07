@@ -73,6 +73,12 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
        _userCubit = userCubit,
        super(const ActiveLicenseState());
 
+  void init(LicenseCodeInfoEntity? licenseInfo) {
+    if (licenseInfo != null) {
+      emit(state.copyWith(licenseInfo: licenseInfo));
+    }
+  }
+
   void showScanner() {
     emit(state.copyWith(isShowScanner: true));
   }

@@ -102,7 +102,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLoginSuccess() {
-    context.go(AppRoutePaths.home);
+    final licenseCodeInfo = context.read<LoginCubit>().state.licenseCodeInfo;
+    if (licenseCodeInfo != null) {
+      if (licenseCodeInfo.accountInfo != null) {
+        context.go(
+          AppRoutePaths.lastLoginInfo,
+          extra: {'licenseInfo': licenseCodeInfo},
+        );
+      } else {
+        context.go(
+          AppRoutePaths.activeLicenseInputPhone,
+          extra: {'licenseInfo': licenseCodeInfo},
+        );
+      }
+    } else {
+      context.go(AppRoutePaths.home);
+    }
   }
 
   void _handleLoginFailure(String errorMessage) {

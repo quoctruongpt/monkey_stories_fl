@@ -5,6 +5,7 @@ import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/di/datasources.dart';
+import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/features/active_license/create_password.dart';
 import 'package:monkey_stories/presentation/features/active_license/input_license.dart';
@@ -18,16 +19,21 @@ import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 
 class ActiveLicenseNavigator extends StatelessWidget {
-  const ActiveLicenseNavigator({super.key, required this.child});
+  const ActiveLicenseNavigator({
+    super.key,
+    required this.child,
+    this.licenseInfo,
+  });
 
   final Widget child;
+  final LicenseCodeInfoEntity? licenseInfo;
 
   @override
   Widget build(BuildContext context) {
     return OrientationWrapper(
       orientation: AppOrientation.portrait,
       child: BlocProvider(
-        create: (context) => sl<ActiveLicenseCubit>(),
+        create: (context) => sl<ActiveLicenseCubit>()..init(licenseInfo),
         child: MultiBlocListener(
           listeners: [
             BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
@@ -114,7 +120,11 @@ class ActiveLicenseNavigator extends StatelessWidget {
 }
 
 final ShellRoute activeLicenseRoutes = ShellRoute(
-  builder: (context, state, child) => ActiveLicenseNavigator(child: child),
+  builder: (context, state, child) {
+    final extraMap = state.extra as Map<String, dynamic>?;
+    final licenseInfo = extraMap?['licenseInfo'] as LicenseCodeInfoEntity?;
+    return ActiveLicenseNavigator(licenseInfo: licenseInfo, child: child);
+  },
   routes: [
     GoRoute(
       path: AppRoutePaths.inputLicense,

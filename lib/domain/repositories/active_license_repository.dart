@@ -7,6 +7,11 @@ abstract class ActiveLicenseRepository {
     String licenseCode,
   );
 
+  Future<ApiResponse<LicenseCodeInfoEntity?>> verifyCodUserCrm(
+    String username,
+    String password,
+  );
+
   Future<ApiResponse<LinkAccountResModel?>> linkCodToThisAccount(
     String newAccessToken,
     bool checkWarning,

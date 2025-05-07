@@ -9,6 +9,12 @@ abstract class ActiveLicenseRemoteDataSource {
   Future<ApiResponse<LicenseCodeInfoEntity?>> verifyLicenseCode(
     String licenseCode,
   );
+
+  Future<ApiResponse<LicenseCodeInfoEntity?>> verifyCodUserCrm(
+    String username,
+    String password,
+  );
+
   Future<ApiResponse<LinkAccountResModel?>> linkCodToAccount({
     required String oldAccessToken,
     required String newAccessToken,
@@ -29,6 +35,28 @@ class ActiveLicenseRemoteDataSourceImpl
     final response = await dio.post(
       ApiEndpoints.verifyLicenseCode,
       data: {'license_code': licenseCode},
+    );
+
+    return ApiResponse.fromJson(response.data, (json, res) {
+      return res['status'] == ApiStatus.success.value &&
+              json is Map<String, dynamic>
+          ? LicenseCodeInfoResModel.fromJson(json).toEntity()
+          : null;
+    });
+  }
+
+  @override
+  Future<ApiResponse<LicenseCodeInfoEntity?>> verifyCodUserCrm(
+    String username,
+    String password,
+  ) async {
+    final response = await dio.post(
+      ApiEndpoints.login,
+      data: {
+        'user_name_crm': username,
+        'password': password,
+        'type': LoginType.userCrm.value,
+      },
     );
 
     return ApiResponse.fromJson(response.data, (json, res) {

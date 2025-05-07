@@ -63,6 +63,7 @@ import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecas
 
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 
 final sl = GetIt.instance;
 
@@ -170,6 +171,9 @@ void initUsecaseDependencies() {
       sl<ActiveLicenseRepository>(),
       sl<AuthRepository>(),
     ),
+  );
+  sl.registerLazySingleton(
+    () => VerifyCodUserCrmUseCase(sl<ActiveLicenseRepository>()),
   );
   // Add other usecase registrations here...
 }
