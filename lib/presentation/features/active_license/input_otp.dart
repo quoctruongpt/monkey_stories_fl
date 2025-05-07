@@ -13,8 +13,19 @@ import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
 
-class ActiveLicenseInputOtp extends StatelessWidget {
+class ActiveLicenseInputOtp extends StatefulWidget {
   const ActiveLicenseInputOtp({super.key});
+
+  @override
+  State<ActiveLicenseInputOtp> createState() => _ActiveLicenseInputOtpState();
+}
+
+class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ActiveLicenseCubit>().otpChanged('');
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -12,8 +12,20 @@ import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
 
-class ActiveLicenseInputPhone extends StatelessWidget {
+class ActiveLicenseInputPhone extends StatefulWidget {
   const ActiveLicenseInputPhone({super.key});
+
+  @override
+  State<ActiveLicenseInputPhone> createState() =>
+      _ActiveLicenseInputPhoneState();
+}
+
+class _ActiveLicenseInputPhoneState extends State<ActiveLicenseInputPhone> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ActiveLicenseCubit>().phoneChanged('');
+  }
 
   @override
   Widget build(BuildContext context) {

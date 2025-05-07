@@ -13,8 +13,21 @@ import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
 
-class ActiveLicenseInputPassword extends StatelessWidget {
+class ActiveLicenseInputPassword extends StatefulWidget {
   const ActiveLicenseInputPassword({super.key});
+
+  @override
+  State<ActiveLicenseInputPassword> createState() =>
+      _ActiveLicenseInputPasswordState();
+}
+
+class _ActiveLicenseInputPasswordState
+    extends State<ActiveLicenseInputPassword> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ActiveLicenseCubit>().passwordChanged('');
+  }
 
   @override
   Widget build(BuildContext context) {

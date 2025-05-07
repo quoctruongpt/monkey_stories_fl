@@ -11,8 +11,22 @@ import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 
-class ActiveLicenseCreatePassword extends StatelessWidget {
+class ActiveLicenseCreatePassword extends StatefulWidget {
   const ActiveLicenseCreatePassword({super.key});
+
+  @override
+  State<ActiveLicenseCreatePassword> createState() =>
+      _ActiveLicenseCreatePasswordState();
+}
+
+class _ActiveLicenseCreatePasswordState
+    extends State<ActiveLicenseCreatePassword> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ActiveLicenseCubit>().passwordChanged('');
+    context.read<ActiveLicenseCubit>().rePasswordChanged('');
+  }
 
   @override
   Widget build(BuildContext context) {
