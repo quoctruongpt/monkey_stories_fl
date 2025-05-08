@@ -20,12 +20,14 @@ class PermissionUtil {
       context: context,
       titleText: AppLocalizations.of(
         context,
-      ).translate('Yêu cầu quyền truy cập'),
-      messageText: AppLocalizations.of(context).translate(
-        'Vui lòng cấp quyền truy cập Camera để xử dụng tính năng này',
-      ),
+      ).translate('app.permission.request'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.permission.camera'),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Mở cài đặt'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.permission.open_setting'),
       onPrimaryAction: () {
         context.pop();
         openAppSettings();
