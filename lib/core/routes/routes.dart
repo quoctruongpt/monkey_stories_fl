@@ -2,26 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/presentation/screens/create_profile/choose_level.dart';
-import 'package:monkey_stories/presentation/screens/create_profile/choose_year_of_birth.dart';
-import 'package:monkey_stories/presentation/screens/create_profile/create_profile_loading.dart';
-import 'package:monkey_stories/presentation/screens/create_profile/input_name_screen.dart';
-import 'package:monkey_stories/presentation/screens/forgot_password/forgot_password_navigator.dart';
-import 'package:monkey_stories/presentation/screens/sign_up/sign_up_success_screen.dart';
-import 'package:monkey_stories/presentation/screens/splash/splash_screen.dart';
-import 'package:monkey_stories/presentation/screens/unity/unity_screen.dart';
-import 'package:monkey_stories/presentation/screens/home_screen.dart';
-import 'package:monkey_stories/presentation/screens/sign_in/login_screen.dart';
-import 'package:monkey_stories/presentation/screens/result_screen.dart';
-import 'package:monkey_stories/presentation/screens/sign_up/sign_up_screen.dart';
+import 'package:monkey_stories/presentation/features/active_license/active_license_navigator.dart';
+import 'package:monkey_stories/presentation/features/create_profile/choose_level.dart';
+import 'package:monkey_stories/presentation/features/create_profile/choose_year_of_birth.dart';
+import 'package:monkey_stories/presentation/features/create_profile/create_profile_loading.dart';
+import 'package:monkey_stories/presentation/features/create_profile/input_name_screen.dart';
+import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
+import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
+import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
+import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
+import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';
+import 'package:monkey_stories/presentation/features/unity/unity_screen.dart';
+import 'package:monkey_stories/presentation/features/home_screen.dart';
+import 'package:monkey_stories/presentation/features/sign_in/login_screen.dart';
+import 'package:monkey_stories/presentation/features/result_screen.dart';
+import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
+import 'package:monkey_stories/presentation/features/purchased_success.dart';
 
 final logger = Logger('router');
+
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 final GoRouter router = GoRouter(
   observers: [routeObserver],
+  navigatorKey: navigatorKey,
   initialLocation: AppRoutePaths.splash,
   routes: <RouteBase>[
+    GoRoute(
+      path: AppRoutePaths.intro,
+      name: AppRouteNames.intro,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: IntroScreen(),
+        );
+      },
+    ),
+
     GoRoute(
       path: AppRoutePaths.splash,
       name: AppRouteNames.splash,
@@ -156,6 +175,20 @@ final GoRouter router = GoRouter(
       },
     ),
 
+    GoRoute(
+      path: AppRoutePaths.purchasedSuccess,
+      name: AppRouteNames.purchasedSuccess,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: PurchasedSuccessScreen(),
+        );
+      },
+    ),
+
     forgotPasswordRoutes,
+
+    obdRoutes,
+    activeLicenseRoutes,
   ],
 );

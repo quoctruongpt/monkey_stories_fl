@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
@@ -11,11 +13,13 @@ import 'package:monkey_stories/core/localization/app_localizations_delegate.dart
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
-import 'package:monkey_stories/presentation/screens/debugs/debug_navigator.dart';
+import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
+import 'package:monkey_stories/presentation/widgets/leave_contact_dialog/leave_contact_dialog.dart';
 
 final logger = Logger('MyApp');
 
@@ -31,6 +35,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<DebugCubit>()),
         BlocProvider(create: (_) => sl<FloatButtonCubit>()),
         BlocProvider(create: (_) => sl<UserCubit>()),
+        BlocProvider(create: (_) => sl<ProfileCubit>()..getCurrentProfile()),
+        BlocProvider(create: (_) => sl<PurchasedCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:
@@ -170,6 +176,36 @@ class _AppBuilderState extends State<AppBuilder>
               listener: (context, state) {
                 _animationController.reset();
                 _animationController.forward();
+              },
+            ),
+            // Lắng nghe trạng thái mua hàng
+            BlocListener<PurchasedCubit, PurchasedState>(
+              listenWhen: (previous, current) {
+                // Lắng nghe khi isVerifyPurchasedSuccess thay đổi thành true
+                // Hoặc khi errorMessage thay đổi từ null thành có giá trị
+                return (previous.isVerifyPurchasedSuccess !=
+                            current.isVerifyPurchasedSuccess &&
+                        current.isVerifyPurchasedSuccess == true) ||
+                    (previous.errorMessage == null &&
+                        current.errorMessage != null);
+              },
+              listener: (context, state) {
+                final context = navigatorKey.currentContext;
+                if (context != null) {
+                  context.read<PurchasedCubit>().resetStatus();
+                  if (state.isVerifyPurchasedSuccess == true) {
+                    context.go(AppRoutePaths.purchasedSuccess);
+                  } else if (state.errorMessage != null) {
+                    try {
+                      showLeaveContactDialog(
+                        navigatorKey.currentContext!,
+                        () => context.go(AppRoutePaths.home),
+                      );
+                    } catch (e) {
+                      logger.severe('Error showing dialog: $e');
+                    }
+                  }
+                }
               },
             ),
           ],

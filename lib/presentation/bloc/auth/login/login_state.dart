@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/username.dart';
@@ -35,6 +36,7 @@ class LoginState extends Equatable {
   final int failedAttempts; // Thêm bộ đếm số lần thất bại
   final String? errorMessageDialog;
   final LastLoginInfo? lastLogin;
+  final LicenseCodeInfoEntity? licenseCodeInfo;
 
   const LoginState({
     this.username = const Username.pure(),
@@ -46,6 +48,7 @@ class LoginState extends Equatable {
     this.failedAttempts = 0, // Khởi tạo bộ đếm
     this.errorMessageDialog,
     this.lastLogin,
+    this.licenseCodeInfo,
   });
 
   // Hàm tiện ích để tạo bản sao của state với các giá trị được cập nhật
@@ -60,6 +63,7 @@ class LoginState extends Equatable {
     bool clearErrorMessage = false, // Thêm cờ để xóa lỗi
     String? errorMessageDialog,
     LastLoginInfo? lastLogin,
+    LicenseCodeInfoEntity? licenseCodeInfo,
   }) {
     return LoginState(
       username: username ?? this.username,
@@ -76,6 +80,7 @@ class LoginState extends Equatable {
               ? null
               : errorMessageDialog ?? this.errorMessageDialog,
       lastLogin: lastLogin ?? this.lastLogin,
+      licenseCodeInfo: licenseCodeInfo ?? this.licenseCodeInfo,
     );
   }
 
@@ -89,5 +94,6 @@ class LoginState extends Equatable {
     isValidForm,
     failedAttempts, // Thêm failedAttempts vào props
     errorMessageDialog,
+    licenseCodeInfo,
   ];
 }

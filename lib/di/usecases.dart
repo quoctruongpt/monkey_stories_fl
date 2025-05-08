@@ -1,8 +1,16 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
+import 'package:monkey_stories/domain/repositories/course_repository.dart';
+import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 // Auth & Account Usecases
@@ -23,6 +31,11 @@ import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart'; // Used by Splash
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
@@ -36,6 +49,21 @@ import 'package:monkey_stories/domain/usecases/unity/register_handler_usecase.da
 import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_usecase.dart';
 import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_with_response_usecase.dart';
 import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.dart';
+
+// Kinesis Usecases
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+
+// Purchased Usecases
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 
 final sl = GetIt.instance;
 
@@ -85,5 +113,67 @@ void initUsecaseDependencies() {
     () => UnregisterHandlerUseCase(sl<UnityRepository>()),
   );
 
+  // Leave Contact
+  sl.registerLazySingleton(
+    () => SaveContactUsecase(sl<LeaveContactRepository>()),
+  );
+
+  // Onboarding
+  sl.registerLazySingleton(() => SignUpSkipUsecase(sl<AuthRepository>()));
+
+  // Profile
+  sl.registerLazySingleton(
+    () => GetListProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetCurrentProfileUsecase(sl<ProfileRepository>()),
+  );
+
+  // Course
+  sl.registerLazySingleton(() => ActiveCourseUsecase(sl<CourseRepository>()));
+
+  // Kinesis
+  sl.registerLazySingleton(
+    () => PutSettingKinesisUsecase(sl<KinesisRepository>()),
+  );
+
+  // Purchased
+  sl.registerLazySingleton(() => GetProductsUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => InitialPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(() => PurchaseUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => ListenToPurchaseErrorsUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => DisposePurchasedUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => ListenToPurchaseUpdatesUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => VerifyPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => RestorePurchasedUsecase(sl<PurchasedRepository>()),
+  );
+
+  // Active license
+  sl.registerLazySingleton(
+    () => VerifyLicenseCodeUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => LinkCodToThisAccountUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => LinkCodToAccountUseCase(
+      sl<ActiveLicenseRepository>(),
+      sl<AuthRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => VerifyCodUserCrmUseCase(sl<ActiveLicenseRepository>()),
+  );
   // Add other usecase registrations here...
 }

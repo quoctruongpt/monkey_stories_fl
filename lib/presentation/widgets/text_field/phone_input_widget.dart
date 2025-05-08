@@ -13,6 +13,8 @@ class PhoneInputField extends StatelessWidget {
   final bool? isLoading;
   final String? errorText;
   final bool? isPhoneValid;
+  final String? labelText;
+  final double? fontSize;
 
   const PhoneInputField({
     super.key,
@@ -25,6 +27,8 @@ class PhoneInputField extends StatelessWidget {
     this.isLoading = false,
     this.errorText,
     this.isPhoneValid = false,
+    this.labelText,
+    this.fontSize = 20,
   });
 
   @override
@@ -36,14 +40,24 @@ class PhoneInputField extends StatelessWidget {
           controller: controller,
           keyboardType: TextInputType.phone,
           onChanged: onChanged,
-          style: const TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: fontSize),
           decoration: InputDecoration(
+            labelText: labelText,
             hintText:
                 hintText ??
                 AppLocalizations.of(
                   context,
                 ).translate('sign_up.input_phone.hint'),
-            errorText: errorText,
+            hintStyle: TextStyle(
+              fontSize: fontSize,
+              color: AppTheme.textGrayLightColor,
+            ),
+            labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppTheme.textGrayColor,
+              fontWeight: FontWeight.w800,
+              fontSize: fontSize,
+            ),
+            errorText: errorText?.isEmpty == true ? null : errorText,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: Spacing.md),
               child: IntrinsicWidth(
@@ -85,7 +99,8 @@ class PhoneInputField extends StatelessWidget {
                         ),
                         Text(
                           country?.dialCode ?? '',
-                          style: Theme.of(context).textTheme.displaySmall,
+                          style: Theme.of(context).textTheme.displaySmall
+                              ?.copyWith(fontSize: fontSize),
                         ),
                       ],
                     );

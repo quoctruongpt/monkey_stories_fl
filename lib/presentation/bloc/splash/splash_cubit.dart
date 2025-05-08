@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/core/error/failures.dart';
@@ -8,14 +10,17 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart'; // Assuming this exists
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
-  final RegisterDeviceUseCase _registerDeviceUseCase; // Assuming this exists
-  final AppCubit _appCubit; // Thêm dependency AppCubit
-  final UserCubit _userCubit; // Thêm dependency UserCubit
+  final RegisterDeviceUseCase _registerDeviceUseCase;
+  final AppCubit _appCubit;
+  final UserCubit _userCubit;
+  final ProfileCubit _profileCubit;
+  final PurchasedCubit _purchasedCubit;
 
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 3;
@@ -23,15 +28,25 @@ class SplashCubit extends Cubit<SplashState> {
   SplashCubit({
     required CheckAuthStatusUseCase checkAuthStatusUseCase,
     required RegisterDeviceUseCase registerDeviceUseCase,
-    required AppCubit appCubit, // Inject AppCubit
-    required UserCubit userCubit, // Inject UserCubit
+    required AppCubit appCubit,
+    required UserCubit userCubit,
+    required ProfileCubit profileCubit,
+    required PurchasedCubit purchasedCubit,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
-       _appCubit = appCubit, // Gán AppCubit
-       _userCubit = userCubit, // Gán UserCubit
+       _appCubit = appCubit,
+       _userCubit = userCubit,
+       _profileCubit = profileCubit,
+       _purchasedCubit = purchasedCubit,
        super(SplashInitial());
 
-  Future<void> initializeApp() async {
+  Future<void> runApp() async {
+    _initializeApp();
+    await _purchasedCubit.initialPurchased();
+    await _purchasedCubit.getProducts();
+  }
+
+  Future<void> _initializeApp() async {
     emit(SplashLoading());
     final startTime = DateTime.now(); // Ghi lại thời gian bắt đầu
 
@@ -113,6 +128,15 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<SplashState> _handleLogicAuthenticated() async {
     await _userCubit.loadUpdate();
+    await _profileCubit.getListProfile();
+
+    final user = _userCubit.state.user;
+    final purchasedInfo = _userCubit.state.purchasedInfo;
+
+    if (user?.loginType == LoginType.skip && purchasedInfo?.isActive == true) {
+      return SplashNeedCreateAccount();
+    }
+
     return SplashAuthenticated();
   }
 

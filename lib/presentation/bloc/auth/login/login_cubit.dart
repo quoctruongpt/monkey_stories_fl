@@ -8,6 +8,8 @@ import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart'
 import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/validators/password.dart';
@@ -15,6 +17,7 @@ import 'dart:async';
 
 import 'package:monkey_stories/core/validators/username.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 
 final logger = Logger('LoginCubit');
 
@@ -24,6 +27,10 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginWithLastLoginUsecase _loginWithLastLoginUsecase;
   final GetLastLoginUsecase _getLastLoginUsecase;
   final GetUserSocialUsecase _getUserSocialUsecase;
+  final RestorePurchasedUsecase _restorePurchasedUsecase;
+  final VerifyCodUserCrmUseCase _verifyCodUserCrmUsecase;
+
+  final ProfileCubit _profileCubit;
 
   UserSocialEntity? _lastLogin;
 
@@ -33,11 +40,17 @@ class LoginCubit extends Cubit<LoginState> {
     required LoginWithLastLoginUsecase loginWithLastLoginUsecase,
     required GetLastLoginUsecase getLastLoginUsecase,
     required GetUserSocialUsecase getUserSocialUsecase,
+    required RestorePurchasedUsecase restorePurchasedUsecase,
+    required ProfileCubit profileCubit,
+    required VerifyCodUserCrmUseCase verifyCodUserCrmUsecase,
   }) : _userCubit = userCubit,
        _loginUsecase = loginUsecase,
        _loginWithLastLoginUsecase = loginWithLastLoginUsecase,
        _getLastLoginUsecase = getLastLoginUsecase,
        _getUserSocialUsecase = getUserSocialUsecase,
+       _restorePurchasedUsecase = restorePurchasedUsecase,
+       _profileCubit = profileCubit,
+       _verifyCodUserCrmUsecase = verifyCodUserCrmUsecase,
        super(const LoginState(username: Username.dirty('')));
 
   void loadLastLogin(String? initialUsername) async {
@@ -221,7 +234,12 @@ class LoginCubit extends Cubit<LoginState> {
         );
       },
       (loginStatus) async {
+        await _restorePurchasedUsecase.call(NoParams());
+        if (_userCubit.state.isPurchasing) {
+          _userCubit.togglePurchasing();
+        }
         await _userCubit.loadUpdate();
+        await _profileCubit.getListProfile();
         emit(state.copyWith(status: FormSubmissionStatus.success));
       },
     );
@@ -250,13 +268,53 @@ class LoginCubit extends Cubit<LoginState> {
       // Xác định loại đăng nhập (email hoặc số điện thoại)
       final username = state.username.value;
       final password = state.password.value;
+
+      LoginType loginType;
       final isEmail = username.contains('@');
+      final isPhone = RegExp(
+        r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
+      ).hasMatch(username);
+
+      if (isEmail) {
+        loginType = LoginType.email;
+      } else if (isPhone) {
+        loginType = LoginType.phone;
+      } else {
+        loginType = LoginType.userCrm;
+      }
+
+      if (loginType == LoginType.userCrm) {
+        final result = await _verifyCodUserCrmUsecase.call(
+          VerifyCodUserCrmParams(username: username, password: password),
+        );
+
+        result.fold(
+          (failure) {
+            emit(
+              state.copyWith(
+                status: FormSubmissionStatus.failure,
+                errorMessage: failure.message,
+              ),
+            );
+          },
+          (response) {
+            emit(
+              state.copyWith(
+                status: FormSubmissionStatus.success,
+                licenseCodeInfo: response,
+              ),
+            );
+          },
+        );
+
+        return;
+      }
 
       await login(
         LoginParams(
-          loginType: isEmail ? LoginType.email : LoginType.phone,
-          phone: isEmail ? '' : username,
-          email: isEmail ? username : '',
+          loginType: loginType,
+          phone: loginType == LoginType.phone ? username : '',
+          email: loginType == LoginType.email ? username : '',
           password: password,
         ),
       );

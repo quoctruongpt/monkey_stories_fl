@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
+import 'package:monkey_stories/data/models/profile/get_profile_response.dart';
 import 'package:monkey_stories/data/models/profile/update_profile_response.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -11,6 +12,8 @@ abstract class ProfileRemoteDataSource {
     String? avatarFile,
     int? id,
   );
+
+  Future<ApiResponse<List<GetProfileResponse>>> getListProfile();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -39,7 +42,25 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
     return ApiResponse.fromJson(
       response.data,
-      (json) => ProfileResponseModel.fromJson(json),
+      (json, res) => ProfileResponseModel.fromJson(json),
     );
+  }
+
+  @override
+  Future<ApiResponse<List<GetProfileResponse>>> getListProfile() async {
+    final response = await dio.get(ApiEndpoints.getListProfile);
+
+    return ApiResponse.fromJson(response.data, (json, res) {
+      if (json is Map<String, dynamic>) {
+        final list = json['profile_list'] as List?;
+        return list
+                ?.map(
+                  (e) => GetProfileResponse.fromJson(e as Map<String, dynamic>),
+                )
+                .toList() ??
+            [];
+      }
+      return [];
+    });
   }
 }

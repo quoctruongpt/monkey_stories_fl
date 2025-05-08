@@ -17,7 +17,10 @@ class RegisterLocationData {
     required this.ac,
   });
 
-  factory RegisterLocationData.fromJson(Object? json) {
+  factory RegisterLocationData.fromJson(
+    Object? json,
+    Map<String, dynamic> res,
+  ) {
     if (json is Map<String, dynamic>) {
       return RegisterLocationData(
         deviceId: json['device_id'] as String? ?? '',

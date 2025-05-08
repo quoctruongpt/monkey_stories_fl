@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -29,15 +30,15 @@ abstract class AuthRepository {
   Future<Either<Failure, UserSocialEntity?>> getUserSocial(LoginType type);
 
   Future<Either<ServerFailureWithCode, bool>> signUp(
-    String countryCode,
-    String phoneNumber,
-    String password,
+    String? countryCode,
+    String? phoneNumber,
+    String? password,
+    LoginType signUpType,
+    bool isUpgrade,
   );
 
-  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
-    String countryCode,
-    String phoneNumber,
-  );
+  Future<Either<ServerFailureWithCode<AccountInfoEntity?>, bool>>
+  checkPhoneNumber(String countryCode, String phoneNumber);
 
   Future<Either<Failure, void>> logout();
 
@@ -48,4 +49,13 @@ abstract class AuthRepository {
   );
 
   Future<Either<Failure, void>> changePassword(ChangePasswordParams params);
+
+  Future<Either<Failure, void>> cacheDataLogin({
+    required String accessToken,
+    required String refreshToken,
+    required LoginType loginType,
+    String? phone,
+    String? email,
+    required bool isSocial,
+  });
 }

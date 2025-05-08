@@ -22,14 +22,17 @@ class AppLocalizations {
     return true;
   }
 
-  String translate(String? key, {Map<String, String>? params}) {
+  String translate(String? key, {Map<String, String?>? params}) {
     if (key == null) return '';
 
     var translation = _localizedStrings[key]?.toString() ?? key;
 
     if (params != null) {
       params.forEach((paramKey, paramValue) {
-        translation = translation.replaceAll('{{${paramKey}}}', paramValue);
+        translation = translation.replaceAll(
+          '{{${paramKey}}}',
+          paramValue ?? '',
+        );
       });
     }
 

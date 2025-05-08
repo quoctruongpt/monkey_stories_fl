@@ -18,11 +18,16 @@ class ServerFailure extends Failure {
   List<Object> get props => [message];
 }
 
-class ServerFailureWithCode extends Failure {
+class ServerFailureWithCode<T> extends Failure {
   final int code;
   final String message;
+  final T? data;
 
-  const ServerFailureWithCode({this.code = 200, this.message = 'Server Error'});
+  const ServerFailureWithCode({
+    this.code = 200,
+    this.message = 'Server Error',
+    this.data,
+  });
 
   @override
   List<Object> get props => [code, message];

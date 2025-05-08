@@ -1,6 +1,20 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/purchased_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
+import 'package:monkey_stories/domain/repositories/course_repository.dart';
+import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 
 // Auth Datasources & Repositories
@@ -19,6 +33,7 @@ import 'package:monkey_stories/data/repositories/device_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/device_repository.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/repositories/settings_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
 import 'package:monkey_stories/data/repositories/system_settings_repository_impl.dart';
@@ -29,6 +44,10 @@ import 'package:monkey_stories/data/datasources/unity_datasource.dart';
 import 'package:monkey_stories/data/repositories/unity_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/unity_repository.dart';
 
+import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
+import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
+
 final sl = GetIt.instance;
 
 void initRepositoryDependencies() {
@@ -36,6 +55,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(
       profileRemoteDataSource: sl<ProfileRemoteDataSource>(),
+      profileLocalDataSource: sl<ProfileLocalDataSource>(),
     ),
   );
 
@@ -49,6 +69,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<AccountRepository>(
     () => AccountRepositoryImpl(
       accountRemoteDataSource: sl<AccountRemoteDataSource>(),
+      systemLocalDataSource: sl<SystemLocalDataSource>(),
     ),
   );
 
@@ -57,6 +78,7 @@ void initRepositoryDependencies() {
     () => DeviceRepositoryImpl(
       remoteDataSource: sl<DeviceRemoteDataSource>(),
       localDataSource: sl<DeviceLocalDataSource>(),
+      systemLocalDataSource: sl<SystemLocalDataSource>(),
     ),
   );
   sl.registerLazySingleton<SettingsRepository>(
@@ -72,6 +94,41 @@ void initRepositoryDependencies() {
   // Unity
   sl.registerLazySingleton<UnityRepository>(
     () => UnityRepositoryImpl(dataSource: sl<UnityDataSource>()),
+  );
+
+  // Leave Contact
+  sl.registerLazySingleton<LeaveContactRepository>(
+    () => LeaveContactRepositoryImpl(
+      remoteDataSource: sl<LeaveContactRemoteDataSource>(),
+      localDataSource: sl<LeaveContactLocalDataSource>(),
+    ),
+  );
+
+  // Course
+  sl.registerLazySingleton<CourseRepository>(
+    () => CourseRepositoryImpl(courseRemoteData: sl<CourseRemoteData>()),
+  );
+
+  // Kinesis
+  sl.registerLazySingleton<KinesisRepository>(
+    () => KinesisRepositoryImpl(
+      kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
+    ),
+  );
+
+  // Purchased
+  sl.registerLazySingleton<PurchasedRepository>(
+    () => PurchasedRepositoryImpl(
+      remoteDataSource: sl<PurchasedRemoteDataSource>(),
+    ),
+  );
+
+  // Active license
+  sl.registerLazySingleton<ActiveLicenseRepository>(
+    () => ActiveLicenseRepositoryImpl(
+      activeLicenseRemoteDataSource: sl<ActiveLicenseRemoteDataSource>(),
+      authLocalDataSource: sl<AuthLocalDataSource>(),
+    ),
   );
 
   // Add other repository registrations here...

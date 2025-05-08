@@ -8,6 +8,12 @@ class SharedPrefKeys {
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
   static const String lastLogin = 'lastLogin';
+  static const String leaveContact = 'leaveContact';
+  static const String profileList = 'profileList';
+  static const String currentProfile = 'currentProfile';
+  static const String countryCode = 'countryCode';
+  static const String purchasedProducts = 'purchasedProducts';
+  static const String purchasedLatest = 'purchasedLatest';
 }
 
 final keysToKeep = [
@@ -15,4 +21,7 @@ final keysToKeep = [
   SharedPrefKeys.isDarkMode,
   SharedPrefKeys.deviceId,
   SharedPrefKeys.lastLogin,
+  SharedPrefKeys.countryCode,
+  SharedPrefKeys.purchasedProducts,
+  SharedPrefKeys.purchasedLatest,
 ];

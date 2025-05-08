@@ -6,7 +6,7 @@ import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/device/device_reponse_model.dart';
 
 abstract class DeviceRemoteDataSource {
-  Future<String> registerDevice(); // Trả về deviceId từ API
+  Future<RegisterLocationData> registerDevice(); // Trả về deviceId từ API
 }
 
 final logger = Logger('DeviceRemoteDataSourceImpl');
@@ -17,7 +17,7 @@ class DeviceRemoteDataSourceImpl implements DeviceRemoteDataSource {
   DeviceRemoteDataSourceImpl({required this.dioClient});
 
   @override
-  Future<String> registerDevice() async {
+  Future<RegisterLocationData> registerDevice() async {
     try {
       // Logic gọi API giống trong splash_screen.dart cũ
       // Sử dụng dioClient đã được inject với interceptor
@@ -28,12 +28,10 @@ class DeviceRemoteDataSourceImpl implements DeviceRemoteDataSource {
         RegisterLocationData.fromJson,
       );
 
-      logger.info('data: ${data.status}');
-
       if (data.status == ApiStatus.success && data.data != null) {
         // Giả sử API trả về JSON có trường 'device_id' hoặc tương tự
         // Cần parse response.data một cách an toàn
-        return data.data!.deviceId;
+        return data.data!;
       } else {
         throw ServerException(
           message:

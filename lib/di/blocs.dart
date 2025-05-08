@@ -1,8 +1,24 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
@@ -27,6 +43,9 @@ import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -45,6 +64,15 @@ import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
 
+// Kinesis Usecases
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
+
 final sl = GetIt.instance;
 
 void initBlocDependencies() {
@@ -57,9 +85,7 @@ void initBlocDependencies() {
   sl.registerFactory(() => ChooseYearOfBirthCubit());
   sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(
-    () => CreateProfileLoadingCubit(
-      createProfileUsecase: sl<CreateProfileUsecase>(),
-    ),
+    () => CreateProfileLoadingCubit(profileCubit: sl<ProfileCubit>()),
   );
 
   // Auth & Account Blocs/Cubits
@@ -67,6 +93,7 @@ void initBlocDependencies() {
     () => UserCubit(
       logoutUsecase: sl<LogoutUsecase>(),
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
     ),
   );
   sl.registerFactory(
@@ -76,6 +103,9 @@ void initBlocDependencies() {
       loginWithLastLoginUsecase: sl<LoginWithLastLoginUsecase>(),
       getLastLoginUsecase: sl<GetLastLoginUsecase>(),
       getUserSocialUsecase: sl<GetUserSocialUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      verifyCodUserCrmUsecase: sl<VerifyCodUserCrmUseCase>(),
     ),
   );
   sl.registerFactory(
@@ -94,6 +124,8 @@ void initBlocDependencies() {
       registerDeviceUseCase: sl<RegisterDeviceUseCase>(),
       appCubit: sl<AppCubit>(),
       userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
     ),
   );
 
@@ -126,6 +158,68 @@ void initBlocDependencies() {
       verifyOtpUsecase: sl<VerifyOtpUsecase>(),
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => OnboardingCubit(
+      getLanguageUseCase: sl<GetLanguageUseCase>(),
+      signUpSkipUsecase: sl<SignUpSkipUsecase>(),
+      userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => LeaveContactCubit(
+      saveContactUsecase: sl<SaveContactUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => ProfileCubit(
+      getListProfileUsecase: sl<GetListProfileUsecase>(),
+      createProfileUsecase: sl<CreateProfileUsecase>(),
+      getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
+      activeCourseUsecase: sl<ActiveCourseUsecase>(),
+      putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(() => VerifyParentCubit());
+
+  sl.registerLazySingleton(
+    () => PurchasedCubit(
+      initialPurchasedUsecase: sl<InitialPurchasedUsecase>(),
+      getProductsUsecase: sl<GetProductsUsecase>(),
+      purchaseUsecase: sl<PurchaseUsecase>(),
+      listenToPurchaseErrorsUseCase: sl<ListenToPurchaseErrorsUseCase>(),
+      disposePurchasedUseCase: sl<DisposePurchasedUseCase>(),
+      listenToPurchaseUpdatesUseCase: sl<ListenToPurchaseUpdatesUseCase>(),
+      verifyPurchasedUsecase: sl<VerifyPurchasedUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
+      userCubit: sl<UserCubit>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => PurchasedViewCubit(purchasedCubit: sl<PurchasedCubit>()),
+  );
+
+  sl.registerFactory(
+    () => ActiveLicenseCubit(
+      verifyLicenseCodeUseCase: sl<VerifyLicenseCodeUseCase>(),
+      checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      signUpUsecase: sl<SignUpUsecase>(),
+      linkCodToThisAccountUseCase: sl<LinkCodToThisAccountUseCase>(),
+      linkCodToAccountUseCase: sl<LinkCodToAccountUseCase>(),
+      loginUsecase: sl<LoginUsecase>(),
+      userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+      sendOtpUsecase: sl<SendOtpUsecase>(),
+      verifyOtpUsecase: sl<VerifyOtpUsecase>(),
     ),
   );
 

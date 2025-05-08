@@ -29,13 +29,33 @@ class DioInterceptor extends Interceptor {
   }
 
   // Hàm private để lấy dữ liệu chung
-  Future<Map<String, dynamic>> _getCommonRequestData() async {
+  Future<Map<String, dynamic>> _getCommonRequestData(
+    RequestOptions options,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    // Sử dụng SharedPrefKeys.accessToken nếu bạn đã định nghĩa nó
-    final String? accessToken = prefs.getString(
-      SharedPrefKeys.token,
-    ); // Hoặc SharedPrefKeys.accessToken
+
+    String? accessToken;
+    // Ưu tiên token được truyền trực tiếp trong queryParameters của request
+    final String? externalToken = options.queryParameters['token'] as String?;
+
+    if (externalToken != null && externalToken.isNotEmpty) {
+      accessToken = externalToken;
+      _logger.info(
+        'Using externally provided token from queryParameters: "$accessToken"',
+      );
+    } else {
+      // Nếu không có token bên ngoài, lấy từ SharedPreferences
+      accessToken = prefs.getString(SharedPrefKeys.token);
+      if (accessToken != null && accessToken.isNotEmpty) {
+        _logger.info('Using token from SharedPreferences: "$accessToken"');
+      } else {
+        _logger.info(
+          'No token provided externally or found in SharedPreferences.',
+        );
+      }
+    }
+
     String? deviceId = await _getDeviceId();
     String subversion = packageInfo.version;
 
@@ -88,14 +108,14 @@ class DioInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // --- 1. Lấy thông tin chung từ hàm helper ---
-    final commonParams = await _getCommonRequestData();
+    // --- 1. Lấy thông tin chung từ hàm helper, đã xử lý logic token ---
+    final commonParams = await _getCommonRequestData(options);
 
     // --- 2. Luôn thêm thông tin chung vào queryParameters ---
     options.queryParameters.addAll(commonParams);
     _logger.info(
-      'Common params added to queryParameters: $commonParams',
-    ); // Ghi log để xác nhận
+      'Common params added to queryParameters. Final queryParameters: ${options.queryParameters}',
+    );
 
     // --- 3. Ghi log dữ liệu body nếu có (không thay đổi) ---
     if (options.data != null) {

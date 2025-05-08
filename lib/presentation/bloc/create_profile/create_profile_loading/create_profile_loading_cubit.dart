@@ -3,55 +3,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'dart:async';
 
-import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 
 part 'create_profile_loading_state.dart';
 
 final logger = Logger('CreateProfileLoadingCubit');
 
 class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
-  final CreateProfileUsecase _createProfileUsecase;
+  final ProfileCubit _profileCubit;
 
-  CreateProfileLoadingCubit({
-    required CreateProfileUsecase createProfileUsecase,
-  }) : _createProfileUsecase = createProfileUsecase,
+  CreateProfileLoadingCubit({required ProfileCubit profileCubit})
+    : _profileCubit = profileCubit,
 
-       super(
-         const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
-       );
+      super(
+        const CreateProfileLoadingState(loadingProcess: LoadingProcess.init),
+      );
 
   Timer? _progressTimer;
-  Timer? _loadingTimer;
 
-  void startLoading(String name, int yearOfBirth) async {
+  void startLoading(String name, int yearOfBirth, int levelId) async {
     try {
       // Bắt đầu từ trạng thái init
       _updateLoadingProcess(LoadingProcess.init);
 
       // Danh sách các trạng thái theo thứ tự
-      await _createProfile(name, yearOfBirth);
+      await _createProfile(name, yearOfBirth, levelId);
 
       _updateLoadingProcess(LoadingProcess.done);
     } catch (e) {}
   }
 
-  Future<void> _createProfile(String name, int yearOfBirth) async {
+  Future<void> _createProfile(String name, int yearOfBirth, int levelId) async {
     try {
-      final result = await _createProfileUsecase.call(
-        CreateProfileUsecaseParams(name: name, yearOfBirth: yearOfBirth),
-      );
+      await _profileCubit.addProfile(name, yearOfBirth, levelId);
 
-      if (result.isLeft()) {
-        result.fold(
-          (failure) {
-            logger.severe('API error: ${failure.message}');
-            throw Exception(failure.message);
-          },
-          (_) {}, // Không cần xử lý trường hợp thành công ở đây
-        );
-      } else {
-        _updateLoadingProcess(LoadingProcess.createProfile);
-      }
+      _updateLoadingProcess(LoadingProcess.createProfile);
     } catch (e) {
       logger.severe('error: $e');
       emit(state.copyWith(callApiProfileError: e.toString()));
@@ -67,9 +53,6 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
     switch (loadingProcess) {
       case LoadingProcess.init:
         targetProgress = 0.1;
-        break;
-      case LoadingProcess.createAccount:
-        targetProgress = 0.25;
         break;
       case LoadingProcess.createProfile:
         targetProgress = 0.5;
@@ -118,7 +101,6 @@ class CreateProfileLoadingCubit extends Cubit<CreateProfileLoadingState> {
   @override
   Future<void> close() {
     _progressTimer?.cancel();
-    _loadingTimer?.cancel();
     return super.close();
   }
 }

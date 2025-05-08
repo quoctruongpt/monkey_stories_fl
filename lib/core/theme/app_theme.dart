@@ -8,6 +8,7 @@ class AppTheme {
   static const Color successColor = Color(0xFF92C73D);
   static const Color blueLightColor = Color(0xFFEDF9FF);
   static const Color skyLightColor = Color(0xFFD2F1FF);
+  static const Color lightGrayColor = Color(0xFFD9D9D9);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);
@@ -15,6 +16,10 @@ class AppTheme {
   static const Color textGrayColor = Color(0xFFA3A3A3);
   static const Color textGrayLightColor = Color(0xFFAFAFAF);
   static const Color textBlueColor = Color(0xFF3393FF);
+  static const Color textPrimaryColor = Color(0xFF00BBFF);
+  static const Color azureColor = Color(0xFF00AAFF);
+  static const Color pinkColor = Color(0xFFFF6CA5);
+  static const Color orangeColor = Color(0xFFFFAE01);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);
@@ -43,6 +48,11 @@ class AppTheme {
     textTheme: const TextTheme(
       titleMedium: TextStyle(
         fontSize: 36,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 32,
         fontWeight: FontWeight.w800,
         color: textColor,
       ),
@@ -125,7 +135,7 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textSecondaryColor,
           fontFamily: 'Nunito',
-          decoration: TextDecoration.underline,
+          decoration: TextDecoration.none,
         ),
       ),
     ),
