@@ -132,7 +132,7 @@ class AuthRepositoryImpl implements AuthRepository {
           isSocial: false,
         ),
       );
-
+      await localDataSource.cacheHasLoggedBefore();
       return const Right(true);
     }
 
@@ -217,6 +217,7 @@ class AuthRepositoryImpl implements AuthRepository {
           isSocial: isSocial,
         ),
       );
+      await localDataSource.cacheHasLoggedBefore();
       return const Right(null);
     } catch (e) {
       return const Left(CacheFailure());
@@ -469,6 +470,23 @@ class AuthRepositoryImpl implements AuthRepository {
     }
 
     return Left(ServerFailure(message: result.message));
+  }
+
+  @override
+  Future<Either<Failure, bool>> getHasLoggedBefore() async {
+    try {
+      final result = await localDataSource.getHasLoggedBefore();
+      if (result == true) {
+        return const Right(true);
+      }
+      return const Left(
+        ServerFailure(message: 'Người dùng chưa từng đăng nhập'),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(message: 'Lấy thông tin người dùng thất bại'),
+      );
+    }
   }
 }
 

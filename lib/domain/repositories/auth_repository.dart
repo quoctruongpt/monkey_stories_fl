@@ -58,4 +58,6 @@ abstract class AuthRepository {
     String? email,
     required bool isSocial,
   });
+
+  Future<Either<Failure, bool>> getHasLoggedBefore();
 }

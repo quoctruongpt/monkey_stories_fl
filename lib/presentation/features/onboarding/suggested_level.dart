@@ -68,14 +68,23 @@ class SuggestedLevel extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: Spacing.xxl),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: List.generate(
-                          phase.length,
-                          (index) => _LevelColumnWidget(
-                            level: index + 1,
-                            isSelected: index == suggestedLearningPhase - 1,
+                      Padding(
+                        padding: const EdgeInsets.only(left: Spacing.md),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: List.generate(
+                            phase.length + 1,
+                            (index) => Row(
+                              children: [
+                                _LevelColumnWidget(
+                                  level: index + 1,
+                                  isSelected:
+                                      index == suggestedLearningPhase - 1,
+                                ),
+                                const SizedBox(width: Spacing.md),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -221,7 +230,7 @@ class _LevelColumnWidgetState extends State<_LevelColumnWidget>
                 ),
               ),
               child: Text(
-                '${widget.level}',
+                widget.level <= phase.length ? '${widget.level}' : '',
                 style: const TextStyle(fontSize: 24, color: Colors.white),
               ),
             ),
@@ -231,9 +240,11 @@ class _LevelColumnWidgetState extends State<_LevelColumnWidget>
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  AppLocalizations.of(
-                    context,
-                  ).translate(phase[widget.level - 1].name),
+                  widget.level <= phase.length
+                      ? AppLocalizations.of(
+                        context,
+                      ).translate(phase[widget.level - 1].name)
+                      : '',
                   style: TextStyle(
                     color: widget.isSelected ? Colors.orange : Colors.lightBlue,
                     fontWeight:

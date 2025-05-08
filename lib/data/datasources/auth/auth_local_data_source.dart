@@ -15,6 +15,8 @@ abstract class AuthLocalDataSource {
   Future<void> cacheLastLogin(LastLoginModel lastLogin);
   Future<LastLoginModel?> getLastLogin();
   Future<void> clearAllData();
+  Future<void> cacheHasLoggedBefore();
+  Future<bool> getHasLoggedBefore();
 }
 
 final logger = Logger('AuthLocalDataSourceImpl');
@@ -107,6 +109,24 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         return null;
       }
       return LastLoginModel.fromJson(jsonDecode(lastLoginJson));
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<void> cacheHasLoggedBefore() async {
+    try {
+      await sharedPreferences.setBool(SharedPrefKeys.hasLoggedBefore, true);
+    } catch (e) {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<bool> getHasLoggedBefore() async {
+    try {
+      return sharedPreferences.getBool(SharedPrefKeys.hasLoggedBefore) ?? false;
     } catch (e) {
       throw CacheException();
     }

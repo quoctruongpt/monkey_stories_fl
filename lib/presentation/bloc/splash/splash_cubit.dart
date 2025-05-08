@@ -13,6 +13,7 @@ import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
@@ -21,6 +22,7 @@ class SplashCubit extends Cubit<SplashState> {
   final UserCubit _userCubit;
   final ProfileCubit _profileCubit;
   final PurchasedCubit _purchasedCubit;
+  final GetHasLoggedBeforeUsecase _getHasLoggedBeforeUsecase;
 
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 3;
@@ -32,12 +34,14 @@ class SplashCubit extends Cubit<SplashState> {
     required UserCubit userCubit,
     required ProfileCubit profileCubit,
     required PurchasedCubit purchasedCubit,
+    required GetHasLoggedBeforeUsecase getHasLoggedBeforeUsecase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit,
        _userCubit = userCubit,
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
+       _getHasLoggedBeforeUsecase = getHasLoggedBeforeUsecase,
        super(SplashInitial());
 
   Future<void> runApp() async {
@@ -141,6 +145,10 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<SplashState> _handleLogicUnauthenticated() async {
+    final hasLoggedBefore = await _getHasLoggedBeforeUsecase.call(NoParams());
+    if (hasLoggedBefore.isRight()) {
+      return SplashAuthenticatedBefore();
+    }
     return SplashUnauthenticated();
   }
 }

@@ -14,6 +14,7 @@ class SharedPrefKeys {
   static const String countryCode = 'countryCode';
   static const String purchasedProducts = 'purchasedProducts';
   static const String purchasedLatest = 'purchasedLatest';
+  static const String hasLoggedBefore = 'hasLoggedBefore';
 }
 
 final keysToKeep = [
@@ -24,4 +25,5 @@ final keysToKeep = [
   SharedPrefKeys.countryCode,
   SharedPrefKeys.purchasedProducts,
   SharedPrefKeys.purchasedLatest,
+  SharedPrefKeys.hasLoggedBefore,
 ];

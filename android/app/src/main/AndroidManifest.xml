@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     
     <application
-        android:label="monkey_stories"
+        android:label="Monkey Stories"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data

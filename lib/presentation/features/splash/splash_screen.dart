@@ -28,8 +28,10 @@ class SplashScreen extends StatelessWidget {
     switch (state) {
       case SplashAuthenticated():
         GoRouter.of(context).replace(AppRoutePaths.home);
+        return;
       case SplashUnauthenticated():
         GoRouter.of(context).replace(AppRoutePaths.intro);
+        return;
       case SplashNeedCreateAccount():
         showCustomNoticeDialog(
           context: context,
@@ -49,8 +51,13 @@ class SplashScreen extends StatelessWidget {
           },
           isCloseable: false,
         );
+        return;
+      case SplashAuthenticatedBefore():
+        GoRouter.of(context).replace(AppRoutePaths.login);
+        return;
       case SplashError():
         _onSplashError(context);
+        return;
     }
   }
 

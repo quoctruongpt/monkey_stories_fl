@@ -9,6 +9,7 @@ import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
@@ -174,6 +175,9 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => VerifyCodUserCrmUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetHasLoggedBeforeUsecase(sl<AuthRepository>()),
   );
   // Add other usecase registrations here...
 }
