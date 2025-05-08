@@ -35,10 +35,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }) : _verifyOtpUsecase = verifyOtpUsecase,
        _sendOtpUsecase = sendOtpUsecase,
        _changePasswordUsecase = changePasswordUsecase,
-       super(const ForgotPasswordState());
+       super(ForgotPasswordState());
 
   void chooseMethod(ForgotPasswordType method) {
     emit(state.copyWith(method: method));
+  }
+
+  void countryCodeInit(String countryCode) {
+    final phone = PhoneValidator.pure(countryCode: countryCode);
+    emit(state.copyWith(phone: phone));
   }
 
   void countryCodeChanged(String countryCode) {

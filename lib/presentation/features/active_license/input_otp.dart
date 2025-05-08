@@ -121,21 +121,33 @@ class _ActiveLicenseInputOtpState extends State<ActiveLicenseInputOtp> {
                           ),
 
                           Center(
-                            child:
-                                state.otpResendTime == 0
-                                    ? TextButton(
-                                      onPressed: () {
+                            child: TextButton(
+                              onPressed:
+                                  state.otpResendTime == 0
+                                      ? () {
                                         context
                                             .read<ActiveLicenseCubit>()
                                             .sendOtp();
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context).translate(
-                                          'app.active_license.input_otp.resend',
-                                        ),
+                                      }
+                                      : null,
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: AppLocalizations.of(
+                                        context,
+                                      ).translate(
+                                        'app.active_license.input_otp.resend',
                                       ),
-                                    )
-                                    : null,
+                                    ),
+                                    if (state.otpResendTime > 0)
+                                      TextSpan(
+                                        text: ' (${state.otpResendTime}s)',
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
 
                           const Spacer(),

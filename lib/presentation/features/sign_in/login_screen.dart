@@ -78,9 +78,11 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         // Check if the state is still mounted
         context.read<LoginCubit>().loadLastLogin(widget.initialUsername);
-        context.read<LoginCubit>().passwordChanged(
-          widget.initialPassword ?? '',
-        );
+        if (widget.initialPassword != null) {
+          context.read<LoginCubit>().passwordChanged(
+            widget.initialPassword ?? '',
+          );
+        }
         if (widget.initialPassword != null && widget.initialUsername != null) {
           _loginPressed();
         }
@@ -269,7 +271,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         context,
                                       ).translate('login.username'),
                                       errorText:
-                                          state.username.displayError != null
+                                          !state.username.isPure &&
+                                                  state.username.displayError !=
+                                                      null
                                               ? AppLocalizations.of(
                                                 context,
                                               ).translate(
@@ -313,7 +317,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   decoration: InputDecoration(
                                     labelText: translate('login.password'),
                                     errorText:
-                                        state.password.displayError != null
+                                        !state.password.isPure &&
+                                                state.password.displayError !=
+                                                    null
                                             ? AppLocalizations.of(
                                               context,
                                             ).translate(

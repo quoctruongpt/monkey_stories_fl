@@ -20,7 +20,12 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
   }) : _saveContactUsecase = saveContactUsecase,
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
-       super(const LeaveContactState());
+       super(LeaveContactState());
+
+  void countryCodeInit(String countryCode) {
+    final phone = PhoneValidator.pure(countryCode: countryCode);
+    emit(state.copyWith(phone: phone));
+  }
 
   void countryCodeChanged(String countryCode) {
     final phone = PhoneValidator.dirty(

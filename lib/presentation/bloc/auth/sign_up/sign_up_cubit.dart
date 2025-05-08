@@ -38,7 +38,12 @@ class SignUpCubit extends Cubit<SignUpState> {
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
        _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
-       super(const SignUpState(step: StepSignUp.phone, isShowPassword: false));
+       super(SignUpState(step: StepSignUp.phone, isShowPassword: false));
+
+  void countryCodeInit(String countryCode) {
+    final phone = PhoneValidator.pure(countryCode: countryCode);
+    emit(state.copyWith(phone: phone));
+  }
 
   void countryCodeChanged(String countryCode) {
     final phone = PhoneValidator.dirty(

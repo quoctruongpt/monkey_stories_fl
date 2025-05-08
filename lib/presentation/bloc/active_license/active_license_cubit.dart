@@ -71,7 +71,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
        _verifyOtpUsecase = verifyOtpUsecase,
        _profileCubit = profileCubit,
        _userCubit = userCubit,
-       super(const ActiveLicenseState());
+       super(ActiveLicenseState());
 
   void init(LicenseCodeInfoEntity? licenseInfo) {
     if (licenseInfo != null) {
@@ -119,6 +119,15 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     emit(state.copyWith(clearLinkAccountError: true));
   }
 
+  void clearPassword() {
+    emit(
+      state.copyWith(
+        password: const Password.pure(),
+        rePassword: const ConfirmedPassword.pure(),
+      ),
+    );
+  }
+
   void closeMergeLifetimeWarning() {
     emit(state.copyWith(showMergeLifetimeWarning: PositionShowWarning.none));
   }
@@ -138,6 +147,11 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
         ),
       ),
     );
+  }
+
+  void countryCodeInit(String countryCode) {
+    final phone = PhoneValidator.pure(countryCode: countryCode);
+    emit(state.copyWith(phone: phone));
   }
 
   void countryCodeChanged(String countryCode) {

@@ -126,7 +126,7 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                                 onCountryInit:
                                     context
                                         .read<ForgotPasswordCubit>()
-                                        .countryCodeChanged,
+                                        .countryCodeInit,
                                 initialCountryCode: 'VN',
                                 errorText: AppLocalizations.of(
                                   context,

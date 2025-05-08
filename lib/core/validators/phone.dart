@@ -19,8 +19,10 @@ class PhoneNumberInput {
 }
 
 class PhoneValidator extends FormzInput<PhoneNumberInput, String> {
-  const PhoneValidator.pure()
-    : super.pure(const PhoneNumberInput(countryCode: '', phoneNumber: ''));
+  PhoneValidator.pure({String? countryCode})
+    : super.pure(
+        PhoneNumberInput(countryCode: countryCode ?? '', phoneNumber: ''),
+      );
 
   const PhoneValidator.dirty(PhoneNumberInput value) : super.dirty(value);
 

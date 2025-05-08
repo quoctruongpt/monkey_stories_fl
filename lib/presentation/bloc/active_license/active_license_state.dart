@@ -26,13 +26,13 @@ class ActiveLicenseState extends Equatable {
   final PositionShowWarning showMergeLifetimeWarning;
   final bool isShowMergeToLifetimeAccountWarning;
 
-  const ActiveLicenseState({
+  ActiveLicenseState({
     this.isShowScanner = false,
     this.licenseCode = const LicenseCodeValidator.pure(),
     this.isLoading = false,
     this.verifyLicenseError,
     this.licenseInfo,
-    this.phone = const PhoneValidator.pure(),
+    PhoneValidator? phone,
     this.phoneInfo,
     this.isNewPhoneValid,
     this.checkPhoneError,
@@ -47,7 +47,7 @@ class ActiveLicenseState extends Equatable {
     this.showMergeLifetimeWarning = PositionShowWarning.none,
     this.isShowMergeToLifetimeAccountWarning = false,
     this.isDone = false,
-  });
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   ActiveLicenseState copyWith({
     bool? isShowScanner,

@@ -1,13 +1,13 @@
 part of 'leave_contact_cubit.dart';
 
 class LeaveContactState extends Equatable {
-  const LeaveContactState({
-    this.phone = const PhoneValidator.pure(),
+  LeaveContactState({
+    PhoneValidator? phone,
     this.isSubmitting = false,
     this.isSuccess = false,
     this.errorMessage,
     this.role,
-  });
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   final PhoneValidator phone;
   final LeaveContactRole? role;

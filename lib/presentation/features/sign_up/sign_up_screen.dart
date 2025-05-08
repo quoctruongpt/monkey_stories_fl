@@ -312,7 +312,7 @@ class _SignUpState extends State<SignUp> {
                                               onCountryInit: (countryCode) {
                                                 context
                                                     .read<SignUpCubit>()
-                                                    .countryCodeChanged(
+                                                    .countryCodeInit(
                                                       countryCode,
                                                     );
                                               },

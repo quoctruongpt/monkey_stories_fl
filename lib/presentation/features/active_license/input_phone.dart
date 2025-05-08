@@ -77,7 +77,7 @@ class _ActiveLicenseInputPhoneState extends State<ActiveLicenseInputPhone> {
                             onCountryInit:
                                 context
                                     .read<ActiveLicenseCubit>()
-                                    .countryCodeChanged,
+                                    .countryCodeInit,
                             onChanged:
                                 context.read<ActiveLicenseCubit>().phoneChanged,
                             onCountryChange:

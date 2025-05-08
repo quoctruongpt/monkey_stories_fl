@@ -100,7 +100,7 @@ class LeaveContact extends StatelessWidget {
                                   onCountryInit: (value) {
                                     context
                                         .read<LeaveContactCubit>()
-                                        .countryCodeChanged(value);
+                                        .countryCodeInit(value);
                                   },
                                   errorText: AppLocalizations.of(
                                     context,

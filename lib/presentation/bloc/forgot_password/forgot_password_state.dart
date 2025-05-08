@@ -9,9 +9,9 @@ class FormValues {
 }
 
 class ForgotPasswordState extends Equatable {
-  const ForgotPasswordState({
+  ForgotPasswordState({
     this.method = ForgotPasswordType.phone,
-    this.phone = const PhoneValidator.pure(),
+    PhoneValidator? phone,
     this.email = const EmailValidator.pure(),
     this.otp = const OtpValidator.pure(),
     this.isLoading = false,
@@ -26,7 +26,7 @@ class ForgotPasswordState extends Equatable {
     this.otpBlockTime,
     this.isShowOtpBlockDialog = false,
     this.formValues = const FormValues(),
-  });
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   // Phương thức gửi OTP
   final ForgotPasswordType method;

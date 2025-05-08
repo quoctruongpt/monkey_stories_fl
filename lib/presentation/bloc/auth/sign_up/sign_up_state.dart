@@ -16,10 +16,10 @@ class SignUpState extends Equatable {
   final String? signUpErrorMessage;
   final String? popupErrorMessage;
 
-  const SignUpState({
+  SignUpState({
     required this.step,
     required this.isShowPassword,
-    this.phone = const PhoneValidator.pure(),
+    PhoneValidator? phone,
     this.password = const Password.pure(),
     this.confirmPassword = const Password.pure(),
     this.isCheckingPhone = false,
@@ -31,7 +31,7 @@ class SignUpState extends Equatable {
     this.isSignUpLoading = false,
     this.signUpErrorMessage,
     this.popupErrorMessage,
-  });
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   SignUpState copyWith({
     StepSignUp? step,

@@ -51,7 +51,7 @@ class LoginCubit extends Cubit<LoginState> {
        _restorePurchasedUsecase = restorePurchasedUsecase,
        _profileCubit = profileCubit,
        _verifyCodUserCrmUsecase = verifyCodUserCrmUsecase,
-       super(const LoginState(username: Username.dirty('')));
+       super(const LoginState());
 
   void loadLastLogin(String? initialUsername) async {
     try {

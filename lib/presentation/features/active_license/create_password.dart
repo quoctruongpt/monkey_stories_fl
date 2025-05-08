@@ -24,8 +24,7 @@ class _ActiveLicenseCreatePasswordState
   @override
   void initState() {
     super.initState();
-    context.read<ActiveLicenseCubit>().passwordChanged('');
-    context.read<ActiveLicenseCubit>().rePasswordChanged('');
+    context.read<ActiveLicenseCubit>().clearPassword();
   }
 
   @override

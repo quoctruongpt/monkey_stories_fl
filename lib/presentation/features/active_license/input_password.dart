@@ -26,7 +26,7 @@ class _ActiveLicenseInputPasswordState
   @override
   void initState() {
     super.initState();
-    context.read<ActiveLicenseCubit>().passwordChanged('');
+    context.read<ActiveLicenseCubit>().clearPassword();
   }
 
   @override

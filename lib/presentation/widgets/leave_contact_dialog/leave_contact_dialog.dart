@@ -173,7 +173,7 @@ class LeaveContactDialog extends StatelessWidget {
                       },
                       initialCountryCode: 'VN',
                       onCountryInit: (value) {
-                        context.read<LeaveContactCubit>().countryCodeChanged(
+                        context.read<LeaveContactCubit>().countryCodeInit(
                           value,
                         );
                       },
