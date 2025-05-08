@@ -63,7 +63,7 @@ class _OnboardLoadingState extends State<OnboardLoading> {
             (previous, current) => previous.progress != current.progress,
         listener: (context, state) {
           if (state.progress == 1) {
-            context.go(AppRoutePaths.leaveContact);
+            context.go(AppRoutePaths.obdPurchase);
           }
         },
         child: Scaffold(

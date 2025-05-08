@@ -30,7 +30,7 @@ class ObdPurchase extends StatelessWidget {
   const ObdPurchase({super.key});
 
   void _onXPressed(BuildContext context) {
-    context.go(AppRoutePaths.home);
+    context.go(AppRoutePaths.leaveContact);
   }
 
   @override

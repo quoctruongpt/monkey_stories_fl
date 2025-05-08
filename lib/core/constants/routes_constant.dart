@@ -25,7 +25,6 @@ class AppRoutePaths {
   static const String chooseLevelOBD = '/choose_level_obd';
   static const String chooseLanguage = '/choose_language';
   static const String suggestedLevel = '/suggested_level';
-  static const String surveyResults = '/survey_results';
   static const String obdPurchase = '/obd_purchase';
   static const String leaveContact = '/leave_contact';
   static const String onboardLoading = '/onboard_loading';

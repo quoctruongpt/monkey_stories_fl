@@ -19,6 +19,7 @@ class AppTheme {
   static const Color textPrimaryColor = Color(0xFF00BBFF);
   static const Color azureColor = Color(0xFF00AAFF);
   static const Color pinkColor = Color(0xFFFF6CA5);
+  static const Color orangeColor = Color(0xFFFFAE01);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);

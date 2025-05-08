@@ -272,7 +272,7 @@ class _AppButtonState extends State<AppButton> {
       case ButtonType.secondary:
         return widget.disabled
             ? AppTheme.textGrayColor
-            : AppTheme.textColor; // Màu chữ đen
+            : AppTheme.primaryColor; // Màu chữ đen
     }
   }
 

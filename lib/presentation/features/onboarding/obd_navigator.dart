@@ -10,7 +10,6 @@ import 'package:monkey_stories/presentation/features/onboarding/choose_year_of_b
 import 'package:monkey_stories/presentation/features/onboarding/leave_contact.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_purchase.dart';
 import 'package:monkey_stories/presentation/features/onboarding/onboard_loading.dart';
-import 'package:monkey_stories/presentation/features/onboarding/survey_results.dart';
 import 'package:monkey_stories/presentation/features/onboarding/suggested_level.dart';
 
 class OBDDNavigator extends StatelessWidget {
@@ -49,11 +48,6 @@ final ShellRoute obdRoutes = ShellRoute(
       path: AppRoutePaths.suggestedLevel,
       name: AppRouteNames.suggestedLevel,
       builder: (context, state) => const SuggestedLevel(),
-    ),
-    GoRoute(
-      path: AppRoutePaths.surveyResults,
-      name: AppRouteNames.surveyResults,
-      builder: (context, state) => const SurveyResults(),
     ),
     GoRoute(
       path: AppRoutePaths.obdPurchase,
