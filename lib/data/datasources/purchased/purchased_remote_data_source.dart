@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
@@ -198,6 +199,8 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
 
   @override
   Future<void> completePurchase(String transactionId) async {
-    await flutterInappPurchase.finishTransactionIOS(transactionId);
+    if (Platform.isIOS) {
+      await flutterInappPurchase.finishTransactionIOS(transactionId);
+    }
   }
 }
