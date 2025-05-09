@@ -132,11 +132,18 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
           state.copyWith(isLoadingProducts: false, isGetProductsSuccess: false),
         ),
         (products) {
+          final uniqueProducts = <PurchasedPackage>[];
+          final seenIds = <String>{};
+          for (final product in products) {
+            if (seenIds.add(product.id)) {
+              uniqueProducts.add(product);
+            }
+          }
           emit(
             state.copyWith(
               isLoadingProducts: false,
               isGetProductsSuccess: true,
-              products: products,
+              products: uniqueProducts,
             ),
           );
         },

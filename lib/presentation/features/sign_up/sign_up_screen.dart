@@ -151,7 +151,7 @@ class _SignUpState extends State<SignUp> {
         titleText: AppLocalizations.of(
           context,
         ).translate('sign_up.popup.title'),
-        messageText: errorMessage,
+        messageText: AppLocalizations.of(context).translate(errorMessage),
         imageAsset: 'assets/images/monkey_sad.png',
         primaryActionText: AppLocalizations.of(
           context,
