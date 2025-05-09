@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
+import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
@@ -29,6 +30,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
   final ListenToPurchaseUpdatesUseCase _listenToPurchaseUpdatesUseCase;
   final VerifyPurchasedUsecase _verifyPurchasedUsecase;
   final RestorePurchasedUsecase _restorePurchasedUsecase;
+  final CompletePurchaseUsecase _completePurchaseUsecase;
 
   final UserCubit _userCubit;
 
@@ -45,6 +47,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     required VerifyPurchasedUsecase verifyPurchasedUsecase,
     required RestorePurchasedUsecase restorePurchasedUsecase,
     required UserCubit userCubit,
+    required CompletePurchaseUsecase completePurchaseUsecase,
   }) : _initialPurchasedUsecase = initialPurchasedUsecase,
        _getProductsUsecase = getProductsUsecase,
        _purchaseUsecase = purchaseUsecase,
@@ -54,6 +57,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
        _verifyPurchasedUsecase = verifyPurchasedUsecase,
        _restorePurchasedUsecase = restorePurchasedUsecase,
        _userCubit = userCubit,
+       _completePurchaseUsecase = completePurchaseUsecase,
        super(const PurchasedState()) {
     _listenForErrors();
     _listenForPurchaseUpdates();
@@ -82,7 +86,10 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
       final result = await _verifyPurchasedUsecase(
         VerifyPurchasedParams(
           productId: purchaseItem.productId,
-          transactionReceipt: purchaseItem.purchaseToken,
+          transactionReceipt:
+              purchaseItem.purchaseToken.isNotEmpty
+                  ? purchaseItem.purchaseToken
+                  : purchaseItem.transactionReceipt,
           price: state.purchasingItem?.price ?? 0,
           currency: state.purchasingItem?.currency ?? '',
         ),
@@ -92,13 +99,18 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
         (failure) => emit(
           state.copyWith(isPurchasing: false, errorMessage: failure.message),
         ),
-        (success) => emit(
-          state.copyWith(
-            isPurchasing: false,
-            isVerifyPurchasedSuccess: true,
-            isNeedRegister: _userCubit.state.user?.loginType == LoginType.skip,
-          ),
-        ),
+        (success) async {
+          await _completePurchaseUsecase(purchaseItem.transactionId);
+          emit(
+            state.copyWith(
+              isPurchasing: false,
+              isVerifyPurchasedSuccess: true,
+              isNeedRegister:
+                  _userCubit.state.user == null ||
+                  _userCubit.state.user?.loginType == LoginType.skip,
+            ),
+          );
+        },
       );
     });
   }

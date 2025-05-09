@@ -10,6 +10,7 @@ import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecas
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
@@ -203,6 +204,7 @@ void initBlocDependencies() {
       verifyPurchasedUsecase: sl<VerifyPurchasedUsecase>(),
       restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
       userCubit: sl<UserCubit>(),
+      completePurchaseUsecase: sl<CompletePurchaseUsecase>(),
     ),
   );
 

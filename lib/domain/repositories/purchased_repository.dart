@@ -21,4 +21,7 @@ abstract class PurchasedRepository {
   Future<void> restorePurchase();
   // Dọn dẹp
   void dispose();
+
+  // Hoàn tất mua hàng
+  Future<void> completePurchase(String transactionId);
 }

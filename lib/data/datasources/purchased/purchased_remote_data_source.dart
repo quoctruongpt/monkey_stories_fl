@@ -37,6 +37,7 @@ abstract class PurchasedRemoteDataSource {
   Stream<PurchasedItem> get purchaseUpdatedStream;
   // Thêm phương thức dọn dẹp
   void dispose();
+  Future<void> completePurchase(String transactionId);
 }
 
 class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
@@ -193,5 +194,10 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
     _purchaseErrorController.close();
     _purchaseUpdatedSubscription?.cancel();
     _purchaseUpdatedController.close();
+  }
+
+  @override
+  Future<void> completePurchase(String transactionId) async {
+    await flutterInappPurchase.finishTransactionIOS(transactionId);
   }
 }

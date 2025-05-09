@@ -61,7 +61,7 @@ import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
-
+import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
@@ -178,6 +178,9 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => GetHasLoggedBeforeUsecase(sl<AuthRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => CompletePurchaseUsecase(repository: sl<PurchasedRepository>()),
   );
   // Add other usecase registrations here...
 }

@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
@@ -13,8 +14,11 @@ class VerifyPurchasedUsecase extends UseCase<void, VerifyPurchasedParams> {
     VerifyPurchasedParams params,
   ) async {
     try {
-      await purchasedRepository.verifyPurchase(params);
-      return right(null);
+      final result = await purchasedRepository.verifyPurchase(params);
+      if (result.status == ApiStatus.success) {
+        return right(null);
+      }
+      return left(ServerFailureWithCode(message: result.message));
     } catch (e) {
       return left(ServerFailureWithCode(message: e.toString()));
     }

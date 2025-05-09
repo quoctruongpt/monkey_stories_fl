@@ -73,7 +73,11 @@ class PurchasedRepositoryImpl extends PurchasedRepository {
     for (var item in result) {
       final response = await remoteDataSource.verifyPurchase(
         packageId: item.productId ?? '',
-        receipt: item.purchaseToken ?? '',
+        receipt:
+            (item.purchaseToken?.isNotEmpty ?? false
+                ? item.purchaseToken
+                : item.transactionReceipt) ??
+            '',
         price: 0,
         currency: '',
       );
@@ -88,5 +92,10 @@ class PurchasedRepositoryImpl extends PurchasedRepository {
   @override
   void dispose() {
     remoteDataSource.dispose();
+  }
+
+  @override
+  Future<void> completePurchase(String transactionId) async {
+    return await remoteDataSource.completePurchase(transactionId);
   }
 }
