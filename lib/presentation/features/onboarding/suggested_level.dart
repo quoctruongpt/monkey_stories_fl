@@ -31,60 +31,63 @@ class SuggestedLevel extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        AppLocalizations.of(
-                          context,
-                        ).translate('app.suggest_level.title'),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          color: AppTheme.azureColor,
-                        ),
-                      ),
-                      Text(
-                        '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase! - 1].name)}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          color: AppTheme.orangeColor,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Spacing.md,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context).translate(
-                            phase[suggestedLearningPhase - 1].description,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(
+                            context,
+                          ).translate('app.suggest_level.title'),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.azureColor,
                           ),
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase! - 1].name)}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            color: AppTheme.orangeColor,
+                          ),
                           textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(height: Spacing.xxl),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: List.generate(
-                            phase.length + 3,
-                            (index) => Flexible(
-                              child: _LevelColumnWidget(
-                                level: index + 1,
-                                isSelected: index == suggestedLearningPhase - 1,
+
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Spacing.md,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context).translate(
+                              phase[suggestedLearningPhase - 1].description,
+                            ),
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(height: Spacing.xxl),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: List.generate(
+                              phase.length + 3,
+                              (index) => Flexible(
+                                child: _LevelColumnWidget(
+                                  level: index + 1,
+                                  isSelected:
+                                      index == suggestedLearningPhase - 1,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
 
