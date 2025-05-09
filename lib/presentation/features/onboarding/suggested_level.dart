@@ -69,21 +69,17 @@ class SuggestedLevel extends StatelessWidget {
                       ),
                       const SizedBox(height: Spacing.xxl),
                       Padding(
-                        padding: const EdgeInsets.only(left: Spacing.md),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: List.generate(
-                            phase.length + 1,
-                            (index) => Row(
-                              children: [
-                                _LevelColumnWidget(
-                                  level: index + 1,
-                                  isSelected:
-                                      index == suggestedLearningPhase - 1,
-                                ),
-                                const SizedBox(width: Spacing.md),
-                              ],
+                            phase.length + 3,
+                            (index) => Flexible(
+                              child: _LevelColumnWidget(
+                                level: index + 1,
+                                isSelected: index == suggestedLearningPhase - 1,
+                              ),
                             ),
                           ),
                         ),
@@ -113,8 +109,9 @@ class SuggestedLevel extends StatelessWidget {
 int getSuggestedLearningPhase(int levelId) {
   switch (levelId) {
     case LevelId.a:
-      return 1;
     case LevelId.b:
+      return 1;
+    case LevelId.e:
       return 2;
     default:
       return 3;
@@ -181,81 +178,107 @@ class _LevelColumnWidgetState extends State<_LevelColumnWidget>
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.width > 600;
+
     return ScaleTransition(
       scale: _scaleAnimation,
-      child: Container(
-        clipBehavior: Clip.none,
-        child: Column(
-          children: [
-            if (widget.isSelected)
+      child: FractionallySizedBox(
+        widthFactor: 0.9,
+        child: Container(
+          clipBehavior: Clip.none,
+          child: Column(
+            children: [
+              if (widget.isSelected)
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final size = constraints.maxWidth * 1.5;
+                    return Container(
+                      clipBehavior: Clip.none,
+                      width: size,
+                      height: size,
+                      alignment: Alignment.center,
+                      child: OverflowBox(
+                        minWidth: size,
+                        maxWidth: size,
+                        minHeight: size,
+                        maxHeight: size,
+                        child: Image.asset(
+                          'assets/images/max_flag.png',
+                          width: size,
+                          height: size,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               Container(
-                clipBehavior: Clip.none,
-                width: 80,
-                height: 120,
-                alignment: Alignment.center,
-                child: OverflowBox(
-                  minWidth: 121,
-                  maxWidth: 121,
-                  minHeight: 120,
-                  maxHeight: 120,
-                  child: Image.asset(
-                    'assets/images/max_flag.png',
-                    width: 121,
-                    height: 120,
-                    fit: BoxFit.cover,
+                height:
+                    isTablet
+                        ? 120.0 + (widget.level * 60)
+                        : 50.0 + (widget.level * 40),
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.only(top: 12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors:
+                        widget.isSelected
+                            ? [
+                              const Color(0xFFFFAE00),
+                              Colors.white,
+                            ] // Màu mờ dần khi được chọn
+                            : widget.level > phase.length
+                            ? [
+                              const Color(0xFFC1EEFF),
+                              Colors.white,
+                            ] // Màu mờ dần mặc định
+                            : [
+                              const Color(0xFF63D3FF),
+                              Colors.white,
+                            ], // Màu mờ dần mặc định
+                    stops: [0.2, 1 - widget.level * 0.05],
                   ),
                 ),
-              ),
-            Container(
-              height: 120.0 + (widget.level * 60),
-              width: 80.0,
-              alignment: Alignment.topCenter,
-              padding: const EdgeInsets.only(top: 12.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.0),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors:
-                      widget.isSelected
-                          ? [
-                            const Color(0xFFFFAE00),
-                            Colors.white,
-                          ] // Màu mờ dần khi được chọn
-                          : [
-                            const Color(0xFF63D3FF),
-                            Colors.white,
-                          ], // Màu mờ dần mặc định
-                  stops: [0.2, 1 - widget.level * 0.05],
-                ),
-              ),
-              child: Text(
-                widget.level <= phase.length ? '${widget.level}' : '',
-                style: const TextStyle(fontSize: 24, color: Colors.white),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: 80,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
                 child: Text(
-                  widget.level <= phase.length
-                      ? AppLocalizations.of(
-                        context,
-                      ).translate(phase[widget.level - 1].name)
-                      : '',
-                  style: TextStyle(
-                    color: widget.isSelected ? Colors.orange : Colors.lightBlue,
-                    fontWeight:
-                        widget.isSelected ? FontWeight.bold : FontWeight.normal,
-                    fontSize: widget.isSelected ? 16 : 12,
-                  ),
-                  maxLines: 1,
+                  widget.level <= phase.length ? '${widget.level}' : '',
+                  style: const TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              SizedBox(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    widget.level <= phase.length
+                        ? AppLocalizations.of(
+                          context,
+                        ).translate(phase[widget.level - 1].name)
+                        : '',
+                    style: TextStyle(
+                      color:
+                          widget.isSelected ? Colors.orange : Colors.lightBlue,
+                      fontWeight:
+                          widget.isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                      fontSize:
+                          isTablet
+                              ? widget.isSelected
+                                  ? 16
+                                  : 14
+                              : widget.isSelected
+                              ? 10
+                              : 8,
+                    ),
+                    maxLines: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
