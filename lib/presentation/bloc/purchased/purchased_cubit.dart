@@ -60,7 +60,6 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
        _completePurchaseUsecase = completePurchaseUsecase,
        super(const PurchasedState()) {
     _listenForErrors();
-    _listenForPurchaseUpdates();
   }
 
   void _listenForErrors() {
@@ -79,40 +78,51 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     );
   }
 
-  void _listenForPurchaseUpdates() {
-    _purchaseUpdatedSubscription = _listenToPurchaseUpdatesUseCase().listen((
-      purchaseItem,
-    ) async {
-      final result = await _verifyPurchasedUsecase(
-        VerifyPurchasedParams(
-          productId: purchaseItem.productId,
-          transactionReceipt:
-              purchaseItem.purchaseToken.isNotEmpty
-                  ? purchaseItem.purchaseToken
-                  : purchaseItem.transactionReceipt,
-          price: state.purchasingItem?.price ?? 0,
-          currency: state.purchasingItem?.currency ?? '',
-        ),
-      );
+  void _activatePurchaseListener() {
+    _purchaseUpdatedSubscription?.cancel();
+    _purchaseUpdatedSubscription = _listenToPurchaseUpdatesUseCase().listen(
+      (purchaseItem) async {
+        final result = await _verifyPurchasedUsecase(
+          VerifyPurchasedParams(
+            productId: purchaseItem.productId,
+            transactionReceipt:
+                purchaseItem.purchaseToken.isNotEmpty
+                    ? purchaseItem.purchaseToken
+                    : purchaseItem.transactionReceipt,
+            price: state.purchasingItem?.price ?? 0,
+            currency: state.purchasingItem?.currency ?? '',
+          ),
+        );
 
-      result.fold(
-        (failure) => emit(
-          state.copyWith(isPurchasing: false, errorMessage: failure.message),
-        ),
-        (success) async {
-          await _completePurchaseUsecase(purchaseItem.transactionId);
-          emit(
-            state.copyWith(
-              isPurchasing: false,
-              isVerifyPurchasedSuccess: true,
-              isNeedRegister:
-                  _userCubit.state.user == null ||
-                  _userCubit.state.user?.loginType == LoginType.skip,
-            ),
-          );
-        },
-      );
-    });
+        result.fold(
+          (failure) => emit(
+            state.copyWith(isPurchasing: false, errorMessage: failure.message),
+          ),
+          (success) async {
+            await _completePurchaseUsecase(purchaseItem.transactionId);
+            emit(
+              state.copyWith(
+                isPurchasing: false,
+                isVerifyPurchasedSuccess: true,
+                isNeedRegister:
+                    _userCubit.state.user == null ||
+                    _userCubit.state.user?.loginType == LoginType.skip,
+              ),
+            );
+          },
+        );
+      },
+      onError: (error, stackTrace) {
+        logger.severe('Error in purchase update stream:', error, stackTrace);
+        emit(
+          state.copyWith(
+            isPurchasing: false,
+            errorMessage:
+                'An error occurred while processing your purchase. Please try again.',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> initialPurchased() async {
@@ -154,9 +164,17 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
   Future<void> purchase(PurchasedPackage package) async {
     try {
       emit(state.copyWith(isPurchasing: true, purchasingItem: package));
+      _activatePurchaseListener();
       await _purchaseUsecase.call(package);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      logger.warning(
+        'Failed to initiate purchase via _purchaseUsecase.call(package):',
+        e,
+        stackTrace,
+      );
       emit(state.copyWith(isPurchasing: false));
+      _purchaseUpdatedSubscription?.cancel();
+      _purchaseUpdatedSubscription = null;
     }
   }
 
