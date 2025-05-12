@@ -17,10 +17,13 @@ class UnityScreen extends StatefulWidget {
 }
 
 class _UnityScreenState extends State<UnityScreen> with RouteAware {
+  late final UnityCubit _unityCubit;
+
   @override
   void initState() {
     super.initState();
-    context.read<UnityCubit>().registerHandler(MessageTypes.closeUnity, (
+    _unityCubit = context.read<UnityCubit>();
+    _unityCubit.registerHandler(MessageTypes.closeUnity, (
       UnityMessageEntity message,
     ) async {
       context.pop();
@@ -43,28 +46,29 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
       type: MessageTypes.openUnity,
       payload: {'destination': 'map_lesson'},
     );
-    context.read<UnityCubit>().sendMessageToUnity(message);
-    context.read<UnityCubit>().showUnity();
+    _unityCubit.sendMessageToUnity(message);
+    _unityCubit.showUnity();
   }
 
   @override
   void didPopNext() {
-    context.read<UnityCubit>().showUnity();
+    _unityCubit.showUnity();
   }
 
   @override
   void didPushNext() {
-    context.read<UnityCubit>().hideUnity();
+    _unityCubit.hideUnity();
   }
 
   @override
   void didPop() {
-    context.read<UnityCubit>().hideUnity();
+    _unityCubit.hideUnity();
   }
 
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
+    _unityCubit.unregisterHandler(MessageTypes.closeUnity);
     super.dispose();
   }
 

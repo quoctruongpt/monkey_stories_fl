@@ -13,6 +13,9 @@ class VerifyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -26,149 +29,9 @@ class VerifyDialog extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Flexible(
-                    child: Image.asset('assets/images/parent_of_max.png'),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Spacing.md,
-                      vertical: Spacing.lg,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          AppLocalizations.of(
-                            context,
-                          ).translate('app.verify.title'),
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(color: AppTheme.textSecondaryColor),
-                        ),
-                        const SizedBox(height: Spacing.sm),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              state.randomNumbers
-                                  .map(
-                                    (e) => AppLocalizations.of(
-                                      context,
-                                    ).translate(e.toString()),
-                                  )
-                                  .join(' - '),
-                              style: Theme.of(context).textTheme.displayMedium,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: Spacing.md),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              children: [
-                                Row(
-                                  children: List.generate(
-                                    numberOfCharacters,
-                                    (index) => Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: SizedBox(
-                                        width: 60,
-                                        height: 32,
-                                        child: Text(
-                                          index < state.input.length
-                                              ? state.input[index]
-                                              : '',
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.displayMedium?.copyWith(
-                                            color: AppTheme.azureColor,
-                                            fontSize: 32,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: List.generate(
-                                    numberOfCharacters,
-                                    (index) => Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Container(
-                                        width: 60,
-                                        height: 4,
-                                        color: AppTheme.azureColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            IconButton(
-                              onPressed: () {
-                                context
-                                    .read<VerifyParentCubit>()
-                                    .onBackspacePressed();
-                              },
-                              icon: const Icon(
-                                Icons.backspace,
-                                size: 40,
-                                color: AppTheme.azureColor,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(
-                          height: 300,
-                          width: 300,
-                          child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3, // 3 cột
-                                  crossAxisSpacing:
-                                      Spacing.md, // Khoảng cách giữa các cột
-                                  mainAxisSpacing:
-                                      Spacing.md, // Khoảng cách giữa các hàng
-                                ),
-                            padding: const EdgeInsets.all(20),
-                            itemCount: 9, // 9 nút từ 1 đến 9
-                            itemBuilder: (context, index) {
-                              // Tạo các nút từ 1 đến 9
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppTheme.azureColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(90),
-                                  ),
-                                ),
-                                onPressed:
-                                    () => context
-                                        .read<VerifyParentCubit>()
-                                        .onNumberPressed(index + 1),
-                                child: Text(
-                                  (index + 1).toString(),
-                                  style: const TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
+              return isLandscape
+                  ? _buildLandscapeLayout(context, state)
+                  : _buildPortraitLayout(context, state);
             },
           ),
 
@@ -183,6 +46,193 @@ class VerifyDialog extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPortraitLayout(BuildContext context, VerifyParentState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Flexible(child: Image.asset('assets/images/parent_of_max.png')),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.md,
+            vertical: Spacing.lg,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                AppLocalizations.of(context).translate('app.verify.title'),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.textSecondaryColor,
+                ),
+              ),
+              const SizedBox(height: Spacing.sm),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    state.randomNumbers
+                        .map(
+                          (e) => AppLocalizations.of(
+                            context,
+                          ).translate(e.toString()),
+                        )
+                        .join(' - '),
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: Spacing.md),
+              _buildInputField(context, state),
+              _buildNumberPad(context),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLandscapeLayout(BuildContext context, VerifyParentState state) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: Spacing.lg),
+            child: Column(
+              children: [
+                Flexible(child: Image.asset('assets/images/parent_of_max.png')),
+                const SizedBox(height: Spacing.lg),
+                Text(
+                  AppLocalizations.of(context).translate('app.verify.title'),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppTheme.textSecondaryColor,
+                  ),
+                ),
+                const SizedBox(height: Spacing.sm),
+                Text(
+                  state.randomNumbers
+                      .map(
+                        (e) => AppLocalizations.of(
+                          context,
+                        ).translate(e.toString()),
+                      )
+                      .join(' - '),
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+                const SizedBox(height: Spacing.md),
+                _buildInputField(context, state),
+              ],
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Spacing.md,
+              vertical: Spacing.lg,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [_buildNumberPad(context)],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInputField(BuildContext context, VerifyParentState state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Column(
+          children: [
+            Row(
+              children: List.generate(
+                numberOfCharacters,
+                (index) => Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: SizedBox(
+                    width: 60,
+                    height: 32,
+                    child: Text(
+                      index < state.input.length ? state.input[index] : '',
+                      style: Theme.of(context).textTheme.displayMedium
+                          ?.copyWith(color: AppTheme.azureColor, fontSize: 32),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: List.generate(
+                numberOfCharacters,
+                (index) => Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Container(
+                    width: 60,
+                    height: 4,
+                    color: AppTheme.azureColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        IconButton(
+          onPressed: () {
+            context.read<VerifyParentCubit>().onBackspacePressed();
+          },
+          icon: const Icon(
+            Icons.backspace,
+            size: 40,
+            color: AppTheme.azureColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNumberPad(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      width: 300,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // 3 cột
+          crossAxisSpacing: Spacing.md, // Khoảng cách giữa các cột
+          mainAxisSpacing: Spacing.md, // Khoảng cách giữa các hàng
+        ),
+        padding: const EdgeInsets.all(20),
+        itemCount: 9, // 9 nút từ 1 đến 9
+        itemBuilder: (context, index) {
+          // Tạo các nút từ 1 đến 9
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.azureColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(90),
+              ),
+            ),
+            onPressed:
+                () => context.read<VerifyParentCubit>().onNumberPressed(
+                  index + 1,
+                ),
+            child: Text(
+              (index + 1).toString(),
+              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w800),
+            ),
+          );
+        },
       ),
     );
   }

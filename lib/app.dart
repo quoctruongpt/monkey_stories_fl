@@ -141,7 +141,12 @@ class _AppBuilderState extends State<AppBuilder>
               duration: const Duration(milliseconds: 300),
               child: IgnorePointer(
                 ignoring: !state.isUnityVisible,
-                child: const UnityView(),
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.lightTheme,
+                  themeMode: ThemeMode.light,
+                  home: const UnityView(),
+                ),
               ),
             );
           },

@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
   void _handleListener(BuildContext context, SplashState state) {
     switch (state) {
       case SplashAuthenticated():
-        GoRouter.of(context).replace(AppRoutePaths.home);
+        GoRouter.of(context).replace(AppRoutePaths.listProfile);
         return;
       case SplashUnauthenticated():
         GoRouter.of(context).replace(AppRoutePaths.intro);

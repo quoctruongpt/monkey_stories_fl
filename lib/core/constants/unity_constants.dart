@@ -16,6 +16,7 @@ class MessageTypes {
   static const String closeUnity = 'CloseUnity';
   static const String coin = 'coin';
   static const String user = 'user';
+  static const String openListProfile = 'open_list_profile';
 }
 
 class Orientation {

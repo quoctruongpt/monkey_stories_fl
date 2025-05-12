@@ -8,6 +8,7 @@ import 'package:monkey_stories/presentation/features/create_profile/choose_year_
 import 'package:monkey_stories/presentation/features/create_profile/create_profile_loading.dart';
 import 'package:monkey_stories/presentation/features/create_profile/input_name_screen.dart';
 import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
+import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
@@ -186,8 +187,18 @@ final GoRouter router = GoRouter(
       },
     ),
 
-    forgotPasswordRoutes,
+    GoRoute(
+      path: AppRoutePaths.listProfile,
+      name: AppRouteNames.listProfile,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: ListProfile(),
+        );
+      },
+    ),
 
+    forgotPasswordRoutes,
     obdRoutes,
     activeLicenseRoutes,
   ],
