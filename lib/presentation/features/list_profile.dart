@@ -8,6 +8,7 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/widgets/profile/add_profile_item.dart';
@@ -34,6 +35,23 @@ class ListProfile extends StatelessWidget {
   void _profilePressed(BuildContext context, int profileId) {
     context.read<ProfileCubit>().selectProfile(profileId);
     context.push(AppRoutePaths.unity);
+  }
+
+  void _showCreateProfileDialog(BuildContext context) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(context).translate('Thông báo'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('Bạn cần tạo hồ sơ học tập trước khi bắt đầu!'),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(context).translate('Tạo hồ sơ'),
+      onPrimaryAction: () {
+        context.push(AppRoutePaths.createProfileInputName);
+      },
+      isCloseable: false,
+      canPopOnBack: false,
+    );
   }
 
   @override
@@ -65,6 +83,13 @@ class ListProfile extends StatelessWidget {
               Flexible(
                 child: BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
+                    // Kiểm tra và hiển thị dialog nếu danh sách profile rỗng
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (state.profiles.isEmpty) {
+                        _showCreateProfileDialog(context);
+                      }
+                    });
+
                     return LayoutBuilder(
                       builder: (context, constraints) {
                         // Xác định số cột dựa trên chiều rộng màn hình
