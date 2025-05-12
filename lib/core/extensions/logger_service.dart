@@ -18,18 +18,18 @@ class Logging {
         print(
           '${record.level.name}: ${record.time} ${record.loggerName}: ${record.message}',
         );
+      }
 
-        // Gửi log đến DebugCubit nếu đã được thiết lập
-        if (_debugCubit != null) {
-          _debugCubit.addLog(
-            Log(
-              level: record.level.name,
-              time: record.time.toString(),
-              name: record.loggerName,
-              message: record.message,
-            ),
-          );
-        }
+      // Gửi log đến DebugCubit nếu đã được thiết lập
+      if (_debugCubit != null) {
+        _debugCubit.addLog(
+          Log(
+            level: record.level.name,
+            time: record.time.toString(),
+            name: record.loggerName,
+            message: record.message,
+          ),
+        );
       }
     });
   }
