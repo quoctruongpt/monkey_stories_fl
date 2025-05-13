@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 
 class AddProfileItem extends StatelessWidget {
   final VoidCallback? onTap;
@@ -29,7 +30,11 @@ class AddProfileItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const Text('Thêm'),
+          Text(
+            AppLocalizations.of(
+              context,
+            ).translate('app.list_profile.add_profile_item.title'),
+          ),
         ],
       ),
     );

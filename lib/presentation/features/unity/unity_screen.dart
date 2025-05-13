@@ -6,6 +6,8 @@ import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/profile/list_profile_dialog.dart';
 
 final logger = Logger('UnityScreen');
 
@@ -27,6 +29,14 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
       UnityMessageEntity message,
     ) async {
       context.pop();
+      return null;
+    });
+    _unityCubit.registerHandler(MessageTypes.openListProfile, (
+      UnityMessageEntity message,
+    ) async {
+      context.read<DialogCubit>().showDialog(
+        buildListProfileDialogWidget(context),
+      );
       return null;
     });
   }
@@ -69,11 +79,12 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
   void dispose() {
     routeObserver.unsubscribe(this);
     _unityCubit.unregisterHandler(MessageTypes.closeUnity);
+    _unityCubit.unregisterHandler(MessageTypes.openListProfile);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const PopScope(canPop: false, child: SizedBox.shrink());
   }
 }

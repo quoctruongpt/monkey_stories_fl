@@ -40,12 +40,16 @@ class ListProfile extends StatelessWidget {
   void _showCreateProfileDialog(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Thông báo'),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.list_profile.create_profile_dialog.title'),
       messageText: AppLocalizations.of(
         context,
-      ).translate('Bạn cần tạo hồ sơ học tập trước khi bắt đầu!'),
+      ).translate('app.list_profile.create_profile_dialog.message'),
       imageAsset: 'assets/images/monkey_confused.png',
-      primaryActionText: AppLocalizations.of(context).translate('Tạo hồ sơ'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.list_profile.create_profile_dialog.primary_action_text'),
       onPrimaryAction: () {
         context.push(AppRoutePaths.createProfileInputName);
       },
@@ -58,7 +62,7 @@ class ListProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).translate('Hồ sơ học tập'),
+        title: AppLocalizations.of(context).translate('app.list_profile.title'),
         actions: [
           IconButton(
             onPressed: () => _settingPressed(context),
@@ -159,7 +163,9 @@ class ListProfile extends StatelessWidget {
                   context.push(AppRoutePaths.inputLicense);
                 },
                 child: Text(
-                  AppLocalizations.of(context).translate('Nhập mã kích hoạt'),
+                  AppLocalizations.of(
+                    context,
+                  ).translate('app.list_profile.input_license_button'),
                   style: const TextStyle(decoration: TextDecoration.underline),
                 ),
               ),

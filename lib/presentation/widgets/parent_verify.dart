@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
 import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
 
 class VerifyDialog extends StatelessWidget {
-  const VerifyDialog({super.key, this.onSuccess});
-
+  final VoidCallback? onSuccessCallback;
+  final VoidCallback? onCloseExplicitly;
   final VoidCallback? onSuccess;
+
+  const VerifyDialog({
+    super.key,
+    this.onSuccessCallback,
+    this.onCloseExplicitly,
+    this.onSuccess,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +33,11 @@ class VerifyDialog extends StatelessWidget {
                 (previous, current) => previous.isCorrect != current.isCorrect,
             listener: (context, state) {
               if (state.isCorrect) {
-                context.pop();
-                onSuccess?.call();
+                onSuccessCallback?.call();
+                if (onSuccess != null) {
+                  context.pop();
+                  onSuccess?.call();
+                }
               }
             },
             builder: (context, state) {
@@ -36,13 +48,20 @@ class VerifyDialog extends StatelessWidget {
           ),
 
           Positioned(
-            top: 30,
+            top: isLandscape ? 0 : 30,
             right: 0,
             child: IconButton(
               onPressed: () {
-                context.pop();
+                if (onCloseExplicitly != null) {
+                  onCloseExplicitly?.call();
+                } else {
+                  context.pop();
+                }
               },
-              icon: const Icon(Icons.close, size: 40),
+              icon:
+                  isLandscape
+                      ? SvgPicture.asset('assets/icons/svg/X.svg')
+                      : const Icon(Icons.close, size: 40),
             ),
           ),
         ],
@@ -238,14 +257,55 @@ class VerifyDialog extends StatelessWidget {
   }
 }
 
+Widget buildVerifyDialogWidget({
+  required BuildContext context,
+  VoidCallback? onSuccess,
+}) {
+  final dialogKey = UniqueKey();
+
+  void closeDialog() {
+    context.read<DialogCubit>().dismissDialogByKey(dialogKey);
+  }
+
+  void handleSuccess() {
+    onSuccess?.call();
+    closeDialog();
+  }
+
+  return Material(
+    key: dialogKey,
+    color: Colors.black.withOpacity(0.6),
+    child: Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          width: double.infinity,
+          height: double.infinity,
+          child: BlocProvider(
+            create:
+                (context) => sl<VerifyParentCubit>()..generateRandomNumbers(),
+            child: VerifyDialog(
+              onSuccessCallback: handleSuccess,
+              onCloseExplicitly: closeDialog,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 Future<void> showVerifyDialog({
   required BuildContext context,
   VoidCallback? onSuccess,
 }) {
   return showGeneralDialog<void>(
     context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     pageBuilder: (
-      BuildContext context,
+      BuildContext buildContext,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
     ) {
