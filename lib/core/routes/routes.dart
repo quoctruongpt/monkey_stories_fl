@@ -11,6 +11,10 @@ import 'package:monkey_stories/presentation/features/forgot_password/forgot_pass
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
+import 'package:monkey_stories/presentation/features/parent/parent_tab.dart';
+import 'package:monkey_stories/presentation/features/parent/report.dart';
+import 'package:monkey_stories/presentation/features/parent/setting.dart';
+import 'package:monkey_stories/presentation/features/parent/vip.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/features/unity/unity_screen.dart';
@@ -25,6 +29,18 @@ final logger = Logger('router');
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// Navigator keys for ShellRoute
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'shell',
+);
+final GlobalKey<NavigatorState> _reportTabNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'reportTab');
+final GlobalKey<NavigatorState> _vipTabNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'vipTab',
+);
+final GlobalKey<NavigatorState> _settingTabNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'settingTab');
 
 final GoRouter router = GoRouter(
   observers: [routeObserver],
@@ -196,6 +212,60 @@ final GoRouter router = GoRouter(
           child: ListProfile(),
         );
       },
+    ),
+
+    // StatefulShellRoute for Parent Tabs
+    StatefulShellRoute.indexedStack(
+      builder: (
+        BuildContext context,
+        GoRouterState state,
+        StatefulNavigationShell navigationShell,
+      ) {
+        return ParentTab(navigationShell: navigationShell);
+      },
+      branches: <StatefulShellBranch>[
+        // Branch for Report Tab
+        StatefulShellBranch(
+          navigatorKey: _reportTabNavigatorKey,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoutePaths.report, // Assuming this is '/parent/report'
+              name:
+                  AppRouteNames
+                      .report, // Optional: if you have names for these routes
+              builder:
+                  (BuildContext context, GoRouterState state) =>
+                      const ReportScreen(),
+            ),
+          ],
+        ),
+        // Branch for VIP Tab
+        StatefulShellBranch(
+          navigatorKey: _vipTabNavigatorKey,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoutePaths.vip, // Assuming this is '/parent/vip'
+              name: AppRouteNames.vip, // Optional
+              builder:
+                  (BuildContext context, GoRouterState state) =>
+                      const VipScreen(),
+            ),
+          ],
+        ),
+        // Branch for Setting Tab
+        StatefulShellBranch(
+          navigatorKey: _settingTabNavigatorKey,
+          routes: <RouteBase>[
+            GoRoute(
+              path: AppRoutePaths.setting, // Assuming this is '/parent/setting'
+              name: AppRouteNames.setting, // Optional
+              builder:
+                  (BuildContext context, GoRouterState state) =>
+                      const SettingScreen(),
+            ),
+          ],
+        ),
+      ],
     ),
 
     forgotPasswordRoutes,

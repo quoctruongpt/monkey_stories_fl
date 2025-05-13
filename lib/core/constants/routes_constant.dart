@@ -43,6 +43,10 @@ class AppRoutePaths {
   static const String activeLicenseSuccess = '/active_license_success';
 
   static const String listProfile = '/list_profile';
+
+  static const String report = '/report';
+  static const String vip = '/vip';
+  static const String setting = '/setting';
 }
 
 class AppRouteNames {
@@ -91,4 +95,8 @@ class AppRouteNames {
   static const String activeLicenseSuccess = 'active_license_success';
 
   static const String listProfile = 'list_profile';
+
+  static const String report = 'report';
+  static const String vip = 'vip';
+  static const String setting = 'setting';
 }

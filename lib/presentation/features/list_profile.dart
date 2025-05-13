@@ -23,7 +23,7 @@ class ListProfile extends StatelessWidget {
     showVerifyDialog(
       context: context,
       onSuccess: () {
-        context.push(AppRoutePaths.home);
+        context.push(AppRoutePaths.report);
       },
     );
   }
