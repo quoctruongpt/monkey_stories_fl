@@ -47,6 +47,7 @@ class AppRoutePaths {
   static const String report = '/report';
   static const String vip = '/vip';
   static const String setting = '/setting';
+  static const String userInfo = '/user_info';
 }
 
 class AppRouteNames {
@@ -99,4 +100,5 @@ class AppRouteNames {
   static const String report = 'report';
   static const String vip = 'vip';
   static const String setting = 'setting';
+  static const String userInfo = 'user_info';
 }

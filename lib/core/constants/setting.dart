@@ -14,8 +14,8 @@ final List<Map<String, dynamic>> settingsData = [
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/person.svg',
-        label: 'Đăng ký',
-        route: AppRoutePaths.home,
+        label: 'Thông tin ba mẹ',
+        route: AppRoutePaths.userInfo,
       ),
       SettingItem(
         icon: 'assets/icons/svg/mobile.svg',

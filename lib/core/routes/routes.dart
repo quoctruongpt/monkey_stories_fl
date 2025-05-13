@@ -24,16 +24,13 @@ import 'package:monkey_stories/presentation/features/result_screen.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 import 'package:monkey_stories/presentation/features/purchased_success.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
 
 final logger = Logger('router');
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// Navigator keys for ShellRoute
-final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(
-  debugLabel: 'shell',
-);
 final GlobalKey<NavigatorState> _reportTabNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'reportTab');
 final GlobalKey<NavigatorState> _vipTabNavigatorKey = GlobalKey<NavigatorState>(
@@ -266,6 +263,17 @@ final GoRouter router = GoRouter(
           ],
         ),
       ],
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.userInfo,
+      name: AppRouteNames.userInfo,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: UserInfo(),
+        );
+      },
     ),
 
     forgotPasswordRoutes,

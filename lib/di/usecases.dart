@@ -4,8 +4,10 @@ import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
@@ -89,6 +91,13 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(() => SendOtpUsecase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => VerifyOtpUsecase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => ChangePasswordUsecase(sl<AuthRepository>()));
+  sl.registerLazySingleton(
+    () => UpdateUserInfoUsecase(accountRepository: sl<AccountRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => ConfirmPasswordUsecase(repository: sl<AuthRepository>()),
+  );
+
   // Other App Features (Device, Settings, System)
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl<DeviceRepository>()));
   sl.registerLazySingleton(() => GetLanguageUseCase(sl<SettingsRepository>()));

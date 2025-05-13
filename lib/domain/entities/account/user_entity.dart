@@ -24,6 +24,30 @@ class UserEntity {
     this.phoneInfo,
   });
 
+  UserEntity copyWith({
+    int? userId,
+    int? maxProfile,
+    LoginType? loginType,
+    String? name,
+    String? email,
+    String? phone,
+    String? avatar,
+    String? country,
+    PhoneEntity? phoneInfo,
+  }) {
+    return UserEntity(
+      userId: userId ?? this.userId,
+      maxProfile: maxProfile ?? this.maxProfile,
+      loginType: loginType ?? this.loginType,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      avatar: avatar ?? this.avatar,
+      country: country ?? this.country,
+      phoneInfo: phoneInfo ?? this.phoneInfo,
+    );
+  }
+
   factory UserEntity.fromJson(Map<String, dynamic> json) {
     return UserEntity(
       userId: json['userId'],

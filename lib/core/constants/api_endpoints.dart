@@ -13,9 +13,11 @@ class ApiEndpoints {
       '/app/api/v1/account/verify-opt-for-phone';
   static const String changePassword =
       '/app/api/v1/account/change-forgot-password';
+  static const String confirmPassword = '/app/api/v1/account/confirm-pw';
 
   // Account
   static const String loadUpdate = '/app/api/v4/account/load-update';
+  static const String updateUserInfo = '/app/api/v1/account/update-info';
 
   // Profile
   static const String updateProfile = '/app/api/v3/account/update-profile';

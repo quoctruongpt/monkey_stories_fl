@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart'; // Cần import Lottie nếu dùng
-// import 'package:monkey_stories/blocs/login/login_cubit.dart'; // Không nên phụ thuộc trực tiếp vào Cubit ở đây
 import 'package:monkey_stories/core/theme/app_theme.dart'; // Cần cho Spacing
-import 'package:monkey_stories/core/utils/lottie_utils.dart'; // Cần cho customDecoder
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
-// import 'package:provider/provider.dart'; // Không cần Provider ở đây
 
 // Định nghĩa kiểu cho hàm translate để dễ truyền hơn
 typedef TranslateFunction = String Function(String key);
@@ -13,9 +9,9 @@ typedef TranslateFunction = String Function(String key);
 class NoticeDialog extends StatelessWidget {
   final String titleText;
   final String messageText;
-  final String imageAsset; // Có thể là path ảnh hoặc Lottie
+  final String? imageAsset; // Có thể là path ảnh hoặc Lottie
   final bool isLottie;
-  final String primaryActionText;
+  final String? primaryActionText;
   final VoidCallback? onPrimaryAction;
   final String? secondaryActionText;
   final VoidCallback? onSecondaryAction;
@@ -23,14 +19,15 @@ class NoticeDialog extends StatelessWidget {
   final bool isCloseable;
   final Color? titleColor;
   final bool canPopOnBack;
+  final Widget? child;
 
   const NoticeDialog({
     super.key,
     required this.titleText,
     required this.messageText,
-    required this.imageAsset,
+    this.imageAsset,
     this.isLottie = false,
-    required this.primaryActionText,
+    this.primaryActionText,
     this.onPrimaryAction,
     this.secondaryActionText,
     this.onSecondaryAction,
@@ -38,6 +35,7 @@ class NoticeDialog extends StatelessWidget {
     this.isCloseable = true,
     this.titleColor,
     this.canPopOnBack = true,
+    this.child,
   });
 
   @override
@@ -76,20 +74,14 @@ class NoticeDialog extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  isLottie
-                      ? Lottie.asset(
-                        imageAsset,
-                        decoder: customDecoder,
-                        width: 90, // đường kính avatar
-                        height: 90,
-                        fit: BoxFit.cover, // Đảm bảo Lottie vừa khít hình tròn
-                      )
-                      : Image.asset(
-                        imageAsset,
+                  imageAsset != null
+                      ? Image.asset(
+                        imageAsset!,
                         width: 176,
                         height: 146,
                         fit: BoxFit.cover,
-                      ),
+                      )
+                      : const SizedBox.shrink(),
                   const SizedBox(height: Spacing.md),
                   Text(
                     titleText,
@@ -108,14 +100,17 @@ class NoticeDialog extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
+                  child ?? const SizedBox.shrink(),
                   const SizedBox(height: Spacing.lg),
                   // Nút Primary
-                  AppButton.primary(
-                    text: primaryActionText,
-                    onPressed: onPrimaryAction ?? () {},
-                    isFullWidth: true,
-                    disabled: onPrimaryAction == null,
-                  ),
+                  primaryActionText != null
+                      ? AppButton.primary(
+                        text: primaryActionText!,
+                        onPressed: onPrimaryAction ?? () {},
+                        isFullWidth: true,
+                        disabled: onPrimaryAction == null,
+                      )
+                      : const SizedBox.shrink(),
                   const SizedBox(height: Spacing.md),
                   // Nút Secondary
                   secondaryActionText != null
@@ -158,9 +153,9 @@ Future<void> showCustomNoticeDialog({
   required BuildContext context,
   required String titleText,
   required String messageText,
-  required String imageAsset,
+  String? imageAsset,
   bool isLottie = false,
-  required String primaryActionText,
+  String? primaryActionText,
   VoidCallback? onPrimaryAction,
   String? secondaryActionText,
   VoidCallback? onSecondaryAction,
@@ -168,6 +163,7 @@ Future<void> showCustomNoticeDialog({
   bool isCloseable = true,
   Color? titleColor,
   bool canPopOnBack = true,
+  Widget? child,
 }) {
   return showDialog<void>(
     context: context,
@@ -205,6 +201,7 @@ Future<void> showCustomNoticeDialog({
         isCloseable: isCloseable,
         titleColor: titleColor,
         canPopOnBack: canPopOnBack,
+        child: child,
       );
     },
   );
