@@ -67,6 +67,7 @@ import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_useca
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -138,6 +139,7 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => GetCurrentProfileUsecase(sl<ProfileRepository>()),
   );
+  sl.registerLazySingleton(() => UpdateProfileUsecase(sl<ProfileRepository>()));
 
   // Course
   sl.registerLazySingleton(() => ActiveCourseUsecase(sl<CourseRepository>()));

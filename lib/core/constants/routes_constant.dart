@@ -48,6 +48,8 @@ class AppRoutePaths {
   static const String vip = '/vip';
   static const String setting = '/setting';
   static const String userInfo = '/user_info';
+  static const String listProfileSetting = '/list_profile_setting';
+  static const String editProfileInfo = '/edit_profile_info';
 }
 
 class AppRouteNames {
@@ -101,4 +103,6 @@ class AppRouteNames {
   static const String vip = 'vip';
   static const String setting = 'setting';
   static const String userInfo = 'user_info';
+  static const String listProfileSetting = 'list_profile_setting';
+  static const String editProfileInfo = 'edit_profile_info';
 }

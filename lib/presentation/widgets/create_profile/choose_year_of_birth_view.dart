@@ -5,6 +5,7 @@ import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_footer.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
+import 'package:monkey_stories/presentation/widgets/year_button.dart';
 
 class ChooseYearOfBirthView extends StatelessWidget {
   const ChooseYearOfBirthView({
@@ -62,7 +63,7 @@ class ChooseYearOfBirthView extends StatelessWidget {
                               12,
                               (index) => SizedBox(
                                 width: itemWidth,
-                                child: _buildYearButton(
+                                child: buildYearButton(
                                   context,
                                   years[index],
                                   yearSelected == years[index],
@@ -77,7 +78,7 @@ class ChooseYearOfBirthView extends StatelessWidget {
 
                       SizedBox(
                         width: double.infinity,
-                        child: _buildYearButton(
+                        child: buildYearButton(
                           context,
                           years[12],
                           yearSelected == years[12],
@@ -103,45 +104,6 @@ class ChooseYearOfBirthView extends StatelessWidget {
                 disabled: yearSelected == null,
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildYearButton(
-    BuildContext context,
-    int year,
-    bool isSelected,
-    VoidCallback onPressed, {
-    String? customText,
-  }) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        side: BorderSide(
-          color:
-              isSelected
-                  ? AppTheme.primaryColor
-                  : AppTheme.buttonPrimaryDisabledBackground,
-          width: 2,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: Spacing.sm,
-          vertical: Spacing.md,
-        ),
-        backgroundColor:
-            isSelected ? AppTheme.blueLightColor : Colors.transparent,
-      ),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          customText ?? year.toString(),
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            color:
-                isSelected
-                    ? AppTheme.primaryColor
-                    : AppTheme.textSecondaryColor,
           ),
         ),
       ),

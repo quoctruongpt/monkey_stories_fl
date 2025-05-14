@@ -106,4 +106,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     // If found, emit the state with the selected profile
   }
+
+  ProfileEntity? getProfile(int profileId) {
+    return state.profiles.firstWhere((profile) => profile.id == profileId);
+  }
+
+  void changeListProfile(List<ProfileEntity> profiles) {
+    emit(state.copyWith(profiles: profiles));
+  }
 }

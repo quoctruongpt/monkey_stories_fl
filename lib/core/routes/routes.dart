@@ -15,6 +15,7 @@ import 'package:monkey_stories/presentation/features/parent/parent_tab.dart';
 import 'package:monkey_stories/presentation/features/parent/report.dart';
 import 'package:monkey_stories/presentation/features/parent/setting.dart';
 import 'package:monkey_stories/presentation/features/parent/vip.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/features/unity/unity_screen.dart';
@@ -25,6 +26,7 @@ import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 import 'package:monkey_stories/presentation/features/purchased_success.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/edit_profile_info.dart';
 
 final logger = Logger('router');
 
@@ -272,6 +274,31 @@ final GoRouter router = GoRouter(
         return const OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: UserInfo(),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.listProfileSetting,
+      name: AppRouteNames.listProfileSetting,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: ListProfileSetting(),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.editProfileInfo,
+      name: AppRouteNames.editProfileInfo,
+      builder: (context, state) {
+        final int profileId = int.parse(
+          state.uri.queryParameters['profileId'] ?? '0',
+        );
+
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: EditProfileInfo(profileId: profileId),
         );
       },
     ),

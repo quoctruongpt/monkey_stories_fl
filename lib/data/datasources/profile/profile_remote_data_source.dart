@@ -6,10 +6,10 @@ import 'package:monkey_stories/data/models/profile/update_profile_response.dart'
 
 abstract class ProfileRemoteDataSource {
   Future<ApiResponse<ProfileResponseModel?>> updateProfile(
-    String name,
-    int yearOfBirth,
+    String? name,
+    int? yearOfBirth,
     String? avatarPath,
-    String? avatarFile,
+    String? avatarFilePath,
     int? id,
   );
 
@@ -23,22 +23,34 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<ApiResponse<ProfileResponseModel?>> updateProfile(
-    String name,
-    int yearOfBirth,
+    String? name,
+    int? yearOfBirth,
     String? avatarPath,
-    String? avatarFile,
+    String? avatarFilePath,
     int? id,
   ) async {
-    final response = await dio.post(
-      ApiEndpoints.updateProfile,
-      data: {
-        'name': name,
-        'year_of_birth': yearOfBirth,
+    FormData formData;
+    if (avatarFilePath != null && avatarFilePath.isNotEmpty) {
+      String fileName = avatarFilePath.split('/').last;
+      formData = FormData.fromMap({
+        'name': name ?? '',
+        'year_of_birth': yearOfBirth ?? '',
         'path_avatar': avatarPath ?? '',
-        // 'file_avatar': avatarFile,
+        'file_avatar': await MultipartFile.fromFile(
+          avatarFilePath,
+          filename: fileName,
+        ),
         'profile_id': id ?? '',
-      },
-    );
+      });
+    } else {
+      formData = FormData.fromMap({
+        'name': name ?? '',
+        'year_of_birth': yearOfBirth ?? '',
+        'profile_id': id ?? '',
+      });
+    }
+
+    final response = await dio.post(ApiEndpoints.updateProfile, data: formData);
 
     return ApiResponse.fromJson(
       response.data,

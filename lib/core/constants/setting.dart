@@ -47,7 +47,7 @@ final List<Map<String, dynamic>> settingsData = [
       SettingItem(
         icon: 'assets/icons/svg/student.svg',
         label: 'Hồ sơ học tập của con',
-        route: AppRoutePaths.home,
+        route: AppRoutePaths.listProfileSetting,
       ),
       SettingItem(
         icon: 'assets/icons/svg/unlock.svg',

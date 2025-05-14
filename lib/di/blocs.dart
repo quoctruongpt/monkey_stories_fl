@@ -22,6 +22,7 @@ import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -77,6 +78,7 @@ import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecas
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -235,6 +237,13 @@ void initBlocDependencies() {
       updateUserInfoUsecase: sl<UpdateUserInfoUsecase>(),
       userCubit: sl<UserCubit>(),
       confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UpdateProfileInfoCubit(
+      profileCubit: sl<ProfileCubit>(),
+      updateProfileUsecase: sl<UpdateProfileUsecase>(),
     ),
   );
 
