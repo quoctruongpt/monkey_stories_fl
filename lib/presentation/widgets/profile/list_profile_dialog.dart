@@ -130,7 +130,7 @@ class ListProfileDialog extends StatelessWidget {
                                 : const SizedBox.shrink())
                             : ProfileItem(
                               name: state.profiles[index].name,
-                              avatar: state.profiles[index].avatarPath,
+                              avatar: state.profiles[index].localAvatarPath,
                               onTap:
                                   () => _profilePressed(
                                     context,

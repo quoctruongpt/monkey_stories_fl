@@ -4,6 +4,7 @@ import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/download/download_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
@@ -31,7 +32,14 @@ final sl = GetIt.instance;
 void initDatasourceDependencies() {
   // Profile
   sl.registerLazySingleton<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(dio: sl<Dio>()),
+    () => ProfileRemoteDataSourceImpl(
+      dio: sl<Dio>(),
+      downloadRemoteDataSource: sl<DownloadRemoteDataSource>(),
+    ),
+  );
+
+  sl.registerLazySingleton<DownloadRemoteDataSource>(
+    () => DownloadRemoteDataSourceImpl(dio: sl<Dio>()),
   );
 
   // Auth

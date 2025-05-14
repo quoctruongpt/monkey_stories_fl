@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 
@@ -29,6 +29,19 @@ class Avatar extends StatelessWidget {
       } catch (e) {
         return Image.asset('assets/images/avatar_default.png');
       }
+    }
+
+    if (avatar!.startsWith('/')) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(200),
+        child: Image.file(
+          File(avatar!),
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset('assets/images/avatar_default.png');
+          },
+        ),
+      );
     }
 
     // Nếu không phải base64 thì xử lý như bình thường
