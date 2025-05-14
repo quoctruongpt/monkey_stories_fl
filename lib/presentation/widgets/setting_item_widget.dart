@@ -24,7 +24,7 @@ class SettingItemWidget extends StatelessWidget {
         ),
       ),
       trailing:
-          item.route != null
+          item.showArrow
               ? const Icon(Icons.arrow_forward_ios, size: 20)
               : item.valueGetter != null
               ? FutureBuilder<String?>(
@@ -43,7 +43,7 @@ class SettingItemWidget extends StatelessWidget {
               : null,
       onTap:
           item.route != null
-              ? () => context.push(item.route!)
+              ? () => context.pushNamed(item.route!)
               : item.onTap != null
               ? () => item.onTap!(context)
               : null,

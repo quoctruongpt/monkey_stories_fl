@@ -50,6 +50,8 @@ class AppRoutePaths {
   static const String userInfo = '/user_info';
   static const String listProfileSetting = '/list_profile_setting';
   static const String editProfileInfo = '/edit_profile_info';
+
+  static const String webView = '/web_view';
 }
 
 class AppRouteNames {
@@ -105,4 +107,6 @@ class AppRouteNames {
   static const String userInfo = 'user_info';
   static const String listProfileSetting = 'list_profile_setting';
   static const String editProfileInfo = 'edit_profile_info';
+
+  static const String webView = 'web_view';
 }

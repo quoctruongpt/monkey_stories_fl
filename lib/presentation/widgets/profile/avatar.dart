@@ -14,13 +14,17 @@ class Avatar extends StatelessWidget {
     }
 
     // Kiểm tra nếu là base64
-    if (avatar!.startsWith('data:image')) {
+    if (avatar!.startsWith('https://')) {
       try {
-        return Image.memory(
-          base64Decode(avatar!.split(',')[1]),
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset('assets/images/avatar_default.png');
-          },
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(200),
+          child: Image.network(
+            avatar!,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset('assets/images/avatar_default.png');
+            },
+            fit: BoxFit.cover,
+          ),
         );
       } catch (e) {
         return Image.asset('assets/images/avatar_default.png');

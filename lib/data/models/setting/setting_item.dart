@@ -10,6 +10,7 @@ class SettingItem {
   final bool isActive;
   final Future<String?> Function()? valueGetter;
   final Function(BuildContext context)? onTap;
+  final bool showArrow;
 
   SettingItem({
     required this.icon,
@@ -19,5 +20,6 @@ class SettingItem {
     this.isActive = true,
     this.valueGetter,
     this.onTap,
+    this.showArrow = true,
   });
 }

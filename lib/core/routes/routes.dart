@@ -23,6 +23,7 @@ import 'package:monkey_stories/presentation/features/home_screen.dart';
 import 'package:monkey_stories/presentation/features/sign_in/login_screen.dart';
 import 'package:monkey_stories/presentation/features/result_screen.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
+import 'package:monkey_stories/presentation/features/webview.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 import 'package:monkey_stories/presentation/features/purchased_success.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
@@ -299,6 +300,19 @@ final GoRouter router = GoRouter(
         return OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: EditProfileInfo(profileId: profileId),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.webView,
+      name: AppRouteNames.webView,
+      builder: (context, state) {
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: WebViewScreen(
+            title: state.uri.queryParameters['title'] ?? '',
+            url: state.uri.queryParameters['url'] ?? '',
+          ),
         );
       },
     ),
