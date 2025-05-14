@@ -92,7 +92,7 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
   }
 
   Future<void> updateAvatar(String path) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, clearError: true));
 
     try {
       final result = await _updateProfileUsecase.call(
