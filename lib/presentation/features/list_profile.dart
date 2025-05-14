@@ -122,7 +122,9 @@ class ListProfile extends StatelessWidget {
                                       width: width,
                                       child: ProfileItem(
                                         name: profile.name,
-                                        avatar: profile.localAvatarPath,
+                                        avatar:
+                                            profile.localAvatarPath ??
+                                            profile.avatarPath,
                                         isActive:
                                             state.currentProfile?.id ==
                                             profile.id,

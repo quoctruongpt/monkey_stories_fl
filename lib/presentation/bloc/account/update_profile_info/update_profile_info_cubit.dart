@@ -75,6 +75,7 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
             id: state.profile?.id ?? 0,
             name: name,
             yearOfBirth: state.birthYear ?? 0,
+            avatarPath: state.profile?.avatarPath ?? '',
           );
           emit(state.copyWith(profile: profile, isSuccess: true));
           _profileCubit.changeListProfile(

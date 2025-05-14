@@ -57,10 +57,32 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
     final response = await dio.post(ApiEndpoints.updateProfile, data: formData);
 
-    return ApiResponse.fromJson(
-      response.data,
-      (json, res) => ProfileResponseModel.fromJson(json),
-    );
+    return ApiResponse.fromJsonAsync(response.data, (json, res) async {
+      if (json is! Map<String, dynamic>) {
+        print(
+          'Error: json is not a Map<String, dynamic> or is null in updateProfile',
+        );
+        return null;
+      }
+      final String? pathAvatar = json['path_avatar'] as String?;
+      String? downloadedAvatarPath;
+
+      if (pathAvatar != null && pathAvatar.isNotEmpty) {
+        try {
+          downloadedAvatarPath = await downloadRemoteDataSource.downloadImage(
+            pathAvatar,
+            pathAvatar.split('/').last,
+          );
+        } catch (error) {
+          print('Lỗi tải avatar cho $pathAvatar: $error');
+        }
+      }
+      final profile = ProfileResponseModel.fromJson(<String, dynamic>{
+        ...json,
+        'local_avatar': downloadedAvatarPath ?? '',
+      });
+      return profile;
+    });
   }
 
   @override
@@ -87,7 +109,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
                   }
                 }
 
-                final profile = GetProfileResponse.fromJson({
+                final profile = GetProfileResponse.fromJson(<String, dynamic>{
                   ...itemMap,
                   'local_avatar': downloadedAvatarPath ?? '',
                 });

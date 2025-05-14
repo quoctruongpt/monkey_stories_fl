@@ -69,7 +69,9 @@ class ListProfileSetting extends StatelessWidget {
                                 width: width,
                                 child: ProfileItem(
                                   name: profile.name,
-                                  avatar: profile.localAvatarPath,
+                                  avatar:
+                                      profile.localAvatarPath ??
+                                      profile.avatarPath,
                                   onTap:
                                       () =>
                                           _profilePressed(context, profile.id),
