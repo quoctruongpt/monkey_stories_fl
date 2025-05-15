@@ -41,6 +41,8 @@ class AppRoutePaths {
   static const String activeLicenseInputOtp = '/active_license_input_otp';
   static const String activeLicensePhoneInfo = '/active_license_phone_info';
   static const String activeLicenseSuccess = '/active_license_success';
+
+  static const String listProfile = '/list_profile';
 }
 
 class AppRouteNames {
@@ -87,4 +89,6 @@ class AppRouteNames {
   static const String activeLicenseInputOtp = 'active_license_input_otp';
   static const String activeLicensePhoneInfo = 'active_license_phone_info';
   static const String activeLicenseSuccess = 'active_license_success';
+
+  static const String listProfile = 'list_profile';
 }

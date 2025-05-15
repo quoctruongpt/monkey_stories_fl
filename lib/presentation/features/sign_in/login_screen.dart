@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } else {
-      context.go(AppRoutePaths.home);
+      context.go(AppRoutePaths.listProfile);
     }
   }
 

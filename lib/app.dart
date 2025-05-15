@@ -20,6 +20,7 @@ import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart
 import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
 import 'package:monkey_stories/presentation/widgets/leave_contact_dialog/leave_contact_dialog.dart';
+import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
 
 final logger = Logger('MyApp');
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<UserCubit>()),
         BlocProvider(create: (_) => sl<ProfileCubit>()..getCurrentProfile()),
         BlocProvider(create: (_) => sl<PurchasedCubit>()),
+        BlocProvider(create: (_) => DialogCubit()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:
@@ -146,6 +148,31 @@ class _AppBuilderState extends State<AppBuilder>
             );
           },
         ),
+
+        // === Dialog Layer ===
+        // Lắng nghe DialogCubit và hiển thị các dialog trong một Stack riêng
+        BlocBuilder<DialogCubit, DialogState>(
+          builder: (context, state) {
+            print('Dialog state: ${state.dialogs}');
+            if (state.dialogs.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            // Stack này sẽ chứa tất cả các dialog
+            // Chúng sẽ được hiển thị chồng lên nhau theo thứ tự trong list
+            return Stack(
+              children:
+                  state.dialogs.map((dialogInfo) {
+                    // Đảm bảo mỗi dialog widget có key duy nhất đã được gán
+                    // để Flutter và Cubit có thể quản lý chính xác
+                    return KeyedSubtree(
+                      key: dialogInfo.key,
+                      child: dialogInfo.widget,
+                    );
+                  }).toList(),
+            );
+          },
+        ),
+        // === End Dialog Layer ===
 
         // Debug view
         BlocSelector<DebugCubit, DebugState, bool>(
