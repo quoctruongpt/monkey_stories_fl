@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
@@ -10,10 +11,12 @@ import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsLocalDataSource localDataSource;
   final SettingsRemoteDataSource remoteDataSource;
+  final AuthLocalDataSource authLocalDataSource;
 
   SettingsRepositoryImpl({
     required this.localDataSource,
     required this.remoteDataSource,
+    required this.authLocalDataSource,
   });
 
   @override
@@ -33,6 +36,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<Either<Failure, void>> saveLanguage(String languageCode) async {
     try {
+      final isLoggedIn = await authLocalDataSource.isLoggedIn();
+      if (!isLoggedIn) {
+        return const Right(null);
+      }
+
       final response = await remoteDataSource.updateUserSetting(
         languageId: languageCode,
       );

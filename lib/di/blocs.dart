@@ -125,6 +125,7 @@ void initBlocDependencies() {
       signUpUsecase: sl<SignUpUsecase>(),
       loginUsecase: sl<LoginUsecase>(),
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
 
@@ -181,6 +182,7 @@ void initBlocDependencies() {
       signUpSkipUsecase: sl<SignUpSkipUsecase>(),
       userCubit: sl<UserCubit>(),
       profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
 

@@ -87,6 +87,7 @@ void initRepositoryDependencies() {
     () => SettingsRepositoryImpl(
       localDataSource: sl<SettingsLocalDataSource>(),
       remoteDataSource: sl<SettingsRemoteDataSource>(),
+      authLocalDataSource: sl<AuthLocalDataSource>(),
     ),
   );
   sl.registerLazySingleton<SystemSettingsRepository>(
