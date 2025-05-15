@@ -74,7 +74,7 @@ final List<Map<String, dynamic>> settingsData = [
       SettingItem(
         icon: 'assets/icons/svg/setting_orange.svg',
         label: 'Cài đặt chung',
-        route: AppRouteNames.home,
+        route: AppRouteNames.generalSetting,
       ),
       SettingItem(
         icon: 'assets/icons/svg/alarm-check.svg',

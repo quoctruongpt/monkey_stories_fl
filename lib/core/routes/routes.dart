@@ -30,6 +30,7 @@ import 'package:monkey_stories/presentation/features/parent_setting/user_info.da
 import 'package:monkey_stories/presentation/features/parent_setting/edit_profile_info.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/change_password.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/change_password_success.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/general_setting.dart';
 
 final logger = Logger('router');
 
@@ -335,6 +336,16 @@ final GoRouter router = GoRouter(
         return const OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: ChangePasswordSuccess(),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.generalSetting,
+      name: AppRouteNames.generalSetting,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: GeneralSettingScreen(),
         );
       },
     ),
