@@ -20,6 +20,7 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_erro
 import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -79,6 +80,7 @@ import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_a
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
 
 final sl = GetIt.instance;
@@ -102,6 +104,7 @@ void initBlocDependencies() {
       logoutUsecase: sl<LogoutUsecase>(),
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
       profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
   sl.registerFactory(
@@ -159,6 +162,8 @@ void initBlocDependencies() {
       saveThemeUseCase: sl<SaveThemeUseCase>(),
       setPreferredOrientationsUseCase: sl<SetPreferredOrientationsUseCase>(),
       unityCubit: sl<UnityCubit>(), // UnityCubit is now also registered here
+      saveSoundTrackUsecase: sl<SaveSoundTrackUsecase>(),
+      getSoundTrackUseCase: sl<GetSoundTrackUseCase>(),
     ),
   );
 

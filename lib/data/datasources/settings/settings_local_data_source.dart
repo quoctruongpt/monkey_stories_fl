@@ -6,7 +6,10 @@ import 'package:monkey_stories/core/error/exceptions.dart';
 abstract class SettingsLocalDataSource {
   Future<String?> getLanguage();
   Future<void> saveLanguage(String languageCode);
-
+  Future<bool> getBackgroundMusic();
+  Future<void> saveBackgroundMusic(bool isEnabled);
+  Future<bool> getNotification();
+  Future<void> saveNotification(bool isEnabled);
   Future<ThemeMode> getTheme();
   Future<void> saveTheme(ThemeMode themeMode);
 }
@@ -76,5 +79,33 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     } catch (e) {
       throw CacheException(message: 'Failed to save theme mode');
     }
+  }
+
+  @override
+  Future<bool> getBackgroundMusic() async {
+    return sharedPreferences.getBool(SharedPrefKeys.isBackgroundMusicEnabled) ??
+        true;
+  }
+
+  @override
+  Future<void> saveBackgroundMusic(bool isEnabled) async {
+    await sharedPreferences.setBool(
+      SharedPrefKeys.isBackgroundMusicEnabled,
+      isEnabled,
+    );
+  }
+
+  @override
+  Future<bool> getNotification() async {
+    return sharedPreferences.getBool(SharedPrefKeys.isNotificationEnabled) ??
+        true;
+  }
+
+  @override
+  Future<void> saveNotification(bool isEnabled) async {
+    await sharedPreferences.setBool(
+      SharedPrefKeys.isNotificationEnabled,
+      isEnabled,
+    );
   }
 }

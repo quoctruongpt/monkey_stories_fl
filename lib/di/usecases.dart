@@ -68,6 +68,8 @@ import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_a
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -192,6 +194,12 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => CompletePurchaseUsecase(repository: sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => SaveSoundTrackUsecase(repository: sl<SettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetSoundTrackUseCase(sl<SettingsRepository>()),
   );
   // Add other usecase registrations here...
 }

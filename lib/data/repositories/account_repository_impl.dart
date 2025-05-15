@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 import 'package:monkey_stories/data/models/account/update_user_info.dart';
 import 'package:monkey_stories/domain/entities/account/load_update_entity.dart';
@@ -11,10 +12,12 @@ import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.
 class AccountRepositoryImpl extends AccountRepository {
   final AccountRemoteDataSource accountRemoteDataSource;
   final SystemLocalDataSource systemLocalDataSource;
+  final SettingsLocalDataSource settingsLocalDataSource;
 
   AccountRepositoryImpl({
     required this.accountRemoteDataSource,
     required this.systemLocalDataSource,
+    required this.settingsLocalDataSource,
   });
 
   @override
@@ -25,6 +28,12 @@ class AccountRepositoryImpl extends AccountRepository {
       final countryCode = response.data?.location.countryCode;
       if (countryCode != null) {
         systemLocalDataSource.cacheCountryCode(countryCode);
+        settingsLocalDataSource.saveLanguage(
+          response.data?.syncUser.languageId ?? '',
+        );
+        settingsLocalDataSource.saveBackgroundMusic(
+          response.data?.syncUser.soundtrack ?? true,
+        );
       }
       return Right(response.data?.toEntity());
     }

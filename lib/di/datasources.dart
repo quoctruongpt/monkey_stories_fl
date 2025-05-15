@@ -11,6 +11,7 @@ import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remo
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Auth Datasources
@@ -112,6 +113,11 @@ void initDatasourceDependencies() {
   // Active license
   sl.registerLazySingleton<ActiveLicenseRemoteDataSource>(
     () => ActiveLicenseRemoteDataSourceImpl(dio: sl<Dio>()),
+  );
+
+  // Settings
+  sl.registerLazySingleton<SettingsRemoteDataSource>(
+    () => SettingsRemoteDataSourceImpl(dio: sl<Dio>()),
   );
 
   // Add other datasource registrations here...

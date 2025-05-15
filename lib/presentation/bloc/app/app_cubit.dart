@@ -13,20 +13,25 @@ import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:monkey_stories/core/constants/unity_constants.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
+  final SaveSoundTrackUsecase _saveSoundTrackUsecase;
   final GetLanguageUseCase _getLanguageUseCase;
   final SaveLanguageUseCase _saveLanguageUseCase;
   final GetThemeUseCase _getThemeUseCase;
   final SaveThemeUseCase _saveThemeUseCase;
   final SetPreferredOrientationsUseCase _setPreferredOrientationsUseCase;
   final UnityCubit _unityCubit;
+  final GetSoundTrackUseCase _getSoundTrackUseCase;
   final Logger _logger = Logger('AppCubit');
 
   AppCubit({
@@ -36,46 +41,60 @@ class AppCubit extends Cubit<AppState> {
     required SaveThemeUseCase saveThemeUseCase,
     required SetPreferredOrientationsUseCase setPreferredOrientationsUseCase,
     required UnityCubit unityCubit,
+    required SaveSoundTrackUsecase saveSoundTrackUsecase,
+    required GetSoundTrackUseCase getSoundTrackUseCase,
   }) : _getLanguageUseCase = getLanguageUseCase,
        _saveLanguageUseCase = saveLanguageUseCase,
        _getThemeUseCase = getThemeUseCase,
        _saveThemeUseCase = saveThemeUseCase,
        _setPreferredOrientationsUseCase = setPreferredOrientationsUseCase,
        _unityCubit = unityCubit,
+       _saveSoundTrackUsecase = saveSoundTrackUsecase,
+       _getSoundTrackUseCase = getSoundTrackUseCase,
        super(
          const AppState(
            isOrientationLoading: false,
            isDarkMode: false,
            languageCode: 'vi',
+           appVersion: '...',
          ),
        ) {
-    _loadInitialSettings();
+    loadInitialSettings();
   }
 
-  Future<void> _loadInitialSettings() async {
+  Future<void> loadInitialSettings() async {
     _logger.info('Loading initial settings...');
     final langResult = await _getLanguageUseCase.call(NoParams());
     final themeResult = await _getThemeUseCase.call(NoParams());
+    final packageInfo = await PackageInfo.fromPlatform();
+    final soundTrackResult = await _getSoundTrackUseCase.call(NoParams());
 
     String initialLanguage = Languages.defaultLanguage;
     bool initialIsDarkMode = false;
+    bool initialIsSoundTrack = true;
+    String appVersion = packageInfo.version;
 
-    langResult.fold((failure) {
-      _logger.warning(
-        'Failed to load saved language: ${failure.displayMessage}. Trying device language.',
-      );
-      final deviceLanguage = PlatformDispatcher.instance.locale.languageCode;
-      if (Languages.supportedLanguages.any(
-        (language) => language.code == deviceLanguage,
-      )) {
-        initialLanguage = deviceLanguage;
-        _logger.info('Using device language: $deviceLanguage');
-        _saveLanguageUseCase.call(initialLanguage);
-      } else {
-        initialLanguage = Languages.defaultLanguage;
-        _saveLanguageUseCase.call(initialLanguage);
-      }
-    }, (languageCode) => initialLanguage = languageCode);
+    langResult.fold(
+      (failure) {
+        _logger.warning(
+          'Failed to load saved language: ${failure.displayMessage}. Trying device language.',
+        );
+        final deviceLanguage = PlatformDispatcher.instance.locale.languageCode;
+        if (Languages.supportedLanguages.any(
+          (language) => language.code == deviceLanguage,
+        )) {
+          initialLanguage = deviceLanguage;
+          _logger.info('Using device language: $deviceLanguage');
+          _saveLanguageUseCase.call(initialLanguage);
+        } else {
+          initialLanguage = Languages.defaultLanguage;
+          _saveLanguageUseCase.call(initialLanguage);
+        }
+      },
+      (languageCode) =>
+          initialLanguage =
+              languageCode.isEmpty ? Languages.defaultLanguage : languageCode,
+    );
 
     themeResult.fold(
       (failure) =>
@@ -83,13 +102,22 @@ class AppCubit extends Cubit<AppState> {
       (themeMode) => initialIsDarkMode = (themeMode == ThemeMode.dark),
     );
 
+    soundTrackResult.fold(
+      (failure) => _logger.warning(
+        'Failed to load sound track: ${failure.displayMessage}',
+      ),
+      (soundTrack) => initialIsSoundTrack = soundTrack,
+    );
+
     _logger.info(
-      'Initial settings loaded: lang=$initialLanguage, isDarkMode=$initialIsDarkMode',
+      'Initial settings loaded: lang=$initialLanguage, isDarkMode=$initialIsDarkMode, version=$appVersion',
     );
     emit(
       state.copyWith(
         languageCode: initialLanguage,
         isDarkMode: initialIsDarkMode,
+        appVersion: appVersion,
+        isBackgroundMusicEnabled: initialIsSoundTrack,
       ),
     );
   }
@@ -170,5 +198,26 @@ class AppCubit extends Cubit<AppState> {
   void updateDeviceInfo({String? deviceId}) {
     _logger.fine('Updating deviceId in AppState: $deviceId');
     emit(state.copyWith(deviceId: deviceId));
+  }
+
+  Future<void> toggleBackgroundMusic() async {
+    final oldValue = state.isBackgroundMusicEnabled;
+    try {
+      emit(state.copyWith(isBackgroundMusicEnabled: !oldValue));
+      final result = await _saveSoundTrackUsecase.call(!oldValue);
+      result.fold((failure) {
+        _logger.severe(
+          'Failed to toggle background music: ${failure.displayMessage}',
+        );
+        emit(state.copyWith(isBackgroundMusicEnabled: oldValue));
+      }, (_) {});
+    } catch (e) {
+      _logger.severe('Failed to toggle background music: $e');
+      emit(state.copyWith(isBackgroundMusicEnabled: oldValue));
+    }
+  }
+
+  void toggleNotification() {
+    emit(state.copyWith(isNotificationEnabled: !state.isNotificationEnabled));
   }
 }

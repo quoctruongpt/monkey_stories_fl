@@ -20,8 +20,131 @@ class GeneralSettingScreen extends StatelessWidget {
 
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-        child: Column(children: [ChangeLanguage()]),
+        child: Column(
+          children: [
+            ChangeLanguage(),
+            Divider(color: AppTheme.skyLightColor),
+
+            SizedBox(height: Spacing.sm),
+            ChangeBackgroundMusic(),
+            SizedBox(height: Spacing.sm),
+            Divider(color: AppTheme.skyLightColor),
+
+            SizedBox(height: Spacing.md),
+            ChangeNotification(),
+            SizedBox(height: Spacing.sm),
+            Divider(color: AppTheme.skyLightColor),
+
+            SizedBox(height: Spacing.md),
+            VersionApp(),
+            SizedBox(height: Spacing.md),
+            Divider(color: AppTheme.skyLightColor),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class VersionApp extends StatelessWidget {
+  const VersionApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SvgPicture.asset('assets/icons/svg/devices.svg', width: 24, height: 24),
+        const SizedBox(width: Spacing.md),
+        Expanded(
+          child: Text(AppLocalizations.of(context).translate('Phiên bản')),
+        ),
+        BlocBuilder<AppCubit, AppState>(
+          builder: (context, state) {
+            return Text(
+              state.appVersion,
+              style: const TextStyle(color: AppTheme.textGrayColor),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class ChangeBackgroundMusic extends StatelessWidget {
+  const ChangeBackgroundMusic({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/svg/volume_up.svg',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: Spacing.md),
+            Expanded(
+              child: Text(AppLocalizations.of(context).translate('Nhạc nền')),
+            ),
+            Switch(
+              value: state.isBackgroundMusicEnabled,
+              onChanged: (value) {
+                context.read<AppCubit>().toggleBackgroundMusic();
+              },
+              activeTrackColor: AppTheme.successColor,
+              inactiveThumbColor: AppTheme.textSecondaryColor,
+              trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppTheme.successColor;
+                }
+                return AppTheme.textSecondaryColor;
+              }),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ChangeNotification extends StatelessWidget {
+  const ChangeNotification({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(
+      builder: (context, state) {
+        return Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/svg/notification.svg',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: Spacing.md),
+            Expanded(
+              child: Text(AppLocalizations.of(context).translate('Thông báo')),
+            ),
+            Switch(
+              value: state.isNotificationEnabled,
+              onChanged: (value) {
+                context.read<AppCubit>().toggleNotification();
+              },
+              activeTrackColor: AppTheme.successColor,
+              inactiveThumbColor: AppTheme.textSecondaryColor,
+              trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppTheme.successColor;
+                }
+                return AppTheme.textSecondaryColor;
+              }),
+            ),
+          ],
+        );
+      },
     );
   }
 }
