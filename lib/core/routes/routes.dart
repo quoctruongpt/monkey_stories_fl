@@ -28,6 +28,8 @@ import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 import 'package:monkey_stories/presentation/features/purchased_success.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/edit_profile_info.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/change_password.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/change_password_success.dart';
 
 final logger = Logger('router');
 
@@ -313,6 +315,26 @@ final GoRouter router = GoRouter(
             title: state.uri.queryParameters['title'] ?? '',
             url: state.uri.queryParameters['url'] ?? '',
           ),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.changePassword,
+      name: AppRouteNames.changePassword,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: ChangePassword(),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.changePasswordSuccess,
+      name: AppRouteNames.changePasswordSuccess,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: ChangePasswordSuccess(),
         );
       },
     ),

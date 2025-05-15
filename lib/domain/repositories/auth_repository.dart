@@ -61,5 +61,8 @@ abstract class AuthRepository {
 
   Future<Either<Failure, bool>> getHasLoggedBefore();
 
-  Future<Either<ServerFailureWithCode, void>> confirmPassword(String password);
+  Future<Either<ServerFailureWithCode, void>> confirmPassword(
+    String password,
+    String? newPassword,
+  );
 }

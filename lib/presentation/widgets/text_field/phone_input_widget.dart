@@ -18,6 +18,7 @@ class PhoneInputField extends StatelessWidget {
   final String? labelTopText;
   final Widget? labelTopIcon;
   final VoidCallback? onTap;
+  final bool? canEdit;
 
   const PhoneInputField({
     super.key,
@@ -35,6 +36,7 @@ class PhoneInputField extends StatelessWidget {
     this.labelTopText,
     this.labelTopIcon,
     this.onTap,
+    this.canEdit = true,
   });
 
   @override
@@ -61,6 +63,7 @@ class PhoneInputField extends StatelessWidget {
                 ],
               ),
             TextField(
+              enabled: canEdit,
               controller: controller,
               keyboardType: TextInputType.phone,
               onChanged: onChanged,
@@ -123,8 +126,15 @@ class PhoneInputField extends StatelessWidget {
                             ),
                             Text(
                               country?.dialCode ?? '',
-                              style: Theme.of(context).textTheme.displaySmall
-                                  ?.copyWith(fontSize: fontSize),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.displaySmall?.copyWith(
+                                fontSize: fontSize,
+                                color:
+                                    canEdit != true
+                                        ? AppTheme.textGrayLightColor
+                                        : null,
+                              ),
                             ),
                           ],
                         );

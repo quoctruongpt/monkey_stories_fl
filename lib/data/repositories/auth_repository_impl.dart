@@ -492,8 +492,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<ServerFailureWithCode, void>> confirmPassword(
     String password,
+    String? newPassword,
   ) async {
-    final result = await remoteDataSource.confirmPassword(password);
+    final result = await remoteDataSource.confirmPassword(
+      password,
+      newPassword,
+    );
     if (result.status == ApiStatus.success) {
       return const Right(null);
     }

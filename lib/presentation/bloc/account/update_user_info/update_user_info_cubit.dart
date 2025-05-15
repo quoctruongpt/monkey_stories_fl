@@ -137,7 +137,9 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
       ),
     );
     try {
-      final result = await _confirmPasswordUsecase.call(state.password.value);
+      final result = await _confirmPasswordUsecase.call(
+        ConfirmPasswordParams(password: state.password.value),
+      );
       result.fold(
         (error) {
           emit(state.copyWith(passwordErrorMessage: error.message));

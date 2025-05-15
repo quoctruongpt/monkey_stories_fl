@@ -68,7 +68,10 @@ abstract class AuthRemoteDataSource {
     String tokenChangePassword,
   );
 
-  Future<ApiResponse<Null>> confirmPassword(String password);
+  Future<ApiResponse<Null>> confirmPassword(
+    String password,
+    String? newPassword,
+  );
 }
 
 final logger = Logger('DeviceRemoteDataSourceImpl');
@@ -278,10 +281,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<Null>> confirmPassword(String password) async {
+  Future<ApiResponse<Null>> confirmPassword(
+    String password,
+    String? newPassword,
+  ) async {
     final response = await dioClient.post(
       ApiEndpoints.confirmPassword,
-      data: {'old_password': password},
+      data: {'old_password': password, 'new_password': newPassword},
     );
 
     return ApiResponse.fromJson(response.data, (json, res) {

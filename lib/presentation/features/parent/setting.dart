@@ -76,7 +76,23 @@ class SettingScreen extends StatelessWidget {
                   if (itemGenIndex.isEven) {
                     final itemIndex = itemGenIndex ~/ 2;
                     final item = section['items'][itemIndex];
-                    return SettingItemWidget(item: item);
+                    if (item.isVisibleGetter != null) {
+                      return FutureBuilder<bool>(
+                        future: item.isVisibleGetter!(context),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const SizedBox.shrink(); // Hoặc một widget tải
+                          }
+                          if (snapshot.hasData && snapshot.data == true) {
+                            return SettingItemWidget(item: item);
+                          }
+                          return const SizedBox.shrink(); // Ẩn nếu lỗi hoặc false
+                        },
+                      );
+                    } else {
+                      return SettingItemWidget(item: item);
+                    }
                   } else {
                     return const Divider(
                       height: 1,

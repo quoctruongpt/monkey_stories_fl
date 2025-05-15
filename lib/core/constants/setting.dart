@@ -28,6 +28,7 @@ final List<Map<String, dynamic>> settingsData = [
           }
           return 'N/A';
         },
+        showArrow: false,
       ),
       SettingItem(
         icon: 'assets/icons/svg/user-circle.svg',
@@ -39,6 +40,7 @@ final List<Map<String, dynamic>> settingsData = [
           }
           return 'N/A';
         },
+        showArrow: false,
       ),
     ],
   },
@@ -58,7 +60,11 @@ final List<Map<String, dynamic>> settingsData = [
       SettingItem(
         icon: 'assets/icons/svg/password.svg',
         label: 'Thay đổi mật khẩu',
-        route: AppRouteNames.home,
+        route: AppRouteNames.changePassword,
+        isVisibleGetter: (BuildContext context) async {
+          final user = context.read<UserCubit>().state.user;
+          return user?.loginType != LoginType.skip;
+        },
       ),
     ],
   },

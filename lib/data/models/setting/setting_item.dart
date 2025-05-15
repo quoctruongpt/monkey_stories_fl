@@ -11,6 +11,7 @@ class SettingItem {
   final Future<String?> Function()? valueGetter;
   final Function(BuildContext context)? onTap;
   final bool showArrow;
+  final Future<bool> Function(BuildContext context)? isVisibleGetter;
 
   SettingItem({
     required this.icon,
@@ -21,5 +22,6 @@ class SettingItem {
     this.valueGetter,
     this.onTap,
     this.showArrow = true,
+    this.isVisibleGetter,
   });
 }

@@ -19,6 +19,7 @@ class TextFieldWidget extends StatelessWidget {
     this.labelTopIcon,
     this.onTap,
     this.keyboardType,
+    this.canEdit = true,
   });
 
   final TextEditingController? controller;
@@ -36,6 +37,7 @@ class TextFieldWidget extends StatelessWidget {
   final Widget? labelTopIcon;
   final VoidCallback? onTap;
   final TextInputType? keyboardType;
+  final bool? canEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,7 @@ class TextFieldWidget extends StatelessWidget {
                 ],
               ),
             TextField(
+              enabled: canEdit,
               textCapitalization: textCapitalization ?? TextCapitalization.none,
               focusNode: focusNode,
               controller: controller,

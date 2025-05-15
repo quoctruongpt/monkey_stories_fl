@@ -79,6 +79,7 @@ import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_a
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -244,6 +245,12 @@ void initBlocDependencies() {
     () => UpdateProfileInfoCubit(
       profileCubit: sl<ProfileCubit>(),
       updateProfileUsecase: sl<UpdateProfileUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ChangePasswordCubit(
+      confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
     ),
   );
 

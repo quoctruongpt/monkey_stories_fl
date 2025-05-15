@@ -10,12 +10,18 @@ import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_passw
 import 'package:monkey_stories/presentation/widgets/base/horizontal_line_text.dart';
 
 class ChooseMethodFp extends StatelessWidget {
-  const ChooseMethodFp({super.key});
+  const ChooseMethodFp({super.key, this.isFromChangePassword = false});
+
+  final bool? isFromChangePassword;
 
   void _onPressed(BuildContext context, ForgotPasswordType method) {
     context.read<ForgotPasswordCubit>().chooseMethod(method);
-
-    context.pushNamed(AppRouteNames.inputPhoneFp);
+    context.pushNamed(
+      AppRouteNames.inputPhoneFp,
+      queryParameters: {
+        'isFromChangePassword': isFromChangePassword.toString(),
+      },
+    );
   }
 
   @override

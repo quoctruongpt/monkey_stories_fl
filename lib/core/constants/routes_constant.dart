@@ -50,7 +50,8 @@ class AppRoutePaths {
   static const String userInfo = '/user_info';
   static const String listProfileSetting = '/list_profile_setting';
   static const String editProfileInfo = '/edit_profile_info';
-
+  static const String changePassword = '/change_password';
+  static const String changePasswordSuccess = '/change_password_success';
   static const String webView = '/web_view';
 }
 
@@ -107,6 +108,8 @@ class AppRouteNames {
   static const String userInfo = 'user_info';
   static const String listProfileSetting = 'list_profile_setting';
   static const String editProfileInfo = 'edit_profile_info';
+  static const String changePassword = 'change_password';
+  static const String changePasswordSuccess = 'change_password_success';
 
   static const String webView = 'web_view';
 }
