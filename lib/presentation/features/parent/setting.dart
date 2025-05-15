@@ -3,7 +3,7 @@ import 'package:monkey_stories/core/constants/setting.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
-import 'package:monkey_stories/presentation/widgets/setting_item_widget.dart';
+import 'package:monkey_stories/presentation/widgets/enhanced_setting_item.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -18,8 +18,8 @@ class SettingScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
         child: ListView.builder(
           itemCount: settingsData.length + 1,
-          itemBuilder: (context, index) {
-            if (index == settingsData.length) {
+          itemBuilder: (context, sectionIndex) {
+            if (sectionIndex == settingsData.length) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
                 child: Row(
@@ -55,55 +55,46 @@ class SettingScreen extends StatelessWidget {
               );
             }
 
-            final section = settingsData[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    AppLocalizations.of(context).translate(section['title']),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.textGrayLightColor,
-                    ),
+            final section = settingsData[sectionIndex];
+            final List<dynamic> itemsInSection =
+                section['items'] as List<dynamic>;
+
+            List<Widget> sectionWidgets = [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  AppLocalizations.of(context).translate(section['title']),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppTheme.textGrayLightColor,
                   ),
                 ),
-                ...List.generate(section['items'].length * 2 - 1, (
-                  itemGenIndex,
-                ) {
-                  if (itemGenIndex.isEven) {
-                    final itemIndex = itemGenIndex ~/ 2;
-                    final item = section['items'][itemIndex];
-                    if (item.isVisibleGetter != null) {
-                      return FutureBuilder<bool>(
-                        future: item.isVisibleGetter!(context),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SizedBox.shrink(); // Hoặc một widget tải
-                          }
-                          if (snapshot.hasData && snapshot.data == true) {
-                            return SettingItemWidget(item: item);
-                          }
-                          return const SizedBox.shrink(); // Ẩn nếu lỗi hoặc false
-                        },
-                      );
-                    } else {
-                      return SettingItemWidget(item: item);
-                    }
-                  } else {
-                    return const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Color(0xFFE5E5E5),
-                    );
-                  }
-                }),
-                if (index == settingsData.length - 1)
-                  const SizedBox(height: Spacing.md),
-              ],
+              ),
+            ];
+
+            for (int i = 0; i < itemsInSection.length; i++) {
+              final currentItem = itemsInSection[i];
+              final nextItem =
+                  (i + 1 < itemsInSection.length)
+                      ? itemsInSection[i + 1]
+                      : null;
+
+              sectionWidgets.add(
+                EnhancedSettingItem(
+                  currentItemModel: currentItem,
+                  nextItemModel: nextItem,
+                ),
+              );
+            }
+
+            if (sectionIndex == settingsData.length - 1) {
+              sectionWidgets.add(const SizedBox(height: Spacing.md));
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: sectionWidgets,
             );
           },
         ),
