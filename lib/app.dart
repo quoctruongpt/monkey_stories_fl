@@ -59,7 +59,12 @@ class MyApp extends StatelessWidget {
             supportedLocales: Languages.getSupportedLocales(),
             locale: Locale(state.languageCode),
             builder: (context, child) {
-              return AppBuilder(child: child);
+              return MediaQuery(
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: const TextScaler.linear(1.0)),
+                child: AppBuilder(child: child),
+              );
             },
           );
         },
