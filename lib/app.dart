@@ -103,6 +103,7 @@ class _AppBuilderState extends State<AppBuilder>
 
     // Lắng nghe thay đổi trạng thái của DebugCubit để bật/tắt logging
     context.read<DebugCubit>().stream.listen((state) {
+      if (!mounted) return;
       if (state.isShowLogger) {
         Logging.debugCubit = context.read<DebugCubit>();
       } else {
@@ -158,7 +159,7 @@ class _AppBuilderState extends State<AppBuilder>
         // Lắng nghe DialogCubit và hiển thị các dialog trong một Stack riêng
         BlocBuilder<DialogCubit, DialogState>(
           builder: (context, state) {
-            print('Dialog state: ${state.dialogs}');
+            logger.info('Dialog state: ${state.dialogs}');
             if (state.dialogs.isEmpty) {
               return const SizedBox.shrink();
             }

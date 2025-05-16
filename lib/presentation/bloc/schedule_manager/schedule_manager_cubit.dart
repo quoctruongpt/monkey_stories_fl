@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/schedule_manager.dart';
 import 'package:monkey_stories/domain/entities/setting/schedule_entity.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 
 part 'schedule_manager_state.dart';
+
+final logger = Logger('ScheduleManagerCubit');
 
 class ScheduleManagerCubit extends Cubit<ScheduleManagerState> {
   final SaveScheduleUsecase _saveScheduleUsecase;
@@ -31,7 +34,7 @@ class ScheduleManagerCubit extends Cubit<ScheduleManagerState> {
             final weekday = weekdays.firstWhere((wd) => wd.id == dayId);
             loadedSelectedWeekdays.add(weekday);
           } catch (e) {
-            print(
+            logger.severe(
               'Không tìm thấy ngày với ID "$dayId" trong danh sách ngày toàn cục.',
             );
           }
@@ -51,7 +54,7 @@ class ScheduleManagerCubit extends Cubit<ScheduleManagerState> {
         );
       }
     } catch (e) {
-      print('kkk Lỗi khi tải lịch trình ban đầu: $e');
+      logger.severe('kkk Lỗi khi tải lịch trình ban đầu: $e');
     }
   }
 
@@ -94,7 +97,7 @@ class ScheduleManagerCubit extends Cubit<ScheduleManagerState> {
         },
       );
     } catch (e) {
-      print('kkk Lỗi khi lưu lịch trình: $e');
+      logger.severe('kkk Lỗi khi lưu lịch trình: $e');
       emit(state.copyWith(error: 'error'));
     } finally {
       emit(state.copyWith(isLoading: false));

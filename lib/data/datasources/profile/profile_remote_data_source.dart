@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/datasources/download/download_remote_data_source.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/profile/get_profile_response.dart';
 import 'package:monkey_stories/data/models/profile/update_profile_response.dart';
+
+final logger = Logger('ProfileRemoteDataSource');
 
 abstract class ProfileRemoteDataSource {
   Future<ApiResponse<ProfileResponseModel?>> updateProfile(
@@ -59,7 +62,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
     return ApiResponse.fromJsonAsync(response.data, (json, res) async {
       if (json is! Map<String, dynamic>) {
-        print(
+        logger.severe(
           'Error: json is not a Map<String, dynamic> or is null in updateProfile',
         );
         return null;
@@ -74,7 +77,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             pathAvatar.split('/').last,
           );
         } catch (error) {
-          print('Lỗi tải avatar cho $pathAvatar: $error');
+          logger.severe('Lỗi tải avatar cho $pathAvatar: $error');
         }
       }
       final profile = ProfileResponseModel.fromJson(<String, dynamic>{
@@ -105,7 +108,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
                     downloadedAvatarPath = await downloadRemoteDataSource
                         .downloadImage(pathAvatar, pathAvatar.split('/').last);
                   } catch (error) {
-                    print('Lỗi tải avatar cho $pathAvatar: $error');
+                    logger.severe('Lỗi tải avatar cho $pathAvatar: $error');
                   }
                 }
 

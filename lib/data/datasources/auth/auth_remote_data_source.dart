@@ -197,7 +197,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
-      print('kkk $e');
+      logger.severe('checkPhoneNumber $e');
       // Các lỗi khác
       throw ServerException(message: e.toString());
     }

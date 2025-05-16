@@ -1,8 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 part 'dialog_state.dart';
+
+final logger = Logger('DialogCubit');
 
 class DialogCubit extends Cubit<DialogState> {
   DialogCubit() : super(DialogInitial());
@@ -18,20 +21,19 @@ class DialogCubit extends Cubit<DialogState> {
 
     // Kiểm tra xem dialog với key này đã tồn tại chưa (tùy chọn, để tránh trùng lặp)
     if (state.dialogs.any((info) => info.key == dialogKey)) {
-      print('Dialog with key $dialogKey already exists. Skipping.');
+      logger.info('Dialog with key $dialogKey already exists. Skipping.');
       return; // Không thêm nếu đã có
     }
 
     final updatedDialogs = List<DialogInfo>.from(state.dialogs)
       ..add(newDialogInfo);
     emit(DialogsUpdated(dialogs: updatedDialogs));
-    print('Dialog with key $dialogKey added.'); // Thêm log xác nhận
+    logger.info('Dialog with key $dialogKey added.'); // Thêm log xác nhận
   }
 
   // Đóng dialog cụ thể bằng key của nó
   void dismissDialogByKey(Key key) {
     final currentDialogs = List<DialogInfo>.from(state.dialogs);
-    final initialLength = currentDialogs.length;
     currentDialogs.removeWhere((dialogInfo) {
       final match = dialogInfo.key == key;
       return match;

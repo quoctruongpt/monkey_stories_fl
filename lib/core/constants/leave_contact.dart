@@ -1,4 +1,4 @@
-enum LeaveContactRole { Student, Parent }
+enum LeaveContactRole { student, parent }
 
 class LeaveContactRoleItem {
   final LeaveContactRole value;
@@ -9,11 +9,11 @@ class LeaveContactRoleItem {
 
 final List<LeaveContactRoleItem> leaveContactRoles = [
   const LeaveContactRoleItem(
-    value: LeaveContactRole.Student,
+    value: LeaveContactRole.student,
     label: 'app.popup_c3.role.student',
   ),
   const LeaveContactRoleItem(
-    value: LeaveContactRole.Parent,
+    value: LeaveContactRole.parent,
     label: 'app.popup_c3.role.parent',
   ),
 ];

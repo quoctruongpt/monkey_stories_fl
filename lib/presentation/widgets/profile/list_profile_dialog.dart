@@ -12,6 +12,9 @@ import 'package:monkey_stories/presentation/widgets/profile/add_profile_item.dar
 import 'package:monkey_stories/presentation/widgets/profile/profile_item.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:logging/logging.dart';
+
+final logger = Logger('ListProfileDialog');
 
 class ListProfileDialog extends StatelessWidget {
   final VoidCallback onClose;
@@ -119,11 +122,10 @@ class ListProfileDialog extends StatelessWidget {
                         (index == state.profiles.length)
                             ? (state.profiles.length <
                                     (context
-                                            .read<UserCubit>()
-                                            .state
-                                            .user!
-                                            .maxProfile ??
-                                        0)
+                                        .read<UserCubit>()
+                                        .state
+                                        .user!
+                                        .maxProfile)
                                 ? AddProfileItem(
                                   onTap: () => _addProfilePressed(context),
                                 )
@@ -245,7 +247,7 @@ Widget buildListProfileDialogWidget(BuildContext context) {
         listen: false,
       ).dismissDialogByKey(dialogKey);
     } catch (e) {
-      print('Error dismissing ListProfileDialog: $e');
+      logger.severe('Error dismissing ListProfileDialog: $e');
     }
   }
 
