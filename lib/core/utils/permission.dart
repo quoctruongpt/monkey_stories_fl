@@ -67,4 +67,30 @@ class PermissionUtil {
     }
     return false;
   }
+
+  static Future<bool> checkNotificationPermission(BuildContext context) async {
+    final status = await Permission.notification.status;
+
+    if (status.isGranted) return true;
+
+    final result = await Permission.notification.request();
+
+    if (result.isGranted) return true;
+
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(context).translate('Đặt lịch học'),
+      messageText: AppLocalizations.of(context).translate(
+        'Ba mẹ cho phép Monkey gửi thông báo nhắc học để sử dụng tính năng này nhé',
+      ),
+      imageAsset: 'assets/images/monkey_notice.png',
+      primaryActionText: AppLocalizations.of(context).translate('Tiếp tục'),
+      onPrimaryAction: () {
+        context.pop();
+        openAppSettings();
+      },
+    );
+
+    return false;
+  }
 }

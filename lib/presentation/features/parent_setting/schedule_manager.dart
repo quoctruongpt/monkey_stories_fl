@@ -3,13 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/core/constants/schedule_manager.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/utils/permission.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/schedule_manager/schedule_manager_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 
-class ScheduleManager extends StatelessWidget {
+class ScheduleManager extends StatefulWidget {
   const ScheduleManager({super.key});
+
+  @override
+  State<ScheduleManager> createState() => _ScheduleManagerState();
+}
+
+class _ScheduleManagerState extends State<ScheduleManager> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkPermission();
+    });
+  }
+
+  Future<void> _checkPermission() async {
+    await PermissionUtil.checkNotificationPermission(context);
+  }
 
   Future<void> _selectTime(BuildContext context, TimeOfDay? initialTime) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -95,7 +113,7 @@ class ScheduleManager extends StatelessWidget {
                                                     (e) => e.id == weekday.id,
                                                   )
                                                   ? Icons.check_circle
-                                                  : Icons.circle_outlined,
+                                                  : Icons.check_circle_outline,
                                               color:
                                                   state.selectedWeekdays.any(
                                                         (e) =>
@@ -103,6 +121,7 @@ class ScheduleManager extends StatelessWidget {
                                                       )
                                                       ? AppTheme.successColor
                                                       : AppTheme.textGrayColor,
+                                              size: 32,
                                             ),
                                             const SizedBox(height: Spacing.xs),
                                             Text(
