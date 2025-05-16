@@ -62,13 +62,19 @@ class _UserInfoViewState extends State<UserInfoView> {
   void _showCreateAccountDialog(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Đăng ký tài khoản'),
-      messageText: AppLocalizations.of(context).translate(
-        'Ba mẹ hãy đăng ký tài khoản để Monkey cập nhật thông tin nhé!',
-      ),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account_message'),
       imageAsset: 'assets/images/monkey_notice.png',
-      primaryActionText: AppLocalizations.of(context).translate('Đăng ký ngay'),
-      secondaryActionText: AppLocalizations.of(context).translate('Để sau'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account.act'),
+      secondaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account.act2'),
       onPrimaryAction: () {
         context.push(AppRoutePaths.signUp);
       },
@@ -81,10 +87,12 @@ class _UserInfoViewState extends State<UserInfoView> {
   void _showPasswordDialog(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('NHẬP LẠI MẬT KHẨU'),
-      messageText: AppLocalizations.of(context).translate(
-        'Để chắc chắn bạn đổi SĐT và Email, Monkey cần bạn nhập lại mật khẩu',
-      ),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account.password'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_account.password_message'),
       child: BlocProvider.value(
         value: context.read<UpdateUserInfoCubit>(),
         child: BlocConsumer<UpdateUserInfoCubit, UpdateUserInfoState>(
@@ -102,7 +110,9 @@ class _UserInfoViewState extends State<UserInfoView> {
               children: [
                 const SizedBox(height: Spacing.md),
                 TextFieldWidget(
-                  hintText: AppLocalizations.of(context).translate('Mật khẩu'),
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('app.user_info.create_account.password.label'),
                   onChanged: (value) {
                     context.read<UpdateUserInfoCubit>().passwordChanged(value);
                   },
@@ -112,7 +122,9 @@ class _UserInfoViewState extends State<UserInfoView> {
                 ),
                 const SizedBox(height: Spacing.md),
                 AppButton.primary(
-                  text: AppLocalizations.of(context).translate('Xác nhận'),
+                  text: AppLocalizations.of(
+                    context,
+                  ).translate('app.user_info.create_account.password.confirm'),
                   onPressed: () {
                     context.read<UpdateUserInfoCubit>().confirmPassword();
                   },
@@ -143,7 +155,7 @@ class _UserInfoViewState extends State<UserInfoView> {
               content: Text(
                 AppLocalizations.of(
                   context,
-                ).translate('Cập nhật thông tin thành công'),
+                ).translate('app.user_info.update_success'),
               ),
             ),
           );
@@ -151,7 +163,11 @@ class _UserInfoViewState extends State<UserInfoView> {
         if (updateState.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(updateState.errorMessage!),
+              content: Text(
+                AppLocalizations.of(
+                  context,
+                ).translate(updateState.errorMessage!),
+              ),
               backgroundColor: AppTheme.errorColor,
             ),
           );
@@ -165,7 +181,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                 appBar: AppBarWidget(
                   title: AppLocalizations.of(
                     context,
-                  ).translate('Thông tin ba mẹ'),
+                  ).translate('app.user_info.title'),
                 ),
                 body: BlocBuilder<UserCubit, UserState>(
                   builder: (context, state) {
@@ -198,10 +214,10 @@ class _UserInfoViewState extends State<UserInfoView> {
                                       },
                                       hintText: AppLocalizations.of(
                                         context,
-                                      ).translate('Họ và tên ba mẹ'),
+                                      ).translate('app.user_info.name.hint'),
                                       labelTopText: AppLocalizations.of(
                                         context,
-                                      ).translate('Họ và tên:'),
+                                      ).translate('app.user_info.name.label'),
                                       labelTopIcon: SvgPicture.asset(
                                         'assets/icons/svg/person.svg',
                                       ),
@@ -233,7 +249,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                                               : null,
                                       labelTopText: AppLocalizations.of(
                                         context,
-                                      ).translate('Số điện thoại:'),
+                                      ).translate('app.user_info.phone.label'),
                                       labelTopIcon: SvgPicture.asset(
                                         'assets/icons/svg/call.svg',
                                       ),
@@ -297,10 +313,10 @@ class _UserInfoViewState extends State<UserInfoView> {
                                       },
                                       hintText: AppLocalizations.of(
                                         context,
-                                      ).translate('Họ và tên ba mẹ'),
+                                      ).translate('app.user_info.email.hint'),
                                       labelTopText: AppLocalizations.of(
                                         context,
-                                      ).translate('Email:'),
+                                      ).translate('app.user_info.email.label'),
                                       labelTopIcon: SvgPicture.asset(
                                         'assets/icons/svg/message.svg',
                                       ),
@@ -323,7 +339,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                             AppButton.primary(
                               text: AppLocalizations.of(
                                 context,
-                              ).translate('Lưu'),
+                              ).translate('app.user_info.save'),
                               onPressed: () {
                                 FocusScope.of(context).unfocus();
                                 context

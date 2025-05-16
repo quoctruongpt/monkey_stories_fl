@@ -15,7 +15,7 @@ class GeneralSettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).translate('Cài đặt chung'),
+        title: AppLocalizations.of(context).translate('app.setting.general'),
       ),
 
       body: const Padding(
@@ -56,7 +56,9 @@ class VersionApp extends StatelessWidget {
         SvgPicture.asset('assets/icons/svg/devices.svg', width: 24, height: 24),
         const SizedBox(width: Spacing.md),
         Expanded(
-          child: Text(AppLocalizations.of(context).translate('Phiên bản')),
+          child: Text(
+            AppLocalizations.of(context).translate('app.setting.version'),
+          ),
         ),
         BlocBuilder<AppCubit, AppState>(
           builder: (context, state) {
@@ -87,7 +89,11 @@ class ChangeBackgroundMusic extends StatelessWidget {
             ),
             const SizedBox(width: Spacing.md),
             Expanded(
-              child: Text(AppLocalizations.of(context).translate('Nhạc nền')),
+              child: Text(
+                AppLocalizations.of(
+                  context,
+                ).translate('app.setting.background_music'),
+              ),
             ),
             Switch(
               value: state.isBackgroundMusicEnabled,
@@ -126,7 +132,11 @@ class ChangeNotification extends StatelessWidget {
             ),
             const SizedBox(width: Spacing.md),
             Expanded(
-              child: Text(AppLocalizations.of(context).translate('Thông báo')),
+              child: Text(
+                AppLocalizations.of(
+                  context,
+                ).translate('app.setting.notification'),
+              ),
             ),
             Switch(
               value: state.isNotificationEnabled,
@@ -157,8 +167,12 @@ class ChangeLanguage extends StatelessWidget {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         return SelectBottomSheet<Language>(
-          hintText: AppLocalizations.of(context).translate('Chọn ngôn ngữ'),
-          title: AppLocalizations.of(context).translate('Ngôn ngữ hiển thị'),
+          hintText: AppLocalizations.of(
+            context,
+          ).translate('app.setting.select_language'),
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.setting.display_language'),
           leading: SvgPicture.asset(
             'assets/icons/svg/language.svg',
             width: 24,

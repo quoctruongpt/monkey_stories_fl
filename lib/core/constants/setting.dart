@@ -11,16 +11,16 @@ import 'package:monkey_stories/presentation/widgets/logout_dialog.dart';
 
 final List<Map<String, dynamic>> settingsData = [
   {
-    'title': 'THÔNG TIN PHỤ HUYNH',
+    'title': 'app.setting.parent_info',
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/person.svg',
-        label: 'Thông tin ba mẹ',
+        label: 'app.user_info.title',
         route: AppRouteNames.userInfo,
       ),
       SettingItem(
         icon: 'assets/icons/svg/mobile.svg',
-        label: 'ID thiết bị',
+        label: 'app.setting.device_id',
         valueGetter: () async {
           final context = navigatorKey.currentContext;
           if (context != null) {
@@ -32,7 +32,7 @@ final List<Map<String, dynamic>> settingsData = [
       ),
       SettingItem(
         icon: 'assets/icons/svg/user-circle.svg',
-        label: 'ID người dùng',
+        label: 'app.setting.user_id',
         valueGetter: () async {
           final context = navigatorKey.currentContext;
           if (context != null) {
@@ -45,21 +45,21 @@ final List<Map<String, dynamic>> settingsData = [
     ],
   },
   {
-    'title': 'QUẢN LÝ NGƯỜI HỌC',
+    'title': 'app.setting.student_management',
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/student.svg',
-        label: 'Hồ sơ học tập của con',
+        label: 'app.setting.student_profile',
         route: AppRouteNames.listProfileSetting,
       ),
       SettingItem(
         icon: 'assets/icons/svg/unlock.svg',
-        label: 'Nhập mã kích hoạt',
+        label: 'app.setting.license_key',
         route: AppRouteNames.inputLicense,
       ),
       SettingItem(
         icon: 'assets/icons/svg/password.svg',
-        label: 'Thay đổi mật khẩu',
+        label: 'app.change_password.title',
         route: AppRouteNames.changePassword,
         isVisibleGetter: (BuildContext context) async {
           final user = context.read<UserCubit>().state.user;
@@ -69,84 +69,99 @@ final List<Map<String, dynamic>> settingsData = [
     ],
   },
   {
-    'title': 'CÀI ĐẶT',
+    'title': 'app.setting.setting',
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/setting_orange.svg',
-        label: 'Cài đặt chung',
+        label: 'app.setting.general',
         route: AppRouteNames.generalSetting,
       ),
       SettingItem(
         icon: 'assets/icons/svg/alarm-check.svg',
-        label: 'Đặt lịch học',
+        label: 'app.schedule_manager.title',
         route: AppRouteNames.scheduleManager,
       ),
     ],
   },
   {
-    'title': 'HỖ TRỢ',
+    'title': 'app.setting.support',
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/danger_circle.svg',
-        label: 'Về Monkey',
+        label: 'app.setting.about_monkey',
         onTap: (BuildContext context) {
           final url = getLocalizedLink(context, aboutMonkey);
           if (url.isNotEmpty) {
             context.pushNamed(
               AppRouteNames.webView,
-              queryParameters: {'title': 'Về Monkey', 'url': url},
+              queryParameters: {
+                'title': 'app.setting.about_monkey',
+                'url': url,
+              },
             );
           }
         },
       ),
       SettingItem(
         icon: 'assets/icons/svg/paper.svg',
-        label: 'Điều khoản sử dụng',
+        label: 'app.setting.terms_of_use',
         onTap: (BuildContext context) {
           final url = getLocalizedLink(context, termsOfUseLinks);
           if (url.isNotEmpty) {
             context.pushNamed(
               AppRouteNames.webView,
-              queryParameters: {'title': 'Điều khoản sử dụng', 'url': url},
+              queryParameters: {
+                'title': 'app.setting.terms_of_use',
+                'url': url,
+              },
             );
           }
         },
       ),
       SettingItem(
         icon: 'assets/icons/svg/shield.svg',
-        label: 'Chính sách bảo mật',
+        label: 'app.setting.privacy_policy',
         onTap: (BuildContext context) {
           final url = getLocalizedLink(context, privacyPolicyLinks);
           if (url.isNotEmpty) {
             context.pushNamed(
               AppRouteNames.webView,
-              queryParameters: {'title': 'Chính sách bảo mật', 'url': url},
+              queryParameters: {
+                'title': 'app.setting.privacy_policy',
+                'url': url,
+              },
             );
           }
         },
       ),
       SettingItem(
         icon: 'assets/icons/svg/chat.svg',
-        label: 'Câu hỏi thường gặp',
+        label: 'app.setting.frequently_asked_questions',
         onTap: (BuildContext context) {
           final url = getLocalizedLink(context, frequentlyAskedQuestionsLinks);
           if (url.isNotEmpty) {
             context.pushNamed(
               AppRouteNames.webView,
-              queryParameters: {'title': 'Câu hỏi thường gặp', 'url': url},
+              queryParameters: {
+                'title': 'app.setting.frequently_asked_questions',
+                'url': url,
+              },
             );
           }
         },
       ),
       SettingItem(
         icon: 'assets/icons/svg/calling.svg',
-        label: 'Liên hệ Monkey',
+        label: 'app.setting.contact_monkey',
         onTap: (BuildContext context) {
           final url = getLocalizedLink(context, contactMonkeyLinks);
           if (url.isNotEmpty) {
             context.pushNamed(
               AppRouteNames.webView,
-              queryParameters: {'title': 'Liên hệ Monkey', 'url': url},
+              queryParameters: {
+                'title': 'app.setting.contact_monkey',
+                'url': url,
+              },
             );
           }
         },
@@ -154,11 +169,11 @@ final List<Map<String, dynamic>> settingsData = [
     ],
   },
   {
-    'title': 'ĐĂNG XUẤT',
+    'title': 'app.setting.logout',
     'items': [
       SettingItem(
         icon: 'assets/icons/svg/logout.svg',
-        label: 'Đăng xuất',
+        label: 'app.setting.logout_label',
         onTap: (BuildContext context) {
           showLogoutDialog(context);
         },

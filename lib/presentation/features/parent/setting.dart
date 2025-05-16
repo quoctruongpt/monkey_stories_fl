@@ -12,7 +12,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: AppLocalizations.of(context).translate('Dành cho phụ huynh'),
+        title: AppLocalizations.of(context).translate('app.setting.label'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Spacing.md),

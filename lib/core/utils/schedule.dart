@@ -147,7 +147,7 @@ Future<void> scheduleWeeklyNotification(
       'Monkey Stories',
       AppLocalizations.of(
         navigatorKey.currentContext!,
-      ).translate('Đã đến giờ học cùng Monkey rồi. Học ngay thôi!'),
+      ).translate('app.schedule_manager.notification_title'),
       scheduledDate,
       platformChannelSpecifics,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,

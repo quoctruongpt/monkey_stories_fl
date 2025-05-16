@@ -57,7 +57,7 @@ class _ScheduleManagerState extends State<ScheduleManager> {
                 content: Text(
                   AppLocalizations.of(
                     context,
-                  ).translate('Lưu lịch học thành công!'),
+                  ).translate('app.schedule_manager.success'),
                 ),
                 backgroundColor: AppTheme.successColor,
               ),
@@ -74,7 +74,9 @@ class _ScheduleManagerState extends State<ScheduleManager> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBarWidget(
-              title: AppLocalizations.of(context).translate('Đặt lịch học'),
+              title: AppLocalizations.of(
+                context,
+              ).translate('app.schedule_manager.title'),
             ),
             body: Padding(
               padding: const EdgeInsets.all(Spacing.md),
@@ -125,7 +127,9 @@ class _ScheduleManagerState extends State<ScheduleManager> {
                                             ),
                                             const SizedBox(height: Spacing.xs),
                                             Text(
-                                              weekday.label,
+                                              AppLocalizations.of(
+                                                context,
+                                              ).translate(weekday.label),
                                               style: TextStyle(
                                                 color:
                                                     state.selectedWeekdays.any(
@@ -152,7 +156,7 @@ class _ScheduleManagerState extends State<ScheduleManager> {
                             Text(
                               AppLocalizations.of(
                                 context,
-                              ).translate('Chọn giờ'),
+                              ).translate('app.schedule_manager.select_time'),
                               style: const TextStyle(
                                 color: AppTheme.textSecondaryColor,
                               ),
@@ -183,7 +187,7 @@ class _ScheduleManagerState extends State<ScheduleManager> {
                   AppButton.primary(
                     text: AppLocalizations.of(
                       context,
-                    ).translate('Lưu lịch học'),
+                    ).translate('app.schedule_manager.save'),
                     onPressed: () {
                       if (state.isFormValid && !state.isLoading) {
                         context.read<ScheduleManagerCubit>().saveSchedule();

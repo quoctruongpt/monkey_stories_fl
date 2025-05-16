@@ -58,7 +58,7 @@ class ChangePasswordView extends StatelessWidget {
                 appBar: AppBarWidget(
                   title: AppLocalizations.of(
                     context,
-                  ).translate('Thay đổi mật khẩu'),
+                  ).translate('app.change_password.title'),
                 ),
                 body: Padding(
                   padding: const EdgeInsets.only(
@@ -79,10 +79,14 @@ class ChangePasswordView extends StatelessWidget {
                                         .onCurrentPasswordChanged(value),
                                 hintText: AppLocalizations.of(
                                   context,
-                                ).translate('Mật khẩu hiện tại'),
+                                ).translate(
+                                  'app.change_password.current_password',
+                                ),
                                 labelTopText: AppLocalizations.of(
                                   context,
-                                ).translate('Mật khẩu hiện tại'),
+                                ).translate(
+                                  'app.change_password.current_password',
+                                ),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
                                   color: AppTheme.textSecondaryColor,
@@ -105,10 +109,10 @@ class ChangePasswordView extends StatelessWidget {
                                         .onNewPasswordChanged(value),
                                 hintText: AppLocalizations.of(
                                   context,
-                                ).translate('Mật khẩu mới'),
+                                ).translate('app.change_password.new_password'),
                                 labelTopText: AppLocalizations.of(
                                   context,
-                                ).translate('Mật khẩu mới'),
+                                ).translate('app.change_password.new_password'),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
                                   color: AppTheme.textSecondaryColor,
@@ -131,10 +135,14 @@ class ChangePasswordView extends StatelessWidget {
                                         .onConfirmPasswordChanged(value),
                                 hintText: AppLocalizations.of(
                                   context,
-                                ).translate('Nhập lại mật khẩu mới'),
+                                ).translate(
+                                  'app.change_password.confirm_password',
+                                ),
                                 labelTopText: AppLocalizations.of(
                                   context,
-                                ).translate('Nhập lại mật khẩu mới'),
+                                ).translate(
+                                  'app.change_password.confirm_password',
+                                ),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
                                   color: AppTheme.textSecondaryColor,
@@ -158,7 +166,7 @@ class ChangePasswordView extends StatelessWidget {
                       AppButton.primary(
                         text: AppLocalizations.of(
                           context,
-                        ).translate('Lưu thay đổi'),
+                        ).translate('app.change_password.save'),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           context
@@ -178,7 +186,7 @@ class ChangePasswordView extends StatelessWidget {
                         child: Text(
                           AppLocalizations.of(
                             context,
-                          ).translate('Quên mật khẩu'),
+                          ).translate('app.change_password.forgot_password'),
                           style: const TextStyle(
                             color: AppTheme.textSecondaryColor,
                           ),

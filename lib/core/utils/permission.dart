@@ -79,12 +79,16 @@ class PermissionUtil {
 
     showCustomNoticeDialog(
       context: context,
-      titleText: AppLocalizations.of(context).translate('Đặt lịch học'),
-      messageText: AppLocalizations.of(context).translate(
-        'Ba mẹ cho phép Monkey gửi thông báo nhắc học để sử dụng tính năng này nhé',
-      ),
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.title'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.notification_message'),
       imageAsset: 'assets/images/monkey_notice.png',
-      primaryActionText: AppLocalizations.of(context).translate('Tiếp tục'),
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.continue'),
       onPrimaryAction: () {
         context.pop();
         openAppSettings();

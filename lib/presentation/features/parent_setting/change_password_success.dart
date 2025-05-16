@@ -13,11 +13,13 @@ class ChangePasswordSuccess extends StatelessWidget {
       body: SuccessScreen(
         title: AppLocalizations.of(
           context,
-        ).translate('Cập nhật mật khẩu thành công'),
+        ).translate('app.change_password.success'),
         onPressed: () {
           context.go(AppRoutePaths.home);
         },
-        buttonText: AppLocalizations.of(context).translate('Vào học ngay'),
+        buttonText: AppLocalizations.of(
+          context,
+        ).translate('app.change_password.success_button'),
       ),
     );
   }

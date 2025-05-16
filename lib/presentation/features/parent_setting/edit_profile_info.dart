@@ -75,7 +75,7 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 8.0),
                   child: Text(
-                    localizations.translate('Thay đổi hình đại diện'),
+                    localizations.translate('app.profile.change_avatar'),
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                     ),
                   ),
                   title: Text(
-                    localizations.translate('Chụp ảnh mới'),
+                    localizations.translate('app.profile.take_photo'),
                     style: const TextStyle(color: AppTheme.textSecondaryColor),
                   ),
                   onTap: () {
@@ -111,7 +111,7 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                     ),
                   ),
                   title: Text(
-                    localizations.translate('Chọn từ thư viện'),
+                    localizations.translate('app.profile.choose_from_library'),
                     style: const TextStyle(color: AppTheme.textSecondaryColor),
                   ),
                   onTap: () {
@@ -166,7 +166,7 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
               content: Text(
                 AppLocalizations.of(
                   context,
-                ).translate('Cập nhật thông tin thành công'),
+                ).translate('app.profile.update_success'),
               ),
             ),
           );
@@ -174,7 +174,9 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
         if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage!),
+              content: Text(
+                AppLocalizations.of(context).translate(state.errorMessage),
+              ),
               backgroundColor: AppTheme.errorColor,
             ),
           );
@@ -186,9 +188,10 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
             children: [
               Scaffold(
                 appBar: AppBarWidget(
-                  title: AppLocalizations.of(
-                    context,
-                  ).translate('Hồ sơ của ${state.profile?.name}'),
+                  title: AppLocalizations.of(context).translate(
+                    'app.profile.title',
+                    params: {'name': state.profile?.name ?? ''},
+                  ),
                 ),
                 body: SafeArea(
                   child: Column(
@@ -218,9 +221,9 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                       const Icon(Icons.photo_camera),
                                       const SizedBox(width: 8),
                                       Text(
-                                        AppLocalizations.of(
-                                          context,
-                                        ).translate('Thay đổi hình đại diện'),
+                                        AppLocalizations.of(context).translate(
+                                          'app.profile.change_avatar',
+                                        ),
                                         style: const TextStyle(fontSize: 16),
                                       ),
                                     ],
@@ -249,10 +252,10 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                       },
                                       labelTopText: AppLocalizations.of(
                                         context,
-                                      ).translate('Họ và tên'),
+                                      ).translate('app.profile.name.label'),
                                       hintText: AppLocalizations.of(
                                         context,
-                                      ).translate('Nhập họ và tên'),
+                                      ).translate('app.profile.name.hint'),
                                       errorText: AppLocalizations.of(
                                         context,
                                       ).translate(state.name.displayError),
@@ -280,7 +283,9 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                       Padding(
                         padding: const EdgeInsets.all(Spacing.md),
                         child: AppButton.primary(
-                          text: AppLocalizations.of(context).translate('Lưu'),
+                          text: AppLocalizations.of(
+                            context,
+                          ).translate('app.user_info.save'),
                           onPressed: () {
                             context
                                 .read<UpdateProfileInfoCubit>()
@@ -388,7 +393,11 @@ class YearSelector extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: Text(AppLocalizations.of(context).translate('Năm sinh')),
+          child: Text(
+            AppLocalizations.of(
+              context,
+            ).translate('app.profile.birth_year.label'),
+          ),
         ),
         const SizedBox(height: 8),
         GestureDetector(
@@ -413,7 +422,9 @@ class YearSelector extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     )
                     : Text(
-                      'Năm sinh',
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.profile.birth_year.hint'),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.textGrayLightColor,
                       ),

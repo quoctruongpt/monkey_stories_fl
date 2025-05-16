@@ -30,7 +30,7 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
   ForgotPasswordCubit? _forgotPasswordCubit;
   late TextEditingController phoneController;
   late TextEditingController emailController;
-  late String countryCode;
+  late String? countryCode = 'VN';
   Future<void> _onPressed(BuildContext context) async {
     final isSendDone = await context.read<ForgotPasswordCubit>().sendOtp();
     if (isSendDone) {
@@ -148,7 +148,7 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                                     context
                                         .read<ForgotPasswordCubit>()
                                         .countryCodeInit,
-                                initialCountryCode: countryCode,
+                                initialCountryCode: countryCode ?? 'VN',
                                 errorText: AppLocalizations.of(
                                   context,
                                 ).translate(state.phone.displayError),

@@ -90,7 +90,7 @@ class _ActiveLicenseCreatePasswordState
                                     .read<ActiveLicenseCubit>()
                                     .rePasswordChanged,
                             labelText: AppLocalizations.of(context).translate(
-                              'app.active_license.create_password.hint',
+                              'app.active_license.re_create_password.title',
                             ),
                             errorText: AppLocalizations.of(
                               context,
