@@ -1,6 +1,7 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
@@ -62,8 +63,10 @@ void initDatasourceDependencies() {
     () => DeviceRemoteDataSourceImpl(dioClient: sl<Dio>()),
   );
   sl.registerLazySingleton<SettingsLocalDataSource>(
-    () =>
-        SettingsLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
+    () => SettingsLocalDataSourceImpl(
+      sharedPreferences: sl<SharedPreferences>(),
+      flutterLocalNotificationsPlugin: sl<FlutterLocalNotificationsPlugin>(),
+    ),
   );
   sl.registerLazySingleton<SystemSettingsDataSource>(
     () => SystemSettingsDataSourceImpl(),
