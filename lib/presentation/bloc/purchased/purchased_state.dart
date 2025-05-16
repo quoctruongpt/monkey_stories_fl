@@ -84,7 +84,7 @@ class PurchasedState extends Equatable {
           <PurchasedPackage>[];
 
       return PurchasedState(products: products);
-    } catch (e, stackTrace) {
+    } catch (e) {
       return const PurchasedState();
     }
   }

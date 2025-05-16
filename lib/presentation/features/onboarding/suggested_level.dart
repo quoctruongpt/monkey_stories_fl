@@ -45,7 +45,7 @@ class SuggestedLevel extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase! - 1].name)}',
+                          '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase - 1].name)}',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w900,

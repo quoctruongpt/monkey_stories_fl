@@ -30,7 +30,7 @@ class AppLocalizations {
     if (params != null) {
       params.forEach((paramKey, paramValue) {
         translation = translation.replaceAll(
-          '{{${paramKey}}}',
+          '{{$paramKey}}',
           paramValue ?? '',
         );
       });

@@ -19,13 +19,13 @@ class CreateProfileInputNameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<InputNameCubit>(),
-      child: CreateProfileInputNameView(),
+      child: const CreateProfileInputNameView(),
     );
   }
 }
 
 class CreateProfileInputNameView extends StatefulWidget {
-  CreateProfileInputNameView({super.key});
+  const CreateProfileInputNameView({super.key});
 
   @override
   State<CreateProfileInputNameView> createState() =>

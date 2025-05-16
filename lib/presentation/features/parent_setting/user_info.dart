@@ -166,7 +166,7 @@ class _UserInfoViewState extends State<UserInfoView> {
               content: Text(
                 AppLocalizations.of(
                   context,
-                ).translate(updateState.errorMessage!),
+                ).translate(updateState.errorMessage),
               ),
               backgroundColor: AppTheme.errorColor,
             ),

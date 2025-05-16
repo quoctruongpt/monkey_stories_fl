@@ -108,7 +108,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   @override
   Future<Either<Failure, void>> saveSchedule(ScheduleEntity schedule) async {
     try {
-      final _schedule = Schedule(
+      final schedule0 = Schedule(
         weekdays: schedule.weekdays,
         time: ScheduleTime(
           hour: schedule.time.hour,
@@ -117,11 +117,11 @@ class SettingsRepositoryImpl implements SettingsRepository {
       );
 
       final response = await remoteDataSource.updateUserSetting(
-        schedule: _schedule,
+        schedule: schedule0,
       );
 
       if (response.status == ApiStatus.success) {
-        await localDataSource.setSchedule(_schedule);
+        await localDataSource.setSchedule(schedule0);
         return const Right(null);
       } else {
         return Left(ServerFailure(message: response.message));

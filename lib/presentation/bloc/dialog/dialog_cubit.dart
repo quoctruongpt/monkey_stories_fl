@@ -49,6 +49,6 @@ class DialogCubit extends Cubit<DialogState> {
 
   // Đóng tất cả dialog
   void dismissAllDialogs() {
-    emit(DialogsUpdated(dialogs: const []));
+    emit(const DialogsUpdated(dialogs: []));
   }
 }

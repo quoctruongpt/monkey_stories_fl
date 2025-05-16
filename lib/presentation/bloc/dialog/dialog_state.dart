@@ -12,8 +12,7 @@ abstract class DialogState extends Equatable {
 class DialogInitial extends DialogState {}
 
 class DialogsUpdated extends DialogState {
-  const DialogsUpdated({required List<DialogInfo> dialogs})
-    : super(dialogs: dialogs);
+  const DialogsUpdated({required super.dialogs});
 }
 
 // Lớp để chứa thông tin dialog, bao gồm key để định danh

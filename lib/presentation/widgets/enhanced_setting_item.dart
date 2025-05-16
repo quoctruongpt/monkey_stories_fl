@@ -9,7 +9,7 @@ import 'package:monkey_stories/presentation/widgets/setting_item_widget.dart';
 class EnhancedSettingItem extends StatelessWidget {
   final dynamic
   currentItemModel; // Kiểu dữ liệu của các phần tử trong section['items']
-  final dynamic? nextItemModel; // Cùng kiểu trên, hoặc null nếu là phần tử cuối
+  final dynamic nextItemModel; // Cùng kiểu trên, hoặc null nếu là phần tử cuối
 
   const EnhancedSettingItem({
     super.key,

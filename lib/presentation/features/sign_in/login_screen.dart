@@ -323,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ? AppLocalizations.of(
                                               context,
                                             ).translate(
-                                              state.password.displayError!,
+                                              state.password.displayError,
                                             )
                                             : null,
                                     suffixIcon: IconButton(
@@ -378,7 +378,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Text(
                                     AppLocalizations.of(
                                       context,
-                                    ).translate(state.errorMessage!),
+                                    ).translate(state.errorMessage),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.labelLarge?.copyWith(

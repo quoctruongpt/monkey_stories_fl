@@ -121,7 +121,7 @@ class LoginCubit extends Cubit<LoginState> {
         },
       );
     } catch (e) {
-      logger.severe('loadLastLogin error: ${e}');
+      logger.severe('loadLastLogin error: $e');
     }
   }
 
@@ -319,7 +319,7 @@ class LoginCubit extends Cubit<LoginState> {
         ),
       );
     } catch (e) {
-      logger.severe('loginSubmitted error: ${e}');
+      logger.severe('loginSubmitted error: $e');
 
       emit(
         state.copyWith(
@@ -407,8 +407,4 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   // Đừng quên hủy subscription khi Cubit bị đóng
-  @override
-  Future<void> close() {
-    return super.close();
-  }
 }

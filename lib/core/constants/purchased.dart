@@ -35,7 +35,7 @@ class SaleOff {
   }
 
   static SaleOff fromJson(Map<String, dynamic> json) {
-    double? _parseDouble(dynamic value) {
+    double? parseDouble(dynamic value) {
       if (value is double) {
         return value;
       }
@@ -49,11 +49,11 @@ class SaleOff {
     }
 
     return SaleOff(
-      vn: _parseDouble(json['vn']),
-      us: _parseDouble(json['us']),
-      th: _parseDouble(json['th']),
-      ms: _parseDouble(json['ms']),
-      other: _parseDouble(json['other']) ?? 0.0,
+      vn: parseDouble(json['vn']),
+      us: parseDouble(json['us']),
+      th: parseDouble(json['th']),
+      ms: parseDouble(json['ms']),
+      other: parseDouble(json['other']) ?? 0.0,
     );
   }
 }

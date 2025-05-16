@@ -27,7 +27,7 @@ class PhoneValidator extends FormzInput<PhoneNumberInput, String> {
         ),
       );
 
-  const PhoneValidator.dirty(PhoneNumberInput value) : super.dirty(value);
+  const PhoneValidator.dirty(super.value) : super.dirty();
 
   @override
   String? validator(PhoneNumberInput value) {

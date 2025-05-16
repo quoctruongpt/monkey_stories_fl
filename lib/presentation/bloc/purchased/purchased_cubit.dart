@@ -73,7 +73,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
         );
       },
       onError: (error) {
-        logger.severe("PurchaseCubit started listening to error stream.");
+        logger.severe('PurchaseCubit started listening to error stream.');
       },
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+final logger = Logger('WebViewScreen');
 
 class WebViewScreen extends StatefulWidget {
   final String title;
@@ -43,7 +46,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
               },
               onWebResourceError: (WebResourceError error) {
                 // You can add error handling here if needed
-                print('WebResourceError: ${error.description}');
+                logger.severe('WebResourceError: ${error.description}');
               },
               onNavigationRequest: (NavigationRequest request) {
                 // You can decide here if you want to navigate to the request.url

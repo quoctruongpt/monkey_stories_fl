@@ -82,7 +82,7 @@ class DioInterceptor extends Interceptor {
         systemVersion = iosInfo.systemVersion;
       }
       deviceInfoStr =
-          'Application Version: ${subversion} OS: ${os} Model: $model System Version: $systemVersion';
+          'Application Version: $subversion OS: $os Model: $model System Version: $systemVersion';
       // Thêm các nền tảng khác nếu cần
     } catch (e, stackTrace) {
       _logger.severe('Failed to get device info in interceptor', e, stackTrace);

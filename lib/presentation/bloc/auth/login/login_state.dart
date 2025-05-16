@@ -14,6 +14,7 @@ enum FormSubmissionStatus {
 }
 
 class LastLoginInfo extends LastLoginEntity {
+  @override
   final String? name;
 
   LastLoginInfo({

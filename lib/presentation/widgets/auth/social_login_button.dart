@@ -68,7 +68,7 @@ class SocialLoginButton extends StatelessWidget {
                         : null,
               )
               : Icon(
-                iconData!,
+                iconData,
                 size: 24,
                 color: isDisabled ? Colors.white.withOpacity(0.5) : null,
               ),

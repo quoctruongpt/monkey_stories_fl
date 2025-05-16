@@ -6,8 +6,6 @@ import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/profile/list_profile_dialog.dart';
-import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 
 final logger = Logger('UnityView');
 
@@ -30,15 +28,6 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _unityCubit = context.read<UnityCubit>();
-    // _unityCubit.registerHandler(MessageTypes.openListProfile, (
-    //   UnityMessageEntity message,
-    // ) async {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) => Column(children: [Text('Hello'), Text('World')]),
-    //   );
-    //   return null;
-    // });
     WidgetsBinding.instance.addObserver(this);
   }
 
