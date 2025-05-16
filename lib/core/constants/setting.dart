@@ -79,7 +79,7 @@ final List<Map<String, dynamic>> settingsData = [
       SettingItem(
         icon: 'assets/icons/svg/alarm-check.svg',
         label: 'Đặt lịch học',
-        route: AppRouteNames.home,
+        route: AppRouteNames.scheduleManager,
       ),
     ],
   },

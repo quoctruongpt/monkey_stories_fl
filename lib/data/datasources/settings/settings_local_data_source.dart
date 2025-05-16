@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/data/models/setting/schedule.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
@@ -12,6 +15,9 @@ abstract class SettingsLocalDataSource {
   Future<void> saveNotification(bool isEnabled);
   Future<ThemeMode> getTheme();
   Future<void> saveTheme(ThemeMode themeMode);
+  Future<Schedule?> getSchedule();
+  Future<void> saveSchedule(Schedule schedule);
+  Future<void> setSchedule(Schedule schedule);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -107,5 +113,53 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       SharedPrefKeys.isNotificationEnabled,
       isEnabled,
     );
+  }
+
+  @override
+  Future<Schedule?> getSchedule() async {
+    final scheduleDayOfWeekString = sharedPreferences.getString(
+      SharedPrefKeys.scheduleDayOfWeek,
+    );
+    final scheduleTimeString = sharedPreferences.getString(
+      SharedPrefKeys.scheduleTime,
+    );
+    if (scheduleDayOfWeekString == null || scheduleTimeString == null) {
+      return null;
+    }
+
+    // Giải mã và ép kiểu weekdays
+    final List<dynamic> decodedWeekdaysDynamic = jsonDecode(
+      scheduleDayOfWeekString,
+    );
+    final List<String> loadedWeekdays =
+        decodedWeekdaysDynamic.cast<String>().toList();
+
+    // Giải mã time, nó sẽ là một Map
+    final Map<String, dynamic> decodedTimeJson = jsonDecode(scheduleTimeString);
+
+    return Schedule(
+      weekdays: loadedWeekdays,
+      time: ScheduleTime(
+        hour: decodedTimeJson['hour'] as int, // Đọc 'hour' từ Map
+        minute: decodedTimeJson['minute'] as int, // Đọc 'minute' từ Map
+      ),
+    );
+  }
+
+  @override
+  Future<void> saveSchedule(Schedule schedule) async {
+    await sharedPreferences.setString(
+      SharedPrefKeys.scheduleDayOfWeek,
+      schedule.weekdaysToJson(),
+    );
+    await sharedPreferences.setString(
+      SharedPrefKeys.scheduleTime,
+      schedule.timeToJson(),
+    );
+  }
+
+  @override
+  Future<void> setSchedule(Schedule schedule) async {
+    await saveSchedule(schedule);
   }
 }

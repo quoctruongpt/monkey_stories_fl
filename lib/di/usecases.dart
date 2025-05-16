@@ -70,6 +70,7 @@ import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -200,6 +201,9 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => GetSoundTrackUseCase(sl<SettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => SaveScheduleUsecase(settingsRepository: sl<SettingsRepository>()),
   );
   // Add other usecase registrations here...
 }

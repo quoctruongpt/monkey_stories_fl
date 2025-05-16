@@ -6,6 +6,8 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
+import 'package:monkey_stories/data/models/setting/schedule.dart';
+import 'package:monkey_stories/domain/entities/setting/schedule_entity.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -94,6 +96,32 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
       if (response.status == ApiStatus.success) {
         await localDataSource.saveBackgroundMusic(isEnabled);
+        return const Right(null);
+      } else {
+        return Left(ServerFailure(message: response.message));
+      }
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveSchedule(ScheduleEntity schedule) async {
+    try {
+      final _schedule = Schedule(
+        weekdays: schedule.weekdays,
+        time: ScheduleTime(
+          hour: schedule.time.hour,
+          minute: schedule.time.minute,
+        ),
+      );
+
+      final response = await remoteDataSource.updateUserSetting(
+        schedule: _schedule,
+      );
+
+      if (response.status == ApiStatus.success) {
+        await localDataSource.setSchedule(_schedule);
         return const Right(null);
       } else {
         return Left(ServerFailure(message: response.message));

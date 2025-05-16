@@ -34,6 +34,12 @@ class AccountRepositoryImpl extends AccountRepository {
         settingsLocalDataSource.saveBackgroundMusic(
           response.data?.syncUser.soundtrack ?? true,
         );
+
+        if (response.data?.syncUser.schedule != null) {
+          settingsLocalDataSource.setSchedule(
+            response.data!.syncUser.schedule!,
+          );
+        }
       }
       return Right(response.data?.toEntity());
     }

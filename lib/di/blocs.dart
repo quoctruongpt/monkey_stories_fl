@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
@@ -21,6 +22,7 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updat
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -52,6 +54,7 @@ import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password
 import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/schedule_manager/schedule_manager_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -258,6 +261,13 @@ void initBlocDependencies() {
   sl.registerFactory(
     () => ChangePasswordCubit(
       confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ScheduleManagerCubit(
+      saveScheduleUsecase: sl<SaveScheduleUsecase>(),
+      settingsLocalDataSource: sl<SettingsLocalDataSource>(),
     ),
   );
 

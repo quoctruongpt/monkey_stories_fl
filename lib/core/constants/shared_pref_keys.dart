@@ -17,6 +17,8 @@ class SharedPrefKeys {
   static const String hasLoggedBefore = 'hasLoggedBefore';
   static const String isBackgroundMusicEnabled = 'isBackgroundMusicEnabled';
   static const String isNotificationEnabled = 'isNotificationEnabled';
+  static const String scheduleDayOfWeek = 'scheduleDayOfWeek';
+  static const String scheduleTime = 'scheduleTime';
 }
 
 final keysToKeep = [
