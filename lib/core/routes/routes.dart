@@ -239,7 +239,10 @@ final GoRouter router = GoRouter(
                       .report, // Optional: if you have names for these routes
               builder:
                   (BuildContext context, GoRouterState state) =>
-                      const ReportScreen(),
+                      const OrientationWrapper(
+                        orientation: AppOrientation.portrait,
+                        child: ReportScreen(),
+                      ),
             ),
           ],
         ),
@@ -252,7 +255,10 @@ final GoRouter router = GoRouter(
               name: AppRouteNames.vip, // Optional
               builder:
                   (BuildContext context, GoRouterState state) =>
-                      const VipScreen(),
+                      const OrientationWrapper(
+                        orientation: AppOrientation.portrait,
+                        child: VipScreen(),
+                      ),
             ),
           ],
         ),
@@ -265,7 +271,10 @@ final GoRouter router = GoRouter(
               name: AppRouteNames.setting, // Optional
               builder:
                   (BuildContext context, GoRouterState state) =>
-                      const SettingScreen(),
+                      const OrientationWrapper(
+                        orientation: AppOrientation.portrait,
+                        child: SettingScreen(),
+                      ),
             ),
           ],
         ),

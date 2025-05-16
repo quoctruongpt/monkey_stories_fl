@@ -22,7 +22,7 @@ class ListProfileDialog extends StatelessWidget {
       buildVerifyDialogWidget(
         context: context,
         onSuccess: () {
-          navigatorKey.currentContext?.push(AppRoutePaths.home);
+          navigatorKey.currentContext?.push(AppRoutePaths.report);
           onClose();
         },
       ),

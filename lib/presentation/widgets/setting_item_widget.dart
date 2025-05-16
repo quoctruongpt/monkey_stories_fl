@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/data/models/setting/setting_item.dart';
 
@@ -16,7 +17,7 @@ class SettingItemWidget extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
       leading: SvgPicture.asset(item.icon, width: 24, height: 24),
       title: Text(
-        item.label,
+        AppLocalizations.of(context).translate(item.label),
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w800,
