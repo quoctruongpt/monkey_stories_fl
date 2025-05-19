@@ -85,7 +85,7 @@
   "app.forgot_password.input_email": "email address",
   "app.forgot_password.send_otp": "Send OTP ",
   "app.forgot_password.notice": "Notice",
-  "app.forgot_password.phone_not_registered": "The phone number is not registered with Monkey, please try again.",
+  "app.forgot_password.phone_not_registered": "The {{method}} is not registered with Monkey, please try again.",
   "app.forgot_password.try_again": "Try again",
   "app.forgot_password.confirm_otp": "Verify OTP",
   "app.forgot_password.confirm_otp_description": "Monkey has sent OTP code to {{method}} {{phone}}",

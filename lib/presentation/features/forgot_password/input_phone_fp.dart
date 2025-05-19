@@ -61,20 +61,30 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
   @override
   void dispose() {
     _forgotPasswordCubit?.phoneChanged('');
-    _forgotPasswordCubit?.emailChanged('');
+    _forgotPasswordCubit?.emailReset();
 
     super.dispose();
   }
 
-  void _showNotRegisteredDialog(BuildContext context) {
+  void _showNotRegisteredDialog(
+    BuildContext context,
+    ForgotPasswordState state,
+  ) {
     showCustomNoticeDialog(
       context: context,
       titleText: AppLocalizations.of(
         context,
       ).translate('app.forgot_password.notice'),
-      messageText: AppLocalizations.of(
-        context,
-      ).translate('app.forgot_password.phone_not_registered'),
+      messageText: AppLocalizations.of(context).translate(
+        'app.forgot_password.phone_not_registered',
+        params: {
+          'method': AppLocalizations.of(context).translate(
+            state.method == ForgotPasswordType.phone
+                ? 'app.forgot_password.input_phone'
+                : 'app.forgot_password.input_email',
+          ),
+        },
+      ),
       imageAsset: 'assets/images/monkey_notice.png',
       primaryActionText: AppLocalizations.of(
         context,
@@ -108,7 +118,7 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                     current.isShowNotRegisteredDialog,
             listener: (context, state) {
               if (state.isShowNotRegisteredDialog) {
-                _showNotRegisteredDialog(context);
+                _showNotRegisteredDialog(context, state);
               }
             },
             builder: (context, state) {
@@ -166,6 +176,7 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
                                 hintText: 'abc@gmail.com',
                                 obscureText: false,
                                 canEdit: widget.isFromChangePassword != true,
+                                keyboardType: TextInputType.emailAddress,
                               ),
 
                           Text(

@@ -71,6 +71,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     emit(state.copyWith(phone: phone, clearPhoneErrorOther: true));
   }
 
+  void emailReset() {
+    emit(
+      state.copyWith(
+        email: const EmailValidator.pure(),
+        clearPhoneErrorOther: true,
+      ),
+    );
+  }
+
   void emailChanged(String value) {
     final email = EmailValidator.dirty(value);
     emit(state.copyWith(email: email, clearPhoneErrorOther: true));

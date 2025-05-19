@@ -85,7 +85,7 @@
   "app.forgot_password.input_email": "ที่อยู่\u200Bอีเมล",
   "app.forgot_password.send_otp": "ส่ง OTP",
   "app.forgot_password.notice": "การแจ้งเตือน",
-  "app.forgot_password.phone_not_registered": "หมายเลข\u200Bโทรศัพท์\u200Bยังไม่ได้\u200Bลงทะเบียน\u200Bกับ\u200BMonkey\u200Bกรุณาลอง\u200Bใหม่\u200Bอีก\u200Bครั้ง",
+  "app.forgot_password.phone_not_registered": "{{method}}\u200Bยังไม่ได้\u200Bลงทะเบียน\u200Bกับ\u200BMonkey\u200Bกรุณาลอง\u200Bใหม่\u200Bอีก\u200Bครั้ง",
   "app.forgot_password.try_again": "ลองอีกครั้ง",
   "app.forgot_password.confirm_otp": "ยืนยัน OTP",
   "app.forgot_password.confirm_otp_description": "Monkey\u200Bส่ง\u200Bรหัส\u200BOTP\u200Bไปที่\u200B{{method}}\u200B{{phone}}\n",

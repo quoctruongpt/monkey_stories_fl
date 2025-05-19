@@ -85,7 +85,7 @@
   "app.forgot_password.input_email": "địa chỉ email",
   "app.forgot_password.send_otp": "Gửi OTP",
   "app.forgot_password.notice": "Thông báo",
-  "app.forgot_password.phone_not_registered": "Số điện thoại chưa được đăng ký với Monkey, vui lòng thử lại.",
+  "app.forgot_password.phone_not_registered": "{{method}} chưa được đăng ký với Monkey, vui lòng thử lại.",
   "app.forgot_password.try_again": "Thử lại",
   "app.forgot_password.confirm_otp": "Xác nhận OTP",
   "app.forgot_password.confirm_otp_description": "Monkey đã gửi mã OTP đến {{method}} {{phone}}",

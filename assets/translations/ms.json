@@ -85,7 +85,7 @@
   "app.forgot_password.input_email": "alamat emel",
   "app.forgot_password.send_otp": "Hantar OTP",
   "app.forgot_password.notice": "Pengumuman",
-  "app.forgot_password.phone_not_registered": "Nombor telefon tidak didaftarkan dengan Monkey, sila cuba lagi.",
+  "app.forgot_password.phone_not_registered": "{{method}} tidak didaftarkan dengan Monkey, sila cuba lagi.",
   "app.forgot_password.try_again": "Cuba semula",
   "app.forgot_password.confirm_otp": "Sahkan OTP",
   "app.forgot_password.confirm_otp_description": "Monyet telah menghantar kod OTP ke {{method}} {{phone}}",
