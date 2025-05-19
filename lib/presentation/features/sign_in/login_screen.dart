@@ -62,16 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    final initialValue = context.read<LoginCubit>().state.username.value;
-    _usernameController = TextEditingController(text: initialValue);
-    _usernameController.addListener(() {
-      context.read<LoginCubit>().usernameChanged(_usernameController.text);
-    });
-
+    _usernameController = TextEditingController(text: widget.initialUsername);
     _passwordController = TextEditingController(text: widget.initialPassword);
-    _passwordController.addListener(() {
-      context.read<LoginCubit>().passwordChanged(_passwordController.text);
-    });
 
     // Call loadLastLogin after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -266,6 +258,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: TextField(
                                     controller: _usernameController,
+                                    onChanged: (value) {
+                                      context
+                                          .read<LoginCubit>()
+                                          .usernameChanged(value);
+                                    },
                                     decoration: InputDecoration(
                                       labelText: AppLocalizations.of(
                                         context,
