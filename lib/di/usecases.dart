@@ -71,6 +71,7 @@ import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.da
 import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -205,5 +206,7 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => SaveScheduleUsecase(settingsRepository: sl<SettingsRepository>()),
   );
-  // Add other usecase registrations here...
+  sl.registerLazySingleton(
+    () => GetListProfileLocalUsecase(repository: sl<ProfileRepository>()),
+  );
 }

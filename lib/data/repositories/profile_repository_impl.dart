@@ -91,4 +91,15 @@ class ProfileRepositoryImpl extends ProfileRepository {
       ServerFailureWithCode(code: response.code, message: response.message),
     );
   }
+
+  @override
+  Future<Either<CacheFailure, List<ProfileEntity>>>
+  getListProfileLocal() async {
+    try {
+      final response = await profileLocalDataSource.getListProfile();
+      return right(response);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
 }

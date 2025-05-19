@@ -13,6 +13,8 @@ abstract class ProfileRepository {
 
   Future<Either<CacheFailure, int?>> getCurrentProfile();
 
+  Future<Either<CacheFailure, List<ProfileEntity>>> getListProfileLocal();
+
   Future<Either<ServerFailureWithCode, ProfileEntity>> updateProfile({
     required int id,
     String? name,

@@ -131,17 +131,24 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<SplashState> _handleLogicAuthenticated() async {
-    await _userCubit.loadUpdate();
-    await _profileCubit.getListProfile();
+    try {
+      await _userCubit.loadUpdate();
+      await _profileCubit.getListProfile();
 
-    final user = _userCubit.state.user;
-    final purchasedInfo = _userCubit.state.purchasedInfo;
+      final user = _userCubit.state.user;
+      final purchasedInfo = _userCubit.state.purchasedInfo;
 
-    if (user?.loginType == LoginType.skip && purchasedInfo?.isActive == true) {
-      return SplashNeedCreateAccount();
+      if (user?.loginType == LoginType.skip &&
+          purchasedInfo?.isActive == true) {
+        return SplashNeedCreateAccount();
+      }
+
+      return SplashAuthenticated();
+    } catch (e) {
+      return _userCubit.state.user != null
+          ? SplashAuthenticated()
+          : SplashAuthenticatedBefore();
     }
-
-    return SplashAuthenticated();
   }
 
   Future<SplashState> _handleLogicUnauthenticated() async {

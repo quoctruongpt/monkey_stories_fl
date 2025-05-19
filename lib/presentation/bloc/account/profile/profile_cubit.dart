@@ -9,7 +9,7 @@ import 'package:monkey_stories/domain/usecases/profile/get_current_profile_useca
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/core/constants/kinesis.dart';
-
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 part 'profile_state.dart';
 
 final Logger logger = Logger('ProfileCubit');
@@ -20,17 +20,21 @@ class ProfileCubit extends Cubit<ProfileState> {
   final GetCurrentProfileUsecase _getCurrentProfileUsecase;
   final ActiveCourseUsecase _activeCourseUsecase;
   final PutSettingKinesisUsecase _putSettingKinesisUsecase;
+  final GetListProfileLocalUsecase _getListProfileLocalUsecase;
+
   ProfileCubit({
     required GetListProfileUsecase getListProfileUsecase,
     required CreateProfileUsecase createProfileUsecase,
     required GetCurrentProfileUsecase getCurrentProfileUsecase,
     required ActiveCourseUsecase activeCourseUsecase,
     required PutSettingKinesisUsecase putSettingKinesisUsecase,
+    required GetListProfileLocalUsecase getListProfileLocalUsecase,
   }) : _getListProfileUsecase = getListProfileUsecase,
        _createProfileUsecase = createProfileUsecase,
        _getCurrentProfileUsecase = getCurrentProfileUsecase,
        _activeCourseUsecase = activeCourseUsecase,
        _putSettingKinesisUsecase = putSettingKinesisUsecase,
+       _getListProfileLocalUsecase = getListProfileLocalUsecase,
        super(const ProfileState());
 
   Future<void> getCurrentProfile() async {
@@ -44,13 +48,31 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> getListProfile() async {
-    final result = await _getListProfileUsecase.call(NoParams());
+    try {
+      final result = await _getListProfileUsecase.call(NoParams());
 
+      result.fold(
+        (failure) {
+          getListProfileLocal();
+        },
+        (profiles) {
+          emit(
+            state.copyWith(status: ProfileStatus.loaded, profiles: profiles),
+          );
+        },
+      );
+    } catch (e) {
+      getListProfileLocal();
+    }
+  }
+
+  Future<void> getListProfileLocal() async {
+    final result = await _getListProfileLocalUsecase.call(NoParams());
     result.fold(
       (failure) => emit(state.copyWith(status: ProfileStatus.error)),
-      (profiles) {
-        emit(state.copyWith(status: ProfileStatus.loaded, profiles: profiles));
-      },
+      (profiles) => emit(
+        state.copyWith(status: ProfileStatus.loaded, profiles: profiles),
+      ),
     );
   }
 

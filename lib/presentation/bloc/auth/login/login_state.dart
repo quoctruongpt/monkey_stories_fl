@@ -10,6 +10,7 @@ enum FormSubmissionStatus {
   loading, // Đang gửi (ví dụ: gọi API)
   success, // Gửi thành công
   failure, // Gửi thất bại (lỗi validation hoặc lỗi từ backend)
+  networkFailure, // Lỗi kết nối
   maxAttemptsReached, // Thêm trạng thái mới khi đạt tối đa số lần thử
 }
 

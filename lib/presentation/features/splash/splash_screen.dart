@@ -18,10 +18,11 @@ class SplashScreen extends StatelessWidget {
   void _onSplashError(BuildContext context) {
     showCustomNoticeDialog(
       context: context,
-      titleText: 'Lỗi',
-      messageText: 'Không thể kết nối',
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.error'),
+      messageText: AppLocalizations.of(context).translate('error'),
       imageAsset: 'assets/images/monkey_sad.png',
-      primaryActionText: 'OK',
     );
   }
 

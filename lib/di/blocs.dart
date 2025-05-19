@@ -85,6 +85,7 @@ import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecas
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -204,6 +205,7 @@ void initBlocDependencies() {
       getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
       activeCourseUsecase: sl<ActiveCourseUsecase>(),
       putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
+      getListProfileLocalUsecase: sl<GetListProfileLocalUsecase>(),
     ),
   );
 
