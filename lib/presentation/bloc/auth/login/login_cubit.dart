@@ -151,7 +151,7 @@ class LoginCubit extends Cubit<LoginState> {
             }
           },
           (response) {
-            emit(state.copyWith(status: FormSubmissionStatus.success));
+            loginSuccess();
           },
         );
       } catch (e) {
@@ -234,15 +234,19 @@ class LoginCubit extends Cubit<LoginState> {
         );
       },
       (loginStatus) async {
-        await _restorePurchasedUsecase.call(NoParams());
-        if (_userCubit.state.isPurchasing) {
-          _userCubit.togglePurchasing();
-        }
-        await _userCubit.loadUpdate();
-        await _profileCubit.getListProfile();
-        emit(state.copyWith(status: FormSubmissionStatus.success));
+        loginSuccess();
       },
     );
+  }
+
+  void loginSuccess() async {
+    await _restorePurchasedUsecase.call(NoParams());
+    if (_userCubit.state.isPurchasing) {
+      _userCubit.togglePurchasing();
+    }
+    await _userCubit.loadUpdate();
+    await _profileCubit.getListProfile();
+    emit(state.copyWith(status: FormSubmissionStatus.success));
   }
 
   Future<void> loginSubmitted() async {
