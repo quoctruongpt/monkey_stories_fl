@@ -103,6 +103,14 @@
           }
         },
         {
+          "client_id": "518533842801-p9bi9i0nmukafv8tcihg1huoss1rghm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.earlystart.android.monkeyjunior.story",
+            "certificate_hash": "88c2b178316c3967c6e16814abfd9646f9e5ef20"
+          }
+        },
+        {
           "client_id": "518533842801-s6loma7vn1dpvnpn7qq44dsgv7fuu3jn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -136,11 +144,10 @@
               "client_type": 3
             },
             {
-              "client_id": "518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com",
+              "client_id": "518533842801-6q53qjiic4b46o893h5r5htepuml9gft.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.earlystart.monkeyjunior.story",
-                "app_store_id": "1236664909"
+                "bundle_id": "com.example.monkeyStories"
               }
             }
           ]

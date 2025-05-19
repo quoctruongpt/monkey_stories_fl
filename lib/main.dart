@@ -8,9 +8,12 @@ import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:monkey_stories/core/utils/schedule.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:monkey_stories/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Logging.setupLogging();
 
   // Khởi tạo environment service
