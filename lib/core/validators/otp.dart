@@ -4,7 +4,7 @@ const otpLength = 4;
 
 class OtpValidator extends FormzInput<String, String> {
   const OtpValidator.pure() : super.pure('');
-  const OtpValidator.dirty([String value = '']) : super.dirty(value);
+  const OtpValidator.dirty([super.value = '']) : super.dirty();
 
   static final _otpRegex = RegExp(r'^[0-9]{4}$');
 

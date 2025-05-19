@@ -6,6 +6,8 @@ import 'package:monkey_stories/di/injection_container.dart' as di;
 import 'package:monkey_stories/core/env/environment_service.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:monkey_stories/core/utils/schedule.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +24,15 @@ Future<void> main() async {
   // Khởi tạo dependency injection
   await di.init();
 
+  // Khởi tạo notifications
+  await initNotification(di.sl<FlutterLocalNotificationsPlugin>());
+
   // Đặt hướng màn hình mặc định ban đầu (ví dụ: portrait)
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersiveSticky,
+    overlays: [],
+  );
 
   runApp(const MyApp());
 }

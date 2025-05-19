@@ -8,7 +8,6 @@ import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
-import 'package:monkey_stories/domain/entities/unity/unity_payload_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 
 final logger = Logger('HomeScreen');
@@ -40,32 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _openUnity() {
     context.push(AppRoutePaths.unity);
-  }
-
-  void _openResult() {
-    context.push(AppRoutePaths.result);
-  }
-
-  Future<void> _sendMessageToUnity() async {
-    final message = const UnityMessageEntity(
-      type: MessageTypes.coin,
-      payload: CoinPayloadEntity(action: 'get'),
-    );
-
-    try {
-      final response = await _unityCubit.sendMessageToUnityWithResponse(
-        message,
-      );
-      logger.info('Nhận phản hồi từ Unity: $response');
-    } catch (error) {
-      logger.severe('Lỗi khi giao tiếp với Unity: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Không thể kết nối với Unity: $error'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
   }
 
   @override
@@ -138,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context.read<UserCubit>().logout();
                   context.go(AppRoutePaths.login);
                 },
-                child: const Text("logout"),
+                child: const Text('logout'),
               ),
             ],
           ),

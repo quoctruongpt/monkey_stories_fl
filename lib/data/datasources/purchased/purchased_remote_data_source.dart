@@ -4,12 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 import 'package:monkey_stories/data/models/purchased/iap_item.dart';
+
+final logger = Logger('PurchasedRemoteDataSource');
 
 // Định nghĩa Exception tùy chỉnh
 class PurchaseException implements Exception {
@@ -128,7 +131,7 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
       item,
     ) {
       if (!_purchaseUpdatedController.isClosed && item != null) {
-        print('kkk item: ${item.toString()}');
+        logger.info('kkk item: ${item.toString()}');
         _purchaseUpdatedController.add(item);
       }
     }, onError: (error) {});

@@ -67,4 +67,39 @@ class ProfileRepositoryImpl extends ProfileRepository {
       return left(const CacheFailure());
     }
   }
+
+  @override
+  Future<Either<ServerFailureWithCode, ProfileEntity>> updateProfile({
+    required int id,
+    String? name,
+    int? yearOfBirth,
+    String? localAvatarPath,
+  }) async {
+    final response = await profileRemoteDataSource.updateProfile(
+      name,
+      yearOfBirth,
+      null,
+      localAvatarPath,
+      id,
+    );
+
+    if (response.status == ApiStatus.success) {
+      return right(response.data!.toEntity(name ?? '', yearOfBirth ?? 0));
+    }
+
+    return left(
+      ServerFailureWithCode(code: response.code, message: response.message),
+    );
+  }
+
+  @override
+  Future<Either<CacheFailure, List<ProfileEntity>>>
+  getListProfileLocal() async {
+    try {
+      final response = await profileLocalDataSource.getListProfile();
+      return right(response);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
 }

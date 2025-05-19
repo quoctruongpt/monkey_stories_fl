@@ -10,6 +10,7 @@ class SignUpState extends Equatable {
   final int? phoneErrorCode;
   final bool isPhoneValid;
   final bool isShowPassword;
+  final bool isShowConfirmPassword;
   final bool isConfirmPasswordCorrect;
   final bool isSignUpSuccess;
   final bool isSignUpLoading;
@@ -18,7 +19,8 @@ class SignUpState extends Equatable {
 
   SignUpState({
     required this.step,
-    required this.isShowPassword,
+    this.isShowPassword = false,
+    this.isShowConfirmPassword = false,
     PhoneValidator? phone,
     this.password = const Password.pure(),
     this.confirmPassword = const Password.pure(),
@@ -49,6 +51,7 @@ class SignUpState extends Equatable {
     bool? isSignUpLoading,
     String? signUpErrorMessage,
     String? popupErrorMessage,
+    bool? isShowConfirmPassword,
   }) {
     return SignUpState(
       step: step ?? this.step,
@@ -78,6 +81,8 @@ class SignUpState extends Equatable {
           clearPhoneErrorMessage == true
               ? null
               : popupErrorMessage ?? this.popupErrorMessage,
+      isShowConfirmPassword:
+          isShowConfirmPassword ?? this.isShowConfirmPassword,
     );
   }
 
@@ -97,5 +102,6 @@ class SignUpState extends Equatable {
     isSignUpLoading,
     signUpErrorMessage,
     popupErrorMessage,
+    isShowConfirmPassword,
   ];
 }

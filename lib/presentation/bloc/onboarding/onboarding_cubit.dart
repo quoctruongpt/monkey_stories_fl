@@ -8,13 +8,14 @@ import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {
   final GetLanguageUseCase _getLanguageUseCase;
   final SignUpSkipUsecase _signUpSkipUsecase;
   final ProfileCubit _profileCubit;
+  final AppCubit _appCubit;
 
   final UserCubit _userCubit;
 
@@ -25,10 +26,12 @@ class OnboardingCubit extends Cubit<OnboardingState> {
     required SignUpSkipUsecase signUpSkipUsecase,
     required UserCubit userCubit,
     required ProfileCubit profileCubit,
+    required AppCubit appCubit,
   }) : _getLanguageUseCase = getLanguageUseCase,
        _signUpSkipUsecase = signUpSkipUsecase,
        _userCubit = userCubit,
        _profileCubit = profileCubit,
+       _appCubit = appCubit,
        super(const OnboardingState()) {
     emit(state.copyWith(years: ProfileUtil.getNearYears()));
     initialName();
@@ -71,6 +74,7 @@ class OnboardingCubit extends Cubit<OnboardingState> {
 
       _updateLoadingProcess(OnboardingProgress.createAccount);
 
+      _appCubit.changeLanguage(_appCubit.state.languageCode);
       await _profileCubit.addProfile(
         state.name ?? '',
         state.yearSelected ?? 0,

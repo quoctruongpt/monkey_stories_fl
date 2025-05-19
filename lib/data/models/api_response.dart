@@ -32,4 +32,24 @@ class ApiResponse<T> {
       data: fromJsonT(json['data'], json),
     );
   }
+
+  // Hàm factory async
+  static Future<ApiResponse<T>> fromJsonAsync<T>(
+    Map<String, dynamic> json,
+    Future<T> Function(Object? json, Map<String, dynamic> response) fromJsonT,
+  ) async {
+    final status = ApiStatus.fromString(json['status'] as String?);
+    final message = json['message'] as String? ?? '';
+    final code = json['code'] as int? ?? -1;
+
+    // Gọi hàm bất đồng bộ để lấy data
+    final data = await fromJsonT(json['data'], json);
+
+    return ApiResponse<T>(
+      status: status,
+      message: message,
+      code: code,
+      data: data,
+    );
+  }
 }

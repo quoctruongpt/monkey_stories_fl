@@ -7,6 +7,7 @@ import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remo
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
@@ -70,6 +71,7 @@ void initRepositoryDependencies() {
     () => AccountRepositoryImpl(
       accountRemoteDataSource: sl<AccountRemoteDataSource>(),
       systemLocalDataSource: sl<SystemLocalDataSource>(),
+      settingsLocalDataSource: sl<SettingsLocalDataSource>(),
     ),
   );
 
@@ -82,8 +84,11 @@ void initRepositoryDependencies() {
     ),
   );
   sl.registerLazySingleton<SettingsRepository>(
-    () =>
-        SettingsRepositoryImpl(localDataSource: sl<SettingsLocalDataSource>()),
+    () => SettingsRepositoryImpl(
+      localDataSource: sl<SettingsLocalDataSource>(),
+      remoteDataSource: sl<SettingsRemoteDataSource>(),
+      authLocalDataSource: sl<AuthLocalDataSource>(),
+    ),
   );
   sl.registerLazySingleton<SystemSettingsRepository>(
     () => SystemSettingsRepositoryImpl(

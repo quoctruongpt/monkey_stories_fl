@@ -1,7 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
+import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
@@ -18,7 +21,11 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_erro
 import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
@@ -47,6 +54,7 @@ import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password
 import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/schedule_manager/schedule_manager_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -74,6 +82,10 @@ import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecas
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -83,7 +95,7 @@ void initBlocDependencies() {
   sl.registerFactory(() => FloatButtonCubit());
 
   // Create Profile Blocs/Cubits
-  sl.registerFactory(() => InputNameCubit());
+  sl.registerFactory(() => InputNameCubit(profileCubit: sl<ProfileCubit>()));
   sl.registerFactory(() => ChooseYearOfBirthCubit());
   sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(
@@ -96,6 +108,7 @@ void initBlocDependencies() {
       logoutUsecase: sl<LogoutUsecase>(),
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
       profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
   sl.registerFactory(
@@ -116,6 +129,7 @@ void initBlocDependencies() {
       signUpUsecase: sl<SignUpUsecase>(),
       loginUsecase: sl<LoginUsecase>(),
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
 
@@ -153,6 +167,8 @@ void initBlocDependencies() {
       saveThemeUseCase: sl<SaveThemeUseCase>(),
       setPreferredOrientationsUseCase: sl<SetPreferredOrientationsUseCase>(),
       unityCubit: sl<UnityCubit>(), // UnityCubit is now also registered here
+      saveSoundTrackUsecase: sl<SaveSoundTrackUsecase>(),
+      getSoundTrackUseCase: sl<GetSoundTrackUseCase>(),
     ),
   );
 
@@ -170,6 +186,7 @@ void initBlocDependencies() {
       signUpSkipUsecase: sl<SignUpSkipUsecase>(),
       userCubit: sl<UserCubit>(),
       profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
     ),
   );
 
@@ -188,6 +205,7 @@ void initBlocDependencies() {
       getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
       activeCourseUsecase: sl<ActiveCourseUsecase>(),
       putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
+      getListProfileLocalUsecase: sl<GetListProfileLocalUsecase>(),
     ),
   );
 
@@ -224,6 +242,34 @@ void initBlocDependencies() {
       profileCubit: sl<ProfileCubit>(),
       sendOtpUsecase: sl<SendOtpUsecase>(),
       verifyOtpUsecase: sl<VerifyOtpUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UpdateUserInfoCubit(
+      updateUserInfoUsecase: sl<UpdateUserInfoUsecase>(),
+      userCubit: sl<UserCubit>(),
+      confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UpdateProfileInfoCubit(
+      profileCubit: sl<ProfileCubit>(),
+      updateProfileUsecase: sl<UpdateProfileUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ChangePasswordCubit(
+      confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ScheduleManagerCubit(
+      saveScheduleUsecase: sl<SaveScheduleUsecase>(),
+      settingsLocalDataSource: sl<SettingsLocalDataSource>(),
     ),
   );
 

@@ -15,6 +15,8 @@ class PasswordInputField extends StatelessWidget {
     this.isPasswordValid = false,
     this.focusNode,
     this.labelText,
+    this.labelTopText,
+    this.labelTopIcon,
   });
 
   final TextEditingController? controller;
@@ -27,6 +29,9 @@ class PasswordInputField extends StatelessWidget {
   final bool isPasswordValid;
   final FocusNode? focusNode;
   final String? labelText;
+  final String? labelTopText;
+  final Widget? labelTopIcon;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,6 +56,8 @@ class PasswordInputField extends StatelessWidget {
               color: AppTheme.textSecondaryColor,
             ),
           ),
+          labelTopText: labelTopText,
+          labelTopIcon: labelTopIcon,
         ),
       ],
     );

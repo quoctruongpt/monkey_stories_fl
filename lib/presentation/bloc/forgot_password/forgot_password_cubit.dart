@@ -42,7 +42,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   void countryCodeInit(String countryCode) {
-    final phone = PhoneValidator.pure(countryCode: countryCode);
+    final phone = PhoneValidator.pure(
+      countryCode: countryCode,
+      phoneNumber: state.phone.value.phoneNumber,
+    );
     emit(state.copyWith(phone: phone));
   }
 
@@ -66,6 +69,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     );
 
     emit(state.copyWith(phone: phone, clearPhoneErrorOther: true));
+  }
+
+  void emailReset() {
+    emit(
+      state.copyWith(
+        email: const EmailValidator.pure(),
+        clearPhoneErrorOther: true,
+      ),
+    );
   }
 
   void emailChanged(String value) {

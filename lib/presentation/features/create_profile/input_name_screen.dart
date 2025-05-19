@@ -19,13 +19,13 @@ class CreateProfileInputNameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<InputNameCubit>(),
-      child: CreateProfileInputNameView(),
+      child: const CreateProfileInputNameView(),
     );
   }
 }
 
 class CreateProfileInputNameView extends StatefulWidget {
-  CreateProfileInputNameView({super.key});
+  const CreateProfileInputNameView({super.key});
 
   @override
   State<CreateProfileInputNameView> createState() =>
@@ -84,11 +84,14 @@ class _CreateProfileInputNameViewState
                               hintText: AppLocalizations.of(
                                 context,
                               ).translate('create_profile.name.hint'),
-                              isValid: state.name.isValid,
+                              isValid:
+                                  state.name.isValid && !state.hasNameExisted,
                               isShowIcon: !state.name.isPure,
-                              errorText: AppLocalizations.of(
-                                context,
-                              ).translate(state.name.displayError),
+                              errorText: AppLocalizations.of(context).translate(
+                                state.hasNameExisted
+                                    ? 'app.create_profile.name.error_existed'
+                                    : state.name.displayError,
+                              ),
                               onErrorPressed: () {
                                 _nameController.clear();
                               },
@@ -109,7 +112,8 @@ class _CreateProfileInputNameViewState
                       ).translate('create_profile.name.act'),
                       onPressed: handleContinue,
                       isFullWidth: true,
-                      disabled: !state.name.isValid,
+                      disabled:
+                          !state.name.isValid || state.hasNameExisted == true,
                     );
                   },
                 ),

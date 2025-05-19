@@ -67,6 +67,11 @@ abstract class AuthRemoteDataSource {
     String password,
     String tokenChangePassword,
   );
+
+  Future<ApiResponse<Null>> confirmPassword(
+    String password,
+    String? newPassword,
+  );
 }
 
 final logger = Logger('DeviceRemoteDataSourceImpl');
@@ -107,8 +112,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during login');
     } catch (e) {
       // Các lỗi khác
       throw ServerException(message: e.toString());
@@ -192,7 +196,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
-      print('kkk ${e}');
+      logger.severe('checkPhoneNumber $e');
       // Các lỗi khác
       throw ServerException(message: e.toString());
     }
@@ -268,6 +272,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'password': password,
         'token_to_change_pw': tokenChangePassword,
       },
+    );
+
+    return ApiResponse.fromJson(response.data, (json, res) {
+      return null;
+    });
+  }
+
+  @override
+  Future<ApiResponse<Null>> confirmPassword(
+    String password,
+    String? newPassword,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.confirmPassword,
+      data: {'old_password': password, 'new_password': newPassword},
     );
 
     return ApiResponse.fromJson(response.data, (json, res) {

@@ -12,7 +12,7 @@ import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 part 'sign_up_state.dart';
 
 final logger = Logger('SignUpCubit');
@@ -23,6 +23,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   final SignUpUsecase _signUpUsecase;
   final LoginUsecase _loginUsecase;
   final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
+  final AppCubit _appCubit;
 
   final UserCubit _userCubit;
 
@@ -34,11 +35,13 @@ class SignUpCubit extends Cubit<SignUpState> {
     required SignUpUsecase signUpUsecase,
     required LoginUsecase loginUsecase,
     required CheckPhoneNumberUsecase checkPhoneNumberUsecase,
+    required AppCubit appCubit,
   }) : _userCubit = userCubit,
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
        _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
-       super(SignUpState(step: StepSignUp.phone, isShowPassword: false));
+       _appCubit = appCubit,
+       super(SignUpState(step: StepSignUp.phone));
 
   void countryCodeInit(String countryCode) {
     final phone = PhoneValidator.pure(countryCode: countryCode);
@@ -184,6 +187,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           if (_userCubit.state.isPurchasing) {
             _userCubit.togglePurchasing();
           }
+          _appCubit.changeLanguage(_appCubit.state.languageCode);
           await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },
@@ -263,6 +267,10 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void toggleShowPassword() {
     emit(state.copyWith(isShowPassword: !state.isShowPassword));
+  }
+
+  void toggleShowConfirmPassword() {
+    emit(state.copyWith(isShowConfirmPassword: !state.isShowConfirmPassword));
   }
 
   void nextToPassword() {

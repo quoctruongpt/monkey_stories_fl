@@ -5,11 +5,11 @@ import 'package:monkey_stories/data/models/unity/unity_payload_model.dart';
 /// Model biểu diễn tin nhắn trao đổi với Unity
 class UnityMessageModel extends UnityMessageEntity {
   UnityMessageModel({
-    String? id,
-    required String type,
-    required dynamic payload,
-    bool? response,
-  }) : super(id: id, type: type, payload: payload, response: response);
+    super.id,
+    required super.type,
+    required super.payload,
+    super.response,
+  });
 
   /// Copy model với các giá trị mới
   UnityMessageModel copyWith({

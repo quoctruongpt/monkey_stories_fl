@@ -1,20 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/data/models/setting/schedule.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:monkey_stories/core/utils/schedule.dart';
 
 abstract class SettingsLocalDataSource {
   Future<String?> getLanguage();
   Future<void> saveLanguage(String languageCode);
-
+  Future<bool> getBackgroundMusic();
+  Future<void> saveBackgroundMusic(bool isEnabled);
+  Future<bool> getNotification();
+  Future<void> saveNotification(bool isEnabled);
   Future<ThemeMode> getTheme();
   Future<void> saveTheme(ThemeMode themeMode);
+  Future<Schedule?> getSchedule();
+  Future<void> saveSchedule(Schedule schedule);
+  Future<void> setSchedule(Schedule schedule);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   final SharedPreferences sharedPreferences;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  SettingsLocalDataSourceImpl({required this.sharedPreferences});
+  SettingsLocalDataSourceImpl({
+    required this.sharedPreferences,
+    required this.flutterLocalNotificationsPlugin,
+  });
 
   @override
   Future<String?> getLanguage() async {
@@ -76,5 +91,85 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     } catch (e) {
       throw CacheException(message: 'Failed to save theme mode');
     }
+  }
+
+  @override
+  Future<bool> getBackgroundMusic() async {
+    return sharedPreferences.getBool(SharedPrefKeys.isBackgroundMusicEnabled) ??
+        true;
+  }
+
+  @override
+  Future<void> saveBackgroundMusic(bool isEnabled) async {
+    await sharedPreferences.setBool(
+      SharedPrefKeys.isBackgroundMusicEnabled,
+      isEnabled,
+    );
+  }
+
+  @override
+  Future<bool> getNotification() async {
+    return sharedPreferences.getBool(SharedPrefKeys.isNotificationEnabled) ??
+        true;
+  }
+
+  @override
+  Future<void> saveNotification(bool isEnabled) async {
+    await sharedPreferences.setBool(
+      SharedPrefKeys.isNotificationEnabled,
+      isEnabled,
+    );
+  }
+
+  @override
+  Future<Schedule?> getSchedule() async {
+    final scheduleDayOfWeekString = sharedPreferences.getString(
+      SharedPrefKeys.scheduleDayOfWeek,
+    );
+    final scheduleTimeString = sharedPreferences.getString(
+      SharedPrefKeys.scheduleTime,
+    );
+    if (scheduleDayOfWeekString == null || scheduleTimeString == null) {
+      return null;
+    }
+
+    // Giải mã và ép kiểu weekdays
+    final List<dynamic> decodedWeekdaysDynamic = jsonDecode(
+      scheduleDayOfWeekString,
+    );
+    final List<String> loadedWeekdays =
+        decodedWeekdaysDynamic.cast<String>().toList();
+
+    // Giải mã time, nó sẽ là một Map
+    final Map<String, dynamic> decodedTimeJson = jsonDecode(scheduleTimeString);
+
+    return Schedule(
+      weekdays: loadedWeekdays,
+      time: ScheduleTime(
+        hour: decodedTimeJson['hour'] as int, // Đọc 'hour' từ Map
+        minute: decodedTimeJson['minute'] as int, // Đọc 'minute' từ Map
+      ),
+    );
+  }
+
+  @override
+  Future<void> saveSchedule(Schedule schedule) async {
+    await sharedPreferences.setString(
+      SharedPrefKeys.scheduleDayOfWeek,
+      schedule.weekdaysToJson(),
+    );
+    await sharedPreferences.setString(
+      SharedPrefKeys.scheduleTime,
+      schedule.timeToJson(),
+    );
+  }
+
+  @override
+  Future<void> setSchedule(Schedule schedule) async {
+    await saveSchedule(schedule);
+    await scheduleWeeklyNotification(
+      flutterLocalNotificationsPlugin,
+      schedule,
+    ); // Gọi hàm lên lịch ở đây
   }
 }

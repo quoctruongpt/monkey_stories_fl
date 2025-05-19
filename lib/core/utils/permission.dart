@@ -36,4 +36,65 @@ class PermissionUtil {
 
     return false;
   }
+
+  static Future<bool> checkPhotoLibraryPermission(BuildContext context) async {
+    final status = await Permission.photos.status;
+
+    if (status.isGranted || status.isLimited) return true;
+
+    final result = await Permission.photos.request();
+
+    if (result.isGranted || result.isLimited) return true;
+
+    if (result.isPermanentlyDenied || result.isDenied) {
+      showCustomNoticeDialog(
+        context: context,
+        titleText: AppLocalizations.of(
+          context,
+        ).translate('app.permission.request'),
+        messageText: AppLocalizations.of(
+          context,
+        ).translate('app.permission.photo_library'),
+        imageAsset: 'assets/images/monkey_confused.png',
+        primaryActionText: AppLocalizations.of(
+          context,
+        ).translate('app.permission.open_setting'),
+        onPrimaryAction: () {
+          context.pop();
+          openAppSettings();
+        },
+      );
+    }
+    return false;
+  }
+
+  static Future<bool> checkNotificationPermission(BuildContext context) async {
+    final status = await Permission.notification.status;
+
+    if (status.isGranted) return true;
+
+    final result = await Permission.notification.request();
+
+    if (result.isGranted) return true;
+
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.title'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.notification_message'),
+      imageAsset: 'assets/images/monkey_notice.png',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.schedule_manager.continue'),
+      onPrimaryAction: () {
+        context.pop();
+        openAppSettings();
+      },
+    );
+
+    return false;
+  }
 }

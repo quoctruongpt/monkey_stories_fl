@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:monkey_stories/core/network/dio_config.dart';
 
@@ -31,5 +32,10 @@ Future<void> initCoreAppDependencies() async {
   // Đăng ký singleton cho FlutterInappPurchase
   sl.registerLazySingleton<FlutterInappPurchase>(
     () => FlutterInappPurchase.instance,
+  );
+
+  // Đăng ký singleton cho FlutterLocalNotificationsPlugin
+  sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
+    () => FlutterLocalNotificationsPlugin(),
   );
 }

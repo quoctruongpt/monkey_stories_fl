@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/presentation/features/list_profile.dart';
+import 'package:monkey_stories/presentation/widgets/profile/avatar.dart';
 
 class ProfileItem extends StatefulWidget {
   const ProfileItem({
@@ -49,13 +49,7 @@ class _ProfileItemState extends State<ProfileItem> {
                         ? Border.all(width: 2, color: _activeColor)
                         : null,
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 6, color: _borderColor),
-                  borderRadius: BorderRadius.circular(200),
-                ),
-                child: _buildAvatar(),
-              ),
+              child: Avatar(avatar: widget.avatar, randomColor: randomColor),
             ),
           ),
           const SizedBox(height: 10),
@@ -63,30 +57,6 @@ class _ProfileItemState extends State<ProfileItem> {
         ],
       ),
     );
-  }
-
-  Widget _buildAvatar() {
-    // print('kkk ${widget.avatar}');
-    if (widget.avatar == null) {
-      return Image.asset('assets/images/avatar_default.png');
-    }
-
-    // Kiểm tra nếu là base64
-    if (widget.avatar!.startsWith('data:image')) {
-      try {
-        return Image.memory(
-          base64Decode(widget.avatar!.split(',')[1]),
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset('assets/images/avatar_default.png');
-          },
-        );
-      } catch (e) {
-        return Image.asset('assets/images/avatar_default.png');
-      }
-    }
-
-    // Nếu không phải base64 thì xử lý như bình thường
-    return Image.asset('assets/images/avatar_default.png');
   }
 
   Color get _backgroundColor {
@@ -97,17 +67,6 @@ class _ProfileItemState extends State<ProfileItem> {
         return const Color(0xFFFFE8F3);
       default:
         return const Color(0xFFCAFFED);
-    }
-  }
-
-  Color get _borderColor {
-    switch (randomColor) {
-      case AvatarColor.blue:
-        return const Color(0xFFC9DEEB);
-      case AvatarColor.pink:
-        return const Color(0xFFEBD5E0);
-      default:
-        return const Color(0xFFBAEBDA);
     }
   }
 

@@ -23,7 +23,7 @@ class ListProfile extends StatelessWidget {
     showVerifyDialog(
       context: context,
       onSuccess: () {
-        context.push(AppRoutePaths.home);
+        context.push(AppRoutePaths.report);
       },
     );
   }
@@ -122,7 +122,9 @@ class ListProfile extends StatelessWidget {
                                       width: width,
                                       child: ProfileItem(
                                         name: profile.name,
-                                        avatar: profile.avatarPath,
+                                        avatar:
+                                            profile.localAvatarPath ??
+                                            profile.avatarPath,
                                         isActive:
                                             state.currentProfile?.id ==
                                             profile.id,

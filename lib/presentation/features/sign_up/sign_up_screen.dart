@@ -333,10 +333,16 @@ class _SignUpState extends State<SignUp> {
                                                       .confirmPasswordChanged,
                                               isShowPassword:
                                                   state.isShowPassword,
+                                              isShowConfirmPassword:
+                                                  state.isShowConfirmPassword,
                                               toggleShowPassword:
                                                   context
                                                       .read<SignUpCubit>()
                                                       .toggleShowPassword,
+                                              toggleShowConfirmPassword:
+                                                  context
+                                                      .read<SignUpCubit>()
+                                                      .toggleShowConfirmPassword,
                                               passwordErrorText:
                                                   state.password.displayError !=
                                                           null
@@ -514,7 +520,9 @@ class PasswordInput extends StatelessWidget {
     required this.onChangedPassword,
     required this.onChangedConfirmPassword,
     required this.isShowPassword,
+    required this.isShowConfirmPassword,
     required this.toggleShowPassword,
+    required this.toggleShowConfirmPassword,
     required this.focusNode,
     this.passwordErrorText,
     this.confirmPasswordErrorText,
@@ -525,9 +533,11 @@ class PasswordInput extends StatelessWidget {
   final TextEditingController controllerPassword;
   final TextEditingController controllerConfirmPassword;
   final bool isShowPassword;
+  final bool isShowConfirmPassword;
   final void Function(String) onChangedPassword;
   final void Function(String) onChangedConfirmPassword;
   final VoidCallback toggleShowPassword;
+  final VoidCallback toggleShowConfirmPassword;
   final String? passwordErrorText;
   final String? confirmPasswordErrorText;
   final bool isPasswordValid;
@@ -566,8 +576,8 @@ class PasswordInput extends StatelessWidget {
           hintText: AppLocalizations.of(
             context,
           ).translate('sign_up.re_password.label'),
-          obscureText: !isShowPassword,
-          onObscureTextToggle: toggleShowPassword,
+          obscureText: !isShowConfirmPassword,
+          onObscureTextToggle: toggleShowConfirmPassword,
           errorText: confirmPasswordErrorText,
           isPasswordValid: isConfirmPasswordValid,
           passwordValidText: AppLocalizations.of(

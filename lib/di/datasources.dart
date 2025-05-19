@@ -1,15 +1,18 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/download/download_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Auth Datasources
@@ -31,7 +34,14 @@ final sl = GetIt.instance;
 void initDatasourceDependencies() {
   // Profile
   sl.registerLazySingleton<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(dio: sl<Dio>()),
+    () => ProfileRemoteDataSourceImpl(
+      dio: sl<Dio>(),
+      downloadRemoteDataSource: sl<DownloadRemoteDataSource>(),
+    ),
+  );
+
+  sl.registerLazySingleton<DownloadRemoteDataSource>(
+    () => DownloadRemoteDataSourceImpl(dio: sl<Dio>()),
   );
 
   // Auth
@@ -53,8 +63,10 @@ void initDatasourceDependencies() {
     () => DeviceRemoteDataSourceImpl(dioClient: sl<Dio>()),
   );
   sl.registerLazySingleton<SettingsLocalDataSource>(
-    () =>
-        SettingsLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
+    () => SettingsLocalDataSourceImpl(
+      sharedPreferences: sl<SharedPreferences>(),
+      flutterLocalNotificationsPlugin: sl<FlutterLocalNotificationsPlugin>(),
+    ),
   );
   sl.registerLazySingleton<SystemSettingsDataSource>(
     () => SystemSettingsDataSourceImpl(),
@@ -104,6 +116,11 @@ void initDatasourceDependencies() {
   // Active license
   sl.registerLazySingleton<ActiveLicenseRemoteDataSource>(
     () => ActiveLicenseRemoteDataSourceImpl(dio: sl<Dio>()),
+  );
+
+  // Settings
+  sl.registerLazySingleton<SettingsRemoteDataSource>(
+    () => SettingsRemoteDataSourceImpl(dio: sl<Dio>()),
   );
 
   // Add other datasource registrations here...

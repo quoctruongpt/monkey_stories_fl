@@ -67,19 +67,26 @@ final ShellRoute forgotPasswordRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.chooseMethodFp,
       name: AppRouteNames.chooseMethodFp,
-      builder:
-          (context, state) => const OrientationWrapper(
-            orientation: AppOrientation.portrait,
-            child: ChooseMethodFp(),
+      builder: (context, state) {
+        return OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: ChooseMethodFp(
+            isFromChangePassword:
+                state.uri.queryParameters['isFromChangePassword'] == 'true',
           ),
+        );
+      },
     ),
     GoRoute(
       path: AppRoutePaths.inputPhoneFp,
       name: AppRouteNames.inputPhoneFp,
       builder:
-          (context, state) => const OrientationWrapper(
+          (context, state) => OrientationWrapper(
             orientation: AppOrientation.portrait,
-            child: InputPhoneFp(),
+            child: InputPhoneFp(
+              isFromChangePassword:
+                  state.uri.queryParameters['isFromChangePassword'] == 'true',
+            ),
           ),
     ),
     GoRoute(

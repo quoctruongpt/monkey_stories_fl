@@ -15,6 +15,10 @@ class SharedPrefKeys {
   static const String purchasedProducts = 'purchasedProducts';
   static const String purchasedLatest = 'purchasedLatest';
   static const String hasLoggedBefore = 'hasLoggedBefore';
+  static const String isBackgroundMusicEnabled = 'isBackgroundMusicEnabled';
+  static const String isNotificationEnabled = 'isNotificationEnabled';
+  static const String scheduleDayOfWeek = 'scheduleDayOfWeek';
+  static const String scheduleTime = 'scheduleTime';
 }
 
 final keysToKeep = [

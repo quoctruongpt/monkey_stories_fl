@@ -43,6 +43,19 @@ class AppRoutePaths {
   static const String activeLicenseSuccess = '/active_license_success';
 
   static const String listProfile = '/list_profile';
+
+  static const String report = '/report';
+  static const String vip = '/vip';
+  static const String setting = '/setting';
+  static const String userInfo = '/user_info';
+  static const String listProfileSetting = '/list_profile_setting';
+  static const String editProfileInfo = '/edit_profile_info';
+  static const String changePassword = '/change_password';
+  static const String changePasswordSuccess = '/change_password_success';
+  static const String generalSetting = '/general_setting';
+  static const String scheduleManager = '/schedule_manager';
+
+  static const String webView = '/web_view';
 }
 
 class AppRouteNames {
@@ -91,4 +104,16 @@ class AppRouteNames {
   static const String activeLicenseSuccess = 'active_license_success';
 
   static const String listProfile = 'list_profile';
+
+  static const String report = 'report';
+  static const String vip = 'vip';
+  static const String setting = 'setting';
+  static const String userInfo = 'user_info';
+  static const String listProfileSetting = 'list_profile_setting';
+  static const String editProfileInfo = 'edit_profile_info';
+  static const String changePassword = 'change_password';
+  static const String changePasswordSuccess = 'change_password_success';
+  static const String generalSetting = 'general_setting';
+  static const String scheduleManager = 'schedule_manager';
+  static const String webView = 'web_view';
 }

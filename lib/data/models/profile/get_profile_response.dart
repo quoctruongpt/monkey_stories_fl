@@ -6,6 +6,7 @@ class GetProfileResponse {
   final String avatar;
   final int yearOfBirth;
   final int levelId;
+  final String localAvatar;
 
   GetProfileResponse({
     required this.id,
@@ -13,6 +14,7 @@ class GetProfileResponse {
     required this.avatar,
     required this.yearOfBirth,
     required this.levelId,
+    required this.localAvatar,
   });
 
   static GetProfileResponse fromJson(dynamic json) {
@@ -22,6 +24,7 @@ class GetProfileResponse {
       avatar: json['path_avatar'] ?? '',
       yearOfBirth: json['year_of_birth'],
       levelId: json['level_id'],
+      localAvatar: json['local_avatar'] ?? '',
     );
   }
 
@@ -32,6 +35,7 @@ class GetProfileResponse {
       avatarPath: avatar,
       yearOfBirth: yearOfBirth,
       levelId: levelId,
+      localAvatarPath: localAvatar,
     );
   }
 }

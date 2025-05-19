@@ -6,6 +6,7 @@ import 'package:monkey_stories/domain/entities/account/user_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
 import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 
 part 'user_state.dart';
 
@@ -15,14 +16,17 @@ class UserCubit extends HydratedCubit<UserState> {
   final LogoutUsecase _logoutUsecase;
   final GetLoadUpdateUsecase _getLoadUpdateUsecase;
   final ProfileCubit _profileCubit;
+  final AppCubit _appCubit;
   // Khởi tạo với trạng thái ban đầu
   UserCubit({
     required LogoutUsecase logoutUsecase,
     required GetLoadUpdateUsecase getLoadUpdateUsecase,
     required ProfileCubit profileCubit,
+    required AppCubit appCubit,
   }) : _logoutUsecase = logoutUsecase,
        _getLoadUpdateUsecase = getLoadUpdateUsecase,
        _profileCubit = profileCubit,
+       _appCubit = appCubit,
        super(const UserState());
 
   void updateUser(UserEntity user) {
@@ -56,6 +60,7 @@ class UserCubit extends HydratedCubit<UserState> {
         (loadUpdate) {
           updateUser(loadUpdate!.user);
           updatePurchasedInfo(loadUpdate.purchasedInfo);
+          _appCubit.loadInitialSettings();
         },
       );
     } catch (e) {

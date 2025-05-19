@@ -7,7 +7,7 @@ class DioConfig {
     final dio = Dio(
       BaseOptions(
         baseUrl: dotenv.env['BASE_URL']!,
-        connectTimeout: const Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 30),
         responseType: ResponseType.json,
         contentType: 'application/json',

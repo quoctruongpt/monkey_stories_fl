@@ -12,4 +12,13 @@ abstract class ProfileRepository {
   Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile();
 
   Future<Either<CacheFailure, int?>> getCurrentProfile();
+
+  Future<Either<CacheFailure, List<ProfileEntity>>> getListProfileLocal();
+
+  Future<Either<ServerFailureWithCode, ProfileEntity>> updateProfile({
+    required int id,
+    String? name,
+    int? yearOfBirth,
+    String? localAvatarPath,
+  });
 }

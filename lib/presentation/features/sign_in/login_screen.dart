@@ -17,6 +17,7 @@ import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.d
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/lost_connect_dialog.dart';
 
 final logger = Logger('LoginScreen');
 
@@ -62,16 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    final initialValue = context.read<LoginCubit>().state.username.value;
-    _usernameController = TextEditingController(text: initialValue);
-    _usernameController.addListener(() {
-      context.read<LoginCubit>().usernameChanged(_usernameController.text);
-    });
-
+    _usernameController = TextEditingController(text: widget.initialUsername);
     _passwordController = TextEditingController(text: widget.initialPassword);
-    _passwordController.addListener(() {
-      context.read<LoginCubit>().passwordChanged(_passwordController.text);
-    });
 
     // Call loadLastLogin after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -109,12 +102,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (licenseCodeInfo.accountInfo != null) {
         context.go(
           AppRoutePaths.lastLoginInfo,
-          extra: {'licenseInfo': licenseCodeInfo},
+          extra: {'licenseInfo': licenseCodeInfo, 'isUsernameCrm': true},
         );
       } else {
         context.go(
           AppRoutePaths.activeLicenseInputPhone,
-          extra: {'licenseInfo': licenseCodeInfo},
+          extra: {'licenseInfo': licenseCodeInfo, 'isUsernameCrm': true},
         );
       }
     } else {
@@ -174,6 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (state.status == FormSubmissionStatus.failure &&
         state.errorMessageDialog != null) {
       _handleLoginFailure(state.errorMessageDialog!);
+      return;
+    }
+    if (state.status == FormSubmissionStatus.networkFailure) {
+      showLostConnectDialog(context: context, onRetry: _loginPressed);
       return;
     }
   }
@@ -266,6 +263,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: TextField(
                                     controller: _usernameController,
+                                    onChanged: (value) {
+                                      context
+                                          .read<LoginCubit>()
+                                          .usernameChanged(value);
+                                    },
                                     decoration: InputDecoration(
                                       labelText: AppLocalizations.of(
                                         context,
@@ -323,7 +325,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ? AppLocalizations.of(
                                               context,
                                             ).translate(
-                                              state.password.displayError!,
+                                              state.password.displayError,
                                             )
                                             : null,
                                     suffixIcon: IconButton(
@@ -378,7 +380,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Text(
                                     AppLocalizations.of(
                                       context,
-                                    ).translate(state.errorMessage!),
+                                    ).translate(state.errorMessage),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.labelLarge?.copyWith(

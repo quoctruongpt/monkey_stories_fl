@@ -12,6 +12,9 @@ import 'package:monkey_stories/presentation/widgets/profile/add_profile_item.dar
 import 'package:monkey_stories/presentation/widgets/profile/profile_item.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:logging/logging.dart';
+
+final logger = Logger('ListProfileDialog');
 
 class ListProfileDialog extends StatelessWidget {
   final VoidCallback onClose;
@@ -22,7 +25,7 @@ class ListProfileDialog extends StatelessWidget {
       buildVerifyDialogWidget(
         context: context,
         onSuccess: () {
-          navigatorKey.currentContext?.push(AppRoutePaths.home);
+          navigatorKey.currentContext?.push(AppRoutePaths.report);
           onClose();
         },
       ),
@@ -83,7 +86,7 @@ class ListProfileDialog extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withAlpha(26),
                 blurRadius: 10,
                 spreadRadius: -10,
                 offset: const Offset(0, 10),
@@ -119,18 +122,19 @@ class ListProfileDialog extends StatelessWidget {
                         (index == state.profiles.length)
                             ? (state.profiles.length <
                                     (context
-                                            .read<UserCubit>()
-                                            .state
-                                            .user!
-                                            .maxProfile ??
-                                        0)
+                                        .read<UserCubit>()
+                                        .state
+                                        .user!
+                                        .maxProfile)
                                 ? AddProfileItem(
                                   onTap: () => _addProfilePressed(context),
                                 )
                                 : const SizedBox.shrink())
                             : ProfileItem(
                               name: state.profiles[index].name,
-                              avatar: state.profiles[index].avatarPath,
+                              avatar:
+                                  state.profiles[index].localAvatarPath ??
+                                  state.profiles[index].avatarPath,
                               onTap:
                                   () => _profilePressed(
                                     context,
@@ -243,7 +247,7 @@ Widget buildListProfileDialogWidget(BuildContext context) {
         listen: false,
       ).dismissDialogByKey(dialogKey);
     } catch (e) {
-      print('Error dismissing ListProfileDialog: $e');
+      logger.severe('Error dismissing ListProfileDialog: $e');
     }
   }
 
