@@ -1,0 +1,41 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "mj-stories-169807",
+          "appId": "1:518533842801:android:dc610ed5e3a491b5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "mj-stories-169807",
+          "appId": "1:518533842801:ios:cd3558a55bf4fc3e",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "mj-stories-169807",
+          "appId": "1:518533842801:ios:44a792211067c73c4a58d0",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "mj-stories-169807",
+          "configurations": {
+            "android": "1:518533842801:android:dc610ed5e3a491b5",
+            "ios": "1:518533842801:ios:cd3558a55bf4fc3e",
+            "macos": "1:518533842801:ios:44a792211067c73c4a58d0",
+            "web": "1:518533842801:web:904c155c7ca10c084a58d0",
+            "windows": "1:518533842801:web:7eaa3cecbfd3bd714a58d0"
+          }
+        }
+      }
+    }
+  }
+}
