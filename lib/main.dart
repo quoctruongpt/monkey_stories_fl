@@ -10,10 +10,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:monkey_stories/core/utils/schedule.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:monkey_stories/firebase_options.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   Logging.setupLogging();
 
   // Khởi tạo environment service

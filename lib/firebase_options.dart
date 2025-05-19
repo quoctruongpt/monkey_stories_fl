@@ -67,10 +67,8 @@ class DefaultFirebaseOptions {
     projectId: 'mj-stories-169807',
     databaseURL: 'https://mj-stories-169807.firebaseio.com',
     storageBucket: 'mj-stories-169807.appspot.com',
-    androidClientId:
-        '518533842801-2p7p2k05h4dh1bdel16g32d3rlh7cg7u.apps.googleusercontent.com',
-    iosClientId:
-        '518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com',
+    androidClientId: '518533842801-2p7p2k05h4dh1bdel16g32d3rlh7cg7u.apps.googleusercontent.com',
+    iosClientId: '518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com',
     iosBundleId: 'com.earlystart.monkeyjunior.story',
   );
 
@@ -81,10 +79,8 @@ class DefaultFirebaseOptions {
     projectId: 'mj-stories-169807',
     databaseURL: 'https://mj-stories-169807.firebaseio.com',
     storageBucket: 'mj-stories-169807.appspot.com',
-    androidClientId:
-        '518533842801-2p7p2k05h4dh1bdel16g32d3rlh7cg7u.apps.googleusercontent.com',
-    iosClientId:
-        '518533842801-6q53qjiic4b46o893h5r5htepuml9gft.apps.googleusercontent.com',
+    androidClientId: '518533842801-2p7p2k05h4dh1bdel16g32d3rlh7cg7u.apps.googleusercontent.com',
+    iosClientId: '518533842801-6q53qjiic4b46o893h5r5htepuml9gft.apps.googleusercontent.com',
     iosBundleId: 'com.example.monkeyStories',
   );
 
@@ -98,4 +94,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'mj-stories-169807.appspot.com',
     measurementId: 'G-22LFP0Q3DB',
   );
+
 }
