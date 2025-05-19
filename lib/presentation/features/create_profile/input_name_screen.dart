@@ -112,7 +112,8 @@ class _CreateProfileInputNameViewState
                       ).translate('create_profile.name.act'),
                       onPressed: handleContinue,
                       isFullWidth: true,
-                      disabled: !state.name.isValid,
+                      disabled:
+                          !state.name.isValid || state.hasNameExisted == true,
                     );
                   },
                 ),

@@ -9,6 +9,7 @@ import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // Đổi tên class thành SplashScreen
 class SplashScreen extends StatelessWidget {
@@ -25,6 +26,7 @@ class SplashScreen extends StatelessWidget {
   }
 
   void _handleListener(BuildContext context, SplashState state) {
+    Permission.notification.request();
     switch (state) {
       case SplashAuthenticated():
         GoRouter.of(context).replace(AppRoutePaths.listProfile);
