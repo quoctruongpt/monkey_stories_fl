@@ -120,5 +120,6 @@ flutter:
     - .env.prod
     - assets/lottie/
     - assets/icons/svg/
+    - assets/icons/img/
     - assets/images/
     - assets/images/flags/

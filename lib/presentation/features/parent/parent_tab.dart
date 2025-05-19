@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 
@@ -53,6 +54,25 @@ class ParentTab extends StatelessWidget {
             label: AppLocalizations.of(context).translate('app.setting.title'),
           ),
         ],
+      ),
+      floatingActionButton: SizedBox(
+        width: 80,
+        height: 80,
+        child: FloatingActionButton(
+          onPressed: () {
+            context.go(AppRoutePaths.unity);
+          },
+          backgroundColor: const Color(0xFFFFBB00),
+          mini: false,
+          shape: const CircleBorder(
+            side: BorderSide(color: Colors.white, width: 4),
+          ),
+          child: Image.asset(
+            'assets/icons/img/play.png',
+            width: 33,
+            height: 36,
+          ),
+        ),
       ),
     );
   }
