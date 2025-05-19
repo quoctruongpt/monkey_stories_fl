@@ -168,7 +168,10 @@ class SignUpCubit extends Cubit<SignUpState> {
       final response = await _signUpUsecase.call(
         SignUpParams(
           countryCode: state.phone.value.countryCode,
-          phoneNumber: state.phone.value.phoneNumber,
+          phoneNumber:
+              state.phone.value.phoneNumber.startsWith('0')
+                  ? state.phone.value.phoneNumber.substring(1)
+                  : state.phone.value.phoneNumber,
           password: state.password.value,
           isUpgrade: _userCubit.state.user?.loginType == LoginType.skip,
         ),
