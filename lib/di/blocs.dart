@@ -94,7 +94,7 @@ void initBlocDependencies() {
   sl.registerFactory(() => FloatButtonCubit());
 
   // Create Profile Blocs/Cubits
-  sl.registerFactory(() => InputNameCubit());
+  sl.registerFactory(() => InputNameCubit(profileCubit: sl<ProfileCubit>()));
   sl.registerFactory(() => ChooseYearOfBirthCubit());
   sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(

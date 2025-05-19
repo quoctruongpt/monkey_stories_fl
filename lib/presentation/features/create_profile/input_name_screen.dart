@@ -84,11 +84,14 @@ class _CreateProfileInputNameViewState
                               hintText: AppLocalizations.of(
                                 context,
                               ).translate('create_profile.name.hint'),
-                              isValid: state.name.isValid,
+                              isValid:
+                                  state.name.isValid && !state.hasNameExisted,
                               isShowIcon: !state.name.isPure,
-                              errorText: AppLocalizations.of(
-                                context,
-                              ).translate(state.name.displayError),
+                              errorText: AppLocalizations.of(context).translate(
+                                state.hasNameExisted
+                                    ? 'app.create_profile.name.error_existed'
+                                    : state.name.displayError,
+                              ),
                               onErrorPressed: () {
                                 _nameController.clear();
                               },
