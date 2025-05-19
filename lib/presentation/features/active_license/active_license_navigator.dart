@@ -23,10 +23,12 @@ class ActiveLicenseNavigator extends StatelessWidget {
     super.key,
     required this.child,
     this.licenseInfo,
+    this.isUsernameCrm = false,
   });
 
   final Widget child;
   final LicenseCodeInfoEntity? licenseInfo;
+  final bool? isUsernameCrm;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +85,11 @@ class ActiveLicenseNavigator extends StatelessWidget {
       isCloseable: false,
       onPrimaryAction: () {
         context.pop();
-        context.go(AppRoutePaths.inputLicense);
+        context.go(
+          isUsernameCrm == true
+              ? AppRoutePaths.login
+              : AppRoutePaths.inputLicense,
+        );
         context.read<ActiveLicenseCubit>().clearLinkAccountError();
       },
     );
@@ -129,7 +135,12 @@ final ShellRoute activeLicenseRoutes = ShellRoute(
   builder: (context, state, child) {
     final extraMap = state.extra as Map<String, dynamic>?;
     final licenseInfo = extraMap?['licenseInfo'] as LicenseCodeInfoEntity?;
-    return ActiveLicenseNavigator(licenseInfo: licenseInfo, child: child);
+    final isUsernameCrm = extraMap?['isUsernameCrm'] as bool?;
+    return ActiveLicenseNavigator(
+      licenseInfo: licenseInfo,
+      isUsernameCrm: isUsernameCrm,
+      child: child,
+    );
   },
   routes: [
     GoRoute(

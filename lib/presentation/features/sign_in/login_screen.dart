@@ -101,12 +101,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (licenseCodeInfo.accountInfo != null) {
         context.go(
           AppRoutePaths.lastLoginInfo,
-          extra: {'licenseInfo': licenseCodeInfo},
+          extra: {'licenseInfo': licenseCodeInfo, 'isUsernameCrm': true},
         );
       } else {
         context.go(
           AppRoutePaths.activeLicenseInputPhone,
-          extra: {'licenseInfo': licenseCodeInfo},
+          extra: {'licenseInfo': licenseCodeInfo, 'isUsernameCrm': true},
         );
       }
     } else {
