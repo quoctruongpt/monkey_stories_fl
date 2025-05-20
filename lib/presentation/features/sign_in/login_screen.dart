@@ -145,6 +145,8 @@ class _LoginScreenState extends State<LoginScreen> {
       primaryActionText: translate('login.popup_error_pw.act'),
       onPrimaryAction: () {
         context.read<LoginCubit>().resetFailedAttempts();
+        context.pop();
+        context.push(AppRoutePaths.chooseMethodFp);
       },
       secondaryActionText: translate('login.popup_error_pw.retry'),
       onSecondaryAction: () {
