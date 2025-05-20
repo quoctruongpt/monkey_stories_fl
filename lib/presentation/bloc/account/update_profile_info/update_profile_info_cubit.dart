@@ -5,20 +5,29 @@ import 'package:monkey_stories/core/validators/name.dart';
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
 import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'update_profile_info_state.dart';
 
 class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
   final ProfileCubit _profileCubit;
   final UpdateProfileUsecase _updateProfileUsecase;
+  final UserCubit _userCubit;
 
   UpdateProfileInfoCubit({
     required ProfileCubit profileCubit,
     required UpdateProfileUsecase updateProfileUsecase,
+    required UserCubit userCubit,
   }) : _profileCubit = profileCubit,
        _updateProfileUsecase = updateProfileUsecase,
+       _userCubit = userCubit,
        super(const UpdateProfileInfoState()) {
     emit(state.copyWith(years: ProfileUtil.getNearYears()));
+  }
+
+  void _initNumberChangeAge(int profileId) {
+    final profileSetting = _userCubit.getSettingProfile(profileId);
+    emit(state.copyWith(numberChangeAge: profileSetting?.numberChangeAge));
   }
 
   void updateName(String name) {
@@ -27,7 +36,12 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
   }
 
   void updateBirthYear(int year) {
-    emit(state.copyWith(birthYear: year));
+    emit(
+      state.copyWith(
+        birthYear: year,
+        hasChangedAge: year != state.profile?.yearOfBirth,
+      ),
+    );
     checkButtonEnabled();
   }
 
@@ -44,6 +58,7 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
   }
 
   ProfileEntity? loadProfile(int profileId) {
+    _initNumberChangeAge(profileId);
     final profile = _profileCubit.getProfile(profileId);
     emit(
       state.copyWith(
@@ -77,12 +92,27 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
             yearOfBirth: state.birthYear ?? 0,
             avatarPath: state.profile?.avatarPath ?? '',
           );
-          emit(state.copyWith(profile: profile, isSuccess: true));
+          emit(
+            state.copyWith(
+              profile: profile,
+              isSuccess: true,
+              numberChangeAge:
+                  state.hasChangedAge
+                      ? state.numberChangeAge + 1
+                      : state.numberChangeAge,
+            ),
+          );
           _profileCubit.changeListProfile(
             _profileCubit.state.profiles
                 .map((e) => e.id == profile.id ? profile : e)
                 .toList(),
           );
+          if (state.hasChangedAge) {
+            _userCubit.updateNumberChangeAge(
+              state.profile?.id ?? 0,
+              state.numberChangeAge + 1,
+            );
+          }
         },
       );
     } catch (e) {

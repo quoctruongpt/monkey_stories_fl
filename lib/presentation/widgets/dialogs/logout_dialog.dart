@@ -10,18 +10,18 @@ import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 void showLogoutDialog(BuildContext context) {
   showCustomNoticeDialog(
     context: context,
-    titleText: AppLocalizations.of(context).translate('Đăng xuất'),
+    titleText: AppLocalizations.of(context).translate('app.logout.title'),
     titleColor: AppTheme.errorColor,
-    messageText: AppLocalizations.of(
-      context,
-    ).translate('Bạn chắc chắn muốn đăng xuất tài khoản này khỏi Monkey?'),
+    messageText: AppLocalizations.of(context).translate('app.logout.message'),
     imageAsset: 'assets/images/max_drink.png',
-    primaryActionText: AppLocalizations.of(context).translate('Đăng xuất'),
+    primaryActionText: AppLocalizations.of(
+      context,
+    ).translate('app.logout.primary_action'),
     onPrimaryAction: () {
       context.read<UserCubit>().logout();
       context.go(AppRoutePaths.login);
     },
-    secondaryActionText: AppLocalizations.of(context).translate('Trở lại'),
+    secondaryActionText: AppLocalizations.of(context).translate('app.back'),
     onSecondaryAction: () {
       context.pop();
     },

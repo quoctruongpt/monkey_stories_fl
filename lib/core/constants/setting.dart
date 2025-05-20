@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/logout_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/logout_dialog.dart';
 
 final List<Map<String, dynamic>> settingsData = [
   {

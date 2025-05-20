@@ -17,7 +17,7 @@ import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.d
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
-import 'package:monkey_stories/presentation/widgets/lost_connect_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
 
 final logger = Logger('LoginScreen');
 

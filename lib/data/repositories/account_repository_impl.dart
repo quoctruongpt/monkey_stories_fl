@@ -41,6 +41,7 @@ class AccountRepositoryImpl extends AccountRepository {
           );
         }
       }
+
       return Right(response.data?.toEntity());
     }
 

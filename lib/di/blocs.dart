@@ -257,6 +257,7 @@ void initBlocDependencies() {
     () => UpdateProfileInfoCubit(
       profileCubit: sl<ProfileCubit>(),
       updateProfileUsecase: sl<UpdateProfileUsecase>(),
+      userCubit: sl<UserCubit>(),
     ),
   );
 

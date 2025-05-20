@@ -9,10 +9,10 @@ void showLostConnectDialog({
 }) {
   showCustomNoticeDialog(
     context: context,
-    titleText: 'Lỗi kết nối',
-    messageText: 'Vui lòng kiểm tra lại kết nối mạng của bạn.',
+    titleText: 'app.lost_connection.title',
+    messageText: 'app.lost_connection.message',
     imageAsset: 'assets/images/monkey_sad.png',
-    primaryActionText: 'Thử lại',
+    primaryActionText: 'app.try_again',
     onPrimaryAction: () {
       onRetry?.call();
       context.pop();

@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/domain/entities/account/purchased_info_entity.dart';
+import 'package:monkey_stories/domain/entities/account/sync_user_entity.dart';
 import 'package:monkey_stories/domain/entities/account/user_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
 import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
@@ -37,6 +39,31 @@ class UserCubit extends HydratedCubit<UserState> {
     emit(state.copyWith(purchasedInfo: purchasedInfo));
   }
 
+  void updateSyncUserProfiles(SyncUserProfilesEntity syncUserProfiles) {
+    emit(state.copyWith(syncUserProfiles: syncUserProfiles));
+  }
+
+  SyncUserProfileEntity? getSettingProfile(int id) {
+    return state.syncUserProfiles?.profiles.firstWhereOrNull(
+      (element) => element.id == id,
+    );
+  }
+
+  void updateNumberChangeAge(int id, int numberChangeAge) {
+    final profiles =
+        state.syncUserProfiles?.profiles
+            .map(
+              (e) =>
+                  e.id == id ? e.copyWith(numberChangeAge: numberChangeAge) : e,
+            )
+            .toList();
+    emit(
+      state.copyWith(
+        syncUserProfiles: state.syncUserProfiles?.copyWith(profiles: profiles),
+      ),
+    );
+  }
+
   void _clear() {
     emit(state.copyWith(isClear: true));
   }
@@ -60,6 +87,7 @@ class UserCubit extends HydratedCubit<UserState> {
         (loadUpdate) {
           updateUser(loadUpdate!.user);
           updatePurchasedInfo(loadUpdate.purchasedInfo);
+          updateSyncUserProfiles(loadUpdate.syncUser.profiles!);
           _appCubit.loadInitialSettings();
         },
       );

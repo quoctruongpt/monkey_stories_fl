@@ -55,4 +55,8 @@ class PurchasedInfoEntity {
     }
     return PurchasedStatus.notEnrolled;
   }
+
+  bool get isPaidUser {
+    return isActive;
+  }
 }

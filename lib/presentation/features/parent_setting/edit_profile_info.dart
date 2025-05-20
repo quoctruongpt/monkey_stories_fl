@@ -6,14 +6,17 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/profile/avatar.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 import 'package:monkey_stories/presentation/widgets/year_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:monkey_stories/core/utils/permission.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/permission_denied_dialog.dart';
 
 class EditProfileInfo extends StatelessWidget {
   const EditProfileInfo({super.key, required this.profileId});
@@ -59,95 +62,43 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
     super.dispose();
   }
 
-  Future<void> _changeAvatar() async {
-    final localizations = AppLocalizations.of(context);
-
-    final ImageSource? source = await showModalBottomSheet<ImageSource>(
+  void _showAgeChangeLimitDialog(BuildContext context) {
+    showCustomNoticeDialog(
       context: context,
-      builder: (BuildContext bottomSheetContext) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 8.0),
-                  child: Text(
-                    localizations.translate('app.profile.change_avatar'),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: const Padding(
-                    padding: EdgeInsets.only(
-                      left: 16.0,
-                    ), // Add padding to align icon with title
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: AppTheme.textSecondaryColor,
-                    ),
-                  ),
-                  title: Text(
-                    localizations.translate('app.profile.take_photo'),
-                    style: const TextStyle(color: AppTheme.textSecondaryColor),
-                  ),
-                  onTap: () {
-                    Navigator.of(bottomSheetContext).pop(ImageSource.camera);
-                  },
-                ),
-                ListTile(
-                  leading: const Padding(
-                    padding: EdgeInsets.only(
-                      left: 16.0,
-                    ), // Add padding to align icon with title
-                    child: Icon(
-                      Icons.photo_library,
-                      color: AppTheme.textSecondaryColor,
-                    ),
-                  ),
-                  title: Text(
-                    localizations.translate('app.profile.choose_from_library'),
-                    style: const TextStyle(color: AppTheme.textSecondaryColor),
-                  ),
-                  onTap: () {
-                    Navigator.of(bottomSheetContext).pop(ImageSource.gallery);
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
+      titleText: AppLocalizations.of(context).translate('app.notice'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.profile.age_change_limit'),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.understand'),
+      onPrimaryAction: () {
+        context.pop();
       },
     );
+  }
 
-    if (source == null) return;
-
-    bool permissionGranted = false;
-    if (source == ImageSource.camera) {
-      if (mounted) {
-        permissionGranted = await PermissionUtil.checkCameraPermission(context);
-      }
-    } else if (source == ImageSource.gallery) {
-      if (mounted) {
-        permissionGranted = await PermissionUtil.checkPhotoLibraryPermission(
-          context,
-        );
-      }
-    }
-
-    if (!permissionGranted) return;
-
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      if (mounted) {
-        context.read<UpdateProfileInfoCubit>().updateAvatar(pickedFile.path);
-      }
-    }
+  void _showAgeChangeWarningDialog(BuildContext context) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(context).translate('app.warning'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.profile.age_change_warning'),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.i_am_sure'),
+      onPrimaryAction: () {
+        context.pop();
+        context.read<UpdateProfileInfoCubit>().updateProfile();
+      },
+      secondaryActionText: AppLocalizations.of(context).translate('app.cancel'),
+      onSecondaryAction: () {
+        context.pop();
+      },
+    );
   }
 
   @override
@@ -271,6 +222,22 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                             .updateBirthYear(year);
                                       },
                                       yearSelected: state.birthYear,
+                                      onSelectorPressed:
+                                          context
+                                                      .read<UserCubit>()
+                                                      .state
+                                                      .purchasedInfo
+                                                      ?.isPaidUser ==
+                                                  false
+                                              ? () =>
+                                                  showPermissionDeniedDialog(
+                                                    context,
+                                                  )
+                                              : state.numberChangeAge >= 1
+                                              ? () => _showAgeChangeLimitDialog(
+                                                context,
+                                              )
+                                              : null,
                                     ),
                                   ],
                                 ),
@@ -287,9 +254,13 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                             context,
                           ).translate('app.user_info.save'),
                           onPressed: () {
-                            context
-                                .read<UpdateProfileInfoCubit>()
-                                .updateProfile();
+                            if (state.hasChangedAge) {
+                              _showAgeChangeWarningDialog(context);
+                            } else {
+                              context
+                                  .read<UpdateProfileInfoCubit>()
+                                  .updateProfile();
+                            }
                           },
                           disabled: !state.isButtonEnabled,
                         ),
@@ -308,6 +279,97 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
       },
     );
   }
+
+  Future<void> _changeAvatar() async {
+    final localizations = AppLocalizations.of(context);
+
+    final ImageSource? source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (BuildContext bottomSheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 8.0),
+                  child: Text(
+                    localizations.translate('app.profile.change_avatar'),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Padding(
+                    padding: EdgeInsets.only(
+                      left: 16.0,
+                    ), // Add padding to align icon with title
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: AppTheme.textSecondaryColor,
+                    ),
+                  ),
+                  title: Text(
+                    localizations.translate('app.profile.take_photo'),
+                    style: const TextStyle(color: AppTheme.textSecondaryColor),
+                  ),
+                  onTap: () {
+                    Navigator.of(bottomSheetContext).pop(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: const Padding(
+                    padding: EdgeInsets.only(
+                      left: 16.0,
+                    ), // Add padding to align icon with title
+                    child: Icon(
+                      Icons.photo_library,
+                      color: AppTheme.textSecondaryColor,
+                    ),
+                  ),
+                  title: Text(
+                    localizations.translate('app.profile.choose_from_library'),
+                    style: const TextStyle(color: AppTheme.textSecondaryColor),
+                  ),
+                  onTap: () {
+                    Navigator.of(bottomSheetContext).pop(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (source == null) return;
+
+    bool permissionGranted = false;
+    if (source == ImageSource.camera) {
+      if (mounted) {
+        permissionGranted = await PermissionUtil.checkCameraPermission(context);
+      }
+    } else if (source == ImageSource.gallery) {
+      if (mounted) {
+        permissionGranted = await PermissionUtil.checkPhotoLibraryPermission(
+          context,
+        );
+      }
+    }
+
+    if (!permissionGranted) return;
+
+    final pickedFile = await _picker.pickImage(source: source);
+    if (pickedFile != null) {
+      if (mounted) {
+        context.read<UpdateProfileInfoCubit>().updateAvatar(pickedFile.path);
+      }
+    }
+  }
 }
 
 class YearSelector extends StatelessWidget {
@@ -316,11 +378,65 @@ class YearSelector extends StatelessWidget {
     this.yearSelected,
     required this.years,
     required this.onChangeYear,
+    this.onSelectorPressed,
   });
 
   final int? yearSelected;
   final List<int> years;
   final void Function(int year) onChangeYear;
+  final void Function()? onSelectorPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(
+            AppLocalizations.of(
+              context,
+            ).translate('app.profile.birth_year.label'),
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onSelectorPressed ?? () => _showYearSelector(context),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: AppTheme.textGrayLightColor),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                yearSelected != null
+                    ? Text(
+                      yearSelected! > years.last
+                          ? yearSelected.toString()
+                          : AppLocalizations.of(context).translate(
+                            'year.before',
+                            params: {'year': years[12].toString()},
+                          ),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )
+                    : Text(
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.profile.birth_year.hint'),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppTheme.textGrayLightColor,
+                      ),
+                    ),
+                const Icon(Icons.keyboard_arrow_down),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   void _showYearSelector(BuildContext context) {
     showModalBottomSheet(
@@ -383,58 +499,6 @@ class YearSelector extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(
-            AppLocalizations.of(
-              context,
-            ).translate('app.profile.birth_year.label'),
-          ),
-        ),
-        const SizedBox(height: 8),
-        GestureDetector(
-          onTap: () => _showYearSelector(context),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: AppTheme.textGrayLightColor),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                yearSelected != null
-                    ? Text(
-                      yearSelected! > years.last
-                          ? yearSelected.toString()
-                          : AppLocalizations.of(context).translate(
-                            'year.before',
-                            params: {'year': years[12].toString()},
-                          ),
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    )
-                    : Text(
-                      AppLocalizations.of(
-                        context,
-                      ).translate('app.profile.birth_year.hint'),
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.textGrayLightColor,
-                      ),
-                    ),
-                const Icon(Icons.keyboard_arrow_down),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
