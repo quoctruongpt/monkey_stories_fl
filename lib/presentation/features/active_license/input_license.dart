@@ -212,6 +212,7 @@ class _InputLicenseState extends State<InputLicense> {
       _controller.text = code;
       context.read<ActiveLicenseCubit>().changeLicenseCode(code);
       context.read<ActiveLicenseCubit>().hideScanner();
+      context.read<ActiveLicenseCubit>().handlePressedContinueLicense();
       return;
     }
 
