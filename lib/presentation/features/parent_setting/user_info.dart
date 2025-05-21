@@ -352,7 +352,9 @@ class _UserInfoViewState extends State<UserInfoView> {
                                     .read<UpdateUserInfoCubit>()
                                     .updateUserInfo();
                               },
-                              disabled: !updateState.isButtonEnabled,
+                              disabled:
+                                  !updateState.isButtonEnabled ||
+                                  updateState.errorMessage != null,
                             ),
                           ],
                         ),

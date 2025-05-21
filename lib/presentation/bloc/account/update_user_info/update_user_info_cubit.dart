@@ -53,7 +53,9 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   }
 
   void nameChanged(String value) {
-    emit(state.copyWith(name: NameValidator.dirty(value)));
+    emit(
+      state.copyWith(name: NameValidator.dirty(value), clearErrorMessage: true),
+    );
     checkButtonEnabled();
   }
 
@@ -78,6 +80,7 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
             phoneNumber: state.phone.value.phoneNumber,
           ),
         ),
+        clearErrorMessage: true,
       ),
     );
     checkButtonEnabled();
@@ -92,13 +95,19 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
             phoneNumber: value,
           ),
         ),
+        clearErrorMessage: true,
       ),
     );
     checkButtonEnabled();
   }
 
   void emailChanged(String value) {
-    emit(state.copyWith(email: EmailValidator.dirty(value)));
+    emit(
+      state.copyWith(
+        email: EmailValidator.dirty(value),
+        clearErrorMessage: true,
+      ),
+    );
     checkButtonEnabled();
   }
 
