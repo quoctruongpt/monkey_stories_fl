@@ -103,7 +103,9 @@ class _InputOtpFpState extends State<InputOtpFp> {
                               'app.forgot_password.confirm_otp_description',
                               params: {
                                 'phone':
-                                    '${state.phone.value.countryCode} ${state.phone.value.phoneNumber}',
+                                    state.method == ForgotPasswordType.phone
+                                        ? '${state.phone.value.countryCode} ${state.phone.value.phoneNumber}'
+                                        : state.email.value,
                                 'method': AppLocalizations.of(
                                   context,
                                 ).translate(
