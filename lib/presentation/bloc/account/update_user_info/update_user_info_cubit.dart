@@ -29,7 +29,12 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
 
   void init() {
     final user = _userCubit.state.user;
-    final phone = user?.phoneInfo?.phone;
+    final phone =
+        user?.phoneInfo?.phone != null
+            ? user!.phoneInfo!.phone.startsWith('0')
+                ? user.phoneInfo!.phone.replaceFirst('0', '')
+                : user.phoneInfo!.phone
+            : null;
     emit(
       state.copyWith(
         name: NameValidator.dirty(user?.name ?? ''),
@@ -39,7 +44,7 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
                 ? PhoneValidator.dirty(
                   PhoneNumberInput(
                     countryCode: user?.phoneInfo?.countryCode ?? '',
-                    phoneNumber: user?.phoneInfo?.phone ?? '',
+                    phoneNumber: phone,
                   ),
                 )
                 : null,

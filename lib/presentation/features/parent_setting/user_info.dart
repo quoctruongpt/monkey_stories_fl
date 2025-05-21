@@ -44,10 +44,16 @@ class _UserInfoViewState extends State<UserInfoView> {
   void initState() {
     super.initState();
     final nameInitial = context.read<UserCubit>().state.user?.name;
-    final phoneInitial = context.read<UserCubit>().state.user?.phoneInfo?.phone;
+    final phoneInitial =
+        context.read<UserCubit>().state.user?.phoneInfo?.phone ?? '';
     final emailInitial = context.read<UserCubit>().state.user?.email;
     nameController = TextEditingController(text: nameInitial);
-    phoneController = TextEditingController(text: phoneInitial);
+    phoneController = TextEditingController(
+      text:
+          phoneInitial.startsWith('0')
+              ? phoneInitial.replaceFirst('0', '')
+              : phoneInitial,
+    );
     emailController = TextEditingController(text: emailInitial);
   }
 
