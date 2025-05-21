@@ -79,6 +79,7 @@ class ForgotPasswordState extends Equatable {
     int? otpBlockTime,
     bool? isShowOtpBlockDialog,
     FormValues? formValues,
+    bool? clearOtpError,
   }) {
     return ForgotPasswordState(
       method: method ?? this.method,
@@ -86,7 +87,7 @@ class ForgotPasswordState extends Equatable {
       email: email ?? this.email,
       otp: otp ?? this.otp,
       isLoading: isLoading ?? this.isLoading,
-      otpError: otpError ?? this.otpError,
+      otpError: clearOtpError == true ? null : otpError ?? this.otpError,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       isShowPassword: isShowPassword ?? this.isShowPassword,

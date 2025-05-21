@@ -91,7 +91,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   void clearOtp() {
-    emit(state.copyWith(otp: const OtpValidator.dirty(''), otpError: null));
+    emit(state.copyWith(otp: const OtpValidator.pure(), clearOtpError: true));
   }
 
   void passwordChanged(String value) {
