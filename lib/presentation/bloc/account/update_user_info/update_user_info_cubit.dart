@@ -28,16 +28,21 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   }
 
   void init() {
+    final user = _userCubit.state.user;
+    final phone = user?.phoneInfo?.phone;
     emit(
       state.copyWith(
-        name: NameValidator.dirty(_userCubit.state.user?.name ?? ''),
-        email: EmailValidator.dirty(_userCubit.state.user?.email ?? ''),
-        phone: PhoneValidator.dirty(
-          PhoneNumberInput(
-            countryCode: _userCubit.state.user?.phoneInfo?.countryCode ?? '',
-            phoneNumber: _userCubit.state.user?.phoneInfo?.phone ?? '',
-          ),
-        ),
+        name: NameValidator.dirty(user?.name ?? ''),
+        email: EmailValidator.dirty(user?.email ?? ''),
+        phone:
+            phone != null
+                ? PhoneValidator.dirty(
+                  PhoneNumberInput(
+                    countryCode: user?.phoneInfo?.countryCode ?? '',
+                    phoneNumber: user?.phoneInfo?.phone ?? '',
+                  ),
+                )
+                : null,
       ),
     );
   }
@@ -50,11 +55,9 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   void countryCodeInit(String value) {
     emit(
       state.copyWith(
-        phone: PhoneValidator.dirty(
-          PhoneNumberInput(
-            countryCode: value,
-            phoneNumber: state.phone.value.phoneNumber,
-          ),
+        phone: PhoneValidator.pure(
+          countryCode: value,
+          phoneNumber: state.phone.value.phoneNumber,
         ),
       ),
     );
