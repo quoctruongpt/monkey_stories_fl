@@ -42,7 +42,7 @@ class TextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: canEdit == true ? onTap : null,
       behavior: HitTestBehavior.opaque,
       child: AbsorbPointer(
         absorbing: onTap != null,

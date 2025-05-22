@@ -132,7 +132,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                     context,
                   ).translate('app.user_info.create_account.password.confirm'),
                   onPressed: () {
-                    context.read<UpdateUserInfoCubit>().confirmPassword();
+                    context.read<UpdateUserInfoCubit>().confirmPassword(false);
                   },
                   disabled: state.password.isNotValid,
                   isLoading: state.isPasswordConfirming,
@@ -143,6 +143,93 @@ class _UserInfoViewState extends State<UserInfoView> {
         ),
       ),
     );
+  }
+
+  void _showCreatePasswordDialog(BuildContext context) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_password.title'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.user_info.create_password.message'),
+      child: BlocProvider.value(
+        value: context.read<UpdateUserInfoCubit>(),
+        child: BlocConsumer<UpdateUserInfoCubit, UpdateUserInfoState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.isPasswordAuthenticated !=
+                  current.isPasswordAuthenticated,
+          listener: (context, state) {
+            if (state.isPasswordAuthenticated) {
+              context.pop();
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              children: [
+                const SizedBox(height: Spacing.md),
+                TextFieldWidget(
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('app.user_info.create_password.password.label'),
+                  onChanged: (value) {
+                    context.read<UpdateUserInfoCubit>().passwordChanged(value);
+                  },
+                  errorText: AppLocalizations.of(
+                    context,
+                  ).translate(state.passwordErrorMessage),
+                ),
+                const SizedBox(height: Spacing.md),
+                TextFieldWidget(
+                  hintText: AppLocalizations.of(
+                    context,
+                  ).translate('app.user_info.create_password.password.confirm'),
+                  onChanged: (value) {
+                    context.read<UpdateUserInfoCubit>().rePasswordChanged(
+                      value,
+                    );
+                  },
+                  errorText: AppLocalizations.of(
+                    context,
+                  ).translate(state.rePassword.displayError),
+                ),
+                const SizedBox(height: Spacing.md),
+                AppButton.primary(
+                  text: AppLocalizations.of(
+                    context,
+                  ).translate('app.user_info.create_account.password.confirm'),
+                  onPressed: () {
+                    context.read<UpdateUserInfoCubit>().confirmPassword(true);
+                  },
+                  disabled:
+                      state.password.isNotValid || state.rePassword.isNotValid,
+                  isLoading: state.isPasswordConfirming,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  VoidCallback? _onTapPhoneInput(
+    BuildContext context,
+    UserState state,
+    UpdateUserInfoState updateState,
+  ) {
+    if (state.user?.loginType == LoginType.skip) {
+      return () => _showCreateAccountDialog(context);
+    } else if (!updateState.isPasswordAuthenticated) {
+      if (state.user?.hasPassword == true) {
+        return () => _showPasswordDialog(context);
+      } else {
+        return () => _showCreatePasswordDialog(context);
+      }
+    }
+    return null;
   }
 
   @override
@@ -242,17 +329,11 @@ class _UserInfoViewState extends State<UserInfoView> {
                                       controller: phoneController,
                                       initialCountryCode:
                                           state.user?.country ?? 'VN',
-                                      onTap:
-                                          state.user?.loginType ==
-                                                  LoginType.skip
-                                              ? () => _showCreateAccountDialog(
-                                                context,
-                                              )
-                                              : !updateState
-                                                  .isPasswordAuthenticated
-                                              ? () =>
-                                                  _showPasswordDialog(context)
-                                              : null,
+                                      onTap: _onTapPhoneInput(
+                                        context,
+                                        state,
+                                        updateState,
+                                      ),
                                       labelTopText: AppLocalizations.of(
                                         context,
                                       ).translate('app.user_info.phone.label'),
@@ -300,6 +381,11 @@ class _UserInfoViewState extends State<UserInfoView> {
                                     ),
                                     const SizedBox(height: Spacing.lg),
                                     TextFieldWidget(
+                                      canEdit:
+                                          state.user?.loginType ==
+                                              LoginType.skip ||
+                                          state.user?.loginType ==
+                                              LoginType.phone,
                                       controller: emailController,
                                       onTap:
                                           state.user?.loginType ==

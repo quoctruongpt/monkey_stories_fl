@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/email.dart';
 import 'package:monkey_stories/core/validators/name.dart';
 import 'package:monkey_stories/core/validators/password.dart';
@@ -112,7 +113,26 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   }
 
   void passwordChanged(String value) {
-    emit(state.copyWith(password: Password.dirty(value)));
+    emit(
+      state.copyWith(
+        password: Password.dirty(value),
+        rePassword: ConfirmedPassword.dirty(
+          originalPassword: value,
+          value: state.rePassword.value,
+        ),
+      ),
+    );
+  }
+
+  void rePasswordChanged(String value) {
+    emit(
+      state.copyWith(
+        rePassword: ConfirmedPassword.dirty(
+          originalPassword: state.password.value,
+          value: value,
+        ),
+      ),
+    );
   }
 
   void checkButtonEnabled() {
@@ -146,7 +166,7 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
     );
   }
 
-  Future<void> confirmPassword() async {
+  Future<void> confirmPassword(bool isCreatePassword) async {
     emit(
       state.copyWith(
         isPasswordConfirming: true,
@@ -155,7 +175,10 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
     );
     try {
       final result = await _confirmPasswordUsecase.call(
-        ConfirmPasswordParams(password: state.password.value),
+        ConfirmPasswordParams(
+          password: isCreatePassword ? null : state.password.value,
+          newPassword: isCreatePassword ? state.password.value : null,
+        ),
       );
       result.fold(
         (error) {
@@ -167,6 +190,9 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
               passwordErrorMessage: null,
               isPasswordAuthenticated: true,
             ),
+          );
+          _userCubit.updateUser(
+            _userCubit.state.user!.copyWith(hasPassword: true),
           );
         },
       );

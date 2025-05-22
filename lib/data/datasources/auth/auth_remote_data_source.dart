@@ -69,7 +69,7 @@ abstract class AuthRemoteDataSource {
   );
 
   Future<ApiResponse<Null>> confirmPassword(
-    String password,
+    String? password,
     String? newPassword,
   );
 }
@@ -281,7 +281,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<ApiResponse<Null>> confirmPassword(
-    String password,
+    String? password,
     String? newPassword,
   ) async {
     final response = await dioClient.post(

@@ -15,6 +15,7 @@ class User {
   final String? avatar;
   final String? country;
   final PhoneModel? phoneInfo;
+  final bool? hasPassword;
 
   User({
     required this.userId,
@@ -26,6 +27,7 @@ class User {
     this.avatar,
     this.country,
     this.phoneInfo,
+    this.hasPassword,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class User {
                   'phone': json['phone_info']['phone'],
                 })
                 : null,
+        hasPassword: json['password'],
       );
     } catch (e) {
       logger.severe('User.fromJson: $e');
@@ -65,6 +68,7 @@ class User {
       'avatar': avatar,
       'country': country,
       'phone_info': phoneInfo?.toJson(),
+      'password': hasPassword,
     };
   }
 
@@ -79,6 +83,7 @@ class User {
       avatar: avatar,
       country: country,
       phoneInfo: phoneInfo?.toEntity(),
+      hasPassword: hasPassword,
     );
   }
 }

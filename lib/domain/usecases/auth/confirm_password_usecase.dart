@@ -17,7 +17,7 @@ class ConfirmPasswordUsecase extends UseCase<void, ConfirmPasswordParams> {
 }
 
 class ConfirmPasswordParams {
-  final String password;
+  final String? password;
   final String? newPassword;
 
   ConfirmPasswordParams({required this.password, this.newPassword});

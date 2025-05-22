@@ -494,7 +494,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<ServerFailureWithCode, void>> confirmPassword(
-    String password,
+    String? password,
     String? newPassword,
   ) async {
     final result = await remoteDataSource.confirmPassword(

@@ -11,6 +11,7 @@ class UserEntity {
   final String? avatar;
   final String? country;
   final PhoneEntity? phoneInfo;
+  final bool? hasPassword;
 
   UserEntity({
     required this.userId,
@@ -22,6 +23,7 @@ class UserEntity {
     this.avatar,
     this.country,
     this.phoneInfo,
+    this.hasPassword,
   });
 
   UserEntity copyWith({
@@ -34,6 +36,7 @@ class UserEntity {
     String? avatar,
     String? country,
     PhoneEntity? phoneInfo,
+    bool? hasPassword,
   }) {
     return UserEntity(
       userId: userId ?? this.userId,
@@ -45,6 +48,7 @@ class UserEntity {
       avatar: avatar ?? this.avatar,
       country: country ?? this.country,
       phoneInfo: phoneInfo ?? this.phoneInfo,
+      hasPassword: hasPassword ?? this.hasPassword,
     );
   }
 
@@ -62,6 +66,7 @@ class UserEntity {
           json['phoneInfo'] != null
               ? PhoneEntity.fromJson(json['phoneInfo'])
               : null,
+      hasPassword: json['hasPassword'],
     );
   }
 
@@ -76,6 +81,7 @@ class UserEntity {
       'avatar': avatar,
       'country': country,
       'phoneInfo': phoneInfo?.toJson(),
+      'hasPassword': hasPassword,
     };
   }
 }

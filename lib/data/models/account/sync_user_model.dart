@@ -16,28 +16,32 @@ class SyncUserModel {
     this.profiles,
   });
 
-  factory SyncUserModel.fromJson(Map<String, dynamic> json) {
-    final weekdaysSchedule =
-        json['schedule']['day_of_week'] is List
-            ? []
-            : jsonDecode(json['schedule']['day_of_week']);
+  factory SyncUserModel.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final weekdaysSchedule =
+          json['schedule']['day_of_week'] is List
+              ? []
+              : jsonDecode(json['schedule']['day_of_week']);
 
-    final timeSchedule = jsonDecode(json['schedule']['time']);
+      final timeSchedule = jsonDecode(json['schedule']['time']);
 
-    return SyncUserModel(
-      languageId: json['lang'],
-      soundtrack: json['soundtrack'],
-      schedule:
-          weekdaysSchedule.length > 0 &&
-                  timeSchedule['hour'] != null &&
-                  timeSchedule['minute'] != null
-              ? Schedule.fromJson(json['schedule'])
-              : null,
-      profiles:
-          json['profile'] is Map<String, dynamic>
-              ? SyncUserProfilesModel.fromJson(json['profile'])
-              : SyncUserProfilesModel(profiles: []),
-    );
+      return SyncUserModel(
+        languageId: json['lang'],
+        soundtrack: json['soundtrack'],
+        schedule:
+            weekdaysSchedule.length > 0 &&
+                    timeSchedule['hour'] != null &&
+                    timeSchedule['minute'] != null
+                ? Schedule.fromJson(json['schedule'])
+                : null,
+        profiles:
+            json['profile'] is Map<String, dynamic>
+                ? SyncUserProfilesModel.fromJson(json['profile'])
+                : SyncUserProfilesModel(profiles: []),
+      );
+    }
+
+    return SyncUserModel();
   }
 
   Map<String, dynamic> toJson() {

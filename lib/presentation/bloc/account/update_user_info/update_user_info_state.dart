@@ -10,6 +10,7 @@ class UpdateUserInfoState extends Equatable {
   final bool isButtonEnabled;
   final bool isPasswordAuthenticated;
   final Password password;
+  final ConfirmedPassword rePassword;
   final String? passwordErrorMessage;
   final bool isPasswordConfirming;
 
@@ -25,6 +26,7 @@ class UpdateUserInfoState extends Equatable {
     this.password = const Password.pure(),
     this.passwordErrorMessage,
     this.isPasswordConfirming = false,
+    this.rePassword = const ConfirmedPassword.pure(),
   }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   UpdateUserInfoState copyWith({
@@ -41,6 +43,7 @@ class UpdateUserInfoState extends Equatable {
     String? passwordErrorMessage,
     bool? clearPasswordErrorMessage,
     bool? isPasswordConfirming,
+    ConfirmedPassword? rePassword,
   }) {
     return UpdateUserInfoState(
       name: name ?? this.name,
@@ -59,6 +62,7 @@ class UpdateUserInfoState extends Equatable {
               ? null
               : passwordErrorMessage ?? this.passwordErrorMessage,
       isPasswordConfirming: isPasswordConfirming ?? this.isPasswordConfirming,
+      rePassword: rePassword ?? this.rePassword,
     );
   }
 
@@ -75,5 +79,6 @@ class UpdateUserInfoState extends Equatable {
     password,
     passwordErrorMessage,
     isPasswordConfirming,
+    rePassword,
   ];
 }
