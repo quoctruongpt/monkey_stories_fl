@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
@@ -39,7 +40,18 @@ class ChooseMethodFp extends StatelessWidget {
             ),
 
             FilledButton(
-              onPressed: () => _onPressed(context, ForgotPasswordType.phone),
+              onPressed:
+                  isFromChangePassword == true &&
+                          context
+                                  .read<UserCubit>()
+                                  .state
+                                  .user
+                                  ?.phoneInfo
+                                  ?.phone
+                                  .isEmpty ==
+                              true
+                      ? null
+                      : () => _onPressed(context, ForgotPasswordType.phone),
               style: FilledButton.styleFrom(
                 backgroundColor: AppTheme.successColor,
               ),
@@ -61,10 +73,17 @@ class ChooseMethodFp extends StatelessWidget {
             ),
 
             OutlinedButton(
-              onPressed: () => _onPressed(context, ForgotPasswordType.email),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.textGrayLightColor,
-              ),
+              onPressed:
+                  isFromChangePassword == true &&
+                          context
+                                  .read<UserCubit>()
+                                  .state
+                                  .user
+                                  ?.email
+                                  ?.isEmpty ==
+                              true
+                      ? null
+                      : () => _onPressed(context, ForgotPasswordType.email),
               child: ContentButton(
                 text: AppLocalizations.of(
                   context,

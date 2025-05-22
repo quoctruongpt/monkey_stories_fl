@@ -179,10 +179,12 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
 
   Future<void> updateUserInfo() async {
     emit(state.copyWith(isLoading: true, clearErrorMessage: true));
+
     try {
+      final name = state.name.value.trim();
       final result = await _updateUserInfoUsecase.call(
         UpdateUserInfoUsecaseParams(
-          name: state.name.value,
+          name: name,
           phone: state.phone.value.phoneNumber,
           countryCode: state.phone.value.countryCode,
           email: state.email.value,
@@ -199,7 +201,7 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
           emit(state.copyWith(isSuccess: true));
           _userCubit.updateUser(
             _userCubit.state.user!.copyWith(
-              name: state.name.value,
+              name: name,
               phone: state.phone.value.phoneNumber,
               country: state.phone.value.countryCode,
               email: state.email.value,
