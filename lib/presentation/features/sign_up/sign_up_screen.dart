@@ -127,6 +127,7 @@ class _SignUpState extends State<SignUp> {
           final encodedPhone = Uri.encodeComponent(
             '${context.read<SignUpCubit>().state.phone.value.countryCode}${_phoneController.text}',
           );
+          context.pop();
           context.push('${AppRoutePaths.login}?username=$encodedPhone');
         },
         onSecondaryAction: () {
