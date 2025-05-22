@@ -311,11 +311,17 @@ class _SignUpState extends State<SignUp> {
                                                   state.phone.isValid,
                                               initialCountryCode: 'VN',
                                               onCountryInit: (countryCode) {
-                                                context
-                                                    .read<SignUpCubit>()
-                                                    .countryCodeInit(
-                                                      countryCode,
-                                                    );
+                                                if (state
+                                                    .phone
+                                                    .value
+                                                    .countryCode
+                                                    .isEmpty) {
+                                                  context
+                                                      .read<SignUpCubit>()
+                                                      .countryCodeInit(
+                                                        countryCode,
+                                                      );
+                                                }
                                               },
                                             ),
 
