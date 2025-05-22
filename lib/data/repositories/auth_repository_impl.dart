@@ -44,7 +44,6 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LastLoginEntity?>> getLastLogin() async {
     try {
       final result = await localDataSource.getLastLogin();
-      // logger.info('lastLogin: ${result?.loginType}');
       return Right(result?.toEntity());
     } catch (e) {
       return const Left(CacheFailure());
@@ -128,7 +127,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.cacheLastLogin(
         LastLoginModel(
           loginType: signUpType,
-          phone: '$countryCode$phoneNumber',
+          phone: '0$phoneNumber',
           isSocial: false,
         ),
       );

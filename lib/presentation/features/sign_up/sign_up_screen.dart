@@ -424,7 +424,9 @@ class _SignUpState extends State<SignUp> {
                           text: translate('sign_up.act'),
                           onPressed: _handleContinue,
                           isFullWidth: true,
-                          disabled: !enableContinueButton,
+                          disabled:
+                              !enableContinueButton ||
+                              state.signUpErrorMessage != null,
                         );
                       },
                     ),

@@ -81,7 +81,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       state.copyWith(
         phone: phone,
         isPhoneValid: false,
-        phoneErrorMessage: null,
+        clearPhoneErrorMessage: true,
       ),
     );
     checkPhoneNumber(phone);
@@ -97,6 +97,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           value,
           state.confirmPassword.value,
         ),
+        clearPhoneErrorMessage: true,
       ),
     );
   }
