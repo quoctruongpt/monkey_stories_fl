@@ -248,7 +248,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<SocialLoginData> _loginWithFacebook() async {
     try {
       final LoginResult result = await FacebookAuth.instance.login(
-        permissions: ['email'],
+        permissions: ['email', 'public_profile'],
+        loginTracking: LoginTracking.enabled,
       );
       if (result.status == LoginStatus.success) {
         final token = (result.accessToken?.tokenString ?? '');
@@ -299,11 +300,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<Either<Failure, Map<String, dynamic>?>> getUserFacebook() async {
     try {
-      final userData = await FacebookAuth.instance.getUserData();
+      final userData = await FacebookAuth.instance.getUserData(
+        fields: 'name,email',
+      );
       return Right(userData);
     } catch (e) {
       return const Left(
-        ServerFailure(message: 'Lấy thông tin người dùng thất bại'),
+        ServerFailure(message: 'Lấy thông tin người dùng facebook thất bại'),
       );
     }
   }

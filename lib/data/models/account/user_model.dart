@@ -1,6 +1,9 @@
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/phone/phone_model.dart';
 import 'package:monkey_stories/domain/entities/account/user_entity.dart';
+
+final logger = Logger('UserModel');
 
 class User {
   final int userId;
@@ -26,23 +29,29 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      userId: json['users_id'],
-      loginType: LoginType.fromValue(json['identity_login']),
-      maxProfile: json['max_profile'],
-      email: json['email'],
-      name: json['name'],
-      phone: json['phone'],
-      avatar: json['avatar'],
-      country: json['country'],
-      phoneInfo:
-          json['phone_info'] != null
-              ? PhoneModel.fromJson({
-                'country_code': json['phone_info']['phone_code'],
-                'phone': json['phone_info']['phone'],
-              })
-              : null,
-    );
+    try {
+      return User(
+        userId: json['users_id'],
+        loginType: LoginType.fromValue(json['identity_login']),
+        maxProfile:
+            json['max_profile'].runtimeType == int ? json['max_profile'] : 3,
+        email: json['email'],
+        name: json['name'],
+        phone: json['phone'],
+        avatar: json['avatar'],
+        country: json['country'],
+        phoneInfo:
+            json['phone_info'] != null
+                ? PhoneModel.fromJson({
+                  'country_code': json['phone_info']['phone_code'],
+                  'phone': json['phone_info']['phone'],
+                })
+                : null,
+      );
+    } catch (e) {
+      logger.severe('User.fromJson: $e');
+      rethrow;
+    }
   }
 
   Map<String, dynamic> toJson() {

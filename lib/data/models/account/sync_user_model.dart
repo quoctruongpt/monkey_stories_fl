@@ -33,7 +33,10 @@ class SyncUserModel {
                   timeSchedule['minute'] != null
               ? Schedule.fromJson(json['schedule'])
               : null,
-      profiles: SyncUserProfilesModel.fromJson(json['profile']),
+      profiles:
+          json['profile'] is Map<String, dynamic>
+              ? SyncUserProfilesModel.fromJson(json['profile'])
+              : SyncUserProfilesModel(profiles: []),
     );
   }
 
