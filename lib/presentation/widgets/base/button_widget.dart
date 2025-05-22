@@ -196,36 +196,28 @@ class _AppButtonState extends State<AppButton> {
                   _isPressed = false;
                 });
               },
-              child: SizedBox(
-                width: buttonWidth,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 50),
-                  transform: Matrix4.translationValues(
-                    0,
-                    _isPressed ? 3.0 : 0.0,
-                    0,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 50),
+                transform: Matrix4.translationValues(
+                  0,
+                  _isPressed ? 3.0 : 0.0,
+                  0,
+                ),
+                decoration: BoxDecoration(
+                  color: borderColorToUse, // màu viền
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.all(
+                  widget.buttonType == ButtonType.secondary ? 1 : 0,
+                ), // độ dày của viền
+                child: Container(
+                  padding: widget.padding ?? defaultPadding,
+                  decoration: BoxDecoration(
+                    color:
+                        widget.disabled ? disabledBackgroundColor : mainColor,
+                    borderRadius: widget.borderRadius ?? defaultBorderRadius,
                   ),
-                  child: ElevatedButton(
-                    onPressed: null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: mainColor,
-                      disabledBackgroundColor:
-                          widget.disabled ? disabledBackgroundColor : mainColor,
-                      padding: widget.padding ?? defaultPadding,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            widget.borderRadius ?? defaultBorderRadius,
-                        side: BorderSide(
-                          color: borderColorToUse,
-                          width:
-                              widget.buttonType == ButtonType.secondary
-                                  ? 1.5
-                                  : 1.0,
-                        ),
-                      ),
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                    ),
+                  child: Center(
                     child:
                         widget.isLoading
                             ? SizedBox(
