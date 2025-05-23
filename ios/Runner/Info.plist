@@ -22,16 +22,57 @@
 	<string>4.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.518533842801-htuivakbfj06u08rf3rlno2abqcll7id</string>
+				<string>com.earlystart.monkeyjunior.stories</string>
+				<string>fb520137134992261</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>31</string>
+	<key>FacebookAppID</key>
+	<string>520137134992261</string>
+	<key>FacebookClientToken</key>
+	<string>798e11b5f2d2d3ff8e6216d914e4b353</string>
+	<key>FacebookDisplayName</key>
+	<string>Monkey Stories</string>
+	<key>GIDClientID</key>
+	<string>518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs photo library access to pick images</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -45,43 +86,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>GIDClientID</key>
-	<string>518533842801-htuivakbfj06u08rf3rlno2abqcll7id.apps.googleusercontent.com</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<!-- TODO Replace this value: -->
-				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
-				<string>com.googleusercontent.apps.518533842801-htuivakbfj06u08rf3rlno2abqcll7id</string>
-				<string>com.earlystart.monkeyjunior.stories</string>
-				<string>fb520137134992261</string>
-			</array>
-		</dict>
-	</array>
-	<key>FacebookAppID</key>
-	<string>520137134992261</string>
-	<key>FacebookClientToken</key>
-	<string>798e11b5f2d2d3ff8e6216d914e4b353</string>
-	<key>FacebookDisplayName</key>
-	<string>Monkey Stories</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs photo library access to pick images</string>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 </dict>
 </plist>

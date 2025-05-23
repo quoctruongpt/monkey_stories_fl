@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
+import 'package:monkey_stories/domain/repositories/notification_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
@@ -14,6 +15,7 @@ import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 // Auth & Account Usecases
@@ -208,5 +210,10 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => GetListProfileLocalUsecase(repository: sl<ProfileRepository>()),
+  );
+
+  // Notification
+  sl.registerLazySingleton(
+    () => SaveFcmUsecase(notificationRepository: sl<NotificationRepository>()),
   );
 }

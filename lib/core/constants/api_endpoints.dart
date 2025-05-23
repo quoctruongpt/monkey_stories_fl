@@ -38,4 +38,7 @@ class ApiEndpoints {
       'app/api/v1/account/verify-license-code';
   static const String linkCodToAccount =
       'app/api/v1/account/link-user-crm-to-account';
+
+  // Notification
+  static const String registerDevice = '/device/api/v1/fcm/save';
 }

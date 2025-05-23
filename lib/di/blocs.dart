@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
@@ -109,6 +110,7 @@ void initBlocDependencies() {
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
       profileCubit: sl<ProfileCubit>(),
       appCubit: sl<AppCubit>(),
+      saveFcmUsecase: sl<SaveFcmUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -143,6 +145,7 @@ void initBlocDependencies() {
       profileCubit: sl<ProfileCubit>(),
       purchasedCubit: sl<PurchasedCubit>(),
       getHasLoggedBeforeUsecase: sl<GetHasLoggedBeforeUsecase>(),
+      saveFcmUsecase: sl<SaveFcmUsecase>(),
     ),
   );
 

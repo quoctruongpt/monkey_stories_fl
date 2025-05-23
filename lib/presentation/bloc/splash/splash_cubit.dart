@@ -14,6 +14,7 @@ import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart'
 
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
@@ -23,6 +24,7 @@ class SplashCubit extends Cubit<SplashState> {
   final ProfileCubit _profileCubit;
   final PurchasedCubit _purchasedCubit;
   final GetHasLoggedBeforeUsecase _getHasLoggedBeforeUsecase;
+  final SaveFcmUsecase _saveFcmUsecase;
 
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 3;
@@ -35,6 +37,7 @@ class SplashCubit extends Cubit<SplashState> {
     required ProfileCubit profileCubit,
     required PurchasedCubit purchasedCubit,
     required GetHasLoggedBeforeUsecase getHasLoggedBeforeUsecase,
+    required SaveFcmUsecase saveFcmUsecase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit,
@@ -42,6 +45,7 @@ class SplashCubit extends Cubit<SplashState> {
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
        _getHasLoggedBeforeUsecase = getHasLoggedBeforeUsecase,
+       _saveFcmUsecase = saveFcmUsecase,
        super(SplashInitial());
 
   Future<void> runApp() async {
@@ -74,6 +78,7 @@ class SplashCubit extends Cubit<SplashState> {
           // Đăng ký device thành công
           _logger.info('Device registered/retrieved successfully: $deviceId');
           _appCubit.updateDeviceInfo(deviceId: deviceId); // Cập nhật AppCubit
+          _saveFcmUsecase.call(NoParams());
 
           // Chỉ tiếp tục kiểm tra auth nếu đăng ký device thành công
           // 2. Check authentication status

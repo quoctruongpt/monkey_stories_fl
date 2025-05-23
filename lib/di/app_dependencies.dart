@@ -1,4 +1,5 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,4 +39,7 @@ Future<void> initCoreAppDependencies() async {
   sl.registerLazySingleton<FlutterLocalNotificationsPlugin>(
     () => FlutterLocalNotificationsPlugin(),
   );
+
+  // Đăng ký singleton cho FirebaseMessaging
+  sl.registerLazySingleton<FirebaseMessaging>(() => FirebaseMessaging.instance);
 }

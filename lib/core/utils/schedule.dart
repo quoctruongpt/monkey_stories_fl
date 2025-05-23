@@ -133,6 +133,7 @@ Future<void> scheduleWeeklyNotification(
           channelDescription: 'Channel for weekly study reminders',
           importance: Importance.max,
           priority: Priority.high,
+          icon: 'ic_launcher',
         );
     const DarwinNotificationDetails iosPlatformChannelSpecifics =
         DarwinNotificationDetails(

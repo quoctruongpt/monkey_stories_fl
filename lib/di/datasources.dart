@@ -1,5 +1,6 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +10,7 @@ import 'package:monkey_stories/data/datasources/download/download_remote_data_so
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
@@ -121,6 +123,14 @@ void initDatasourceDependencies() {
   // Settings
   sl.registerLazySingleton<SettingsRemoteDataSource>(
     () => SettingsRemoteDataSourceImpl(dio: sl<Dio>()),
+  );
+
+  // Notification
+  sl.registerLazySingleton<NotificationRemoteDataSource>(
+    () => NotificationRemoteDataSourceImpl(
+      firebaseMessaging: sl<FirebaseMessaging>(),
+      dio: sl<Dio>(),
+    ),
   );
 
   // Add other datasource registrations here...
