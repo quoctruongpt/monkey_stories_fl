@@ -40,6 +40,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       final isLoggedIn = await authLocalDataSource.isLoggedIn();
       if (!isLoggedIn) {
+        await localDataSource.saveLanguage(languageCode);
         return const Right(null);
       }
 

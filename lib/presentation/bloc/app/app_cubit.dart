@@ -84,11 +84,11 @@ class AppCubit extends Cubit<AppState> {
         )) {
           initialLanguage = deviceLanguage;
           _logger.info('Using device language: $deviceLanguage');
-          _saveLanguageUseCase.call(initialLanguage);
         } else {
           initialLanguage = Languages.defaultLanguage;
-          _saveLanguageUseCase.call(initialLanguage);
         }
+
+        _saveLanguageUseCase.call(initialLanguage);
       },
       (languageCode) =>
           initialLanguage =
