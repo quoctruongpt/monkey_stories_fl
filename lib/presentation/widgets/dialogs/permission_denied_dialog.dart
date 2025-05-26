@@ -15,7 +15,9 @@ void showPermissionDeniedDialog(BuildContext context) {
       context.pop();
       context.go(AppRoutePaths.vip);
     },
-    primaryActionText: 'app.permission.act',
+    primaryActionText: AppLocalizations.of(
+      context,
+    ).translate('app.permission.act'),
     imageAsset: 'assets/images/monkey_confused.png',
   );
 }

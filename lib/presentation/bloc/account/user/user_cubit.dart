@@ -87,6 +87,9 @@ class UserCubit extends HydratedCubit<UserState> {
 
       result.fold(
         (failure) {
+          if (state.user == null) {
+            throw Exception(failure.toString());
+          }
           return;
         },
         (loadUpdate) {
@@ -99,6 +102,7 @@ class UserCubit extends HydratedCubit<UserState> {
       );
     } catch (e) {
       logger.severe('Error loading update $e');
+      rethrow;
     }
   }
 
