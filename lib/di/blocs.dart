@@ -24,6 +24,7 @@ import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -132,6 +133,7 @@ void initBlocDependencies() {
       loginUsecase: sl<LoginUsecase>(),
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
       appCubit: sl<AppCubit>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
     ),
   );
 

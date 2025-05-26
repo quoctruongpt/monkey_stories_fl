@@ -74,6 +74,7 @@ import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -114,7 +115,10 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => SetPreferredOrientationsUseCase(sl<SystemSettingsRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () =>
+        GetCountryCodeUsecase(systemRepository: sl<SystemSettingsRepository>()),
+  );
   // Unity
   sl.registerLazySingleton(
     () => SendMessageToUnityUseCase(sl<UnityRepository>()),

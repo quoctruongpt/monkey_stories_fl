@@ -96,6 +96,7 @@ void initRepositoryDependencies() {
   sl.registerLazySingleton<SystemSettingsRepository>(
     () => SystemSettingsRepositoryImpl(
       dataSource: sl<SystemSettingsDataSource>(),
+      settingsLocalDataSource: sl<SystemLocalDataSource>(),
     ),
   );
 

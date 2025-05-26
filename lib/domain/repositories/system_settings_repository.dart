@@ -6,4 +6,6 @@ abstract class SystemSettingsRepository {
   Future<Either<Failure, void>> setPreferredOrientations(
     List<DeviceOrientation> orientations,
   );
+
+  Future<Either<Failure, String>> getCountryCode();
 }

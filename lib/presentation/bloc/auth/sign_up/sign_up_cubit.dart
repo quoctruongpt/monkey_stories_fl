@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
@@ -13,6 +15,7 @@ import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 part 'sign_up_state.dart';
 
 final logger = Logger('SignUpCubit');
@@ -23,6 +26,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   final SignUpUsecase _signUpUsecase;
   final LoginUsecase _loginUsecase;
   final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
+  final GetCountryCodeUsecase _getCountryCodeUsecase;
   final AppCubit _appCubit;
 
   final UserCubit _userCubit;
@@ -36,16 +40,22 @@ class SignUpCubit extends Cubit<SignUpState> {
     required LoginUsecase loginUsecase,
     required CheckPhoneNumberUsecase checkPhoneNumberUsecase,
     required AppCubit appCubit,
+    required GetCountryCodeUsecase getCountryCodeUsecase,
   }) : _userCubit = userCubit,
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
        _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
        _appCubit = appCubit,
+       _getCountryCodeUsecase = getCountryCodeUsecase,
        super(SignUpState(step: StepSignUp.phone));
 
-  void countryCodeInit(String countryCode) {
-    final phone = PhoneValidator.pure(countryCode: countryCode);
-    emit(state.copyWith(phone: phone));
+  Future<void> countryCodeInit() async {
+    final response = await _getCountryCodeUsecase.call(NoParams());
+    response.fold((failure) {}, (success) {
+      final code = CountryCode.fromCountryCode(success);
+      final phone = PhoneValidator.pure(countryCode: code.dialCode);
+      emit(state.copyWith(phone: phone));
+    });
   }
 
   void countryCodeChanged(String countryCode) {

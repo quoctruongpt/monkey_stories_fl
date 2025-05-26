@@ -25,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<SignUpCubit>(),
+      create: (context) => sl<SignUpCubit>()..countryCodeInit(),
       child: const SignUp(),
     );
   }
@@ -309,20 +309,8 @@ class _SignUpState extends State<SignUp> {
                                               isPhoneValid:
                                                   state.isPhoneValid &&
                                                   state.phone.isValid,
-                                              initialCountryCode: 'VN',
-                                              onCountryInit: (countryCode) {
-                                                if (state
-                                                    .phone
-                                                    .value
-                                                    .countryCode
-                                                    .isEmpty) {
-                                                  context
-                                                      .read<SignUpCubit>()
-                                                      .countryCodeInit(
-                                                        countryCode,
-                                                      );
-                                                }
-                                              },
+                                              initialCountryCode:
+                                                  state.phone.value.countryCode,
                                             ),
 
                                             PasswordInput(
