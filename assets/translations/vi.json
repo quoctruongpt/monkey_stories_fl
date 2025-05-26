@@ -315,5 +315,9 @@
   "app.setting.logout_label": "Đăng xuất",
   "app.schedule_manager.notification_title": "Đã đến giờ học cùng Monkey rồi. Học ngay thôi!",
   "app.schedule_manager.notification_message": "Ba mẹ cho phép Monkey gửi thông báo nhắc học để sử dụng tính năng này nhé!",
-  "app.schedule_manager.continue": "Tiếp tục"
+  "app.schedule_manager.continue": "Tiếp tục",
+  "app.user_info.create_password.title": "Cập nhật mật khẩu",
+  "app.user_info.create_password.message": "Ba mẹ thêm mật khẩu để chỉnh sửa thông tin và đăng nhập trong lần sau nhé!",
+  "app.user_info.create_password.password.label": "Mật khẩu mới",
+  "app.user_info.create_password.password.confirm": "Xác nhận mật khẩu mới"
 }
