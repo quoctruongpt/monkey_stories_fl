@@ -1,5 +1,7 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/email.dart';
 import 'package:monkey_stories/core/validators/name.dart';
@@ -8,6 +10,7 @@ import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/entities/phone/phone_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'update_user_info_state.dart';
@@ -16,19 +19,22 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   final UpdateUserInfoUsecase _updateUserInfoUsecase;
   final ConfirmPasswordUsecase _confirmPasswordUsecase;
   final UserCubit _userCubit;
+  final GetCountryCodeUsecase _getCountryCodeUsecase;
 
   UpdateUserInfoCubit({
     required UpdateUserInfoUsecase updateUserInfoUsecase,
     required UserCubit userCubit,
     required ConfirmPasswordUsecase confirmPasswordUsecase,
+    required GetCountryCodeUsecase getCountryCodeUsecase,
   }) : _updateUserInfoUsecase = updateUserInfoUsecase,
        _confirmPasswordUsecase = confirmPasswordUsecase,
        _userCubit = userCubit,
+       _getCountryCodeUsecase = getCountryCodeUsecase,
        super(UpdateUserInfoState()) {
     init();
   }
 
-  void init() {
+  Future<void> init() async {
     final user = _userCubit.state.user;
     final phone =
         user?.phoneInfo?.phone != null
@@ -36,6 +42,15 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
                 ? user.phoneInfo!.phone.replaceFirst('0', '')
                 : user.phoneInfo!.phone
             : null;
+    var countryCode = user?.phoneInfo?.countryCode;
+
+    if (countryCode == null) {
+      final response = await _getCountryCodeUsecase.call(NoParams());
+      response.fold((failure) {}, (success) {
+        countryCode = CountryCode.fromCountryCode(success).dialCode;
+      });
+    }
+
     emit(
       state.copyWith(
         name: NameValidator.dirty(user?.name ?? ''),
@@ -44,11 +59,11 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
             phone != null
                 ? PhoneValidator.dirty(
                   PhoneNumberInput(
-                    countryCode: user?.phoneInfo?.countryCode ?? '',
+                    countryCode: countryCode ?? '+84',
                     phoneNumber: phone,
                   ),
                 )
-                : null,
+                : PhoneValidator.pure(countryCode: countryCode),
       ),
     );
   }
@@ -56,18 +71,6 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   void nameChanged(String value) {
     emit(
       state.copyWith(name: NameValidator.dirty(value), clearErrorMessage: true),
-    );
-    checkButtonEnabled();
-  }
-
-  void countryCodeInit(String value) {
-    emit(
-      state.copyWith(
-        phone: PhoneValidator.pure(
-          countryCode: value,
-          phoneNumber: state.phone.value.phoneNumber,
-        ),
-      ),
     );
     checkButtonEnabled();
   }

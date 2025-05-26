@@ -255,6 +255,7 @@ void initBlocDependencies() {
       updateUserInfoUsecase: sl<UpdateUserInfoUsecase>(),
       userCubit: sl<UserCubit>(),
       confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
     ),
   );
 

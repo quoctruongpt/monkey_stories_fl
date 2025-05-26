@@ -328,7 +328,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                                     PhoneInputField(
                                       controller: phoneController,
                                       initialCountryCode:
-                                          state.user?.country ?? 'VN',
+                                          updateState.phone.value.countryCode,
                                       onTap: _onTapPhoneInput(
                                         context,
                                         state,
@@ -349,11 +349,6 @@ class _UserInfoViewState extends State<UserInfoView> {
                                         context
                                             .read<UpdateUserInfoCubit>()
                                             .countryCodeChanged(value);
-                                      },
-                                      onCountryInit: (value) {
-                                        context
-                                            .read<UpdateUserInfoCubit>()
-                                            .countryCodeInit(value);
                                       },
                                       errorText:
                                           (updateState
