@@ -25,6 +25,14 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
     emit(state.copyWith(years: ProfileUtil.getNearYears()));
   }
 
+  void checkNameTaken(String name) {
+    final isNameTaken = _profileCubit.state.profiles.any((profile) {
+      return profile.name.toLowerCase() == name.toLowerCase().trim() &&
+          profile.id != state.profile?.id;
+    });
+    emit(state.copyWith(isNameTaken: isNameTaken));
+  }
+
   void _initNumberChangeAge(int profileId) {
     final profileSetting = _userCubit.getSettingProfile(profileId);
     emit(state.copyWith(numberChangeAge: profileSetting?.numberChangeAge));
@@ -32,6 +40,7 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
 
   void updateName(String name) {
     emit(state.copyWith(name: NameValidator.dirty(name)));
+    checkNameTaken(name);
     checkButtonEnabled();
   }
 

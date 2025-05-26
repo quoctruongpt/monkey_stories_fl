@@ -9,6 +9,7 @@ class UpdateProfileInfoState extends Equatable {
   final bool isButtonEnabled;
   final int numberChangeAge;
   final bool hasChangedAge;
+  final bool isNameTaken;
 
   final bool isLoading;
   final String? errorMessage;
@@ -26,6 +27,7 @@ class UpdateProfileInfoState extends Equatable {
     this.isButtonEnabled = false,
     this.numberChangeAge = 0,
     this.hasChangedAge = false,
+    this.isNameTaken = false,
   });
 
   UpdateProfileInfoState copyWith({
@@ -41,6 +43,7 @@ class UpdateProfileInfoState extends Equatable {
     bool? clearError,
     int? numberChangeAge,
     bool? hasChangedAge,
+    bool? isNameTaken,
   }) {
     return UpdateProfileInfoState(
       name: name ?? this.name,
@@ -55,6 +58,7 @@ class UpdateProfileInfoState extends Equatable {
       isButtonEnabled: isButtonEnabled ?? this.isButtonEnabled,
       numberChangeAge: numberChangeAge ?? this.numberChangeAge,
       hasChangedAge: hasChangedAge ?? this.hasChangedAge,
+      isNameTaken: isNameTaken ?? this.isNameTaken,
     );
   }
 
@@ -71,5 +75,6 @@ class UpdateProfileInfoState extends Equatable {
     isButtonEnabled,
     numberChangeAge,
     hasChangedAge,
+    isNameTaken,
   ];
 }

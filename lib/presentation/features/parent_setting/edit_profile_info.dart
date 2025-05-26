@@ -209,7 +209,11 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                       ).translate('app.profile.name.hint'),
                                       errorText: AppLocalizations.of(
                                         context,
-                                      ).translate(state.name.displayError),
+                                      ).translate(
+                                        state.isNameTaken
+                                            ? 'app.create_profile.name.error_existed'
+                                            : state.name.displayError,
+                                      ),
                                       textCapitalization:
                                           TextCapitalization.words,
                                     ),
@@ -262,7 +266,7 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                   .updateProfile();
                             }
                           },
-                          disabled: !state.isButtonEnabled,
+                          disabled: !state.isButtonEnabled || state.isNameTaken,
                         ),
                       ),
                     ],
