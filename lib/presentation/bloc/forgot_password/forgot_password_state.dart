@@ -26,6 +26,7 @@ class ForgotPasswordState extends Equatable {
     this.otpBlockTime,
     this.isShowOtpBlockDialog = false,
     this.formValues = const FormValues(),
+    this.countryCodeByIp,
   }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   // Phương thức gửi OTP
@@ -59,6 +60,7 @@ class ForgotPasswordState extends Equatable {
   // Hiển thị dialog lỗi gửi OTP quá nhiều lần
   final bool isShowOtpBlockDialog;
   final FormValues formValues;
+  final String? countryCodeByIp;
 
   ForgotPasswordState copyWith({
     ForgotPasswordType? method,
@@ -80,6 +82,7 @@ class ForgotPasswordState extends Equatable {
     bool? isShowOtpBlockDialog,
     FormValues? formValues,
     bool? clearOtpError,
+    String? countryCodeByIp,
   }) {
     return ForgotPasswordState(
       method: method ?? this.method,
@@ -103,6 +106,7 @@ class ForgotPasswordState extends Equatable {
           clearOtpBlockTime == true ? null : otpBlockTime ?? this.otpBlockTime,
       isShowOtpBlockDialog: isShowOtpBlockDialog ?? this.isShowOtpBlockDialog,
       formValues: formValues ?? this.formValues,
+      countryCodeByIp: countryCodeByIp ?? this.countryCodeByIp,
     );
   }
 
@@ -124,5 +128,6 @@ class ForgotPasswordState extends Equatable {
     otpBlockTime,
     isShowOtpBlockDialog,
     formValues,
+    countryCodeByIp,
   ];
 }

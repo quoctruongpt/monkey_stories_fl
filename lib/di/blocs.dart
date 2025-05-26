@@ -182,6 +182,7 @@ void initBlocDependencies() {
       verifyOtpUsecase: sl<VerifyOtpUsecase>(),
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
     ),
   );
 

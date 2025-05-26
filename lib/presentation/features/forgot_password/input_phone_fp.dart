@@ -53,7 +53,13 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
       );
       _forgotPasswordCubit?.emailChanged(emailController.text);
       setState(() {
-        countryCode = context.read<UserCubit>().state.user?.country ?? 'VN';
+        countryCode =
+            context.read<UserCubit>().state.user?.country ??
+            _forgotPasswordCubit?.state.countryCodeByIp;
+      });
+    } else {
+      setState(() {
+        countryCode = _forgotPasswordCubit?.state.countryCodeByIp;
       });
     }
   }

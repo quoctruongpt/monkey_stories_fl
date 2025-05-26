@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/email.dart';
 import 'package:monkey_stories/core/validators/otp.dart';
@@ -12,6 +13,7 @@ import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 
 part 'forgot_password_state.dart';
 
@@ -25,6 +27,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final VerifyOtpUsecase _verifyOtpUsecase;
   final SendOtpUsecase _sendOtpUsecase;
   final ChangePasswordUsecase _changePasswordUsecase;
+  final GetCountryCodeUsecase _getCountryCodeUsecase;
 
   Timer? _otpResendTimer;
   String _tokenChangePassword = '';
@@ -32,10 +35,21 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     required VerifyOtpUsecase verifyOtpUsecase,
     required SendOtpUsecase sendOtpUsecase,
     required ChangePasswordUsecase changePasswordUsecase,
+    required GetCountryCodeUsecase getCountryCodeUsecase,
   }) : _verifyOtpUsecase = verifyOtpUsecase,
        _sendOtpUsecase = sendOtpUsecase,
        _changePasswordUsecase = changePasswordUsecase,
-       super(ForgotPasswordState());
+       _getCountryCodeUsecase = getCountryCodeUsecase,
+       super(ForgotPasswordState()) {
+    _initCountryCodeByIp();
+  }
+
+  void _initCountryCodeByIp() async {
+    final response = await _getCountryCodeUsecase.call(NoParams());
+    response.fold((failure) {}, (success) {
+      emit(state.copyWith(countryCodeByIp: success));
+    });
+  }
 
   void chooseMethod(ForgotPasswordType method) {
     emit(state.copyWith(method: method));
