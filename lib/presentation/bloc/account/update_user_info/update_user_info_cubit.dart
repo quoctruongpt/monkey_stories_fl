@@ -59,7 +59,10 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
             phone != null
                 ? PhoneValidator.dirty(
                   PhoneNumberInput(
-                    countryCode: countryCode ?? '+84',
+                    countryCode:
+                        (countryCode?.startsWith('+') ?? false)
+                            ? countryCode!
+                            : '+${countryCode ?? ''}',
                     phoneNumber: phone,
                   ),
                 )

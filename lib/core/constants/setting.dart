@@ -185,34 +185,32 @@ final List<Map<String, dynamic>> settingsData = [
 
 final Map<String, String> aboutMonkey = {
   'vi': 'https://monkey.edu.vn/gioi-thieu',
-  'th': 'https://www.monkeyenglish.net/th/',
-  'other': 'https://www.monkeyenglish.net/en/about-monkey',
+  'th': 'https://www.monkeyenglish.net/th/about-us',
+  'other': 'https://www.monkeyenglish.net/about-monkey',
 };
 
 final Map<String, String> termsOfUseLinks = {
   'vi': 'https://monkey.edu.vn/dieu-khoan-su-dung',
-  'th':
-      'https://www.monkeyenglish.net/th/tips-for-parents/terms-of-service-th.html',
-  'other': 'https://www.monkeyenglish.net/en/terms-of-use',
+  'th': 'https://www.monkeyenglish.net/th/terms-of-use',
+  'other': 'https://www.monkeyenglish.net/terms-of-use',
 };
 
 final Map<String, String> privacyPolicyLinks = {
   'vi': 'https://monkey.edu.vn/chinh-sach-bao-mat',
-  'th':
-      'https://www.monkeyenglish.net/th/tips-for-parents/privacy-policy-th.html',
-  'other': 'https://www.monkeyenglish.net/en/policy',
+  'th': 'https://www.monkeyenglish.net/th/policy',
+  'other': 'https://www.monkeyenglish.net/policy',
 };
 
 final Map<String, String> frequentlyAskedQuestionsLinks = {
   'vi': 'https://monkey.edu.vn/ho-tro-khach-hang',
   'th': 'https://www.monkeyenglish.net/th/customer-support.html',
-  'other': 'https://www.monkeyenglish.net/en/customer-support',
+  'other': 'https://www.monkeyenglish.net/customer-support',
 };
 
 final Map<String, String> contactMonkeyLinks = {
   'vi': 'https://monkey.edu.vn/lien-he',
   'th': 'https://www.monkeyenglish.net/th/contact-us',
-  'other': 'https://www.monkeyenglish.net/en/contact',
+  'other': 'https://www.monkeyenglish.net/contact',
 };
 
 String getLocalizedLink(BuildContext context, Map<String, String> linkMap) {
