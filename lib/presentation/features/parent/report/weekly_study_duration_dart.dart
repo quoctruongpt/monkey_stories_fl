@@ -1,11 +1,11 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:monkey_stories/presentation/widgets/report_card.dart';
+import 'package:monkey_stories/presentation/widgets/custom_bar_chart.dart';
+import 'dart:math' as math;
 
-class WeeklyStudyDurationChart extends StatelessWidget {
+class WeeklyStudyDurationChart extends StatefulWidget {
   const WeeklyStudyDurationChart({
     super.key,
     required this.weeklyStudyDuration,
@@ -18,16 +18,29 @@ class WeeklyStudyDurationChart extends StatelessWidget {
   static const Color tooltipBackgroundColor = Color(0xFFFF8AD1);
 
   @override
-  Widget build(BuildContext context) {
-    final double maxValFromList =
-        weeklyStudyDuration.isEmpty ? 0.0 : weeklyStudyDuration.max.toDouble();
+  State<WeeklyStudyDurationChart> createState() =>
+      _WeeklyStudyDurationChartState();
+}
 
-    final double chartMaxY;
-    if (maxValFromList <= 0) {
-      chartMaxY = 100.0;
-    } else {
-      chartMaxY = (maxValFromList / 100.0).ceil() * 100.0;
-    }
+class _WeeklyStudyDurationChartState extends State<WeeklyStudyDurationChart> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final List<BarChartData> chartDataCustom = List.generate(
+      widget.weeklyStudyDuration.length,
+      (index) => BarChartData(
+        value: widget.weeklyStudyDuration[index].toDouble(),
+        color:
+            index == widget.weeklyStudyDuration.length - 1
+                ? WeeklyStudyDurationChart.thisWeekBarColor
+                : WeeklyStudyDurationChart.otherWeeksBarColor,
+        tooltipLabel: '${widget.weeklyStudyDuration[index]}p',
+      ),
+    );
 
     return ReportCard(
       title: AppLocalizations.of(
@@ -37,91 +50,37 @@ class WeeklyStudyDurationChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 250,
-            child: BarChart(
-              BarChartData(
-                maxY: chartMaxY,
-                titlesData: FlTitlesData(
-                  bottomTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: leftTitleWidgets,
-                      reservedSize: 40,
-                      interval: 100,
-                    ),
-                  ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                ),
-                barGroups: List.generate(
-                  weeklyStudyDuration.length,
-                  (index) => makeGroupData(
-                    index,
-                    weeklyStudyDuration[index].toDouble(),
-                    isThisWeek: index == weeklyStudyDuration.length - 1,
-                  ),
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: Colors.grey.withOpacity(0.3),
-                      strokeWidth: 1,
-                      dashArray: [4, 4],
-                    );
-                  },
-                  checkToShowHorizontalLine: (value) => value % 100 == 0,
-                ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: const Border(
-                    bottom: BorderSide(
-                      color: AppTheme.buttonSecondaryDisabledBackground,
-                      width: 2,
-                    ),
-                    left: BorderSide.none,
-                    right: BorderSide.none,
-                    top: BorderSide.none,
-                  ),
-                ),
-                extraLinesData: ExtraLinesData(
-                  horizontalLines: [
-                    HorizontalLine(
-                      y: chartMaxY,
-                      color: AppTheme.buttonSecondaryDisabledBackground,
-                      strokeWidth: 2,
-                      dashArray: [4, 4],
-                    ),
-                  ],
-                ),
-                barTouchData: BarTouchData(
-                  touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (group) => tooltipBackgroundColor,
-                    tooltipBorderRadius: BorderRadius.circular(8),
-                    tooltipBorder: const BorderSide(color: Colors.transparent),
-                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      return BarTooltipItem(
-                        '${rod.toY.round()}p',
-                        const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+            child: CustomBarChart(
+              data: chartDataCustom,
+              chartHeight: 220,
+              barWidth: 40,
+              barSpacing: 25,
+              yAxisInterval:
+                  widget.weeklyStudyDuration.reduce(math.max) < 100 ? 10 : 100,
+              yAxisLabelsWidth: 35,
+              defaultBarColor: WeeklyStudyDurationChart.otherWeeksBarColor,
+              initiallyActiveTooltipIndex:
+                  chartDataCustom.isNotEmpty
+                      ? chartDataCustom.length - 1
+                      : null,
+              tooltipBackgroundColor:
+                  WeeklyStudyDurationChart.tooltipBackgroundColor,
+              tooltipTextStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
+              yAxisLabelStyle: const TextStyle(
+                color: Color(0xFFCECFD2),
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
+              barBorderRadius: const Radius.circular(6),
+              showGridLines: true,
+              gridLineColor: Colors.grey,
+              dashArray: const <double>[4, 4],
             ),
           ),
-          const SizedBox(height: Spacing.md),
           const Divider(
             color: AppTheme.buttonSecondaryDisabledBackground,
             thickness: 1,
@@ -139,13 +98,13 @@ class WeeklyStudyDurationChart extends StatelessWidget {
       children: [
         _legendItem(
           context,
-          thisWeekBarColor,
+          WeeklyStudyDurationChart.thisWeekBarColor,
           AppLocalizations.of(context).translate('Thời lượng học tuần này'),
         ),
         const SizedBox(height: Spacing.xs),
         _legendItem(
           context,
-          otherWeeksBarColor,
+          WeeklyStudyDurationChart.otherWeeksBarColor,
           AppLocalizations.of(
             context,
           ).translate('Thời lượng học các tuần trước'),
@@ -172,47 +131,6 @@ class WeeklyStudyDurationChart extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  // Tiêu đề trục Y
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    final style = TextStyle(
-      color: Colors.grey[700],
-      fontSize: 10,
-      fontWeight: FontWeight.w500,
-    );
-    String text;
-    if (value == 0) {
-      text = '0';
-    } else if (value % 100 == 0) {
-      text = '${value.toInt()}p';
-    } else {
-      return Container();
-    }
-    return SideTitleWidget(
-      meta: meta,
-      space: 6,
-      child: Text(text, style: style),
-    );
-  }
-
-  // Tạo một cột dữ liệu
-  BarChartGroupData makeGroupData(int x, double y, {bool isThisWeek = false}) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          width: 26,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4),
-            topRight: Radius.circular(4),
-          ),
-          color: isThisWeek ? thisWeekBarColor : otherWeeksBarColor,
-        ),
-      ],
-      showingTooltipIndicators: isThisWeek ? [0] : [],
     );
   }
 }

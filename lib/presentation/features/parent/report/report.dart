@@ -46,7 +46,7 @@ class ReportScreen extends StatelessWidget {
               child: const Column(
                 children: [
                   WeeklyStudyDurationChart(
-                    weeklyStudyDuration: [24, 200, 380, 360],
+                    weeklyStudyDuration: [185, 111, 121, 99],
                   ),
                   SizedBox(height: Spacing.md),
                   OverviewReport(
