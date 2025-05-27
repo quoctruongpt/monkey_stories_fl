@@ -53,7 +53,7 @@ class _ProfileItemState extends State<ProfileItem> {
             ),
           ),
           const SizedBox(height: 10),
-          FittedBox(child: Text(widget.name, maxLines: 1)),
+          Text(widget.name, maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );
