@@ -27,7 +27,7 @@ class SplashCubit extends Cubit<SplashState> {
   final SaveFcmUsecase _saveFcmUsecase;
 
   final Logger _logger = Logger('SplashCubit');
-  final int _splashTime = 3;
+  final int _splashTime = 4;
 
   SplashCubit({
     required CheckAuthStatusUseCase checkAuthStatusUseCase,
