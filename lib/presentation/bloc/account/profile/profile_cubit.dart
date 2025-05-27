@@ -7,6 +7,7 @@ import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
@@ -21,6 +22,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final ActiveCourseUsecase _activeCourseUsecase;
   final PutSettingKinesisUsecase _putSettingKinesisUsecase;
   final GetListProfileLocalUsecase _getListProfileLocalUsecase;
+  final SaveCurrentProfileUsecase _saveCurrentProfileUsecase;
 
   ProfileCubit({
     required GetListProfileUsecase getListProfileUsecase,
@@ -29,12 +31,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     required ActiveCourseUsecase activeCourseUsecase,
     required PutSettingKinesisUsecase putSettingKinesisUsecase,
     required GetListProfileLocalUsecase getListProfileLocalUsecase,
+    required SaveCurrentProfileUsecase saveCurrentProfileUsecase,
   }) : _getListProfileUsecase = getListProfileUsecase,
        _createProfileUsecase = createProfileUsecase,
        _getCurrentProfileUsecase = getCurrentProfileUsecase,
        _activeCourseUsecase = activeCourseUsecase,
        _putSettingKinesisUsecase = putSettingKinesisUsecase,
        _getListProfileLocalUsecase = getListProfileLocalUsecase,
+       _saveCurrentProfileUsecase = saveCurrentProfileUsecase,
        super(const ProfileState());
 
   Future<void> getCurrentProfile() async {
@@ -117,16 +121,14 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       profile = state.profiles.firstWhere((profile) => profile.id == profileId);
       emit(state.copyWith(currentProfile: profile));
+      _saveCurrentProfileUsecase.call(profileId);
     } catch (e) {
-      // Log the error if no profile is found
       logger.warning(
         'Profile with id $profileId not found in state.profiles. Error: $e',
       );
-      // Optionally, handle the state differently, e.g., emit an error state or do nothing.
-      // For now, we'll just log and not change the state if the profile isn't found.
+
       return; // Exit the function
     }
-    // If found, emit the state with the selected profile
   }
 
   ProfileEntity? getProfile(int profileId) {

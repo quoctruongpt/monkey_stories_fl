@@ -102,4 +102,10 @@ class ProfileRepositoryImpl extends ProfileRepository {
       return left(const CacheFailure());
     }
   }
+
+  @override
+  Future<Either<CacheFailure, void>> saveCurrentProfile(int profileId) async {
+    await profileLocalDataSource.cacheCurrentProfile(profileId);
+    return right(null);
+  }
 }

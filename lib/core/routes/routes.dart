@@ -12,7 +12,7 @@ import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/features/parent/parent_tab.dart';
-import 'package:monkey_stories/presentation/features/parent/report.dart';
+import 'package:monkey_stories/presentation/features/parent/report/report.dart';
 import 'package:monkey_stories/presentation/features/parent/setting.dart';
 import 'package:monkey_stories/presentation/features/parent/vip.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';

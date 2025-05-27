@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 
 class Avatar extends StatelessWidget {
-  const Avatar({super.key, this.avatar, this.randomColor});
+  const Avatar({
+    super.key,
+    this.avatar,
+    this.randomColor,
+    this.isShowBorder = true,
+  });
 
   final String? avatar;
   final AvatarColor? randomColor;
+  final bool? isShowBorder;
 
   Widget _buildAvatar() {
     if (avatar == null) {
@@ -63,7 +69,10 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(width: 6, color: _borderColor),
+        border:
+            isShowBorder == true
+                ? Border.all(width: 6, color: _borderColor)
+                : null,
         borderRadius: BorderRadius.circular(200),
       ),
       child: _buildAvatar(),

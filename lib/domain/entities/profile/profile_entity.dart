@@ -6,6 +6,7 @@ class ProfileEntity {
   final String? localAvatarPath;
   final int? levelId;
   final int numberChangeAge;
+  final int timeCreated;
 
   ProfileEntity({
     required this.id,
@@ -15,6 +16,7 @@ class ProfileEntity {
     this.localAvatarPath,
     this.levelId,
     this.numberChangeAge = 0,
+    this.timeCreated = 0,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class ProfileEntity {
       'year_of_birth': yearOfBirth,
       'level_id': levelId,
       'number_change_age': numberChangeAge,
+      'time_created': timeCreated,
     };
   }
 
@@ -38,6 +41,7 @@ class ProfileEntity {
       yearOfBirth: json['year_of_birth'],
       levelId: json['level_id'],
       numberChangeAge: json['number_change_age'],
+      timeCreated: json['time_created'],
     );
   }
 }

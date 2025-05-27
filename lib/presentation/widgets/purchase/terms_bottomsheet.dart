@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/presentation/widgets/purchase/drag_handle.dart';
 
 class TermsBottomSheet extends StatelessWidget {
   const TermsBottomSheet({super.key});
@@ -16,14 +17,7 @@ class TermsBottomSheet extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            width: 70,
-            height: 8,
-            decoration: BoxDecoration(
-              color: AppTheme.lightGrayColor,
-              borderRadius: BorderRadius.circular(Spacing.sm),
-            ),
-          ),
+          const DragHandle(),
           const SizedBox(height: Spacing.lg),
           Text(
             AppLocalizations.of(context).translate('app.purchase.footer.terms'),
