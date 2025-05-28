@@ -14,46 +14,59 @@ class ParentTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        selectedItemColor: AppTheme.azureColor,
-        unselectedItemColor: AppTheme.textGrayLightColor,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12.0,
-          fontWeight: FontWeight.w700,
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashFactory: NoSplash.splashFactory,
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12.0,
-          fontWeight: FontWeight.w700,
-        ),
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          navigationShell.goBranch(
-            index,
-            initialLocation: index == navigationShell.currentIndex,
-          );
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/icons/svg/report_inactive.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/svg/report_active.svg'),
-            label: AppLocalizations.of(context).translate('app.report.title'),
+        child: BottomNavigationBar(
+          currentIndex: navigationShell.currentIndex,
+          selectedItemColor: AppTheme.azureColor,
+          unselectedItemColor: AppTheme.textGrayLightColor,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w700,
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/icons/svg/vip_inactive.svg'),
-            activeIcon: SvgPicture.asset('assets/icons/svg/vip_active.svg'),
-            label: AppLocalizations.of(context).translate('app.vip.title'),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w700,
           ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/icons/svg/setting_tab_inactive.svg',
-              width: 24,
-              height: 24,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            if (index == navigationShell.currentIndex) {
+              return;
+            }
+            navigationShell.goBranch(index);
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/svg/report_inactive.svg'),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/svg/report_active.svg',
+              ),
+              label: AppLocalizations.of(context).translate('app.report.title'),
             ),
-            activeIcon: SvgPicture.asset('assets/icons/svg/setting_active.svg'),
-            label: AppLocalizations.of(context).translate('app.setting.title'),
-          ),
-        ],
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/icons/svg/vip_inactive.svg'),
+              activeIcon: SvgPicture.asset('assets/icons/svg/vip_active.svg'),
+              label: AppLocalizations.of(context).translate('app.vip.title'),
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/svg/setting_tab_inactive.svg',
+                width: 24,
+                height: 24,
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/svg/setting_active.svg',
+              ),
+              label: AppLocalizations.of(
+                context,
+              ).translate('app.setting.title'),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: SizedBox(
         width: 80,

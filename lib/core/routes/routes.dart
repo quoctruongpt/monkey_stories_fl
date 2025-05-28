@@ -233,10 +233,8 @@ final GoRouter router = GoRouter(
           navigatorKey: _reportTabNavigatorKey,
           routes: <RouteBase>[
             GoRoute(
-              path: AppRoutePaths.report, // Assuming this is '/parent/report'
-              name:
-                  AppRouteNames
-                      .report, // Optional: if you have names for these routes
+              path: AppRoutePaths.report,
+              name: AppRouteNames.report,
               builder:
                   (BuildContext context, GoRouterState state) =>
                       const OrientationWrapper(
