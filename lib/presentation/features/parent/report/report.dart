@@ -30,7 +30,7 @@ class ReportScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              BlocConsumer<ProfileCubit, ProfileState>(
+              BlocBuilder<ReportCubit, ReportState>(
                 builder: (context, state) {
                   return Container(
                     padding: const EdgeInsets.symmetric(
@@ -40,18 +40,12 @@ class ReportScreen extends StatelessWidget {
                     color: AppTheme.backgroundColor,
                     child: ReportHeader(
                       profile: state.currentProfile!,
-                      profiles: state.profiles,
+                      profiles: context.read<ProfileCubit>().state.profiles,
                       onSelectProfile: (profile) {
-                        context.read<ProfileCubit>().selectProfile(profile.id);
+                        context.read<ReportCubit>().onProfileChanged(profile);
                       },
                     ),
                   );
-                },
-                buildWhen:
-                    (previous, current) =>
-                        previous.currentProfile != current.currentProfile,
-                listener: (context, state) {
-                  context.read<ReportCubit>().getReport();
                 },
               ),
               BlocBuilder<ReportCubit, ReportState>(

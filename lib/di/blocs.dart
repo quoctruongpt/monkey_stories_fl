@@ -284,7 +284,7 @@ void initBlocDependencies() {
     ),
   );
 
-  sl.registerFactory(() => ReportCubit());
+  sl.registerFactory(() => ReportCubit(profileCubit: sl<ProfileCubit>()));
 
   // Add other Bloc/Cubit registrations here...
 }
