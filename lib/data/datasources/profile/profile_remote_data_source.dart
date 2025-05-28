@@ -49,12 +49,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           filename: fileName,
         ),
         'profile_id': id ?? '',
+        'day_of_birth': 1,
+        'month_of_birth': 1,
       });
     } else {
       formData = FormData.fromMap({
         'name': name ?? '',
         'year_of_birth': yearOfBirth ?? '',
         'profile_id': id ?? '',
+        'day_of_birth': 1,
+        'month_of_birth': 1,
       });
     }
 
