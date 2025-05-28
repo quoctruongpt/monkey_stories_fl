@@ -89,6 +89,7 @@ import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase
 import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -282,6 +283,8 @@ void initBlocDependencies() {
       settingsLocalDataSource: sl<SettingsLocalDataSource>(),
     ),
   );
+
+  sl.registerFactory(() => ReportCubit());
 
   // Add other Bloc/Cubit registrations here...
 }
