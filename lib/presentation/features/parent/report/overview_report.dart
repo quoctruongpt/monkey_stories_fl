@@ -34,7 +34,9 @@ class OverviewReport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReportCard(
-      title: AppLocalizations.of(context).translate('Tuần này'),
+      title: AppLocalizations.of(
+        context,
+      ).translate('app.report.overview.this_week'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +49,9 @@ class OverviewReport extends StatelessWidget {
           ),
           const SizedBox(height: Spacing.xxl),
           Text(
-            AppLocalizations.of(context).translate('Tổng đã học'),
+            AppLocalizations.of(
+              context,
+            ).translate('app.report.overview.total_learned'),
             style: Theme.of(context).textTheme.displaySmall,
           ),
           const SizedBox(height: Spacing.md),
@@ -97,35 +101,45 @@ class ReportGridView extends StatelessWidget {
         _buildStatCard(
           context,
           icon: 'assets/icons/svg/stories.svg',
-          title: 'Truyện',
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.report.overview.stories'),
           value: numberStories,
           color: Colors.blue,
         ),
         _buildStatCard(
           context,
           icon: 'assets/icons/svg/lesson.svg',
-          title: 'Bài học',
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.report.overview.lessons'),
           value: numberLessons,
           color: Colors.green,
         ),
         _buildStatCard(
           context,
           icon: 'assets/icons/svg/video.svg',
-          title: 'Video',
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.report.overview.videos'),
           value: numberVideos,
           color: Colors.pink,
         ),
         _buildStatCard(
           context,
           icon: 'assets/icons/svg/audio_book.svg',
-          title: 'Sách nói',
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.report.overview.audio_books'),
           value: numberAudioBooks,
           color: Colors.purple,
         ),
         _buildStatCard(
           context,
           icon: 'assets/icons/svg/minute.svg',
-          title: 'Phút',
+          title: AppLocalizations.of(
+            context,
+          ).translate('app.report.overview.minutes'),
           value: numberMinutes,
           color: Colors.orange,
         ),

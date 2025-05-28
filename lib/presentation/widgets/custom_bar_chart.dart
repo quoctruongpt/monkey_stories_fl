@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:collection/collection.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 
 // Data class
 /// Lớp dữ liệu cho mỗi cột trong biểu đồ
@@ -124,6 +125,7 @@ class _ChartGridLines extends StatelessWidget {
         gridLineWidth: gridLineWidth,
         dashArray: dashArray,
         yAxisLabelsWidth: yAxisLabelsWidth,
+        context: context,
       ),
     );
   }
@@ -171,6 +173,7 @@ class CustomBarChart extends StatefulWidget {
   const CustomBarChart({
     super.key,
     required this.data,
+    required this.context,
     this.barWidth = 30.0,
     this.barSpacing = 15.0,
     this.defaultBarColor = Colors.blue,
@@ -195,6 +198,7 @@ class CustomBarChart extends StatefulWidget {
   });
 
   final List<BarChartData> data;
+  final BuildContext context;
   final double barWidth;
   final double barSpacing;
   final Color defaultBarColor;
@@ -481,7 +485,12 @@ class _CustomBarChartState extends State<CustomBarChart>
 
   double _getTooltipWidth(BarChartData item) {
     final textSpan = TextSpan(
-      text: item.tooltipLabel ?? '${item.value.round()}p',
+      text:
+          item.tooltipLabel ??
+          AppLocalizations.of(widget.context).translate(
+            'app.short_minutes',
+            params: {'value': item.value.round().toString()},
+          ),
       style: widget.tooltipTextStyle,
     );
     final textPainter = TextPainter(
@@ -502,15 +511,14 @@ class _CustomBarChartState extends State<CustomBarChart>
             : ((maxValue / widget.yAxisInterval).ceil() + 1) *
                 widget.yAxisInterval.toDouble();
 
-    // Sử dụng maxYValue để tính chiều cao cột, giống như trong phương thức build
     final barHeight =
         maxYValue == 0 ? 0.0 : (item.value / maxYValue) * widget.chartHeight;
 
     // Tính vị trí của đỉnh cột
     final barTop = widget.chartHeight - barHeight;
 
-    // Đặt tooltip cách đỉnh cột 8px
-    return barTop - 8.0;
+    // Đặt tooltip cách đỉnh cột 12px
+    return barTop - 12.0;
   }
 
   void _updateTooltipIndex(Offset localPosition) {
@@ -534,7 +542,12 @@ class _CustomBarChartState extends State<CustomBarChart>
   }
 
   Widget _buildTooltip(BuildContext context, BarChartData item) {
-    String tooltipText = item.tooltipLabel ?? '${item.value.round()}p';
+    String tooltipText =
+        item.tooltipLabel ??
+        AppLocalizations.of(widget.context).translate(
+          'app.short_minutes',
+          params: {'value': item.value.round().toString()},
+        );
     final textSpan = TextSpan(
       text: tooltipText,
       style: widget.tooltipTextStyle,
@@ -547,7 +560,7 @@ class _CustomBarChartState extends State<CustomBarChart>
     textPainter.layout();
 
     final double horizontalPadding = 8.0;
-    final double verticalPadding = 4.0;
+    final double verticalPadding = 6.0; // Tăng padding dọc
     final double tailHeight = 4.0;
     final double tailBaseWidth = 8.0;
 
@@ -557,12 +570,10 @@ class _CustomBarChartState extends State<CustomBarChart>
     final double bubbleBodyWidth = textWidth + 2 * horizontalPadding;
     final double bubbleBodyHeight = textHeight + 2 * verticalPadding;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 4),
+    return SizedBox(
       width: bubbleBodyWidth,
       height: bubbleBodyHeight + tailHeight,
       child: Stack(
-        alignment: Alignment.topCenter,
         children: [
           CustomPaint(
             size: Size(bubbleBodyWidth, bubbleBodyHeight + tailHeight),
@@ -572,14 +583,21 @@ class _CustomBarChartState extends State<CustomBarChart>
               tailHeight: tailHeight,
               tailBaseWidth: tailBaseWidth,
               tailTipWidth: tailBaseWidth,
+              contentHeight: bubbleBodyHeight,
             ),
           ),
-          Positioned(
-            top: verticalPadding,
-            child: Text(
-              tooltipText,
-              style: widget.tooltipTextStyle,
-              textAlign: TextAlign.center,
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: verticalPadding,
+                bottom: verticalPadding + tailHeight,
+              ),
+              child: Text(
+                tooltipText,
+                style: widget.tooltipTextStyle,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ],
@@ -595,6 +613,7 @@ class _TooltipBubblePainter extends CustomPainter {
   final double tailHeight;
   final double tailBaseWidth;
   final double tailTipWidth;
+  final double contentHeight;
 
   _TooltipBubblePainter({
     required this.backgroundColor,
@@ -602,6 +621,7 @@ class _TooltipBubblePainter extends CustomPainter {
     required this.tailHeight,
     required this.tailBaseWidth,
     required this.tailTipWidth,
+    required this.contentHeight,
   });
 
   @override
@@ -611,10 +631,9 @@ class _TooltipBubblePainter extends CustomPainter {
           ..color = backgroundColor
           ..style = PaintingStyle.fill;
 
-    final double bubbleBodyHeight = size.height - tailHeight;
     final Path path = Path();
     final double centerX = size.width / 2;
-    final radius = 4.0; // Bo tròn 4px
+    final radius = 4.0;
 
     // Vẽ phần thân tooltip với góc bo tròn
     path.moveTo(radius, 0);
@@ -624,21 +643,21 @@ class _TooltipBubblePainter extends CustomPainter {
       radius: Radius.circular(radius),
       clockwise: true,
     );
-    path.lineTo(size.width, bubbleBodyHeight - radius);
+    path.lineTo(size.width, contentHeight - radius);
     path.arcToPoint(
-      Offset(size.width - radius, bubbleBodyHeight),
+      Offset(size.width - radius, contentHeight),
       radius: Radius.circular(radius),
       clockwise: true,
     );
 
     // Vẽ phần mũi tên
-    path.lineTo(centerX + tailBaseWidth / 2, bubbleBodyHeight);
-    path.lineTo(centerX, size.height); // Điểm mũi tên
-    path.lineTo(centerX - tailBaseWidth / 2, bubbleBodyHeight);
+    path.lineTo(centerX + tailBaseWidth / 2, contentHeight);
+    path.lineTo(centerX, size.height);
+    path.lineTo(centerX - tailBaseWidth / 2, contentHeight);
 
-    path.lineTo(radius, bubbleBodyHeight);
+    path.lineTo(radius, contentHeight);
     path.arcToPoint(
-      Offset(0, bubbleBodyHeight - radius),
+      Offset(0, contentHeight - radius),
       radius: Radius.circular(radius),
       clockwise: true,
     );
@@ -658,7 +677,8 @@ class _TooltipBubblePainter extends CustomPainter {
         oldDelegate.bubbleRadius != bubbleRadius ||
         oldDelegate.tailHeight != tailHeight ||
         oldDelegate.tailBaseWidth != tailBaseWidth ||
-        oldDelegate.tailTipWidth != tailTipWidth;
+        oldDelegate.tailTipWidth != tailTipWidth ||
+        oldDelegate.contentHeight != contentHeight;
   }
 }
 
@@ -672,6 +692,7 @@ class _ChartGridPainter extends CustomPainter {
   final double gridLineWidth;
   final List<double>? dashArray;
   final double yAxisLabelsWidth;
+  final BuildContext context;
 
   _ChartGridPainter({
     required this.maxValue,
@@ -682,6 +703,7 @@ class _ChartGridPainter extends CustomPainter {
     required this.gridLineWidth,
     this.dashArray,
     required this.yAxisLabelsWidth,
+    required this.context,
   });
 
   @override
@@ -726,7 +748,13 @@ class _ChartGridPainter extends CustomPainter {
         }
 
         // Vẽ label
-        var labelText = currentVal == 0 ? "0" : '${currentVal.round()}p';
+        var labelText =
+            currentVal == 0
+                ? '0'
+                : AppLocalizations.of(context).translate(
+                  'app.short_minutes',
+                  params: {'value': currentVal.round().toString()},
+                );
         final tp = TextPainter(
           text: TextSpan(text: labelText, style: textStyle),
           textAlign: TextAlign.right,

@@ -42,7 +42,7 @@ class ReportHeader extends StatelessWidget {
               ),
               Text(
                 AppLocalizations.of(context).translate(
-                  'Đã tham gia:',
+                  'app.report.profile.time_join',
                   params: {
                     'date': DateFormat('MM/yyyy').format(
                       DateTime.fromMillisecondsSinceEpoch(
@@ -69,7 +69,11 @@ class ReportHeader extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(AppLocalizations.of(context).translate('Đổi hồ sơ')),
+                      Text(
+                        AppLocalizations.of(
+                          context,
+                        ).translate('app.report.profile.change_profile'),
+                      ),
                       const SizedBox(width: Spacing.sm),
                       const Icon(Icons.keyboard_arrow_down, size: 24),
                     ],
@@ -96,7 +100,12 @@ class ReportHeader extends StatelessWidget {
             const SizedBox(height: Spacing.md),
             const DragHandle(),
             const SizedBox(height: Spacing.md),
-            Text('Đổi hồ sơ', style: Theme.of(context).textTheme.displayMedium),
+            Text(
+              AppLocalizations.of(
+                context,
+              ).translate('app.report.profile.change_profile').toUpperCase(),
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
             const SizedBox(height: Spacing.md),
             const Divider(
               color: AppTheme.buttonPrimaryDisabledBackground,
@@ -154,7 +163,7 @@ class ReportHeader extends StatelessWidget {
                                   ),
                                   Text(
                                     AppLocalizations.of(context).translate(
-                                      'Started from ${DateFormat('MMMM yyyy', AppLocalizations.of(context).locale.languageCode).format(DateTime.fromMillisecondsSinceEpoch(itemProfile.timeCreated * 1000))}',
+                                      'app.report.profile.join_from',
                                       params: {
                                         'date': DateFormat(
                                           'MMMM yyyy',

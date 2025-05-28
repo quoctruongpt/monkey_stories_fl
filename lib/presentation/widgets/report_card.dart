@@ -34,6 +34,9 @@ class ReportCard extends StatelessWidget {
           Row(
             children: [
               iconWidget ?? const SizedBox.shrink(),
+              iconWidget != null
+                  ? const SizedBox(width: Spacing.md)
+                  : const SizedBox.shrink(),
               Text(title, style: Theme.of(context).textTheme.displaySmall),
             ],
           ),

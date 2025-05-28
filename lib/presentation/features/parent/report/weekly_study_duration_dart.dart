@@ -38,14 +38,17 @@ class _WeeklyStudyDurationChartState extends State<WeeklyStudyDurationChart> {
             index == widget.weeklyStudyDuration.length - 1
                 ? WeeklyStudyDurationChart.thisWeekBarColor
                 : WeeklyStudyDurationChart.otherWeeksBarColor,
-        tooltipLabel: '${widget.weeklyStudyDuration[index]}p',
+        tooltipLabel: AppLocalizations.of(context).translate(
+          'app.short_minutes',
+          params: {'value': widget.weeklyStudyDuration[index].toString()},
+        ),
       ),
     );
 
     return ReportCard(
       title: AppLocalizations.of(
         context,
-      ).translate('Thời lượng học 4 tuần gần nhất'),
+      ).translate('app.report.weekly_study_duration.title'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -79,6 +82,7 @@ class _WeeklyStudyDurationChartState extends State<WeeklyStudyDurationChart> {
               showGridLines: true,
               gridLineColor: Colors.grey,
               dashArray: const <double>[4, 4],
+              context: context,
             ),
           ),
           const Divider(
@@ -99,7 +103,9 @@ class _WeeklyStudyDurationChartState extends State<WeeklyStudyDurationChart> {
         _legendItem(
           context,
           WeeklyStudyDurationChart.thisWeekBarColor,
-          AppLocalizations.of(context).translate('Thời lượng học tuần này'),
+          AppLocalizations.of(
+            context,
+          ).translate('app.report.weekly_study_duration.this_week'),
         ),
         const SizedBox(height: Spacing.xs),
         _legendItem(
@@ -107,7 +113,7 @@ class _WeeklyStudyDurationChartState extends State<WeeklyStudyDurationChart> {
           WeeklyStudyDurationChart.otherWeeksBarColor,
           AppLocalizations.of(
             context,
-          ).translate('Thời lượng học các tuần trước'),
+          ).translate('app.report.weekly_study_duration.other_weeks'),
         ),
       ],
     );
