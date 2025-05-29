@@ -5,6 +5,8 @@ import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
@@ -222,5 +224,12 @@ void initUsecaseDependencies() {
   // Notification
   sl.registerLazySingleton(
     () => SaveFcmUsecase(notificationRepository: sl<NotificationRepository>()),
+  );
+
+  // Tracking
+  sl.registerLazySingleton(
+    () => RegisterTokenAirbridgeUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
   );
 }

@@ -209,6 +209,8 @@
 				F59597F72A44E388614F5F1E /* [CP] Embed Pods Frameworks */,
 				829D1A84E1AB548FD8B9D7B4 /* [CP] Copy Pods Resources */,
 				2B59F704710FC1C4FE01711C /* FlutterFire: "flutterfire upload-crashlytics-symbols" */,
+				CD76F49BE40EFBB34D252247 /* [Airbridge] Copy airbridge.json */,
+				B24DA1D01E962E380323B46C /* [Airbridge] Create LibraryInfo.json */,
 			);
 			buildRules = (
 			);
@@ -390,6 +392,42 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		B24DA1D01E962E380323B46C /* [Airbridge] Create LibraryInfo.json */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Airbridge] Create LibraryInfo.json";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo '{\"wrapperName\": \"airbridge-flutter-sdk-restricted\", \"wrapperVersion\": \"4.4.1\"}' > \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LibraryInfo.json\"\n";
+		};
+		CD76F49BE40EFBB34D252247 /* [Airbridge] Copy airbridge.json */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[Airbridge] Copy airbridge.json";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -r \"${SRCROOT}/../airbridge.json\" ]; then\n    cp \"${SRCROOT}/../airbridge.json\" \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/airbridge.json\"\nfi";
 		};
 		F59597F72A44E388614F5F1E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

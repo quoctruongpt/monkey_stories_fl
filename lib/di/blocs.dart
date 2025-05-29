@@ -25,6 +25,7 @@ import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_useca
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -150,6 +151,7 @@ void initBlocDependencies() {
       purchasedCubit: sl<PurchasedCubit>(),
       getHasLoggedBeforeUsecase: sl<GetHasLoggedBeforeUsecase>(),
       saveFcmUsecase: sl<SaveFcmUsecase>(),
+      registerTokenAirbridgeUsecase: sl<RegisterTokenAirbridgeUsecase>(),
     ),
   );
 

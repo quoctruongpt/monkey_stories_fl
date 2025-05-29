@@ -9,6 +9,8 @@ import 'package:monkey_stories/data/datasources/profile/profile_local_data_sourc
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
+import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
@@ -20,6 +22,7 @@ import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
 // Auth Datasources & Repositories
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
@@ -147,5 +150,12 @@ void initRepositoryDependencies() {
     ),
   );
 
+  // Tracking
+  sl.registerLazySingleton<TrackingRepository>(
+    () => TrackingRepositoryImpl(
+      trackingRemoteDataSource: sl<TrackingRemoteDataSource>(),
+      notificationRemoteDataSource: sl<NotificationRemoteDataSource>(),
+    ),
+  );
   // Add other repository registrations here...
 }

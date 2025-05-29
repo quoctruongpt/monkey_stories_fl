@@ -15,6 +15,7 @@ import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart'
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
@@ -25,7 +26,7 @@ class SplashCubit extends Cubit<SplashState> {
   final PurchasedCubit _purchasedCubit;
   final GetHasLoggedBeforeUsecase _getHasLoggedBeforeUsecase;
   final SaveFcmUsecase _saveFcmUsecase;
-
+  final RegisterTokenAirbridgeUsecase _registerTokenAirbridgeUsecase;
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 4;
 
@@ -38,6 +39,7 @@ class SplashCubit extends Cubit<SplashState> {
     required PurchasedCubit purchasedCubit,
     required GetHasLoggedBeforeUsecase getHasLoggedBeforeUsecase,
     required SaveFcmUsecase saveFcmUsecase,
+    required RegisterTokenAirbridgeUsecase registerTokenAirbridgeUsecase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit,
@@ -46,6 +48,7 @@ class SplashCubit extends Cubit<SplashState> {
        _purchasedCubit = purchasedCubit,
        _getHasLoggedBeforeUsecase = getHasLoggedBeforeUsecase,
        _saveFcmUsecase = saveFcmUsecase,
+       _registerTokenAirbridgeUsecase = registerTokenAirbridgeUsecase,
        super(SplashInitial());
 
   Future<void> runApp() async {
@@ -60,6 +63,7 @@ class SplashCubit extends Cubit<SplashState> {
 
     try {
       // 1. Ensure device is registered
+      _registerTokenAirbridgeUsecase.call(NoParams());
       final deviceResult = await _registerDeviceUseCase.call(NoParams());
 
       // Xử lý kết quả đăng ký device. Nếu lỗi, dừng ngay.

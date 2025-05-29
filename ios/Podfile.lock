@@ -1,4 +1,8 @@
 PODS:
+  - airbridge-ios-sdk-restricted (4.4.2)
+  - airbridge_flutter_sdk_restricted (4.4.1):
+    - airbridge-ios-sdk-restricted (= 4.4.2)
+    - Flutter
   - AppAuth (1.7.6):
     - AppAuth/Core (= 1.7.6)
     - AppAuth/ExternalUserAgent (= 1.7.6)
@@ -216,6 +220,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - airbridge_flutter_sdk_restricted (from `.symlinks/plugins/airbridge_flutter_sdk_restricted/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -241,6 +246,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - airbridge-ios-sdk-restricted
     - AppAuth
     - FBAEMKit
     - FBSDKCoreKit
@@ -267,6 +273,8 @@ SPEC REPOS:
     - PromisesSwift
 
 EXTERNAL SOURCES:
+  airbridge_flutter_sdk_restricted:
+    :path: ".symlinks/plugins/airbridge_flutter_sdk_restricted/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_analytics:
@@ -313,6 +321,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
+  airbridge-ios-sdk-restricted: 10be563f98d7fa04affa2b0db32a9a687435f7be
+  airbridge_flutter_sdk_restricted: fbe3f0b19ea342726145cbc0dfb72239602516ba
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   FBAEMKit: e34530df538b8eb8aeb53c35867715ba6c63ef0c
