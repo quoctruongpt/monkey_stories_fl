@@ -6,6 +6,7 @@ import 'package:monkey_stories/domain/repositories/notification_repository.dart'
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
@@ -231,5 +232,9 @@ void initUsecaseDependencies() {
     () => RegisterTokenAirbridgeUsecase(
       trackingRepository: sl<TrackingRepository>(),
     ),
+  );
+
+  sl.registerLazySingleton(
+    () => SetUserUsecase(trackingRepository: sl<TrackingRepository>()),
   );
 }

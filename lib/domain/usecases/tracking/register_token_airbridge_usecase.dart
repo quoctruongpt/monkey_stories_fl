@@ -12,7 +12,7 @@ class RegisterTokenAirbridgeUsecase implements UseCase<void, NoParams> {
 
   @override
   Future<Either<Failure, void>> call(NoParams params) async {
-    _trackingRepository.registerTokenAirbridge();
+    _trackingRepository.registerToken();
     return const Right(null);
   }
 }

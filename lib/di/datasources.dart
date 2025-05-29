@@ -15,7 +15,7 @@ import 'package:monkey_stories/data/datasources/profile/profile_local_data_sourc
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
-import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Auth Datasources
@@ -135,8 +135,8 @@ void initDatasourceDependencies() {
   );
 
   // Tracking
-  sl.registerLazySingleton<TrackingRemoteDataSource>(
-    () => TrackingRemoteDataSourceImpl(),
+  sl.registerLazySingleton<AirbridgeRemoteDataSource>(
+    () => AirbridgeRemoteDataSourceImpl(),
   );
 
   // Add other datasource registrations here...
