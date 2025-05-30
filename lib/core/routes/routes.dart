@@ -35,7 +35,8 @@ import 'package:monkey_stories/presentation/features/parent_setting/schedule_man
 
 final logger = Logger('router');
 
-final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 final GlobalKey<NavigatorState> _reportTabNavigatorKey =

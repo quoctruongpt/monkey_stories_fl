@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
@@ -53,7 +54,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with RouteAware, WidgetsBindingObserver {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   final FocusNode _passwordFocusNode = FocusNode();
@@ -63,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _usernameController = TextEditingController(text: widget.initialUsername);
     _passwordController = TextEditingController(text: widget.initialPassword);
 
@@ -84,10 +87,35 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void didPop() {
+    context.read<LoginCubit>().signInTracking();
+  }
+
+  @override
+  void didPushNext() {
+    context.read<LoginCubit>().signInTracking();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      context.read<LoginCubit>().signInTracking();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _usernameController.dispose();
     _passwordController.dispose();
     _passwordFocusNode.dispose();
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
@@ -178,10 +206,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _signUpPressed() {
+    context.read<LoginCubit>().signUpClicked();
     context.push(AppRoutePaths.signUp);
   }
 
   void _forgotPasswordPressed() {
+    context.read<LoginCubit>().forgotPasswordClicked();
     context.push(AppRoutePaths.chooseMethodFp);
   }
 
@@ -423,6 +453,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       'login.active_code.act',
                                     ),
                                     onActionTap: () {
+                                      context
+                                          .read<LoginCubit>()
+                                          .activeCodeClicked();
                                       context.push(AppRoutePaths.inputLicense);
                                     },
                                   ),

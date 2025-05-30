@@ -49,9 +49,11 @@ class TrackingRepositoryImpl implements TrackingRepository {
     final defaultProperties =
         await _trackingLocalDataSource.getDefaultProperties();
     String partitionKey = '';
-    if (defaultProperties.profileId != null) {
+    if (defaultProperties.profileId != null &&
+        defaultProperties.profileId != 0) {
       partitionKey = defaultProperties.profileId.toString();
-    } else if (defaultProperties.userId != null) {
+    } else if (defaultProperties.userId != null &&
+        defaultProperties.userId != 0) {
       partitionKey = defaultProperties.userId.toString();
     } else {
       final deviceId = await _airbridgeRemoteDataSource.getDeviceId();
@@ -69,10 +71,11 @@ class TrackingRepositoryImpl implements TrackingRepository {
     if (isPushKinesis) {
       await _kinesisRemoteDataSource.pushEvent(partitionKey, {
         'event_name': eventName,
-        'time_record': DateTime.now().toIso8601String(),
+        'time_record': DateTime.now().microsecondsSinceEpoch ~/ 1000,
         'properties': {
           ...(semanticProperties ?? {}),
           ...(customProperties ?? {}),
+          ...(defaultProperties.toJson()),
         },
       });
     }

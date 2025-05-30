@@ -27,6 +27,7 @@ import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.da
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -129,6 +130,7 @@ void initBlocDependencies() {
       restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
       profileCubit: sl<ProfileCubit>(),
       verifyCodUserCrmUsecase: sl<VerifyCodUserCrmUseCase>(),
+      msSignInTrackingUsecase: sl<MsSignInTrackingUsecase>(),
     ),
   );
   sl.registerFactory(

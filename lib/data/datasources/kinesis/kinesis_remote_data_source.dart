@@ -3,7 +3,10 @@ import 'dart:typed_data';
 
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/models/kinesis/kinesis_model.dart';
+
+final logger = Logger('KinesisRemoteDataSource');
 
 abstract class KinesisRemoteDataSource {
   Future<KinesisModel> pushSetting(
@@ -43,6 +46,8 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
     String partitionKey,
     Map<String, dynamic> event,
   ) async {
+    logger.info('pushEvent: $event');
+
     final result = await kinesisClient.putRecord(
       partitionKey: partitionKey,
       data: Uint8List.fromList(jsonEncode(event).codeUnits),

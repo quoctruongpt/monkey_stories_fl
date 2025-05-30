@@ -25,9 +25,11 @@ enum PurchasedStatus {
   const PurchasedStatus(this.value);
 
   static PurchasedStatus fromValue(String value) {
-    return PurchasedStatus.values.firstWhere(
+    final status = PurchasedStatus.values.firstWhere(
       (element) => element.value == value,
+      orElse: () => PurchasedStatus.notEnrolled,
     );
+    return status;
   }
 }
 
