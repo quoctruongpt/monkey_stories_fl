@@ -89,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context)!);
+    final ModalRoute? route = ModalRoute.of(context);
+    routeObserver.subscribe(this, route as PageRoute);
   }
 
   @override
