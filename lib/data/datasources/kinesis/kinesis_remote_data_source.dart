@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:aws_client/kinesis_2013_12_02.dart';
-import 'package:monkey_stories/core/constants/kinesis.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:monkey_stories/data/models/kinesis/kinesis_model.dart';
 
 abstract class KinesisRemoteDataSource {
@@ -29,7 +29,7 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
     final result = await kinesisClient.putRecord(
       partitionKey: partitionKey,
       data: Uint8List.fromList(jsonEncode(event).codeUnits),
-      streamName: KinesisConstants.kinesisStreamNameSetting,
+      streamName: dotenv.env['KINESIS_SETTING_STREAM_NAME'],
     );
     return KinesisModel(
       sequenceNumber: result.sequenceNumber,
@@ -46,7 +46,7 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
     final result = await kinesisClient.putRecord(
       partitionKey: partitionKey,
       data: Uint8List.fromList(jsonEncode(event).codeUnits),
-      streamName: KinesisConstants.kinesisStreamNameEvent,
+      streamName: dotenv.env['KINESIS_EVENT_STREAM_NAME'],
     );
     return KinesisModel(
       sequenceNumber: result.sequenceNumber,

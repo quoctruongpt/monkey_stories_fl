@@ -33,7 +33,8 @@ class ProfileRepositoryImpl extends ProfileRepository {
       await profileLocalDataSource.addProfile(
         response.data!.toEntity(name, yearOfBirth),
       );
-      await profileLocalDataSource.cacheCurrentProfile(response.data!.id);
+      final age = DateTime.now().year - yearOfBirth;
+      await profileLocalDataSource.cacheCurrentProfile(response.data!.id, age);
       return right(response.data!.toEntity(name, yearOfBirth));
     }
 
@@ -105,7 +106,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
 
   @override
   Future<Either<CacheFailure, void>> saveCurrentProfile(int profileId) async {
-    await profileLocalDataSource.cacheCurrentProfile(profileId);
-    return right(null);
+    try {
+      final profile = (await profileLocalDataSource.getListProfile())
+          .firstWhere((p) => p.id == profileId);
+      final age = DateTime.now().year - profile.yearOfBirth;
+      await profileLocalDataSource.cacheCurrentProfile(profileId, age);
+      return right(null);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
   }
 }

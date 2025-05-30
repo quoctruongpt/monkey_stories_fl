@@ -8,6 +8,7 @@ class PurchasedInfoModel {
   final int freeDays;
   final bool isFreeUser;
   final int timeActive;
+  final int profileTrial;
 
   PurchasedInfoModel({
     required this.isEnrolled,
@@ -17,6 +18,7 @@ class PurchasedInfoModel {
     required this.freeDays,
     required this.isFreeUser,
     required this.timeActive,
+    this.profileTrial = 0,
   });
 
   factory PurchasedInfoModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class PurchasedInfoModel {
       freeDays: json['free_days'],
       isFreeUser: json['free_user'],
       timeActive: json['time_active'],
+      profileTrial: json['profile_trial'],
     );
   }
 
@@ -40,6 +43,7 @@ class PurchasedInfoModel {
       'free_days': freeDays,
       'free_user': isFreeUser,
       'time_active': timeActive,
+      'profile_trial': profileTrial,
     };
   }
 
@@ -52,6 +56,7 @@ class PurchasedInfoModel {
       freeDays: freeDays,
       isFreeUser: isFreeUser,
       timeActive: timeActive,
+      profileTrial: profileTrial,
     );
   }
 }

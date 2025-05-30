@@ -13,7 +13,23 @@ enum PackageType {
   }
 }
 
-enum PurchasedStatus { notEnrolled, trial, active, expired }
+enum PurchasedStatus {
+  notEnrolled('notEnrolled'),
+  trial('trial'),
+  active('paid'),
+  expired('expired'),
+  free('free');
+
+  final String value;
+
+  const PurchasedStatus(this.value);
+
+  static PurchasedStatus fromValue(String value) {
+    return PurchasedStatus.values.firstWhere(
+      (element) => element.value == value,
+    );
+  }
+}
 
 class SaleOff {
   final double? vn;

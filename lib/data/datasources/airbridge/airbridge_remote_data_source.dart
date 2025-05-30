@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
 
 abstract class AirbridgeRemoteDataSource {
@@ -7,6 +9,12 @@ abstract class AirbridgeRemoteDataSource {
     String? email,
     String? phone,
     String? name,
+  );
+  Future<String> getDeviceId();
+  void pushEvent(
+    String eventName,
+    Map<String, dynamic>? semanticProperties,
+    Map<String, dynamic>? customProperties,
   );
 }
 
@@ -33,5 +41,34 @@ class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
     if (name != null && name.isNotEmpty) {
       Airbridge.setUserAttribute(key: 'name', value: name);
     }
+  }
+
+  @override
+  Future<String> getDeviceId() async {
+    final completer = Completer<String>();
+
+    await Airbridge.fetchAirbridgeGeneratedUUID(
+      onSuccess: (uuid) {
+        completer.complete(uuid);
+      },
+      onFailure: (error) {
+        completer.completeError('Failed to fetch UUID');
+      },
+    );
+
+    return completer.future;
+  }
+
+  @override
+  void pushEvent(
+    String eventName,
+    Map<String, dynamic>? semanticProperties,
+    Map<String, dynamic>? customProperties,
+  ) {
+    Airbridge.trackEvent(
+      category: eventName,
+      semanticAttributes: semanticProperties,
+      customAttributes: customProperties,
+    );
   }
 }

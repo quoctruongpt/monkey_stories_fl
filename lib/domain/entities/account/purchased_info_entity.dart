@@ -8,6 +8,7 @@ class PurchasedInfoEntity {
   final int freeDays;
   final bool isFreeUser;
   final int timeActive;
+  final int profileTrial;
 
   PurchasedInfoEntity({
     required this.isEnrolled,
@@ -17,6 +18,7 @@ class PurchasedInfoEntity {
     required this.freeDays,
     required this.isFreeUser,
     required this.timeActive,
+    this.profileTrial = 0,
   });
 
   factory PurchasedInfoEntity.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class PurchasedInfoEntity {
       freeDays: json['freeDays'],
       isFreeUser: json['isFreeUser'],
       timeActive: json['timeActive'],
+      profileTrial: json['profileTrial'],
     );
   }
 
@@ -40,20 +43,28 @@ class PurchasedInfoEntity {
       'freeDays': freeDays,
       'isFreeUser': isFreeUser,
       'timeActive': timeActive,
+      'profileTrial': profileTrial,
     };
   }
 
   PurchasedStatus get status {
+    if (!isEnrolled) {
+      return PurchasedStatus.notEnrolled;
+    }
+
+    if (profileTrial != 0) {
+      return PurchasedStatus.trial;
+    }
+
+    if (isFreeUser) {
+      return PurchasedStatus.free;
+    }
+
     if (isActive) {
       return PurchasedStatus.active;
     }
-    if (isFreeUser) {
-      return PurchasedStatus.expired;
-    }
-    if (freeDays > 0) {
-      return PurchasedStatus.trial;
-    }
-    return PurchasedStatus.notEnrolled;
+
+    return PurchasedStatus.expired;
   }
 
   bool get isPaidUser {
