@@ -15,7 +15,7 @@ class MsChangePasswordMethodTrackingUsecase
     MsChangePasswordMethodTrackingParams params,
   ) async {
     _trackingRepository.pushEvent(
-      eventName: 'ms_change_password_method',
+      eventName: 'ms_change_password_method_screen',
       customProperties: params.toJson(),
     );
     return right(null);

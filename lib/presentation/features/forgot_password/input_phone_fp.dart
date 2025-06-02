@@ -8,6 +8,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
@@ -26,12 +27,14 @@ class InputPhoneFp extends StatefulWidget {
   State<InputPhoneFp> createState() => _InputPhoneFpState();
 }
 
-class _InputPhoneFpState extends State<InputPhoneFp> {
+class _InputPhoneFpState extends State<InputPhoneFp>
+    with RouteAware, WidgetsBindingObserver {
   ForgotPasswordCubit? _forgotPasswordCubit;
   late TextEditingController phoneController;
   late TextEditingController emailController;
   late String? countryCode = 'VN';
   Future<void> _onPressed(BuildContext context) async {
+    _forgotPasswordCubit?.onConfirmPhone();
     final isSendDone = await context.read<ForgotPasswordCubit>().sendOtp();
     if (isSendDone) {
       context.pushNamed(AppRouteNames.inputOtpFp);
@@ -65,9 +68,50 @@ class _InputPhoneFpState extends State<InputPhoneFp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    forgotPasswordRouteObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    _forgotPasswordCubit?.onStartSentOtp();
+  }
+
+  @override
+  void didPopNext() {
+    _forgotPasswordCubit?.onStartSentOtp();
+  }
+
+  @override
+  void didPop() {
+    _forgotPasswordCubit?.onInputPhoneBack();
+    _forgotPasswordCubit?.onEndSentOtp();
+    _forgotPasswordCubit?.trackSentOtp();
+  }
+
+  @override
+  void didPushNext() {
+    _forgotPasswordCubit?.onEndSentOtp();
+    _forgotPasswordCubit?.trackSentOtp();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused &&
+        ModalRoute.of(context)?.settings.name == AppRouteNames.inputPhoneFp) {
+      _forgotPasswordCubit?.onEndSentOtp();
+      _forgotPasswordCubit?.trackSentOtp();
+    }
+  }
+
+  @override
   void dispose() {
     _forgotPasswordCubit?.phoneChanged('');
     _forgotPasswordCubit?.emailReset();
+    forgotPasswordRouteObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }

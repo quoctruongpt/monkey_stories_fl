@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/validators/otp.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
@@ -19,7 +20,8 @@ class InputOtpFp extends StatefulWidget {
   State<InputOtpFp> createState() => _InputOtpFpState();
 }
 
-class _InputOtpFpState extends State<InputOtpFp> {
+class _InputOtpFpState extends State<InputOtpFp>
+    with RouteAware, WidgetsBindingObserver {
   ForgotPasswordCubit? _forgotPasswordCubit;
 
   Future<void> _onConfirmPressed(BuildContext context) async {
@@ -50,6 +52,7 @@ class _InputOtpFpState extends State<InputOtpFp> {
   }
 
   void _onResendOtpPressed(BuildContext context) {
+    _forgotPasswordCubit?.onResendOtp();
     context.read<ForgotPasswordCubit>().sendOtp();
   }
 
@@ -60,8 +63,49 @@ class _InputOtpFpState extends State<InputOtpFp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    forgotPasswordRouteObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    _forgotPasswordCubit?.onStartConfirmOtp();
+  }
+
+  @override
+  void didPop() {
+    _forgotPasswordCubit?.onInputOtpBack();
+    _forgotPasswordCubit?.onEndConfirmOtp();
+    _forgotPasswordCubit?.trackConfirmOtp();
+  }
+
+  @override
+  void didPopNext() {
+    _forgotPasswordCubit?.onStartConfirmOtp();
+  }
+
+  @override
+  void didPushNext() {
+    _forgotPasswordCubit?.onEndConfirmOtp();
+    _forgotPasswordCubit?.trackConfirmOtp();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused &&
+        ModalRoute.of(context)?.settings.name == AppRouteNames.inputOtpFp) {
+      _forgotPasswordCubit?.onEndConfirmOtp();
+      _forgotPasswordCubit?.trackConfirmOtp();
+    }
+  }
+
+  @override
   void dispose() {
     _forgotPasswordCubit?.clearOtp();
+    forgotPasswordRouteObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

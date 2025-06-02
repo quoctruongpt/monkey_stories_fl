@@ -26,6 +26,9 @@ import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
@@ -210,6 +213,11 @@ void initBlocDependencies() {
       msChangePasswordMethodTrackingUsecase:
           sl<MsChangePasswordMethodTrackingUsecase>(),
       userCubit: sl<UserCubit>(),
+      msChangePasswordSentOTPTrackingUsecase:
+          sl<MsChangePasswordSentOTPTrackingUseCase>(),
+      msChangePasswordConfirmOTPTrackingUsecase:
+          sl<MsChangePasswordConfirmOTPTrackingUseCase>(),
+      msUpdatePasswordTrackingUsecase: sl<MsUpdatePasswordTrackingUseCase>(),
     ),
   );
 

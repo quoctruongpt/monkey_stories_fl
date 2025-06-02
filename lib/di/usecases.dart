@@ -85,6 +85,9 @@ import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart'
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
 
 final sl = GetIt.instance;
 
@@ -260,5 +263,14 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsChangePasswordMethodTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordSentOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordConfirmOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdatePasswordTrackingUseCase(sl<TrackingRepository>()),
   );
 }
