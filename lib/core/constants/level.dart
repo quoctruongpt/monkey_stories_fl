@@ -1,3 +1,5 @@
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+
 class LevelId {
   static const int a = 4;
   static const int b = 5;
@@ -38,12 +40,14 @@ class Level {
 class LevelOnboarding extends Level {
   final String description;
   final int difficulty;
+  final MsSelectLevelType trackName;
 
   LevelOnboarding({
     required super.name,
     required super.id,
     required this.description,
     required this.difficulty,
+    required this.trackName,
   });
 }
 
@@ -53,23 +57,27 @@ final List<LevelOnboarding> onboardingLevels = [
     id: LevelId.a,
     description: 'create_profile.level.a',
     difficulty: 0,
+    trackName: MsSelectLevelType.entry,
   ),
   LevelOnboarding(
     name: 'B',
     id: LevelId.b,
     description: 'create_profile.level.b',
     difficulty: 1,
+    trackName: MsSelectLevelType.basic,
   ),
   LevelOnboarding(
     name: 'E',
     id: LevelId.e,
     description: 'create_profile.level.c',
     difficulty: 2,
+    trackName: MsSelectLevelType.intermediate,
   ),
   LevelOnboarding(
     name: 'J',
     id: LevelId.j,
     description: 'create_profile.level.d',
     difficulty: 3,
+    trackName: MsSelectLevelType.advanced,
   ),
 ];

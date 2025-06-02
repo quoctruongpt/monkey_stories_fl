@@ -84,6 +84,7 @@ import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usec
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
 
 final sl = GetIt.instance;
 
@@ -256,5 +257,8 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsSelectLevelTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordMethodTrackingUsecase(sl<TrackingRepository>()),
   );
 }

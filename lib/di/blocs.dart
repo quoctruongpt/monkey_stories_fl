@@ -25,6 +25,7 @@ import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_useca
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
@@ -206,6 +207,9 @@ void initBlocDependencies() {
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
       getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msChangePasswordMethodTrackingUsecase:
+          sl<MsChangePasswordMethodTrackingUsecase>(),
+      userCubit: sl<UserCubit>(),
     ),
   );
 

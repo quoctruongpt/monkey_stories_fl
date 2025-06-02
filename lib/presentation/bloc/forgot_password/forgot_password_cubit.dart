@@ -14,6 +14,8 @@ import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'forgot_password_state.dart';
 
@@ -23,23 +25,43 @@ const otpResendTime = 60;
 const otpWrongCount = 5;
 const otpBlockTime = 300000;
 
+class ChooseMethodTrackingData {
+  String source = '';
+  MsChangePasswordMethodClickType clickType =
+      MsChangePasswordMethodClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+}
+
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final VerifyOtpUsecase _verifyOtpUsecase;
   final SendOtpUsecase _sendOtpUsecase;
   final ChangePasswordUsecase _changePasswordUsecase;
   final GetCountryCodeUsecase _getCountryCodeUsecase;
+  final MsChangePasswordMethodTrackingUsecase
+  _msChangePasswordMethodTrackingUsecase;
+  final UserCubit _userCubit;
 
   Timer? _otpResendTimer;
   String _tokenChangePassword = '';
+
+  final _chooseMethodTrackingData = ChooseMethodTrackingData();
+
   ForgotPasswordCubit({
     required VerifyOtpUsecase verifyOtpUsecase,
     required SendOtpUsecase sendOtpUsecase,
     required ChangePasswordUsecase changePasswordUsecase,
     required GetCountryCodeUsecase getCountryCodeUsecase,
+    required MsChangePasswordMethodTrackingUsecase
+    msChangePasswordMethodTrackingUsecase,
+    required UserCubit userCubit,
   }) : _verifyOtpUsecase = verifyOtpUsecase,
        _sendOtpUsecase = sendOtpUsecase,
        _changePasswordUsecase = changePasswordUsecase,
        _getCountryCodeUsecase = getCountryCodeUsecase,
+       _msChangePasswordMethodTrackingUsecase =
+           msChangePasswordMethodTrackingUsecase,
+       _userCubit = userCubit,
        super(ForgotPasswordState()) {
     _initCountryCodeByIp();
   }
@@ -52,6 +74,11 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   void chooseMethod(ForgotPasswordType method) {
+    _chooseMethodTrackingData.clickType =
+        method == ForgotPasswordType.email
+            ? MsChangePasswordMethodClickType.viaEmail
+            : MsChangePasswordMethodClickType.viaSms;
+
     emit(state.copyWith(method: method));
   }
 
@@ -295,6 +322,34 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
     }
+  }
+
+  void onChooseMethodBack() {
+    _chooseMethodTrackingData.clickType = MsChangePasswordMethodClickType.back;
+  }
+
+  void onStartChooseMethod() {
+    _chooseMethodTrackingData.timeStart = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndChooseMethod() {
+    _chooseMethodTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void trackChooseMethod() {
+    _msChangePasswordMethodTrackingUsecase.call(
+      MsChangePasswordMethodTrackingParams(
+        clickType: _chooseMethodTrackingData.clickType,
+        timeOnScreen:
+            ((_chooseMethodTrackingData.timeEnd -
+                        _chooseMethodTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        haveOccurredError: false,
+        errorMessage: '',
+        accountType: _userCubit.state.accountType,
+      ),
+    );
   }
 
   @override

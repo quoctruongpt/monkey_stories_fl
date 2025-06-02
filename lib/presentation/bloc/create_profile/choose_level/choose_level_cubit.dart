@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/constants/level.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
 
 part 'choose_level_state.dart';
@@ -44,5 +45,7 @@ class ChooseLevelCubit extends Cubit<ChooseLevelState> {
 
   void onPressedLevel(int level) {
     emit(state.copyWith(levelSelected: level));
+    _chooseLevelTrackingData.level =
+        onboardingLevels.firstWhere((e) => e.id == level).trackName;
   }
 }
