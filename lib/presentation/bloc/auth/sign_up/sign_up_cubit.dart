@@ -16,6 +16,7 @@ import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
 part 'sign_up_state.dart';
 
 final logger = Logger('SignUpCubit');
@@ -28,6 +29,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
   final GetCountryCodeUsecase _getCountryCodeUsecase;
   final AppCubit _appCubit;
+  final MsSignInPopupWarningUsecase _msSignInPopupWarningUsecase;
 
   final UserCubit _userCubit;
 
@@ -41,12 +43,14 @@ class SignUpCubit extends Cubit<SignUpState> {
     required CheckPhoneNumberUsecase checkPhoneNumberUsecase,
     required AppCubit appCubit,
     required GetCountryCodeUsecase getCountryCodeUsecase,
+    required MsSignInPopupWarningUsecase msSignInPopupWarningUsecase,
   }) : _userCubit = userCubit,
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
        _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
        _appCubit = appCubit,
        _getCountryCodeUsecase = getCountryCodeUsecase,
+       _msSignInPopupWarningUsecase = msSignInPopupWarningUsecase,
        super(SignUpState(step: StepSignUp.phone));
 
   Future<void> countryCodeInit() async {
@@ -297,5 +301,11 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void clearPopupErrorMessage() {
     emit(state.copyWith(popupErrorMessage: null));
+  }
+
+  void trackPopupWarning(MsSignInPopupWarningClickType clickType) {
+    _msSignInPopupWarningUsecase.call(
+      MsSignInPopupWarningParams(clickType: clickType),
+    );
   }
 }

@@ -6,8 +6,10 @@ import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/sign_up/sign_up_cubit.dart';
@@ -182,12 +184,24 @@ class _SignUpState extends State<SignUp> {
         ).translate('sign_up.phone.exists.act'),
         onPrimaryAction: () {
           context.push(AppRoutePaths.login);
+          context.read<SignUpCubit>().trackPopupWarning(
+            MsSignInPopupWarningClickType.signIn,
+          );
         },
         secondaryActionText: AppLocalizations.of(
           context,
         ).translate('sign_up.phone.exists.act2'),
         onSecondaryAction: () {
           context.pop();
+          context.read<SignUpCubit>().trackPopupWarning(
+            MsSignInPopupWarningClickType.cancel,
+          );
+        },
+        onClose: () {
+          context.pop();
+          context.read<SignUpCubit>().trackPopupWarning(
+            MsSignInPopupWarningClickType.close,
+          );
         },
       );
       return;
