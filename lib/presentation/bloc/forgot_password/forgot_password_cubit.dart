@@ -54,6 +54,14 @@ class ConfirmOtpTrackingData {
   int countTimeVerifyOTP = 0;
 }
 
+class UpdatePasswordTrackingData {
+  MsUpdatePasswordClickType clickType = MsUpdatePasswordClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+  bool isSuccessful = false;
+  String? errorMessage;
+}
+
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final VerifyOtpUsecase _verifyOtpUsecase;
   final SendOtpUsecase _sendOtpUsecase;
@@ -74,6 +82,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final _chooseMethodTrackingData = ChooseMethodTrackingData();
   final _sentOtpTrackingData = SentOtpTrackingData();
   final _confirmOtpTrackingData = ConfirmOtpTrackingData();
+  final _updatePasswordTrackingData = UpdatePasswordTrackingData();
 
   ForgotPasswordCubit({
     required VerifyOtpUsecase verifyOtpUsecase,
@@ -323,6 +332,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   Future<bool> changePassword() async {
     try {
+      _updatePasswordTrackingData.clickType = MsUpdatePasswordClickType.update;
+
       emit(state.copyWith(isLoading: true));
       final result = await _changePasswordUsecase(
         ChangePasswordParams(
@@ -347,6 +358,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
       result.fold(
         (error) {
+          _updatePasswordTrackingData.errorMessage = error.toString();
           isSuccess = false;
         },
         (r) {
@@ -354,8 +366,11 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         },
       );
 
+      _updatePasswordTrackingData.isSuccessful = isSuccess;
+
       return isSuccess;
     } catch (e) {
+      _updatePasswordTrackingData.errorMessage = e.toString();
       return false;
     } finally {
       emit(
@@ -378,6 +393,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   void onInputPhoneBack() {
     _sentOtpTrackingData.clickType = MsChangePasswordSentOTPClickType.back;
+  }
+
+  void onUpdatePasswordBack() {
+    _updatePasswordTrackingData.clickType = MsUpdatePasswordClickType.back;
   }
 
   void onConfirmPhone() {
@@ -416,6 +435,15 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   void onEndConfirmOtp() {
     _confirmOtpTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onStartUpdatePassword() {
+    _updatePasswordTrackingData.timeStart =
+        DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndUpdatePassword() {
+    _updatePasswordTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
   }
 
   void trackChooseMethod() {
@@ -464,6 +492,23 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         countTimeVerifyOTP: _confirmOtpTrackingData.countTimeVerifyOTP,
         haveOccurredError: _confirmOtpTrackingData.errorMessage != null,
         errorMessage: _confirmOtpTrackingData.errorMessage,
+      ),
+    );
+  }
+
+  void trackUpdatePassword() {
+    _msUpdatePasswordTrackingUsecase.call(
+      MsUpdatePasswordTrackingParams(
+        clickType: _updatePasswordTrackingData.clickType,
+        accountType: _userCubit.state.accountType,
+        timeOnScreen:
+            ((_updatePasswordTrackingData.timeEnd -
+                        _updatePasswordTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        haveOccurredError: _updatePasswordTrackingData.errorMessage != null,
+        errorMessage: _updatePasswordTrackingData.errorMessage,
+        isSuccessful: _updatePasswordTrackingData.isSuccessful,
       ),
     );
   }
