@@ -38,6 +38,27 @@ final logger = Logger('router');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+class RouteTracker extends NavigatorObserver {
+  static String? currentRouteName;
+
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    currentRouteName =
+        route.settings.name ??
+        route.settings.name ??
+        route.settings.arguments?.toString();
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    currentRouteName =
+        previousRoute?.settings.name ??
+        previousRoute?.settings.arguments?.toString();
+    super.didPop(route, previousRoute);
+  }
+}
+
 final GlobalKey<NavigatorState> _reportTabNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'reportTab');
 final GlobalKey<NavigatorState> _vipTabNavigatorKey = GlobalKey<NavigatorState>(
@@ -47,7 +68,7 @@ final GlobalKey<NavigatorState> _settingTabNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'settingTab');
 
 final GoRouter router = GoRouter(
-  observers: [routeObserver],
+  observers: [routeObserver, RouteTracker()],
   navigatorKey: navigatorKey,
   initialLocation: AppRoutePaths.splash,
   routes: <RouteBase>[

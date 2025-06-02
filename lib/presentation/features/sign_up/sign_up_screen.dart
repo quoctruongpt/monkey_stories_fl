@@ -42,7 +42,8 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends State<SignUp>
+    with RouteAware, WidgetsBindingObserver {
   late TextEditingController _phoneController;
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
@@ -51,6 +52,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     final initialValue =
         context.read<SignUpCubit>().state.phone.value.phoneNumber;
@@ -59,6 +61,31 @@ class _SignUpState extends State<SignUp> {
     _confirmPasswordController = TextEditingController();
     _pageController = PageController();
     _passwordFocusNode = FocusNode();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    routeObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPop() {
+    context.read<SignUpCubit>().trackSignUp();
+  }
+
+  @override
+  void didPushNext() {
+    context.read<SignUpCubit>().trackSignUp();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused &&
+        RouteTracker.currentRouteName == AppRouteNames.signUp) {
+      context.read<SignUpCubit>().trackSignUp();
+    }
   }
 
   @override
@@ -166,6 +193,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   void _onLoginPressed(BuildContext context) {
+    context.read<SignUpCubit>().signInClicked();
     if (context.read<UserCubit>().state.isPurchasing) {
       showCustomNoticeDialog(
         context: context,

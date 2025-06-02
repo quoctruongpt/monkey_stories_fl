@@ -17,11 +17,20 @@ import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+
 part 'sign_up_state.dart';
 
 final logger = Logger('SignUpCubit');
 
 enum StepSignUp { phone, password }
+
+class SignUpTrackingData {
+  String type = '';
+  String phone = '';
+  bool haveClickedSignIn = false;
+  String? errorMessage;
+}
 
 class SignUpCubit extends Cubit<SignUpState> {
   final SignUpUsecase _signUpUsecase;
@@ -30,11 +39,13 @@ class SignUpCubit extends Cubit<SignUpState> {
   final GetCountryCodeUsecase _getCountryCodeUsecase;
   final AppCubit _appCubit;
   final MsSignInPopupWarningUsecase _msSignInPopupWarningUsecase;
+  final MsSignUpTrackingUsecase _msSignUpTrackingUsecase;
 
   final UserCubit _userCubit;
 
   Timer? _debounce;
   CancelToken? _cancelCheckPhoneNumberToken;
+  final _signUpTrackingData = SignUpTrackingData();
 
   SignUpCubit({
     required UserCubit userCubit,
@@ -44,6 +55,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     required AppCubit appCubit,
     required GetCountryCodeUsecase getCountryCodeUsecase,
     required MsSignInPopupWarningUsecase msSignInPopupWarningUsecase,
+    required MsSignUpTrackingUsecase msSignUpTrackingUsecase,
   }) : _userCubit = userCubit,
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
@@ -51,6 +63,7 @@ class SignUpCubit extends Cubit<SignUpState> {
        _appCubit = appCubit,
        _getCountryCodeUsecase = getCountryCodeUsecase,
        _msSignInPopupWarningUsecase = msSignInPopupWarningUsecase,
+       _msSignUpTrackingUsecase = msSignUpTrackingUsecase,
        super(SignUpState(step: StepSignUp.phone));
 
   Future<void> countryCodeInit() async {
@@ -159,6 +172,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
         response.fold(
           (failure) {
+            _signUpTrackingData.errorMessage = failure.message;
             emit(
               state.copyWith(
                 isPhoneValid: false,
@@ -178,6 +192,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpPressed() async {
+    _signUpTrackingData.type = 'phone';
     emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
     try {
       final response = await _signUpUsecase.call(
@@ -194,6 +209,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
       response.fold(
         (failure) {
+          _signUpTrackingData.errorMessage = failure.message;
           emit(
             state.copyWith(
               signUpErrorMessage: failure.message,
@@ -211,6 +227,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         },
       );
     } catch (e) {
+      _signUpTrackingData.errorMessage = e.toString();
       if (e is ApiResponse) {
         emit(state.copyWith(signUpErrorMessage: e.message));
       } else {
@@ -226,6 +243,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       final result = await _loginUsecase.call(params);
       result.fold(
         (failure) {
+          _signUpTrackingData.errorMessage = failure.message;
           throw failure;
         },
         (loginStatus) async {
@@ -234,6 +252,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         },
       );
     } catch (e) {
+      _signUpTrackingData.errorMessage = e.toString();
       emit(state.copyWith(isSignUpLoading: false));
       switch (params.loginType) {
         case LoginType.facebook:
@@ -272,14 +291,17 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   void signUpWithGoogle() async {
+    _signUpTrackingData.type = 'google';
     _signUpWithSocial(const LoginParams(loginType: LoginType.email));
   }
 
   void signUpWithFacebook() async {
+    _signUpTrackingData.type = 'facebook';
     _signUpWithSocial(const LoginParams(loginType: LoginType.facebook));
   }
 
   void signUpWithApple() async {
+    _signUpTrackingData.type = 'apple';
     _signUpWithSocial(const LoginParams(loginType: LoginType.apple));
   }
 
@@ -306,6 +328,24 @@ class SignUpCubit extends Cubit<SignUpState> {
   void trackPopupWarning(MsSignInPopupWarningClickType clickType) {
     _msSignInPopupWarningUsecase.call(
       MsSignInPopupWarningParams(clickType: clickType),
+    );
+  }
+
+  void signInClicked() {
+    _signUpTrackingData.haveClickedSignIn = true;
+  }
+
+  void trackSignUp() {
+    _msSignUpTrackingUsecase.call(
+      MsSignUpTrackingParams(
+        type: _signUpTrackingData.type,
+        phone:
+            '${state.phone.value.countryCode}${state.phone.value.phoneNumber}',
+        isSuccessful: state.isSignUpSuccess,
+        haveClickedSignIn: _signUpTrackingData.haveClickedSignIn,
+        haveOccurredError: _signUpTrackingData.errorMessage != null,
+        errorMessage: _signUpTrackingData.errorMessage,
+      ),
     );
   }
 }
