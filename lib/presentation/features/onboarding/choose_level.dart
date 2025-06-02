@@ -24,6 +24,9 @@ class ChooseLevelOBD extends StatelessWidget {
             context.read<OnboardingCubit>().onChangeLevel(levelId);
           },
           levelSelected: state.levelId,
+          onBackPressed: () {
+            context.pop();
+          },
         );
       },
     );

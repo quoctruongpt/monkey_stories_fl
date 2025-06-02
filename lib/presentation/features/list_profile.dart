@@ -31,7 +31,7 @@ class ListProfile extends StatelessWidget {
   void _addProfilePressed(BuildContext context) {
     context.pushNamed(
       AppRouteNames.createProfileInputName,
-      queryParameters: {'source': 'list_profile'},
+      queryParameters: {'source': 'add_profile'},
     );
   }
 
@@ -56,7 +56,7 @@ class ListProfile extends StatelessWidget {
       onPrimaryAction: () {
         context.pushNamed(
           AppRouteNames.createProfileInputName,
-          queryParameters: {'source': 'list_profile'},
+          queryParameters: {'source': 'add_profile'},
         );
       },
       isCloseable: false,

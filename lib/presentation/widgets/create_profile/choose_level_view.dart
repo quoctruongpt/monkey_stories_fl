@@ -14,17 +14,19 @@ class ChooseLevelView extends StatelessWidget {
     required this.levels,
     this.levelSelected,
     required this.onPressedLevel,
+    this.onBackPressed,
   });
 
   final VoidCallback onContinuePressed;
   final List<LevelOnboarding> levels;
   final int? levelSelected;
   final void Function(int levelId) onPressedLevel;
+  final void Function()? onBackPressed;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(onBackPressed: onBackPressed),
       body: Padding(
         padding: const EdgeInsets.only(
           left: Spacing.md,

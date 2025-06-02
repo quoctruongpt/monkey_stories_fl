@@ -176,9 +176,13 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.createProfileInputDateOfBirth,
       builder: (context, state) {
         final String name = state.uri.queryParameters['name'] ?? '';
+        final String source = state.uri.queryParameters['source'] ?? '';
         return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: CreateProfileChooseYearOfBirthScreen(name: name),
+          child: CreateProfileChooseYearOfBirthScreen(
+            name: name,
+            source: source,
+          ),
         );
       },
     ),
@@ -190,9 +194,14 @@ final GoRouter router = GoRouter(
         final int yearOfBirth = int.parse(
           state.uri.queryParameters['yearOfBirth'] ?? '0',
         );
+        final String source = state.uri.queryParameters['source'] ?? '';
         return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: ChooseLevelScreen(name: name, yearOfBirth: yearOfBirth),
+          child: ChooseLevelScreenProvider(
+            name: name,
+            yearOfBirth: yearOfBirth,
+            source: source,
+          ),
         );
       },
     ),

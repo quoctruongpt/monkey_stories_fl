@@ -39,7 +39,7 @@ class ListProfileDialog extends StatelessWidget {
         onSuccess: () {
           navigatorKey.currentContext?.pushNamed(
             AppRouteNames.createProfileInputName,
-            queryParameters: {'source': 'list_profile'},
+            queryParameters: {'source': 'add_profile'},
           );
           onClose();
         },

@@ -22,13 +22,15 @@ class CreateProfileInputNameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<InputNameCubit>()..initTrackingData(source),
-      child: const CreateProfileInputNameView(),
+      child: CreateProfileInputNameView(source: source),
     );
   }
 }
 
 class CreateProfileInputNameView extends StatefulWidget {
-  const CreateProfileInputNameView({super.key});
+  const CreateProfileInputNameView({super.key, required this.source});
+
+  final String source;
 
   @override
   State<CreateProfileInputNameView> createState() =>
@@ -54,6 +56,7 @@ class _CreateProfileInputNameViewState extends State<CreateProfileInputNameView>
 
   @override
   void didPop() {
+    context.read<InputNameCubit>().onBackClicked();
     context.read<InputNameCubit>().trackProfileName();
   }
 
@@ -83,17 +86,12 @@ class _CreateProfileInputNameViewState extends State<CreateProfileInputNameView>
     void handleContinue() {
       context.read<InputNameCubit>().onContinueClicked();
       context.push(
-        '${AppRoutePaths.createProfileInputDateOfBirth}?name=${_nameController.text.trim()}',
+        '${AppRoutePaths.createProfileInputDateOfBirth}?name=${_nameController.text.trim()}&source=${widget.source}',
       );
     }
 
     return Scaffold(
-      appBar: AppBarWidget(
-        onBackPressed: () {
-          context.read<InputNameCubit>().onBackClicked();
-          context.pop();
-        },
-      ),
+      appBar: const AppBarWidget(),
       body: KeyboardDismisser(
         child: SafeArea(
           top: false,
