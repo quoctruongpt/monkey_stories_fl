@@ -82,6 +82,7 @@ import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_us
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 
 final sl = GetIt.instance;
 
@@ -248,5 +249,8 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsSignUpTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsProfileNameTrackingUsecase(sl<TrackingRepository>()),
   );
 }

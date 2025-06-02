@@ -105,10 +105,9 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      if (RouteTracker.currentRouteName == AppRouteNames.login) {
-        context.read<LoginCubit>().signInTracking();
-      }
+    if (state == AppLifecycleState.paused &&
+        RouteTracker.currentRouteName == AppRouteNames.login) {
+      context.read<LoginCubit>().signInTracking();
     }
   }
 

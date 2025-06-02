@@ -164,9 +164,10 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.createProfileInputName,
       name: AppRouteNames.createProfileInputName,
       builder: (context, state) {
-        return const OrientationWrapper(
+        final String source = state.uri.queryParameters['source'] ?? '';
+        return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: CreateProfileInputNameScreen(),
+          child: CreateProfileInputNameScreen(source: source),
         );
       },
     ),

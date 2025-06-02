@@ -29,6 +29,7 @@ import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
@@ -104,7 +105,12 @@ void initBlocDependencies() {
   sl.registerFactory(() => FloatButtonCubit());
 
   // Create Profile Blocs/Cubits
-  sl.registerFactory(() => InputNameCubit(profileCubit: sl<ProfileCubit>()));
+  sl.registerFactory(
+    () => InputNameCubit(
+      profileCubit: sl<ProfileCubit>(),
+      msProfileNameTrackingUsecase: sl<MsProfileNameTrackingUsecase>(),
+    ),
+  );
   sl.registerFactory(() => ChooseYearOfBirthCubit());
   sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(

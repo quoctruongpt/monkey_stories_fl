@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/input_name/input_name_cubit.dart';
@@ -13,12 +14,14 @@ import 'package:monkey_stories/presentation/widgets/create_profile/create_profil
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_with_suffix_icon.dart';
 
 class CreateProfileInputNameScreen extends StatelessWidget {
-  const CreateProfileInputNameScreen({super.key});
+  const CreateProfileInputNameScreen({super.key, required this.source});
+
+  final String source;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<InputNameCubit>(),
+      create: (context) => sl<InputNameCubit>()..initTrackingData(source),
       child: const CreateProfileInputNameView(),
     );
   }
@@ -32,26 +35,65 @@ class CreateProfileInputNameView extends StatefulWidget {
       _CreateProfileInputNameViewState();
 }
 
-class _CreateProfileInputNameViewState
-    extends State<CreateProfileInputNameView> {
+class _CreateProfileInputNameViewState extends State<CreateProfileInputNameView>
+    with RouteAware, WidgetsBindingObserver {
   final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    routeObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPop() {
+    context.read<InputNameCubit>().trackProfileName();
+  }
+
+  @override
+  void didPushNext() {
+    context.read<InputNameCubit>().trackProfileName();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused &&
+        RouteTracker.currentRouteName == AppRouteNames.createProfileInputName) {
+      context.read<InputNameCubit>().trackProfileName();
+    }
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     void handleContinue() {
+      context.read<InputNameCubit>().onContinueClicked();
       context.push(
         '${AppRoutePaths.createProfileInputDateOfBirth}?name=${_nameController.text.trim()}',
       );
     }
 
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(
+        onBackPressed: () {
+          context.read<InputNameCubit>().onBackClicked();
+          context.pop();
+        },
+      ),
       body: KeyboardDismisser(
         child: SafeArea(
           top: false,

@@ -29,7 +29,10 @@ class ListProfile extends StatelessWidget {
   }
 
   void _addProfilePressed(BuildContext context) {
-    context.push(AppRoutePaths.createProfileInputName);
+    context.pushNamed(
+      AppRouteNames.createProfileInputName,
+      queryParameters: {'source': 'list_profile'},
+    );
   }
 
   void _profilePressed(BuildContext context, int profileId) {
@@ -51,7 +54,10 @@ class ListProfile extends StatelessWidget {
         context,
       ).translate('app.list_profile.create_profile_dialog.primary_action_text'),
       onPrimaryAction: () {
-        context.push(AppRoutePaths.createProfileInputName);
+        context.pushNamed(
+          AppRouteNames.createProfileInputName,
+          queryParameters: {'source': 'list_profile'},
+        );
       },
       isCloseable: false,
       canPopOnBack: false,

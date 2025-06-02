@@ -94,6 +94,9 @@ class _SignUpState extends State<SignUp>
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _pageController.dispose();
+    _passwordFocusNode.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
