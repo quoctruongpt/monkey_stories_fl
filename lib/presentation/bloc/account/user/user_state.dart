@@ -1,5 +1,15 @@
 part of 'user_cubit.dart';
 
+enum AccountType {
+  unknown('unknown'),
+  trial('trial'),
+  verified('verified');
+
+  final String value;
+
+  const AccountType(this.value);
+}
+
 class UserState extends Equatable {
   // Thông tin người dùng
   final UserEntity? user;
@@ -13,11 +23,14 @@ class UserState extends Equatable {
   // Đang trong luồng đi gán thông tin khi đã mua sản phẩm
   final bool isPurchasing;
 
+  final AccountType accountType;
+
   const UserState({
     this.user,
     this.purchasedInfo,
     this.syncUserProfiles,
     this.isPurchasing = false,
+    this.accountType = AccountType.unknown,
   });
 
   UserState copyWith({
@@ -26,6 +39,7 @@ class UserState extends Equatable {
     SyncUserProfilesEntity? syncUserProfiles,
     bool? isClear,
     bool? isPurchasing,
+    AccountType? accountType,
   }) {
     return UserState(
       user: isClear == true ? null : user ?? this.user,
@@ -34,6 +48,10 @@ class UserState extends Equatable {
       syncUserProfiles:
           isClear == true ? null : syncUserProfiles ?? this.syncUserProfiles,
       isPurchasing: isPurchasing ?? this.isPurchasing,
+      accountType:
+          isClear == true
+              ? AccountType.unknown
+              : accountType ?? this.accountType,
     );
   }
 
@@ -43,6 +61,7 @@ class UserState extends Equatable {
     purchasedInfo,
     isPurchasing,
     syncUserProfiles,
+    accountType,
   ];
 
   UserState fromJson(Map<String, dynamic> json) {
@@ -52,6 +71,7 @@ class UserState extends Equatable {
       syncUserProfiles: SyncUserProfilesEntity.fromJson(
         json['syncUserProfiles'],
       ),
+      accountType: AccountType.values.byName(json['accountType']),
     );
   }
 
@@ -60,6 +80,7 @@ class UserState extends Equatable {
       'user': user?.toJson(),
       'purchasedInfo': purchasedInfo?.toJson(),
       'syncUserProfiles': syncUserProfiles?.toJson(),
+      'accountType': accountType.value,
     };
   }
 }

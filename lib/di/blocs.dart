@@ -25,7 +25,17 @@ import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_useca
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -100,9 +110,18 @@ void initBlocDependencies() {
   sl.registerFactory(() => FloatButtonCubit());
 
   // Create Profile Blocs/Cubits
-  sl.registerFactory(() => InputNameCubit(profileCubit: sl<ProfileCubit>()));
+  sl.registerFactory(
+    () => InputNameCubit(
+      profileCubit: sl<ProfileCubit>(),
+      msProfileNameTrackingUsecase: sl<MsProfileNameTrackingUsecase>(),
+    ),
+  );
   sl.registerFactory(() => ChooseYearOfBirthCubit());
-  sl.registerFactory(() => ChooseLevelCubit());
+  sl.registerFactory(
+    () => ChooseLevelCubit(
+      msSelectLevelTrackingUsecase: sl<MsSelectLevelTrackingUsecase>(),
+    ),
+  );
   sl.registerFactory(
     () => CreateProfileLoadingCubit(profileCubit: sl<ProfileCubit>()),
   );
@@ -115,6 +134,7 @@ void initBlocDependencies() {
       profileCubit: sl<ProfileCubit>(),
       appCubit: sl<AppCubit>(),
       saveFcmUsecase: sl<SaveFcmUsecase>(),
+      setUserUsecase: sl<SetUserUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -127,6 +147,7 @@ void initBlocDependencies() {
       restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
       profileCubit: sl<ProfileCubit>(),
       verifyCodUserCrmUsecase: sl<VerifyCodUserCrmUseCase>(),
+      msSignInTrackingUsecase: sl<MsSignInTrackingUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -137,6 +158,8 @@ void initBlocDependencies() {
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
       appCubit: sl<AppCubit>(),
       getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msSignInPopupWarningUsecase: sl<MsSignInPopupWarningUsecase>(),
+      msSignUpTrackingUsecase: sl<MsSignUpTrackingUsecase>(),
     ),
   );
 
@@ -187,6 +210,14 @@ void initBlocDependencies() {
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
       getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msChangePasswordMethodTrackingUsecase:
+          sl<MsChangePasswordMethodTrackingUsecase>(),
+      userCubit: sl<UserCubit>(),
+      msChangePasswordSentOTPTrackingUsecase:
+          sl<MsChangePasswordSentOTPTrackingUseCase>(),
+      msChangePasswordConfirmOTPTrackingUsecase:
+          sl<MsChangePasswordConfirmOTPTrackingUseCase>(),
+      msUpdatePasswordTrackingUsecase: sl<MsUpdatePasswordTrackingUseCase>(),
     ),
   );
 

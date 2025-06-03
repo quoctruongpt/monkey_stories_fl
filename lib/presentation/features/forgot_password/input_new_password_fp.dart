@@ -8,12 +8,74 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/lottie_utils.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/password_input_widget.dart';
 
-class InputNewPasswordFp extends StatelessWidget {
+class InputNewPasswordFp extends StatefulWidget {
   const InputNewPasswordFp({super.key});
+
+  @override
+  State<InputNewPasswordFp> createState() => _InputNewPasswordFpState();
+}
+
+class _InputNewPasswordFpState extends State<InputNewPasswordFp>
+    with RouteAware, WidgetsBindingObserver {
+  ForgotPasswordCubit? _forgotPasswordCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _forgotPasswordCubit = context.read<ForgotPasswordCubit>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    forgotPasswordRouteObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPush() {
+    _forgotPasswordCubit?.onStartUpdatePassword();
+  }
+
+  @override
+  void didPop() {
+    _forgotPasswordCubit?.onUpdatePasswordBack();
+    _forgotPasswordCubit?.onEndUpdatePassword();
+    _forgotPasswordCubit?.trackUpdatePassword();
+  }
+
+  @override
+  void didPopNext() {
+    _forgotPasswordCubit?.onStartUpdatePassword();
+  }
+
+  @override
+  void didPushNext() {
+    _forgotPasswordCubit?.onEndUpdatePassword();
+    _forgotPasswordCubit?.trackUpdatePassword();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused &&
+        ModalRoute.of(context)?.settings.name ==
+            AppRouteNames.inputNewPasswordFp) {
+      _forgotPasswordCubit?.onEndUpdatePassword();
+      _forgotPasswordCubit?.trackUpdatePassword();
+    }
+  }
+
+  @override
+  void dispose() {
+    forgotPasswordRouteObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   Future<void> _onUpdatePassword(BuildContext context) async {
     final result = await context.read<ForgotPasswordCubit>().changePassword();

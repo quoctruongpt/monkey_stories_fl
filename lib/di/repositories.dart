@@ -9,7 +9,8 @@ import 'package:monkey_stories/data/datasources/profile/profile_local_data_sourc
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
-import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
 import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
@@ -30,6 +31,7 @@ import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dar
 import 'package:monkey_stories/data/repositories/auth_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/auth_repository.dart';
 import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
 import 'package:monkey_stories/data/repositories/account_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/account_repository.dart';
 
@@ -78,6 +80,7 @@ void initRepositoryDependencies() {
       accountRemoteDataSource: sl<AccountRemoteDataSource>(),
       systemLocalDataSource: sl<SystemLocalDataSource>(),
       settingsLocalDataSource: sl<SettingsLocalDataSource>(),
+      accountLocalDataSource: sl<AccountLocalDataSource>(),
     ),
   );
 
@@ -153,8 +156,10 @@ void initRepositoryDependencies() {
   // Tracking
   sl.registerLazySingleton<TrackingRepository>(
     () => TrackingRepositoryImpl(
-      trackingRemoteDataSource: sl<TrackingRemoteDataSource>(),
+      airbridgeRemoteDataSource: sl<AirbridgeRemoteDataSource>(),
       notificationRemoteDataSource: sl<NotificationRemoteDataSource>(),
+      trackingLocalDataSource: sl<TrackingLocalDataSource>(),
+      kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
     ),
   );
   // Add other repository registrations here...

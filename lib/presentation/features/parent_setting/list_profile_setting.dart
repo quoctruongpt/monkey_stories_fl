@@ -16,7 +16,10 @@ class ListProfileSetting extends StatelessWidget {
   const ListProfileSetting({super.key});
 
   void _addProfilePressed(BuildContext context) {
-    context.push(AppRoutePaths.createProfileInputName);
+    context.pushNamed(
+      AppRouteNames.createProfileInputName,
+      queryParameters: {'source': 'add_profile'},
+    );
   }
 
   void _profilePressed(BuildContext context, int profileId) {

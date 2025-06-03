@@ -15,13 +15,15 @@ import 'package:monkey_stories/data/datasources/profile/profile_local_data_sourc
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
-import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Auth Datasources
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
 
 // Other App Features Datasources
 import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
@@ -57,7 +59,9 @@ void initDatasourceDependencies() {
   sl.registerLazySingleton<AccountRemoteDataSource>(
     () => AccountRemoteDataSourceImpl(dio: sl<Dio>()),
   );
-
+  sl.registerLazySingleton<AccountLocalDataSource>(
+    () => AccountLocalDataSourceImpl(prefs: sl<SharedPreferences>()),
+  );
   // Other App Features (Device, Settings, System)
   sl.registerLazySingleton<DeviceLocalDataSource>(
     () => DeviceLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
@@ -135,8 +139,14 @@ void initDatasourceDependencies() {
   );
 
   // Tracking
-  sl.registerLazySingleton<TrackingRemoteDataSource>(
-    () => TrackingRemoteDataSourceImpl(),
+  sl.registerLazySingleton<AirbridgeRemoteDataSource>(
+    () => AirbridgeRemoteDataSourceImpl(),
+  );
+  sl.registerLazySingleton<TrackingLocalDataSource>(
+    () => TrackingLocalDataSourceImpl(
+      profileLocalDataSource: sl<ProfileLocalDataSource>(),
+      accountLocalDataSource: sl<AccountLocalDataSource>(),
+    ),
   );
 
   // Add other datasource registrations here...

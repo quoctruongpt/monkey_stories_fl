@@ -38,6 +38,27 @@ final logger = Logger('router');
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+class RouteTracker extends NavigatorObserver {
+  static String? currentRouteName;
+
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    currentRouteName =
+        route.settings.name ??
+        route.settings.name ??
+        route.settings.arguments?.toString();
+    super.didPush(route, previousRoute);
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    currentRouteName =
+        previousRoute?.settings.name ??
+        previousRoute?.settings.arguments?.toString();
+    super.didPop(route, previousRoute);
+  }
+}
+
 final GlobalKey<NavigatorState> _reportTabNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'reportTab');
 final GlobalKey<NavigatorState> _vipTabNavigatorKey = GlobalKey<NavigatorState>(
@@ -47,7 +68,7 @@ final GlobalKey<NavigatorState> _settingTabNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'settingTab');
 
 final GoRouter router = GoRouter(
-  observers: [routeObserver],
+  observers: [routeObserver, RouteTracker()],
   navigatorKey: navigatorKey,
   initialLocation: AppRoutePaths.splash,
   routes: <RouteBase>[
@@ -143,9 +164,10 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.createProfileInputName,
       name: AppRouteNames.createProfileInputName,
       builder: (context, state) {
-        return const OrientationWrapper(
+        final String source = state.uri.queryParameters['source'] ?? '';
+        return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: CreateProfileInputNameScreen(),
+          child: CreateProfileInputNameScreen(source: source),
         );
       },
     ),
@@ -154,9 +176,13 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.createProfileInputDateOfBirth,
       builder: (context, state) {
         final String name = state.uri.queryParameters['name'] ?? '';
+        final String source = state.uri.queryParameters['source'] ?? '';
         return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: CreateProfileChooseYearOfBirthScreen(name: name),
+          child: CreateProfileChooseYearOfBirthScreen(
+            name: name,
+            source: source,
+          ),
         );
       },
     ),
@@ -168,9 +194,14 @@ final GoRouter router = GoRouter(
         final int yearOfBirth = int.parse(
           state.uri.queryParameters['yearOfBirth'] ?? '0',
         );
+        final String source = state.uri.queryParameters['source'] ?? '';
         return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: ChooseLevelScreen(name: name, yearOfBirth: yearOfBirth),
+          child: ChooseLevelScreenProvider(
+            name: name,
+            yearOfBirth: yearOfBirth,
+            source: source,
+          ),
         );
       },
     ),

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/account/purchased_info_entity.dart';
 import 'package:monkey_stories/domain/entities/account/sync_user_entity.dart';
@@ -9,6 +10,7 @@ import 'package:monkey_stories/domain/entities/account/user_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 
@@ -22,6 +24,7 @@ class UserCubit extends HydratedCubit<UserState> {
   final ProfileCubit _profileCubit;
   final AppCubit _appCubit;
   final SaveFcmUsecase _saveFcmUsecase;
+  final SetUserUsecase _setUserUsecase;
   // Khởi tạo với trạng thái ban đầu
   UserCubit({
     required LogoutUsecase logoutUsecase,
@@ -29,11 +32,13 @@ class UserCubit extends HydratedCubit<UserState> {
     required ProfileCubit profileCubit,
     required AppCubit appCubit,
     required SaveFcmUsecase saveFcmUsecase,
+    required SetUserUsecase setUserUsecase,
   }) : _logoutUsecase = logoutUsecase,
        _getLoadUpdateUsecase = getLoadUpdateUsecase,
        _profileCubit = profileCubit,
        _appCubit = appCubit,
        _saveFcmUsecase = saveFcmUsecase,
+       _setUserUsecase = setUserUsecase,
        super(const UserState());
 
   void updateUser(UserEntity user) {
@@ -98,6 +103,22 @@ class UserCubit extends HydratedCubit<UserState> {
           updateSyncUserProfiles(loadUpdate.syncUser.profiles!);
           _appCubit.loadInitialSettings();
           _saveFcmUsecase.call(NoParams());
+          _setUserUsecase.call(
+            SetUserParams(
+              userId: state.user!.userId.toString(),
+              email: state.user!.email,
+              phone: state.user!.phone,
+              name: state.user!.name,
+            ),
+          );
+          emit(
+            state.copyWith(
+              accountType:
+                  loadUpdate.user.loginType == LoginType.skip
+                      ? AccountType.trial
+                      : AccountType.verified,
+            ),
+          );
         },
       );
     } catch (e) {

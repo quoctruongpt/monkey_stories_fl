@@ -13,7 +13,10 @@ class SignUpSuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     void handleContinue() {
       if (context.read<ProfileCubit>().state.profiles.isEmpty) {
-        context.push(AppRoutePaths.createProfileInputName);
+        context.pushNamed(
+          AppRouteNames.createProfileInputName,
+          queryParameters: {'source': 'sign_up'},
+        );
       } else {
         context.push(AppRoutePaths.home);
       }

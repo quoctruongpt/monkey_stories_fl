@@ -6,6 +6,9 @@ import 'package:monkey_stories/domain/repositories/notification_repository.dart'
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
@@ -78,6 +81,13 @@ import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.da
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
 
 final sl = GetIt.instance;
 
@@ -231,5 +241,36 @@ void initUsecaseDependencies() {
     () => RegisterTokenAirbridgeUsecase(
       trackingRepository: sl<TrackingRepository>(),
     ),
+  );
+
+  sl.registerLazySingleton(
+    () => SetUserUsecase(trackingRepository: sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignInTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignInPopupWarningUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignUpTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsProfileNameTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSelectLevelTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordMethodTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordSentOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordConfirmOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdatePasswordTrackingUseCase(sl<TrackingRepository>()),
   );
 }

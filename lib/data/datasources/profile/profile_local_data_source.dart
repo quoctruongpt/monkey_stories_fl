@@ -9,8 +9,9 @@ abstract class ProfileLocalDataSource {
   Future<List<ProfileEntity>> getListProfile();
   Future<void> addProfile(ProfileEntity profile);
   Future<void> clearProfile();
-  Future<void> cacheCurrentProfile(int profileId);
+  Future<void> cacheCurrentProfile(int profileId, int? age);
   Future<int?> getCurrentProfile();
+  Future<int?> getCurrentProfileAge();
 }
 
 class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
@@ -46,12 +47,18 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
   }
 
   @override
-  Future<void> cacheCurrentProfile(int profileId) async {
+  Future<void> cacheCurrentProfile(int profileId, int? age) async {
     await sharedPreferences.setInt(SharedPrefKeys.currentProfile, profileId);
+    await sharedPreferences.setInt(SharedPrefKeys.currentProfileAge, age ?? 0);
   }
 
   @override
   Future<int?> getCurrentProfile() async {
     return sharedPreferences.getInt(SharedPrefKeys.currentProfile);
+  }
+
+  @override
+  Future<int?> getCurrentProfileAge() async {
+    return sharedPreferences.getInt(SharedPrefKeys.currentProfileAge);
   }
 }

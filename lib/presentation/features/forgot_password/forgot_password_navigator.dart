@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/di/blocs.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
 import 'package:monkey_stories/presentation/features/forgot_password/choose_method_fp.dart';
@@ -13,10 +14,44 @@ import 'package:monkey_stories/presentation/features/forgot_password/input_phone
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
 
-class ForgotPasswordNavigator extends StatelessWidget {
+class ForgotPasswordNavigator extends StatefulWidget {
   const ForgotPasswordNavigator({super.key, required this.child});
 
   final Widget child;
+
+  @override
+  State<ForgotPasswordNavigator> createState() =>
+      _ForgotPasswordNavigatorState();
+}
+
+class _ForgotPasswordNavigatorState extends State<ForgotPasswordNavigator>
+    with RouteAware {
+  late final ForgotPasswordCubit _forgotPasswordCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _forgotPasswordCubit = sl<ForgotPasswordCubit>();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute? route = ModalRoute.of(context);
+    routeObserver.subscribe(this, route as PageRoute);
+  }
+
+  @override
+  void didPop() {
+    _forgotPasswordCubit.onEndChooseMethod();
+    _forgotPasswordCubit.trackChooseMethod();
+  }
+
+  @override
+  void dispose() {
+    forgotPasswordRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
 
   void _showOtpBlockDialog(BuildContext context) {
     showCustomNoticeDialog(
@@ -32,11 +67,11 @@ class ForgotPasswordNavigator extends StatelessWidget {
         context,
       ).translate('app.forgot_password.i_understand'),
       onPrimaryAction: () {
-        context.read<ForgotPasswordCubit>().hideOtpBlockDialog();
+        _forgotPasswordCubit.hideOtpBlockDialog();
         context.pop();
       },
       onClose: () {
-        context.read<ForgotPasswordCubit>().hideOtpBlockDialog();
+        _forgotPasswordCubit.hideOtpBlockDialog();
         context.pop();
       },
     );
@@ -44,25 +79,32 @@ class ForgotPasswordNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<ForgotPasswordCubit>(),
-      child: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
-        listenWhen:
-            (previous, current) =>
-                previous.isShowOtpBlockDialog != current.isShowOtpBlockDialog,
-        listener: (context, state) {
-          if (state.isShowOtpBlockDialog) {
-            _showOtpBlockDialog(context);
-          }
-        },
-        child: child,
+    return PopScope(
+      canPop: false,
+      child: BlocProvider.value(
+        value: _forgotPasswordCubit,
+        child: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.isShowOtpBlockDialog != current.isShowOtpBlockDialog,
+          listener: (context, state) {
+            if (state.isShowOtpBlockDialog) {
+              _showOtpBlockDialog(context);
+            }
+          },
+          child: widget.child,
+        ),
       ),
     );
   }
 }
 
+final RouteObserver<PageRoute> forgotPasswordRouteObserver =
+    RouteObserver<PageRoute>();
+
 final ShellRoute forgotPasswordRoutes = ShellRoute(
   builder: (context, state, child) => ForgotPasswordNavigator(child: child),
+  observers: [forgotPasswordRouteObserver],
   routes: [
     GoRoute(
       path: AppRoutePaths.chooseMethodFp,

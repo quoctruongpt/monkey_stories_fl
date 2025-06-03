@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
@@ -13,11 +14,12 @@ class AccountRepositoryImpl extends AccountRepository {
   final AccountRemoteDataSource accountRemoteDataSource;
   final SystemLocalDataSource systemLocalDataSource;
   final SettingsLocalDataSource settingsLocalDataSource;
-
+  final AccountLocalDataSource accountLocalDataSource;
   AccountRepositoryImpl({
     required this.accountRemoteDataSource,
     required this.systemLocalDataSource,
     required this.settingsLocalDataSource,
+    required this.accountLocalDataSource,
   });
 
   @override
@@ -40,6 +42,11 @@ class AccountRepositoryImpl extends AccountRepository {
             response.data!.syncUser.schedule!,
           );
         }
+      }
+
+      final userInfo = response.data?.toEntity();
+      if (userInfo != null) {
+        await accountLocalDataSource.cacheUserInfo(userInfo);
       }
 
       return Right(response.data?.toEntity());

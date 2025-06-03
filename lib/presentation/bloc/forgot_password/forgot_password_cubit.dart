@@ -14,6 +14,11 @@ import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'forgot_password_state.dart';
 
@@ -23,23 +28,87 @@ const otpResendTime = 60;
 const otpWrongCount = 5;
 const otpBlockTime = 300000;
 
+class ChooseMethodTrackingData {
+  MsChangePasswordMethodClickType clickType =
+      MsChangePasswordMethodClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+}
+
+class SentOtpTrackingData {
+  MsChangePasswordSentOTPClickType clickType =
+      MsChangePasswordSentOTPClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+  String? errorMessage;
+  bool isSuccessful = false;
+}
+
+class ConfirmOtpTrackingData {
+  MsChangePasswordConfirmOTPClickType clickType =
+      MsChangePasswordConfirmOTPClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+  String? errorMessage;
+  bool isSuccessful = false;
+  int countTimeVerifyOTP = 0;
+}
+
+class UpdatePasswordTrackingData {
+  MsUpdatePasswordClickType clickType = MsUpdatePasswordClickType.none;
+  int timeStart = 0;
+  int timeEnd = 0;
+  bool isSuccessful = false;
+  String? errorMessage;
+}
+
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final VerifyOtpUsecase _verifyOtpUsecase;
   final SendOtpUsecase _sendOtpUsecase;
   final ChangePasswordUsecase _changePasswordUsecase;
   final GetCountryCodeUsecase _getCountryCodeUsecase;
+  final MsChangePasswordMethodTrackingUsecase
+  _msChangePasswordMethodTrackingUsecase;
+  final MsChangePasswordSentOTPTrackingUseCase
+  _msChangePasswordSentOTPTrackingUsecase;
+  final MsChangePasswordConfirmOTPTrackingUseCase
+  _msChangePasswordConfirmOTPTrackingUsecase;
+  final MsUpdatePasswordTrackingUseCase _msUpdatePasswordTrackingUsecase;
+  final UserCubit _userCubit;
 
   Timer? _otpResendTimer;
   String _tokenChangePassword = '';
+
+  final _chooseMethodTrackingData = ChooseMethodTrackingData();
+  final _sentOtpTrackingData = SentOtpTrackingData();
+  final _confirmOtpTrackingData = ConfirmOtpTrackingData();
+  final _updatePasswordTrackingData = UpdatePasswordTrackingData();
+
   ForgotPasswordCubit({
     required VerifyOtpUsecase verifyOtpUsecase,
     required SendOtpUsecase sendOtpUsecase,
     required ChangePasswordUsecase changePasswordUsecase,
     required GetCountryCodeUsecase getCountryCodeUsecase,
+    required MsChangePasswordMethodTrackingUsecase
+    msChangePasswordMethodTrackingUsecase,
+    required UserCubit userCubit,
+    required MsChangePasswordSentOTPTrackingUseCase
+    msChangePasswordSentOTPTrackingUsecase,
+    required MsChangePasswordConfirmOTPTrackingUseCase
+    msChangePasswordConfirmOTPTrackingUsecase,
+    required MsUpdatePasswordTrackingUseCase msUpdatePasswordTrackingUsecase,
   }) : _verifyOtpUsecase = verifyOtpUsecase,
        _sendOtpUsecase = sendOtpUsecase,
        _changePasswordUsecase = changePasswordUsecase,
        _getCountryCodeUsecase = getCountryCodeUsecase,
+       _msChangePasswordMethodTrackingUsecase =
+           msChangePasswordMethodTrackingUsecase,
+       _msChangePasswordSentOTPTrackingUsecase =
+           msChangePasswordSentOTPTrackingUsecase,
+       _msChangePasswordConfirmOTPTrackingUsecase =
+           msChangePasswordConfirmOTPTrackingUsecase,
+       _msUpdatePasswordTrackingUsecase = msUpdatePasswordTrackingUsecase,
+       _userCubit = userCubit,
        super(ForgotPasswordState()) {
     _initCountryCodeByIp();
   }
@@ -52,6 +121,11 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   }
 
   void chooseMethod(ForgotPasswordType method) {
+    _chooseMethodTrackingData.clickType =
+        method == ForgotPasswordType.email
+            ? MsChangePasswordMethodClickType.viaEmail
+            : MsChangePasswordMethodClickType.viaSms;
+
     emit(state.copyWith(method: method));
   }
 
@@ -142,6 +216,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
       result.fold(
         (error) {
+          _sentOtpTrackingData.errorMessage = error.message;
           switch (error.code) {
             case AuthConstants.userNotFoundCode:
               emit(state.copyWith(isShowNotRegisteredDialog: true));
@@ -159,8 +234,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         },
       );
 
+      _sentOtpTrackingData.isSuccessful = isSuccess;
       return isSuccess;
     } catch (e) {
+      _sentOtpTrackingData.errorMessage = e.toString();
       return false;
     } finally {
       emit(state.copyWith(isLoading: false));
@@ -169,6 +246,10 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   Future<bool> verifyOtp() async {
     try {
+      _confirmOtpTrackingData.clickType =
+          MsChangePasswordConfirmOTPClickType.confirm;
+      _confirmOtpTrackingData.countTimeVerifyOTP += 1;
+
       bool needsReset = state.otpBlockTime != null && canVerifyOtp();
 
       if (needsReset) {
@@ -191,6 +272,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
       result.fold(
         (error) {
+          _confirmOtpTrackingData.errorMessage = error.message;
           final newOtpWrongCount = state.otpWrongCount + 1;
           int? newOtpBlockTime = state.otpBlockTime;
           if (newOtpWrongCount >= otpWrongCount) {
@@ -210,6 +292,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
           isSuccess = true;
         },
       );
+
+      _confirmOtpTrackingData.isSuccessful = isSuccess;
 
       return isSuccess;
     } catch (e) {
@@ -248,6 +332,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
   Future<bool> changePassword() async {
     try {
+      _updatePasswordTrackingData.clickType = MsUpdatePasswordClickType.update;
+
       emit(state.copyWith(isLoading: true));
       final result = await _changePasswordUsecase(
         ChangePasswordParams(
@@ -272,6 +358,7 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
 
       result.fold(
         (error) {
+          _updatePasswordTrackingData.errorMessage = error.toString();
           isSuccess = false;
         },
         (r) {
@@ -279,8 +366,11 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         },
       );
 
+      _updatePasswordTrackingData.isSuccessful = isSuccess;
+
       return isSuccess;
     } catch (e) {
+      _updatePasswordTrackingData.errorMessage = e.toString();
       return false;
     } finally {
       emit(
@@ -295,6 +385,132 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         ),
       );
     }
+  }
+
+  void onChooseMethodBack() {
+    _chooseMethodTrackingData.clickType = MsChangePasswordMethodClickType.back;
+  }
+
+  void onInputPhoneBack() {
+    _sentOtpTrackingData.clickType = MsChangePasswordSentOTPClickType.back;
+  }
+
+  void onUpdatePasswordBack() {
+    _updatePasswordTrackingData.clickType = MsUpdatePasswordClickType.back;
+  }
+
+  void onConfirmPhone() {
+    _sentOtpTrackingData.clickType = MsChangePasswordSentOTPClickType.sendOTP;
+  }
+
+  void onInputOtpBack() {
+    _confirmOtpTrackingData.clickType =
+        MsChangePasswordConfirmOTPClickType.back;
+  }
+
+  void onResendOtp() {
+    _confirmOtpTrackingData.clickType =
+        MsChangePasswordConfirmOTPClickType.resend;
+  }
+
+  void onStartChooseMethod() {
+    _chooseMethodTrackingData.timeStart = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndChooseMethod() {
+    _chooseMethodTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onStartSentOtp() {
+    _sentOtpTrackingData.timeStart = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndSentOtp() {
+    _sentOtpTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onStartConfirmOtp() {
+    _confirmOtpTrackingData.timeStart = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndConfirmOtp() {
+    _confirmOtpTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onStartUpdatePassword() {
+    _updatePasswordTrackingData.timeStart =
+        DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void onEndUpdatePassword() {
+    _updatePasswordTrackingData.timeEnd = DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void trackChooseMethod() {
+    _msChangePasswordMethodTrackingUsecase.call(
+      MsChangePasswordMethodTrackingParams(
+        clickType: _chooseMethodTrackingData.clickType,
+        timeOnScreen:
+            ((_chooseMethodTrackingData.timeEnd -
+                        _chooseMethodTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        haveOccurredError: false,
+        errorMessage: '',
+        accountType: _userCubit.state.accountType,
+      ),
+    );
+  }
+
+  void trackSentOtp() {
+    _msChangePasswordSentOTPTrackingUsecase.call(
+      MsChangePasswordSentOTPTrackingParams(
+        clickType: _sentOtpTrackingData.clickType,
+        timeOnScreen:
+            ((_sentOtpTrackingData.timeEnd - _sentOtpTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        accountType: _userCubit.state.accountType,
+        isSuccessful: _sentOtpTrackingData.isSuccessful,
+        haveOccurredError: _sentOtpTrackingData.errorMessage != null,
+        errorMessage: _sentOtpTrackingData.errorMessage,
+      ),
+    );
+  }
+
+  void trackConfirmOtp() {
+    _msChangePasswordConfirmOTPTrackingUsecase.call(
+      MsChangePasswordConfirmOTPTrackingParams(
+        clickType: _confirmOtpTrackingData.clickType,
+        timeOnScreen:
+            ((_confirmOtpTrackingData.timeEnd -
+                        _confirmOtpTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        accountType: _userCubit.state.accountType,
+        haveVerifiedOTPSuccessfully: _confirmOtpTrackingData.isSuccessful,
+        countTimeVerifyOTP: _confirmOtpTrackingData.countTimeVerifyOTP,
+        haveOccurredError: _confirmOtpTrackingData.errorMessage != null,
+        errorMessage: _confirmOtpTrackingData.errorMessage,
+      ),
+    );
+  }
+
+  void trackUpdatePassword() {
+    _msUpdatePasswordTrackingUsecase.call(
+      MsUpdatePasswordTrackingParams(
+        clickType: _updatePasswordTrackingData.clickType,
+        accountType: _userCubit.state.accountType,
+        timeOnScreen:
+            ((_updatePasswordTrackingData.timeEnd -
+                        _updatePasswordTrackingData.timeStart) /
+                    1000)
+                .ceil(),
+        haveOccurredError: _updatePasswordTrackingData.errorMessage != null,
+        errorMessage: _updatePasswordTrackingData.errorMessage,
+        isSuccessful: _updatePasswordTrackingData.isSuccessful,
+      ),
+    );
   }
 
   @override
