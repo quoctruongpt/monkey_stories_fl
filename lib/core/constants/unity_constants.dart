@@ -17,6 +17,7 @@ class MessageTypes {
   static const String coin = 'coin';
   static const String user = 'user';
   static const String openListProfile = 'open_list_profile';
+  static const String buyNow = 'buy_now';
 }
 
 class Orientation {

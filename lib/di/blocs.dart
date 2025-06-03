@@ -101,6 +101,7 @@ import 'package:monkey_stories/presentation/bloc/change_password/change_password
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -318,6 +319,10 @@ void initBlocDependencies() {
   );
 
   sl.registerFactory(() => ReportCubit(profileCubit: sl<ProfileCubit>()));
+
+  sl.registerFactory(
+    () => UnityScreenCubit(purchasedCubit: sl<PurchasedCubit>()),
+  );
 
   // Add other Bloc/Cubit registrations here...
 }

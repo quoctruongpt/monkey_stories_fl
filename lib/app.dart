@@ -230,10 +230,13 @@ class _AppBuilderState extends State<AppBuilder>
                     context.go(AppRoutePaths.purchasedSuccess);
                   } else if (state.errorMessage != null) {
                     try {
-                      showLeaveContactDialog(
-                        navigatorKey.currentContext!,
-                        () => context.go(AppRoutePaths.home),
-                      );
+                      final unityState = context.read<UnityCubit>().state;
+                      if (!unityState.isUnityVisible) {
+                        showLeaveContactDialog(
+                          navigatorKey.currentContext!,
+                          () => context.go(AppRoutePaths.home),
+                        );
+                      }
                     } catch (e) {
                       logger.severe('Error showing dialog: $e');
                     }

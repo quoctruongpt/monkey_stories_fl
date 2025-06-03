@@ -2,23 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/widgets/profile/list_profile_dialog.dart';
 
 final logger = Logger('UnityScreen');
 
-class UnityScreen extends StatefulWidget {
+class UnityScreen extends StatelessWidget {
   const UnityScreen({super.key});
 
   @override
-  State<UnityScreen> createState() => _UnityScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<UnityScreenCubit>(),
+      child: const UnityScreenView(),
+    );
+  }
 }
 
-class _UnityScreenState extends State<UnityScreen> with RouteAware {
+class UnityScreenView extends StatefulWidget {
+  const UnityScreenView({super.key});
+
+  @override
+  State<UnityScreenView> createState() => _UnityScreenViewState();
+}
+
+class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
   late final UnityCubit _unityCubit;
 
   @override
@@ -28,15 +44,23 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
     _unityCubit.registerHandler(MessageTypes.closeUnity, (
       UnityMessageEntity message,
     ) async {
-      context.pop();
+      context.go(AppRoutePaths.home);
       return null;
     });
+
     _unityCubit.registerHandler(MessageTypes.openListProfile, (
       UnityMessageEntity message,
     ) async {
       context.read<DialogCubit>().showDialog(
         buildListProfileDialogWidget(context),
       );
+      return null;
+    });
+
+    _unityCubit.registerHandler(MessageTypes.buyNow, (
+      UnityMessageEntity message,
+    ) async {
+      _handleBuyNow();
       return null;
     });
   }
@@ -86,5 +110,30 @@ class _UnityScreenState extends State<UnityScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return const PopScope(canPop: false, child: SizedBox.shrink());
+  }
+
+  void _handleBuyNow() {
+    final dialogKey = UniqueKey();
+
+    void closeDialog() {
+      try {
+        BlocProvider.of<DialogCubit>(
+          context,
+          listen: false,
+        ).dismissDialogByKey(dialogKey);
+      } catch (e) {
+        logger.severe('Error dismissing ListProfileDialog: $e');
+      }
+    }
+
+    context.read<DialogCubit>().showDialog(
+      buildVerifyDialogWidget(
+        context: context,
+        onSuccess: () {
+          context.read<UnityScreenCubit>().buyNow();
+          closeDialog();
+        },
+      ),
+    );
   }
 }
