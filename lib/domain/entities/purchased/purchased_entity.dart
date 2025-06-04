@@ -28,6 +28,7 @@ class PurchasedPackage extends PackageItem {
     required this.localPriceForOneMonth,
     required this.appliedSaleOff,
     required this.canUseTrial,
+    required super.isBestSeller,
   });
 
   factory PurchasedPackage.fromJson(Map<String, dynamic> json) {
@@ -47,6 +48,7 @@ class PurchasedPackage extends PackageItem {
       type: PackageType.fromValue(json['type']),
       isSubscription: json['isSubscription'],
       canUseTrial: json['canUseTrial'],
+      isBestSeller: json['isBestSeller'],
     );
   }
 
@@ -67,6 +69,7 @@ class PurchasedPackage extends PackageItem {
       'type': type.value,
       'isSubscription': isSubscription,
       'canUseTrial': canUseTrial,
+      'isBestSeller': isBestSeller,
     };
   }
 }

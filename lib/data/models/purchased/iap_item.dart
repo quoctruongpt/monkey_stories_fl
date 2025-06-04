@@ -41,6 +41,7 @@ class IAPItemFlutter {
       isSubscription: localPackage.isSubscription,
       appliedSaleOff: appliedSaleOff,
       canUseTrial: canUseTrial,
+      isBestSeller: localPackage.isBestSeller,
     );
   }
 

@@ -18,6 +18,7 @@ class MessageTypes {
   static const String user = 'user';
   static const String openListProfile = 'open_list_profile';
   static const String buyNow = 'buy_now';
+  static const String goToPurchase = 'go_to_purchase';
 }
 
 class Orientation {

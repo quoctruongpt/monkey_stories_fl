@@ -95,8 +95,21 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
             child: const Text('Close'),
           ),
         ),
-
-        const SizedBox.shrink(),
+        Positioned(
+          top: 250,
+          left: 0,
+          right: 0,
+          child: FilledButton(
+            onPressed: () {
+              _handleUnityMessage(
+                const JsonEncoder.withIndent(
+                  '',
+                ).convert({'type': MessageTypes.goToPurchase, 'payload': null}),
+              );
+            },
+            child: const Text('Close'),
+          ),
+        ),
 
         BlocBuilder<PurchasedCubit, PurchasedState>(
           builder: (context, state) {

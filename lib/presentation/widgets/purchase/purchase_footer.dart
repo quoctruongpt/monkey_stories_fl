@@ -39,7 +39,7 @@ class PurchaseFooter extends StatelessWidget {
         Text(
           description,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.azureColor,
+            color: AppTheme.textColor,
             fontWeight: FontWeight.w600,
           ),
         ),

@@ -63,6 +63,20 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
       _handleBuyNow();
       return null;
     });
+
+    _unityCubit.registerHandler(MessageTypes.goToPurchase, (
+      UnityMessageEntity message,
+    ) async {
+      context.read<DialogCubit>().showDialog(
+        buildVerifyDialogWidget(
+          context: context,
+          onSuccess: () {
+            context.go(AppRoutePaths.purchased);
+          },
+        ),
+      );
+      return null;
+    });
   }
 
   @override
@@ -86,6 +100,7 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
 
   @override
   void didPopNext() {
+    logger.info('didPopNext');
     _unityCubit.showUnity();
   }
 
@@ -109,6 +124,7 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
+    logger.info(context.read<UnityCubit>().state.isUnityVisible);
     return const PopScope(canPop: false, child: SizedBox.shrink());
   }
 

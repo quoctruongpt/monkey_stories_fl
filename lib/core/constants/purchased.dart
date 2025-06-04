@@ -82,6 +82,7 @@ class PackageItem {
   final SaleOff saleOff;
   final PackageType type;
   final bool isSubscription;
+  final bool isBestSeller;
 
   const PackageItem({
     required this.id,
@@ -89,6 +90,7 @@ class PackageItem {
     required this.saleOff,
     required this.type,
     required this.isSubscription,
+    this.isBestSeller = false,
   });
 
   double getSaleOff(String countryCode) {
@@ -116,30 +118,29 @@ class Purchase {
     PackageItem(
       id: sixMonthId,
       name: '6 tháng',
-      saleOff: SaleOff(vn: 0.4, other: 0.4),
+      saleOff: SaleOff(other: 0),
       type: PackageType.sixMonth,
       isSubscription: true,
     ),
     PackageItem(
       id: oneYearId,
       name: '1 năm',
-      saleOff: SaleOff(vn: 0.4, other: 0.4),
+      saleOff: SaleOff(other: 0.41),
       type: PackageType.oneYear,
       isSubscription: true,
+      isBestSeller: true,
     ),
     PackageItem(
       id: lifetimeId,
       name: 'Trọn đời',
-      saleOff: SaleOff(vn: 0.4, other: 0.4),
+      saleOff: SaleOff(other: 0.5),
       type: PackageType.lifetime,
       isSubscription: false,
     ),
   ];
 
   static PackageItem recommendedPackage() {
-    return packages.firstWhere(
-      (element) => element.type == PackageType.oneYear,
-    );
+    return packages.firstWhere((element) => element.isBestSeller);
   }
 
   static PackageItem getPackageById(String id) {

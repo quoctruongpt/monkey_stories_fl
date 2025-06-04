@@ -30,6 +30,7 @@ class AppRoutePaths {
   static const String onboardLoading = '/onboard_loading';
 
   static const String purchasedSuccess = '/purchased_success';
+  static const String purchased = '/purchased';
 
   static const String inputLicense = '/input_license';
   static const String lastLoginInfo = '/last_login_info';
@@ -91,6 +92,7 @@ class AppRouteNames {
   static const String onboardLoading = 'onboard_loading';
 
   static const String purchasedSuccess = 'purchased_success';
+  static const String purchased = 'purchased';
 
   static const String inputLicense = 'input_license';
   static const String lastLoginInfo = 'last_login_info';

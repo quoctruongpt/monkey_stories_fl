@@ -9,6 +9,12 @@ part 'purchased_view_state.dart';
 
 final logger = Logger('PurchasedViewCubit');
 
+const sortPackages = [
+  PackageType.oneYear,
+  PackageType.lifetime,
+  PackageType.sixMonth,
+];
+
 class PurchasedViewCubit extends Cubit<PurchasedViewState> {
   final PurchasedCubit _purchasedCubit;
   PurchasedViewCubit({required PurchasedCubit purchasedCubit})
@@ -27,6 +33,25 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
             .toList();
 
     logger.info('packages: $packages');
+
+    emit(
+      state.copyWith(
+        packages: packages,
+        selectedPackage: packages.isNotEmpty ? packages.first : null,
+      ),
+    );
+  }
+
+  void getPackages() {
+    final packages =
+        _purchasedCubit.state.products
+            .where((element) => sortPackages.contains(element.type))
+            .toList();
+
+    packages.sort(
+      (a, b) =>
+          sortPackages.indexOf(a.type).compareTo(sortPackages.indexOf(b.type)),
+    );
 
     emit(
       state.copyWith(
