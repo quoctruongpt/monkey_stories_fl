@@ -1,44 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
-import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item_with_discount.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart';
-import 'package:monkey_stories/presentation/widgets/purchase/purchased_content.dart';
-import 'package:monkey_stories/presentation/widgets/purchase/purchased_image.dart';
 
-const listContent = [
-  '6500+ hoạt động truyện tranh, thơ, bài hát, trò chơi tương tác vui nhộn',
-  'Hoạt động cập nhật mới mỗi tuần',
-  'Nội dung phù hợp với từng giai đoạn phát triển của trẻ',
-];
-
-class VipPurchasedProvider extends StatelessWidget {
-  const VipPurchasedProvider({super.key});
+class RenewPlanScreen extends StatelessWidget {
+  const RenewPlanScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<PurchasedViewCubit>()..getPackages(),
-      child: const VipPurchasedScreen(),
+      child: const RenewPlanView(),
     );
   }
 }
 
-class VipPurchasedScreen extends StatelessWidget {
-  const VipPurchasedScreen({super.key});
+class RenewPlanView extends StatelessWidget {
+  const RenewPlanView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
+          appBar: AppBarWidget(
+            showBackButton: false,
+            actions: [
+              IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(
+                  Icons.clear,
+                  color: AppTheme.textColor,
+                  size: 40,
+                ),
+              ),
+            ],
+          ),
+          extendBodyBehindAppBar: true,
           body: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
             builder: (context, viewState) {
               return Column(
@@ -72,10 +79,6 @@ class VipPurchasedScreen extends StatelessWidget {
                                 );
                               },
                             ),
-                            const SizedBox(height: Spacing.md),
-                            const PurchasedContent(),
-                            const SizedBox(height: Spacing.md),
-                            const PurchasedImage(),
                             const SizedBox(height: Spacing.lg),
                           ],
                         ),
@@ -152,15 +155,7 @@ class VipPurchasedScreen extends StatelessWidget {
           ),
         ),
 
-        BlocConsumer<PurchasedCubit, PurchasedState>(
-          listenWhen:
-              (previous, current) =>
-                  previous.isPurchasing != current.isPurchasing,
-          listener: (context, state) {
-            context.read<BottomNavigationCubit>().setBottomNavVisible(
-              !state.isPurchasing,
-            );
-          },
+        BlocBuilder<PurchasedCubit, PurchasedState>(
           builder: (context, state) {
             return state.isPurchasing
                 ? const LoadingOverlay()

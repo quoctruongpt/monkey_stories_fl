@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
@@ -77,7 +79,20 @@ class ExpirationInfo extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'Ngày hết hạn: ${state.purchasedInfo?.isLifetimeUser != true ? DateFormat('dd/MM/yyyy').format(date) : 'Trọn đời'}',
+                                  AppLocalizations.of(context).translate(
+                                    'app.expired.date',
+                                    params: {
+                                      'date':
+                                          state.purchasedInfo?.isLifetimeUser !=
+                                                  true
+                                              ? DateFormat(
+                                                'dd/MM/yyyy',
+                                              ).format(date)
+                                              : AppLocalizations.of(
+                                                context,
+                                              ).translate('lifetime'),
+                                    },
+                                  ),
                                   style: Theme.of(
                                     context,
                                   ).textTheme.bodyMedium?.copyWith(
@@ -87,10 +102,14 @@ class ExpirationInfo extends StatelessWidget {
                                 const SizedBox(height: Spacing.lg),
                                 state.purchasedInfo?.isLifetimeUser != true
                                     ? AppButton.primary(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.pushNamed(
+                                          AppRouteNames.renewPlan,
+                                        );
+                                      },
                                       text: AppLocalizations.of(
                                         context,
-                                      ).translate('Gia hạn sử dụng'),
+                                      ).translate('app.expired.renew'),
                                     )
                                     : const SizedBox.shrink(),
                               ],
@@ -127,8 +146,16 @@ class ExpirationInfo extends StatelessWidget {
                                       data:
                                           state.purchasedInfo?.isLifetimeUser ==
                                                   true
-                                              ? '<p class="text">${AppLocalizations.of(context).translate('Trọn đời')}</p>'
-                                              : '<p class="text">Còn lại</p>\n<p class="number">$remainingDays</p>\n<p class="text">Ngày</p>',
+                                              ? '<p class="text">${AppLocalizations.of(context).translate('lifetime')}</p>'
+                                              : AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.expired.remaining_days',
+                                                params: {
+                                                  'count':
+                                                      remainingDays.toString(),
+                                                },
+                                              ),
                                       style: {
                                         '.text': Style(
                                           color: Colors.white,

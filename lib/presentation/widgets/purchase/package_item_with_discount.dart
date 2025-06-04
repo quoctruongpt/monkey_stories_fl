@@ -90,10 +90,12 @@ class _PackageItemState extends State<PackageItem>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          Wrap(
                             children: [
                               Text(
-                                widget.package.name,
+                                AppLocalizations.of(
+                                  context,
+                                ).translate(widget.package.name),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(width: Spacing.md),
@@ -123,7 +125,7 @@ class _PackageItemState extends State<PackageItem>
                               ? Text(
                                 AppLocalizations.of(
                                   context,
-                                ).translate('7-ngày dùng thử miễn phí'),
+                                ).translate('app.purchased.trial_info'),
                                 style: Theme.of(
                                   context,
                                 ).textTheme.bodyLarge?.copyWith(
@@ -188,7 +190,9 @@ class _PackageItemState extends State<PackageItem>
                             vertical: Spacing.xs,
                           ),
                           child: Text(
-                            AppLocalizations.of(context).translate('Tốt nhất'),
+                            AppLocalizations.of(
+                              context,
+                            ).translate('app.purchased.best_seller'),
                             style: Theme.of(context).textTheme.bodyLarge
                                 ?.copyWith(color: AppTheme.backgroundColor),
                           ),

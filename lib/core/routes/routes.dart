@@ -17,6 +17,7 @@ import 'package:monkey_stories/presentation/features/parent/setting.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
 import 'package:monkey_stories/presentation/features/parent/vip.dart';
 import 'package:monkey_stories/presentation/features/purchased/purchased.dart';
+import 'package:monkey_stories/presentation/features/purchased/renew_plan.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/features/unity/unity_screen.dart';
@@ -246,6 +247,17 @@ final GoRouter router = GoRouter(
         return const OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: PurchasedProvider(),
+        );
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.renewPlan,
+      name: AppRouteNames.renewPlan,
+      builder: (context, state) {
+        return const OrientationWrapper(
+          orientation: AppOrientation.portrait,
+          child: RenewPlanScreen(),
         );
       },
     ),

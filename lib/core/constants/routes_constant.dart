@@ -31,6 +31,7 @@ class AppRoutePaths {
 
   static const String purchasedSuccess = '/purchased_success';
   static const String purchased = '/purchased';
+  static const String renewPlan = '/renew_plan';
 
   static const String inputLicense = '/input_license';
   static const String lastLoginInfo = '/last_login_info';
@@ -93,6 +94,7 @@ class AppRouteNames {
 
   static const String purchasedSuccess = 'purchased_success';
   static const String purchased = 'purchased';
+  static const String renewPlan = 'renew_plan';
 
   static const String inputLicense = 'input_license';
   static const String lastLoginInfo = 'last_login_info';

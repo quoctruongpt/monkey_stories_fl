@@ -49,7 +49,7 @@ class PurchasedImage extends StatelessWidget {
                             child: Text(
                               AppLocalizations.of(
                                 context,
-                              ).translate('10 triệu phụ huynh\n tin dùng'),
+                              ).translate('app.intro.user'),
                               style: const TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.w600,

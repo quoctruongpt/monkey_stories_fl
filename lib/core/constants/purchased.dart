@@ -117,14 +117,14 @@ class Purchase {
   static const List<PackageItem> packages = [
     PackageItem(
       id: sixMonthId,
-      name: '6 tháng',
+      name: 'app.purchased.package.6month',
       saleOff: SaleOff(other: 0),
       type: PackageType.sixMonth,
       isSubscription: true,
     ),
     PackageItem(
       id: oneYearId,
-      name: '1 năm',
+      name: 'app.purchased.package.1year',
       saleOff: SaleOff(other: 0.41),
       type: PackageType.oneYear,
       isSubscription: true,
@@ -132,7 +132,7 @@ class Purchase {
     ),
     PackageItem(
       id: lifetimeId,
-      name: 'Trọn đời',
+      name: 'app.purchased.package.lifetime',
       saleOff: SaleOff(other: 0.5),
       type: PackageType.lifetime,
       isSubscription: false,

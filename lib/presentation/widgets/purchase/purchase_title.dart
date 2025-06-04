@@ -10,7 +10,7 @@ class PurchaseTitle extends StatelessWidget {
     return Column(
       children: [
         Text(
-          AppLocalizations.of(context).translate('Mở khóa toàn bộ nội dung'),
+          AppLocalizations.of(context).translate('app.purchased.title'),
           style: Theme.of(
             context,
           ).textTheme.displayLarge?.copyWith(color: AppTheme.azureColor),
@@ -18,9 +18,7 @@ class PurchaseTitle extends StatelessWidget {
         ),
         const SizedBox(height: Spacing.sm),
         Text(
-          AppLocalizations.of(context).translate(
-            'Gia nhập cộng đồng 15 triệu phụ huynh thông thái! Giúp con giỏi tiếng anh trước tuổi lên 10!',
-          ),
+          AppLocalizations.of(context).translate('app.purchased.description'),
           style: Theme.of(
             context,
           ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
