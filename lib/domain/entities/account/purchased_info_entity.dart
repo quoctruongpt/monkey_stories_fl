@@ -70,4 +70,8 @@ class PurchasedInfoEntity {
   bool get isPaidUser {
     return isActive;
   }
+
+  bool get isLifetimeUser {
+    return timeExpired == 0 && isActive;
+  }
 }

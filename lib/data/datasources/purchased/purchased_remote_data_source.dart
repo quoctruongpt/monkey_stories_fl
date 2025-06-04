@@ -155,7 +155,10 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
   Future<PurchasedItem> purchaseProduct(String packageId) async {
     try {
       // Thêm try-catch
-      final result = await flutterInappPurchase.requestPurchase(packageId);
+      final result = await flutterInappPurchase.requestPurchase(
+        packageId,
+        obfuscatedAccountId: '',
+      );
       return result;
     } on PlatformException catch (e) {
       throw PurchaseException(e.code, e.message ?? 'Lỗi không xác định');
