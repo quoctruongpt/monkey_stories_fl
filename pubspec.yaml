@@ -24,6 +24,7 @@ environment:
 dependencies:
   airbridge_flutter_sdk_restricted: ^4.4.1
   android_id: ^0.4.0
+  animated_text_kit: ^4.2.3
   aws_client: ^0.7.0
   collection: ^1.19.1
   country_code_picker: ^3.3.0

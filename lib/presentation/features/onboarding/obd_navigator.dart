@@ -20,7 +20,7 @@ class OBDDNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<OnboardingCubit>(),
+      create: (context) => sl<OnboardingCubit>()..initialName(),
       child: child,
     );
   }

@@ -34,7 +34,6 @@ class OnboardingCubit extends Cubit<OnboardingState> {
        _appCubit = appCubit,
        super(const OnboardingState()) {
     emit(state.copyWith(years: ProfileUtil.getNearYears()));
-    initialName();
   }
 
   Future<void> initialName() async {

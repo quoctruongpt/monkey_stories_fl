@@ -7,7 +7,7 @@ import 'package:monkey_stories/presentation/widgets/create_profile/create_profil
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
 import 'package:monkey_stories/presentation/widgets/year_button.dart';
 
-class ChooseYearOfBirthView extends StatelessWidget {
+class ChooseYearOfBirthView extends StatefulWidget {
   const ChooseYearOfBirthView({
     super.key,
     required this.name,
@@ -22,6 +22,51 @@ class ChooseYearOfBirthView extends StatelessWidget {
   final int? yearSelected;
   final void Function(int year) onChangeYear;
   final List<int> years;
+
+  @override
+  State<ChooseYearOfBirthView> createState() => _ChooseYearOfBirthViewState();
+}
+
+class _ChooseYearOfBirthViewState extends State<ChooseYearOfBirthView>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+
+    // Ensure the animation only starts after the delay
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted) {
+        // Check if the widget is still in the tree
+        _animationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,54 +88,70 @@ class ChooseYearOfBirthView extends StatelessWidget {
                       CreateProfileHeader(
                         title: AppLocalizations.of(context).translate(
                           'create_profile.year_of_birth.title',
-                          params: {'Name': name},
+                          params: {'Name': widget.name},
                         ),
                       ),
                       const SizedBox(height: Spacing.md),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          const crossAxisCount = 4;
-                          const spacing = Spacing.sm;
-                          final totalSpacing = spacing * (crossAxisCount - 1);
-                          final itemWidth =
-                              (constraints.maxWidth - totalSpacing) /
-                              crossAxisCount;
+                      SlideTransition(
+                        position: _slideAnimation,
+                        child: FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Column(
+                            children: [
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  const crossAxisCount = 4;
+                                  const spacing = Spacing.sm;
+                                  final totalSpacing =
+                                      spacing * (crossAxisCount - 1);
+                                  final itemWidth =
+                                      (constraints.maxWidth - totalSpacing) /
+                                      crossAxisCount;
 
-                          return Wrap(
-                            spacing: spacing,
-                            runSpacing: spacing,
-                            children: List.generate(
-                              12,
-                              (index) => SizedBox(
-                                width: itemWidth,
+                                  return Wrap(
+                                    spacing: spacing,
+                                    runSpacing: spacing,
+                                    children: List.generate(
+                                      12,
+                                      (index) => SizedBox(
+                                        width: itemWidth,
+                                        child: buildYearButton(
+                                          context,
+                                          widget.years[index],
+                                          widget.yearSelected ==
+                                              widget.years[index],
+                                          () => widget.onChangeYear(
+                                            widget.years[index],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                width: double.infinity,
                                 child: buildYearButton(
                                   context,
-                                  years[index],
-                                  yearSelected == years[index],
-                                  () => onChangeYear(years[index]),
+                                  widget.years[12],
+                                  widget.yearSelected == widget.years[12],
+                                  () => widget.onChangeYear(widget.years[12]),
+                                  customText: AppLocalizations.of(
+                                    context,
+                                  ).translate(
+                                    'year.before',
+                                    params: {
+                                      'year': widget.years[12].toString(),
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: buildYearButton(
-                          context,
-                          years[12],
-                          yearSelected == years[12],
-                          () => onChangeYear(years[12]),
-                          customText: AppLocalizations.of(context).translate(
-                            'year.before',
-                            params: {'year': years[12].toString()},
+                              const CreateProfileFooter(),
+                            ],
                           ),
                         ),
                       ),
-
-                      const CreateProfileFooter(),
                     ],
                   ),
                 ),
@@ -100,8 +161,8 @@ class ChooseYearOfBirthView extends StatelessWidget {
                 text: AppLocalizations.of(
                   context,
                 ).translate('create_profile.year_of_birth.act'),
-                onPressed: () => onPressedContinue(yearSelected!),
-                disabled: yearSelected == null,
+                onPressed: () => widget.onPressedContinue(widget.yearSelected!),
+                disabled: widget.yearSelected == null,
               ),
             ],
           ),

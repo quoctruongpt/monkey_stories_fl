@@ -7,7 +7,7 @@ import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_footer.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
 
-class ChooseLevelView extends StatelessWidget {
+class ChooseLevelView extends StatefulWidget {
   const ChooseLevelView({
     super.key,
     required this.onContinuePressed,
@@ -24,9 +24,52 @@ class ChooseLevelView extends StatelessWidget {
   final void Function()? onBackPressed;
 
   @override
+  State<ChooseLevelView> createState() => _ChooseLevelViewState();
+}
+
+class _ChooseLevelViewState extends State<ChooseLevelView>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
+
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(onBackPressed: onBackPressed),
+      appBar: AppBarWidget(onBackPressed: widget.onBackPressed),
       body: Padding(
         padding: const EdgeInsets.only(
           left: Spacing.md,
@@ -45,59 +88,74 @@ class ChooseLevelView extends StatelessWidget {
                       ).translate('create_profile.level.title'),
                     ),
                     const SizedBox(height: Spacing.md),
-                    Column(
-                      children:
-                          levels.map((e) {
-                            final isSelected = levelSelected == e.id;
+                    SlideTransition(
+                      position: _slideAnimation,
+                      child: FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: Column(
+                          children: [
+                            Column(
+                              children:
+                                  widget.levels.map((e) {
+                                    final isSelected =
+                                        widget.levelSelected == e.id;
 
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: Spacing.sm),
-                              width: double.infinity,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  onPressedLevel(e.id);
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: Spacing.lg,
-                                    vertical: Spacing.md,
-                                  ),
-                                  side: BorderSide(
-                                    color:
-                                        isSelected
-                                            ? AppTheme.primaryColor
-                                            : AppTheme
-                                                .buttonPrimaryDisabledBackground,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    DifficultyLevel(difficulty: e.difficulty),
-                                    const SizedBox(width: Spacing.lg),
-                                    Flexible(
-                                      child: Text(
-                                        AppLocalizations.of(
-                                          context,
-                                        ).translate(e.description),
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge?.copyWith(
-                                          color:
-                                              isSelected
-                                                  ? AppTheme.primaryColor
-                                                  : AppTheme.textColor,
+                                    return Container(
+                                      margin: const EdgeInsets.only(
+                                        bottom: Spacing.sm,
+                                      ),
+                                      width: double.infinity,
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          widget.onPressedLevel(e.id);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: Spacing.lg,
+                                            vertical: Spacing.md,
+                                          ),
+                                          side: BorderSide(
+                                            color:
+                                                isSelected
+                                                    ? AppTheme.primaryColor
+                                                    : AppTheme
+                                                        .buttonPrimaryDisabledBackground,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            DifficultyLevel(
+                                              difficulty: e.difficulty,
+                                            ),
+                                            const SizedBox(width: Spacing.lg),
+                                            Flexible(
+                                              child: Text(
+                                                AppLocalizations.of(
+                                                  context,
+                                                ).translate(e.description),
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyLarge?.copyWith(
+                                                  color:
+                                                      isSelected
+                                                          ? AppTheme
+                                                              .primaryColor
+                                                          : AppTheme.textColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                                    );
+                                  }).toList(),
+                            ),
+                            const CreateProfileFooter(),
+                          ],
+                        ),
+                      ),
                     ),
-
-                    const CreateProfileFooter(),
                   ],
                 ),
               ),
@@ -107,8 +165,8 @@ class ChooseLevelView extends StatelessWidget {
               text: AppLocalizations.of(
                 context,
               ).translate('create_profile.level.act'),
-              onPressed: onContinuePressed,
-              disabled: levelSelected == null,
+              onPressed: widget.onContinuePressed,
+              disabled: widget.levelSelected == null,
             ),
           ],
         ),

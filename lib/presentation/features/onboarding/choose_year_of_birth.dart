@@ -16,13 +16,15 @@ class ChooseYearOfBirthOBD extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OnboardingCubit, OnboardingState>(
       builder: (context, state) {
-        return ChooseYearOfBirthView(
-          name: state.name ?? '',
-          onPressedContinue: (year) => _onPressedContinue(context),
-          onChangeYear: context.read<OnboardingCubit>().onChangeYear,
-          years: state.years,
-          yearSelected: state.yearSelected,
-        );
+        return state.name?.isNotEmpty ?? false
+            ? ChooseYearOfBirthView(
+              name: state.name ?? '',
+              onPressedContinue: (year) => _onPressedContinue(context),
+              onChangeYear: context.read<OnboardingCubit>().onChangeYear,
+              years: state.years,
+              yearSelected: state.yearSelected,
+            )
+            : const SizedBox.shrink();
       },
     );
   }
