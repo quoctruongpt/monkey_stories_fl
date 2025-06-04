@@ -14,8 +14,8 @@ import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.da
 import 'package:monkey_stories/presentation/features/parent/parent_tab.dart';
 import 'package:monkey_stories/presentation/features/parent/report/report.dart';
 import 'package:monkey_stories/presentation/features/parent/setting.dart';
-import 'package:monkey_stories/presentation/features/parent/vip.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
+import 'package:monkey_stories/presentation/features/parent/vip.dart';
 import 'package:monkey_stories/presentation/features/purchased/purchased.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';

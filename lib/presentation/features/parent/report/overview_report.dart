@@ -91,59 +91,93 @@ class ReportGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 16,
-      childAspectRatio: MediaQuery.of(context).size.width / (2 * 92),
-      children: [
-        _buildStatCard(
-          context,
-          icon: 'assets/icons/svg/stories.svg',
-          title: AppLocalizations.of(
-            context,
-          ).translate('app.report.overview.stories'),
-          value: numberStories,
-          color: Colors.blue,
-        ),
-        _buildStatCard(
-          context,
-          icon: 'assets/icons/svg/lesson.svg',
-          title: AppLocalizations.of(
-            context,
-          ).translate('app.report.overview.lessons'),
-          value: numberLessons,
-          color: Colors.green,
-        ),
-        _buildStatCard(
-          context,
-          icon: 'assets/icons/svg/video.svg',
-          title: AppLocalizations.of(
-            context,
-          ).translate('app.report.overview.videos'),
-          value: numberVideos,
-          color: Colors.pink,
-        ),
-        _buildStatCard(
-          context,
-          icon: 'assets/icons/svg/audio_book.svg',
-          title: AppLocalizations.of(
-            context,
-          ).translate('app.report.overview.audio_books'),
-          value: numberAudioBooks,
-          color: Colors.purple,
-        ),
-        _buildStatCard(
-          context,
-          icon: 'assets/icons/svg/minute.svg',
-          title: AppLocalizations.of(
-            context,
-          ).translate('app.report.overview.minutes'),
-          value: numberMinutes,
-          color: Colors.orange,
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double availableWidth = constraints.maxWidth;
+        final double spacing = 16.0; // Defined spacing in Wrap
+        double itemWidth;
+
+        // Calculate ideal width for two items per row
+        if (availableWidth > spacing) {
+          // Enough space for at least one spacing and some item width for two items
+          itemWidth = (availableWidth - spacing) / 2.0;
+        } else {
+          // Not enough space for two items with spacing,
+          // so make items take full available width (effectively one item per row)
+          itemWidth = availableWidth;
+        }
+
+        // Ensure itemWidth is not negative
+        itemWidth = itemWidth > 0 ? itemWidth : 0.0;
+
+        return Wrap(
+          spacing: spacing, // Horizontal spacing between items in a run
+          runSpacing: 16.0, // Vertical spacing between runs
+          alignment: WrapAlignment.start,
+          children: [
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatCard(
+                context,
+                icon: 'assets/icons/svg/stories.svg',
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.report.overview.stories'),
+                value: numberStories,
+                color: Colors.blue,
+              ),
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatCard(
+                context,
+                icon: 'assets/icons/svg/lesson.svg',
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.report.overview.lessons'),
+                value: numberLessons,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatCard(
+                context,
+                icon: 'assets/icons/svg/video.svg',
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.report.overview.videos'),
+                value: numberVideos,
+                color: Colors.pink,
+              ),
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatCard(
+                context,
+                icon: 'assets/icons/svg/audio_book.svg',
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.report.overview.audio_books'),
+                value: numberAudioBooks,
+                color: Colors.purple,
+              ),
+            ),
+            SizedBox(
+              width: itemWidth,
+              child: _buildStatCard(
+                context,
+                icon: 'assets/icons/svg/minute.svg',
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.report.overview.minutes'),
+                value: numberMinutes,
+                color: Colors.orange,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -24,13 +24,17 @@ class TermsBottomSheet extends StatelessWidget {
             style: Theme.of(context).textTheme.displaySmall,
           ),
           const SizedBox(height: Spacing.lg),
-          Text(
-            AppLocalizations.of(
-              context,
-            ).translate(Platform.isIOS ? 'app.terms.ios' : 'app.terms.android'),
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: AppTheme.textGrayColor,
-              fontWeight: FontWeight.w600,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(
+                AppLocalizations.of(context).translate(
+                  Platform.isIOS ? 'app.terms.ios' : 'app.terms.android',
+                ),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.textGrayColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
         ],
@@ -43,9 +47,16 @@ void showTermsBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder:
-        (context) => const FractionallySizedBox(
-          widthFactor: 1, // full width
-          child: TermsBottomSheet(),
+        (context) => ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight:
+                MediaQuery.of(context).size.height *
+                0.7, // Giới hạn 70% chiều cao màn hình
+          ),
+          child: const FractionallySizedBox(
+            widthFactor: 1, // full width
+            child: TermsBottomSheet(),
+          ),
         ),
   );
 }

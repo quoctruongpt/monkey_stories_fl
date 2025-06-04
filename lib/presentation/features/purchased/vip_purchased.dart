@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
+import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item_with_discount.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
@@ -21,40 +19,26 @@ const listContent = [
   'Nội dung phù hợp với từng giai đoạn phát triển của trẻ',
 ];
 
-class PurchasedProvider extends StatelessWidget {
-  const PurchasedProvider({super.key});
+class VipPurchasedProvider extends StatelessWidget {
+  const VipPurchasedProvider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<PurchasedViewCubit>()..getPackages(),
-      child: const PurchasedScreen(),
+      child: const VipPurchasedScreen(),
     );
   }
 }
 
-class PurchasedScreen extends StatelessWidget {
-  const PurchasedScreen({super.key});
+class VipPurchasedScreen extends StatelessWidget {
+  const VipPurchasedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBarWidget(
-            showBackButton: false,
-            actions: [
-              IconButton(
-                onPressed: () => context.go(AppRoutePaths.unity),
-                icon: const Icon(
-                  Icons.clear,
-                  color: AppTheme.textColor,
-                  size: 40,
-                ),
-              ),
-            ],
-          ),
-          extendBodyBehindAppBar: true,
           body: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
             builder: (context, viewState) {
               return Column(
@@ -72,10 +56,6 @@ class PurchasedScreen extends StatelessWidget {
                             ),
                             const PurchaseTitle(),
                             const SizedBox(height: Spacing.md),
-                            const PurchasedImage(),
-                            const SizedBox(height: Spacing.md),
-                            const PurchasedContent(),
-                            const SizedBox(height: Spacing.md),
                             BlocBuilder<PurchasedCubit, PurchasedState>(
                               builder: (context, state) {
                                 return Column(
@@ -92,6 +72,10 @@ class PurchasedScreen extends StatelessWidget {
                                 );
                               },
                             ),
+                            const SizedBox(height: Spacing.md),
+                            const PurchasedContent(),
+                            const SizedBox(height: Spacing.md),
+                            const PurchasedImage(),
                             const SizedBox(height: Spacing.lg),
                           ],
                         ),
@@ -158,7 +142,15 @@ class PurchasedScreen extends StatelessWidget {
           ),
         ),
 
-        BlocBuilder<PurchasedCubit, PurchasedState>(
+        BlocConsumer<PurchasedCubit, PurchasedState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.isPurchasing != current.isPurchasing,
+          listener: (context, state) {
+            context.read<BottomNavigationCubit>().setBottomNavVisible(
+              !state.isPurchasing,
+            );
+          },
           builder: (context, state) {
             return state.isPurchasing
                 ? const LoadingOverlay()

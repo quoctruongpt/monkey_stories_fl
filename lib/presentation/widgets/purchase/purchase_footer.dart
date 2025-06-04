@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
@@ -36,11 +37,23 @@ class PurchaseFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          description,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: AppTheme.textColor,
-            fontWeight: FontWeight.w600,
+        FittedBox(
+          child: Html(
+            data: description,
+            style: {
+              'b': Style(
+                color: AppTheme.textColor,
+                fontWeight: FontWeight.w700,
+              ),
+              'body': Style(
+                textAlign: TextAlign.center,
+                color: AppTheme.textSecondaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: FontSize(14),
+                maxLines: 1,
+                textOverflow: TextOverflow.clip,
+              ),
+            },
           ),
         ),
         const SizedBox(height: Spacing.sm),

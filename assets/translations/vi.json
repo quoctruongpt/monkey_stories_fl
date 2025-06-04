@@ -150,7 +150,7 @@
   "9": "Chín",
   "app.obd_payment.act.not_trial": "Mua ngay",
   "app.obd_payment.act.trial": "Dùng thử với giá 0đ",
-  "app.obd_payment.desc.trial": "{{price}}/{{time}} sau 7 ngày dùng thử",
+  "app.obd_payment.desc.trial": "<b>{{price}}/{{time}}</b> <span>sau 7 ngày dùng thử. Hủy bất cứ lúc nào</span>",
   "app.obd_payment.desc.not_trial": "{{price}}/{{time}}",
   "app.obd_payment.created_account.desc": "Gói mua đã được kích hoạt. Ba mẹ vui lòng tạo tài khoản để sử dụng.",
   "app.obd_payment.created_account.title": "Thông báo",

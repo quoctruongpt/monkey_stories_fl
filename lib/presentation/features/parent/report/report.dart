@@ -23,6 +23,7 @@ class ReportScreen extends StatelessWidget {
       create: (context) => sl<ReportCubit>(),
       child: Scaffold(
         appBar: AppBarWidget(
+          showBackButton: false,
           title: AppLocalizations.of(
             context,
           ).translate('app.report.study_report'),
