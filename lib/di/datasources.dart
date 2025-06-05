@@ -11,6 +11,7 @@ import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_sour
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
+import 'package:monkey_stories/data/datasources/report/report_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
@@ -147,6 +148,11 @@ void initDatasourceDependencies() {
       profileLocalDataSource: sl<ProfileLocalDataSource>(),
       accountLocalDataSource: sl<AccountLocalDataSource>(),
     ),
+  );
+
+  // Report
+  sl.registerLazySingleton<ReportRemoteDataSource>(
+    () => ReportRemoteDataSourceImpl(dio: sl<Dio>()),
   );
 
   // Add other datasource registrations here...

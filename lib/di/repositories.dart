@@ -5,6 +5,7 @@ import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_sour
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
+import 'package:monkey_stories/data/datasources/report/report_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
@@ -15,6 +16,7 @@ import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/report_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/purchased_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/notification_repository_impl.dart';
@@ -22,6 +24,7 @@ import 'package:monkey_stories/domain/repositories/active_license_repository.dar
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+import 'package:monkey_stories/domain/repositories/report_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
@@ -162,5 +165,11 @@ void initRepositoryDependencies() {
       kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
     ),
   );
+
+  // Report
+  sl.registerLazySingleton<ReportRepository>(
+    () => ReportRepositoryImpl(remoteDataSource: sl<ReportRemoteDataSource>()),
+  );
+
   // Add other repository registrations here...
 }

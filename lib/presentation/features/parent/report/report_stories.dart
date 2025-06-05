@@ -5,20 +5,33 @@ import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:monkey_stories/presentation/widgets/report_card.dart';
 
 class ReportStories extends StatelessWidget {
-  const ReportStories({super.key});
+  final List<PieChartData> weeklyData;
+  final List<PieChartData> totalData;
+
+  const ReportStories({
+    super.key,
+    required this.weeklyData,
+    required this.totalData,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ReportCard(
       title: AppLocalizations.of(context).translate('app.report.stories.title'),
       iconWidget: SvgPicture.asset('assets/icons/svg/stories.svg'),
-      child: const StoriesTabView(),
+      child: StoriesTabView(weeklyData: weeklyData, totalData: totalData),
     );
   }
 }
 
 class StoriesTabView extends StatefulWidget {
-  const StoriesTabView({super.key});
+  final List<PieChartData> weeklyData;
+  final List<PieChartData> totalData;
+  const StoriesTabView({
+    super.key,
+    required this.weeklyData,
+    required this.totalData,
+  });
 
   @override
   State<StoriesTabView> createState() => _StoriesTabViewState();
@@ -27,23 +40,6 @@ class StoriesTabView extends StatefulWidget {
 class _StoriesTabViewState extends State<StoriesTabView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  // Data mẫu cho 2 tab
-  final List<PieChartData> _weeklyData = [
-    PieChartData(value: 10, label: 'Level A'),
-    PieChartData(value: 10, label: 'Level B'),
-    PieChartData(value: 1, label: 'Level C'),
-    // PieChartData(value: 5, label: 'Level D'),
-    // PieChartData(value: 0, label: 'Level E'),
-  ];
-
-  final List<PieChartData> _totalData = [
-    PieChartData(value: 50, label: 'Level A'),
-    PieChartData(value: 40, label: 'Level B'),
-    PieChartData(value: 30, label: 'Level C'),
-    PieChartData(value: 5, label: 'Level D'),
-    PieChartData(value: 1, label: 'Level E'),
-  ];
 
   @override
   void initState() {
@@ -77,7 +73,8 @@ class _StoriesTabViewState extends State<StoriesTabView>
         ),
         const SizedBox(height: 36),
         CustomPieChart(
-          data: _tabController.index == 0 ? _weeklyData : _totalData,
+          data:
+              _tabController.index == 0 ? widget.weeklyData : widget.totalData,
           emptyDataLabel: AppLocalizations.of(
             context,
           ).translate('app.report.stories.no_data'),

@@ -3,7 +3,9 @@ import 'package:monkey_stories/domain/repositories/active_license_repository.dar
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/repositories/report_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
@@ -272,5 +274,10 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsUpdatePasswordTrackingUseCase(sl<TrackingRepository>()),
+  );
+
+  // Report
+  sl.registerLazySingleton(
+    () => GetReportUsecase(reportRepository: sl<ReportRepository>()),
   );
 }

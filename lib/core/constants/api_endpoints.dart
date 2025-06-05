@@ -41,4 +41,6 @@ class ApiEndpoints {
 
   // Notification
   static const String registerDevice = '/device/api/v1/fcm/save';
+
+  static const String learningReport = '/report/ms2/parent_report';
 }

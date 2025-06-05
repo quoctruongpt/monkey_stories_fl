@@ -36,6 +36,7 @@ import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
@@ -319,7 +320,13 @@ void initBlocDependencies() {
     ),
   );
 
-  sl.registerFactory(() => ReportCubit(profileCubit: sl<ProfileCubit>()));
+  sl.registerFactory(
+    () => ReportCubit(
+      profileCubit: sl<ProfileCubit>(),
+      getReportUsecase: sl<GetReportUsecase>(),
+      userCubit: sl<UserCubit>(),
+    ),
+  );
 
   sl.registerFactory(
     () => UnityScreenCubit(purchasedCubit: sl<PurchasedCubit>()),

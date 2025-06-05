@@ -12,6 +12,7 @@ import 'package:monkey_stories/presentation/features/parent/report/report_storie
 import 'package:monkey_stories/presentation/features/parent/report/report_header.dart';
 import 'package:monkey_stories/presentation/features/parent/report/weekly_study_duration_dart.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ReportScreen extends StatelessWidget {
@@ -28,12 +29,29 @@ class ReportScreen extends StatelessWidget {
             context,
           ).translate('app.report.study_report'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              BlocBuilder<ReportCubit, ReportState>(
-                builder: (context, state) {
-                  return Container(
+        body: BlocConsumer<ReportCubit, ReportState>(
+          listenWhen:
+              (previous, current) => previous.hasError != current.hasError,
+          listener: (context, state) {
+            if (state.hasError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context).translate('error'),
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(hours: 1),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).clearSnackBars();
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Spacing.md,
                       vertical: Spacing.sm,
@@ -46,76 +64,180 @@ class ReportScreen extends StatelessWidget {
                         context.read<ReportCubit>().onProfileChanged(profile);
                       },
                     ),
-                  );
-                },
+                  ),
+
+                  state.isLoading || state.data == null
+                      ? const ReportSkeleton()
+                      : Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(Spacing.md),
+                        color: const Color(0xFFF2F4F7),
+                        child: Column(
+                          children: [
+                            WeeklyStudyDurationChart(
+                              weeklyStudyDuration: [
+                                state.data!.recentWeeklyReport.week1,
+                                state.data!.recentWeeklyReport.week2,
+                                state.data!.recentWeeklyReport.week3,
+                                state.data!.recentWeeklyReport.week4,
+                              ],
+                            ),
+                            const SizedBox(height: Spacing.md),
+                            OverviewReport(
+                              numberStoriesWeek:
+                                  state
+                                      .data!
+                                      .weeklyReport
+                                      .generalReport
+                                      .totalStory,
+                              numberLessonsWeek:
+                                  state
+                                      .data!
+                                      .weeklyReport
+                                      .generalReport
+                                      .totalLesson,
+                              numberVideosWeek:
+                                  state
+                                      .data!
+                                      .weeklyReport
+                                      .generalReport
+                                      .totalVideo,
+                              numberAudioBooksWeek:
+                                  state
+                                      .data!
+                                      .weeklyReport
+                                      .generalReport
+                                      .totalAudioBook,
+                              numberMinutesWeek:
+                                  state
+                                      .data!
+                                      .weeklyReport
+                                      .generalReport
+                                      .totalDuration,
+                              numberStoriesTotal:
+                                  state
+                                      .data!
+                                      .totalLearned
+                                      .generalReport
+                                      .totalStory,
+                              numberLessonsTotal:
+                                  state
+                                      .data!
+                                      .totalLearned
+                                      .generalReport
+                                      .totalLesson,
+                              numberVideosTotal:
+                                  state
+                                      .data!
+                                      .totalLearned
+                                      .generalReport
+                                      .totalVideo,
+                              numberAudioBooksTotal:
+                                  state
+                                      .data!
+                                      .totalLearned
+                                      .generalReport
+                                      .totalAudioBook,
+                              numberMinutesTotal:
+                                  state
+                                      .data!
+                                      .totalLearned
+                                      .generalReport
+                                      .totalDuration,
+                            ),
+                            const SizedBox(height: Spacing.md),
+                            ReportStories(
+                              weeklyData:
+                                  state.data!.weeklyReport.storyByLevel.keys
+                                      .map(
+                                        (key) => PieChartData(
+                                          value:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .storyByLevel[key]!
+                                                  .toDouble(),
+                                          label: key,
+                                        ),
+                                      )
+                                      .toList(),
+                              totalData:
+                                  state.data!.totalLearned.storyByLevel.keys
+                                      .map(
+                                        (key) => PieChartData(
+                                          value:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .storyByLevel[key]!
+                                                  .toDouble(),
+                                          label: key,
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                            const SizedBox(height: Spacing.md),
+                            ProgressReport(
+                              nurseryTotalLessons:
+                                  state.data!.levelProgress.nursery.total,
+                              kindergartenTotalLessons:
+                                  state.data!.levelProgress.kindergarten.total,
+                              grade1TotalLessons:
+                                  state.data!.levelProgress.grade1.total,
+                              nurseryValue:
+                                  state.data!.levelProgress.nursery.current,
+                              kindergartenValue:
+                                  state
+                                      .data!
+                                      .levelProgress
+                                      .kindergarten
+                                      .current,
+                              grade1Value:
+                                  state.data!.levelProgress.grade1.current,
+                              phonicsLevelSelected:
+                                  PhonicsLevelSelected.nursery,
+                              title: AppLocalizations.of(
+                                context,
+                              ).translate('app.report.progress.phonics'),
+                              icon: SvgPicture.asset(
+                                'assets/icons/svg/phonics.svg',
+                              ),
+                            ),
+                            const SizedBox(height: Spacing.md),
+                            ProgressReport(
+                              nurseryTotalLessons:
+                                  state.data!.levelProgress.nursery.total,
+                              kindergartenTotalLessons:
+                                  state.data!.levelProgress.kindergarten.total,
+                              grade1TotalLessons:
+                                  state.data!.levelProgress.grade1.total,
+                              nurseryValue:
+                                  state.data!.levelProgress.nursery.current,
+                              kindergartenValue:
+                                  state
+                                      .data!
+                                      .levelProgress
+                                      .kindergarten
+                                      .current,
+                              grade1Value:
+                                  state.data!.levelProgress.grade1.current,
+                              phonicsLevelSelected:
+                                  PhonicsLevelSelected.nursery,
+                              title: AppLocalizations.of(
+                                context,
+                              ).translate('app.report.progress.reading'),
+                              icon: SvgPicture.asset(
+                                'assets/icons/svg/read.svg',
+                              ),
+                            ),
+                            const SizedBox(height: 100),
+                          ],
+                        ),
+                      ),
+                ],
               ),
-              BlocBuilder<ReportCubit, ReportState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return const ReportSkeleton();
-                  }
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(Spacing.md),
-                    color: const Color(0xFFF2F4F7),
-                    child: Column(
-                      children: [
-                        const WeeklyStudyDurationChart(
-                          weeklyStudyDuration: [30, 111, 121, 150],
-                        ),
-                        const SizedBox(height: Spacing.md),
-                        const OverviewReport(
-                          numberStoriesWeek: 9,
-                          numberLessonsWeek: 12,
-                          numberVideosWeek: 10,
-                          numberAudioBooksWeek: 25,
-                          numberMinutesWeek: 912,
-                          numberStoriesTotal: 9,
-                          numberLessonsTotal: 48,
-                          numberVideosTotal: 40,
-                          numberAudioBooksTotal: 100,
-                          numberMinutesTotal: 1000,
-                        ),
-                        const SizedBox(height: Spacing.md),
-                        const ReportStories(),
-                        const SizedBox(height: Spacing.md),
-                        ProgressReport(
-                          nurseryTotalLessons: 210,
-                          kindergartenTotalLessons: 210,
-                          grade1TotalLessons: 210,
-                          nurseryValue: 20,
-                          kindergartenValue: 40,
-                          grade1Value: 80,
-                          phonicsLevelSelected: PhonicsLevelSelected.nursery,
-                          title: AppLocalizations.of(
-                            context,
-                          ).translate('app.report.progress.phonics'),
-                          icon: SvgPicture.asset(
-                            'assets/icons/svg/phonics.svg',
-                          ),
-                        ),
-                        const SizedBox(height: Spacing.md),
-                        ProgressReport(
-                          nurseryTotalLessons: 210,
-                          kindergartenTotalLessons: 210,
-                          grade1TotalLessons: 210,
-                          nurseryValue: 20,
-                          kindergartenValue: 40,
-                          grade1Value: 80,
-                          phonicsLevelSelected: PhonicsLevelSelected.nursery,
-                          title: AppLocalizations.of(
-                            context,
-                          ).translate('app.report.progress.reading'),
-                          icon: SvgPicture.asset('assets/icons/svg/read.svg'),
-                        ),
-                        const SizedBox(height: 100),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
