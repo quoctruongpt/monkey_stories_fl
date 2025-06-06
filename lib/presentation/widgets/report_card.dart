@@ -37,7 +37,12 @@ class ReportCard extends StatelessWidget {
               iconWidget != null
                   ? const SizedBox(width: Spacing.md)
                   : const SizedBox.shrink(),
-              Text(title, style: Theme.of(context).textTheme.displaySmall),
+              Expanded(
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: Spacing.md),

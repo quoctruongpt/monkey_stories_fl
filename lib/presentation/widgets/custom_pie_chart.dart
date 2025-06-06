@@ -41,13 +41,17 @@ class CustomPieChart extends StatefulWidget {
 }
 
 class _CustomPieChartState extends State<CustomPieChart>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  late AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
   List<PieChartData>? _oldData;
   bool _showAllLegends = false;
   List<PieChartData>? _cachedChartData;
   List<PieChartData>? _cachedSortedData;
+  int? _selectedIndex;
+  int? _previousSelectedIndex;
 
   static const double kMinValidValue = 0.0;
   static const int kMaxVisibleItems = 2;
@@ -106,8 +110,8 @@ class _CustomPieChartState extends State<CustomPieChart>
           .fold(kMinValidValue, (sum, item) => sum + item.value);
 
       final parts = [
-        (value: firstValue, label: validData[0].label),
-        (value: secondValue, label: validData[1].label),
+        (value: firstValue, label: 'Level ${validData[0].label}'),
+        (value: secondValue, label: 'Level ${validData[1].label}'),
         (value: remainingValue, label: widget.otherLevelsLabel ?? ''),
       ];
 
@@ -194,9 +198,18 @@ class _CustomPieChartState extends State<CustomPieChart>
       duration: const Duration(milliseconds: 1500),
     );
 
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
     _animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOutCubic,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
     );
 
     _oldData = List.from(widget.data);
@@ -210,6 +223,8 @@ class _CustomPieChartState extends State<CustomPieChart>
       _oldData = List.from(widget.data);
       _cachedChartData = null;
       _cachedSortedData = null;
+      _selectedIndex = null;
+      _previousSelectedIndex = null;
       _controller.forward(from: 0);
     }
   }
@@ -226,9 +241,63 @@ class _CustomPieChartState extends State<CustomPieChart>
   @override
   void dispose() {
     _controller.dispose();
+    _scaleController.dispose();
     _cachedChartData = null;
     _cachedSortedData = null;
     super.dispose();
+  }
+
+  void _handleTap(TapUpDetails details) {
+    final size = Size(widget.radius * 2, widget.radius * 2);
+    final chartData = _getChartData();
+    final total = chartData.fold(0.0, (sum, item) => sum + item.value);
+    if (total <= 0) return;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final tapPosition = details.localPosition;
+    final dx = tapPosition.dx - center.dx;
+    final dy = tapPosition.dy - center.dy;
+
+    final distanceFromCenter = sqrt(dx * dx + dy * dy);
+    final radius = widget.radius;
+    final innerRadius = radius * PieChartPainter.kInnerRadiusRatio;
+
+    if (distanceFromCenter > radius * PieChartPainter.kSelectedScale ||
+        distanceFromCenter < innerRadius) {
+      if (_selectedIndex != null) {
+        setState(() {
+          _selectedIndex = null;
+        });
+      }
+      return;
+    }
+
+    var angle = atan2(dy, dx);
+    if (angle < -pi / 2) {
+      angle += 2 * pi;
+    }
+
+    double startAngle = -pi / 2;
+    int? tappedIndex;
+    for (int i = 0; i < chartData.length; i++) {
+      final item = chartData[i];
+      if (item.value <= 0) continue;
+      final sweepAngle = 2 * pi * (item.value / total);
+      final endAngle = startAngle + sweepAngle;
+      if (angle >= startAngle && angle < endAngle) {
+        tappedIndex = i;
+        break;
+      }
+      startAngle = endAngle;
+    }
+
+    if (_selectedIndex != tappedIndex) {
+      setState(() {
+        _previousSelectedIndex = _selectedIndex;
+        _selectedIndex = tappedIndex;
+        _scaleController.forward(from: 0.0);
+      });
+    }
   }
 
   @override
@@ -247,18 +316,25 @@ class _CustomPieChartState extends State<CustomPieChart>
         SizedBox(
           width: widget.radius * 2,
           height: widget.radius * 2,
-          child: AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: PieChartPainter(
-                  data: chartData,
-                  progress: _animation.value,
-                  getColorForIndex: _getColorForIndex,
-                  emptyColor: kEmptyDataColor,
-                ),
-              );
-            },
+          child: GestureDetector(
+            onTapUp: _handleTap,
+            child: AnimatedBuilder(
+              animation: Listenable.merge([_animation, _scaleAnimation]),
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: PieChartPainter(
+                    data: chartData,
+                    progress: _animation.value,
+                    getColorForIndex: _getColorForIndex,
+                    emptyColor: kEmptyDataColor,
+                    selectedIndex: _selectedIndex,
+                    previousSelectedIndex: _previousSelectedIndex,
+                    scaleAnimationValue: _scaleAnimation.value,
+                  ),
+                  size: Size(widget.radius * 2, widget.radius * 2),
+                );
+              },
+            ),
           ),
         ),
         const SizedBox(height: 24),
@@ -271,6 +347,7 @@ class _CustomPieChartState extends State<CustomPieChart>
           total: total,
           getLabel: widget.getLabel,
           otherLevelsLabel: widget.otherLevelsLabel ?? '',
+          emptyDataLabel: widget.emptyDataLabel ?? '',
         ),
       ],
     );
@@ -286,6 +363,7 @@ class ChartLegend extends StatelessWidget {
   final double total;
   final String Function(int) getLabel;
   final String otherLevelsLabel;
+  final String emptyDataLabel;
 
   const ChartLegend({
     super.key,
@@ -297,15 +375,16 @@ class ChartLegend extends StatelessWidget {
     required this.total,
     required this.getLabel,
     required this.otherLevelsLabel,
+    required this.emptyDataLabel,
   });
 
   List<Widget> _buildLegendItems() {
     // Nếu không có dữ liệu hoặc tổng = 0
     if (data.isEmpty || total <= 0) {
       return [
-        const Text(
-          'Chưa có dữ liệu thống kê',
-          style: TextStyle(fontSize: 14, color: Color(0xFF94969C)),
+        Text(
+          emptyDataLabel,
+          style: const TextStyle(fontSize: 14, color: Color(0xFF94969C)),
         ),
       ];
     }
@@ -338,19 +417,6 @@ class ChartLegend extends StatelessWidget {
       }
     }
 
-    // if (data.length <= 3 || showAll) {
-    //   final items = data.where((item) => item.value > 0).toList();
-    //   return items.map((item) {
-    //     // Nếu là một trong 2 item đầu tiên hoặc là "Các level khác", sử dụng thứ tự từ valueOrder
-    //     final order = valueOrder[item.label] ?? items.indexOf(item);
-    //     return _LegendItem(
-    //       color: getColorForIndex(order),
-    //       label: item.label,
-    //       value: _formatValue(item.value),
-    //     );
-    //   }).toList();
-    // }
-
     // Hiển thị 2 item đầu và gộp các item còn lại
     final List<Widget> items = [];
     double remainingValue = 0;
@@ -364,7 +430,7 @@ class ChartLegend extends StatelessWidget {
       items.add(
         _LegendItem(
           color: getColorForIndex(order),
-          label: validItems[i].label,
+          label: 'Level ${validItems[i].label}',
           value: _formatValue(validItems[i].value),
         ),
       );
@@ -383,7 +449,7 @@ class ChartLegend extends StatelessWidget {
             items.add(
               _LegendItem(
                 color: getColorForIndex(order),
-                label: item.label,
+                label: 'Level ${item.label}',
                 value: _formatValue(item.value),
               ),
             );
@@ -512,16 +578,23 @@ class PieChartPainter extends CustomPainter {
   final double progress;
   final Color Function(int) getColorForIndex;
   final Color emptyColor;
+  final int? selectedIndex;
+  final int? previousSelectedIndex;
+  final double scaleAnimationValue;
 
   static const double kMinPercentageForLabel = 5.0;
   static const double kLabelAnimationThreshold = 0.8;
   static const double kInnerRadiusRatio = 0.5;
+  static const double kSelectedScale = 1.08;
 
   PieChartPainter({
     required this.data,
     required this.progress,
     required this.getColorForIndex,
     required this.emptyColor,
+    this.selectedIndex,
+    this.previousSelectedIndex,
+    required this.scaleAnimationValue,
   });
 
   @override
@@ -530,39 +603,39 @@ class PieChartPainter extends CustomPainter {
     final radius = size.width / 2;
     final innerRadius = radius * kInnerRadiusRatio;
 
-    // Cache tổng giá trị
     final total = data.fold(0.0, (sum, item) => sum + item.value);
-    double startAngle = -pi / 2;
-
-    // Tạo và cache các Paint objects
-    final backgroundPaint =
-        Paint()
-          ..style = PaintingStyle.fill
-          ..color = Colors.grey.withOpacity(0.1);
 
     final holePaint =
         Paint()
           ..style = PaintingStyle.fill
           ..color = Colors.white;
 
-    // Vẽ background
-    canvas.drawCircle(center, radius, backgroundPaint);
+    if (total <= 0) {
+      final emptyPaint =
+          Paint()
+            ..style = PaintingStyle.fill
+            ..color = emptyColor;
+      canvas.drawCircle(center, radius, emptyPaint);
+      canvas.drawCircle(center, innerRadius * progress, holePaint);
+      return;
+    }
 
-    // Cache rect cho việc vẽ arc
-    final rect = Rect.fromCircle(center: center, radius: radius);
-
-    // Cache các giá trị cho label
-    final labelRadius = (radius + innerRadius) / 2;
-    final labelOpacity =
-        progress > kLabelAnimationThreshold
-            ? (progress - kLabelAnimationThreshold) * 5
-            : 0.0;
+    double startAngle = -pi / 2;
 
     for (var i = 0; i < data.length; i++) {
       final item = data[i];
       final sweepAngle = 2 * pi * (item.value / total) * progress;
 
-      // Vẽ phần pie
+      double scale = 1.0;
+      if (i == selectedIndex) {
+        scale = 1.0 + (scaleAnimationValue * (kSelectedScale - 1.0));
+      } else if (i == previousSelectedIndex) {
+        scale = kSelectedScale - (scaleAnimationValue * (kSelectedScale - 1.0));
+      }
+      final currentRadius = radius * scale;
+
+      final rect = Rect.fromCircle(center: center, radius: currentRadius);
+
       final paint =
           Paint()
             ..style = PaintingStyle.fill
@@ -570,9 +643,17 @@ class PieChartPainter extends CustomPainter {
 
       canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
 
-      // Vẽ label nếu đủ điều kiện
       if (item.value >= kMinPercentageForLabel &&
           progress > kLabelAnimationThreshold) {
+        final currentInnerRadius = currentRadius * kInnerRadiusRatio;
+        final labelRadius = (currentRadius + currentInnerRadius) / 2;
+        final labelOpacity =
+            progress > kLabelAnimationThreshold
+                ? ((progress - kLabelAnimationThreshold) /
+                        (1.0 - kLabelAnimationThreshold))
+                    .clamp(0.0, 1.0)
+                : 0.0;
+
         _drawLabel(
           canvas,
           center,
@@ -587,8 +668,91 @@ class PieChartPainter extends CustomPainter {
       startAngle += sweepAngle;
     }
 
+    if (selectedIndex != null &&
+        selectedIndex! < data.length &&
+        progress == 1.0) {
+      final item = data[selectedIndex!];
+      if (item.value > 0) {
+        double angleForSelected = -pi / 2;
+        for (int i = 0; i < selectedIndex!; i++) {
+          angleForSelected += 2 * pi * (data[i].value / total);
+        }
+        final sweepAngle = 2 * pi * (item.value / total);
+        final middleAngle = angleForSelected + sweepAngle / 2;
+        final scale = 1.0 + (scaleAnimationValue * (kSelectedScale - 1.0));
+        final animatedRadius = radius * scale;
+        _drawSelectedLabel(
+          canvas,
+          center,
+          radius,
+          animatedRadius,
+          middleAngle,
+          item,
+          size,
+        );
+      }
+    }
+
     // Vẽ lỗ trống ở giữa
     canvas.drawCircle(center, innerRadius * progress, holePaint);
+  }
+
+  void _drawSelectedLabel(
+    Canvas canvas,
+    Offset center,
+    double baseRadius,
+    double animatedRadius,
+    double angle,
+    PieChartData item,
+    Size size,
+  ) {
+    final leaderLineStartPoint =
+        center + Offset(cos(angle), sin(angle)) * animatedRadius;
+    final leaderLineBreakPoint =
+        center + Offset(cos(angle), sin(angle)) * (baseRadius * 1.15);
+    final leaderLineEndPoint =
+        leaderLineBreakPoint + Offset(cos(angle) > 0 ? 10.0 : -10.0, 0);
+
+    final linePaint =
+        Paint()
+          ..color = const Color(0xFF94969C)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
+
+    final path =
+        Path()
+          ..moveTo(leaderLineStartPoint.dx, leaderLineStartPoint.dy)
+          ..lineTo(leaderLineBreakPoint.dx, leaderLineBreakPoint.dy)
+          ..lineTo(leaderLineEndPoint.dx, leaderLineEndPoint.dy);
+    canvas.drawPath(path, linePaint);
+
+    final textSpan = TextSpan(
+      text: item.label,
+      style: const TextStyle(
+        color: Color(0xFF475467),
+        fontSize: 10,
+        fontWeight: FontWeight.w800,
+        fontFamily: 'Nunito',
+      ),
+    );
+
+    final textPainter = TextPainter(
+      text: textSpan,
+      textAlign: cos(angle) >= 0 ? TextAlign.left : TextAlign.right,
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout(maxWidth: 100);
+
+    double dx;
+    if (cos(angle) >= 0) {
+      dx = leaderLineEndPoint.dx + 4.0;
+    } else {
+      dx = leaderLineEndPoint.dx - textPainter.width - 4.0;
+    }
+    final dy = leaderLineEndPoint.dy - textPainter.height / 2;
+
+    textPainter.paint(canvas, Offset(dx, dy));
   }
 
   void _drawLabel(
@@ -628,6 +792,9 @@ class PieChartPainter extends CustomPainter {
   bool shouldRepaint(covariant PieChartPainter oldDelegate) {
     return oldDelegate.progress != progress ||
         oldDelegate.data.length != data.length ||
+        oldDelegate.selectedIndex != selectedIndex ||
+        oldDelegate.previousSelectedIndex != previousSelectedIndex ||
+        oldDelegate.scaleAnimationValue != scaleAnimationValue ||
         !_listEquals(oldDelegate.data, data);
   }
 
