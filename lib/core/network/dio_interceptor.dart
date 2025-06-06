@@ -28,13 +28,9 @@ class DioInterceptor extends Interceptor {
     return deviceId;
   }
 
-  // Hàm private để lấy dữ liệu chung
-  Future<Map<String, dynamic>> _getCommonRequestData(
-    RequestOptions options,
-  ) async {
+  // Hàm private để lấy access token
+  Future<String?> _getAccessToken(RequestOptions options) async {
     final prefs = await SharedPreferences.getInstance();
-    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
     String? accessToken;
     // Ưu tiên token được truyền trực tiếp trong queryParameters của request
     final String? externalToken = options.queryParameters['token'] as String?;
@@ -44,6 +40,8 @@ class DioInterceptor extends Interceptor {
       _logger.info(
         'Using externally provided token from queryParameters: "$accessToken"',
       );
+      // Xóa token khỏi queryParameters vì nó sẽ được chuyển vào header
+      options.queryParameters.remove('token');
     } else {
       // Nếu không có token bên ngoài, lấy từ SharedPreferences
       accessToken = prefs.getString(SharedPrefKeys.token);
@@ -55,6 +53,12 @@ class DioInterceptor extends Interceptor {
         );
       }
     }
+    return accessToken;
+  }
+
+  // Hàm private để lấy dữ liệu chung
+  Future<Map<String, dynamic>> _getCommonRequestData() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     String? deviceId = await _getDeviceId();
     String subversion = packageInfo.version;
@@ -97,7 +101,6 @@ class DioInterceptor extends Interceptor {
       'device_id': deviceId,
       'info': deviceInfoStr,
       'lang': lang,
-      if (accessToken != null && accessToken.isNotEmpty) 'token': accessToken,
     };
 
     return commonParams;
@@ -108,8 +111,15 @@ class DioInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // --- 1. Lấy thông tin chung từ hàm helper, đã xử lý logic token ---
-    final commonParams = await _getCommonRequestData(options);
+    // --- Lấy Access Token và thêm vào Header ---
+    final String? accessToken = await _getAccessToken(options);
+    if (accessToken != null && accessToken.isNotEmpty) {
+      options.headers['token'] = accessToken;
+      _logger.info('Added Authorization header.');
+    }
+
+    // --- 1. Lấy thông tin chung từ hàm helper ---
+    final commonParams = await _getCommonRequestData();
 
     // --- 2. Luôn thêm thông tin chung vào queryParameters ---
     options.queryParameters.addAll(commonParams);
