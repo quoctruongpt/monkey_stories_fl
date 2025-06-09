@@ -12,11 +12,13 @@ class SyncUserProfilesEntity {
   SyncUserProfilesEntity({required this.profiles});
 
   factory SyncUserProfilesEntity.fromJson(Map<String, dynamic> json) {
+    final profilesData = json['profiles'] as List<dynamic>? ?? [];
     return SyncUserProfilesEntity(
-      profiles:
-          json['profiles']
-              .map((e) => SyncUserProfileEntity.fromJson(e))
-              .toList(),
+      profiles: List<SyncUserProfileEntity>.from(
+        profilesData.map(
+          (e) => SyncUserProfileEntity.fromJson(e as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 

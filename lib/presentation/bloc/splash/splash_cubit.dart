@@ -141,8 +141,11 @@ class SplashCubit extends Cubit<SplashState> {
 
   Future<SplashState> _handleLogicAuthenticated() async {
     try {
-      await _userCubit.loadUpdate();
-      await _profileCubit.getListProfile();
+      // Chạy cả hai tác vụ load dữ liệu người dùng và danh sách profile đồng thời
+      await Future.wait([
+        _userCubit.loadUpdate(showConnectionErrorDialog: false),
+        _profileCubit.getListProfile(showConnectionErrorDialog: false),
+      ]);
 
       final user = _userCubit.state.user;
       final purchasedInfo = _userCubit.state.purchasedInfo;
@@ -154,6 +157,7 @@ class SplashCubit extends Cubit<SplashState> {
 
       return SplashAuthenticated();
     } catch (e) {
+      _logger.severe('Error during authenticated logic', e);
       return _userCubit.state.user != null
           ? SplashAuthenticated()
           : SplashAuthenticatedBefore();

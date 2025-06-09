@@ -17,7 +17,9 @@ abstract class ProfileRemoteDataSource {
     int? id,
   );
 
-  Future<ApiResponse<List<GetProfileResponse>>> getListProfile();
+  Future<ApiResponse<List<GetProfileResponse>>> getListProfile({
+    bool showConnectionErrorDialog = true,
+  });
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -93,8 +95,17 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<List<GetProfileResponse>>> getListProfile() async {
-    final response = await dio.get(ApiEndpoints.getListProfile);
+  Future<ApiResponse<List<GetProfileResponse>>> getListProfile({
+    bool showConnectionErrorDialog = true,
+  }) async {
+    final response = await dio.get(
+      ApiEndpoints.getListProfile,
+      options: Options(
+        extra: {
+          AppConstants.showConnectionErrorDialog: showConnectionErrorDialog,
+        },
+      ),
+    );
 
     return ApiResponse.fromJsonAsync(response.data, (json, res) async {
       if (json is Map<String, dynamic>) {

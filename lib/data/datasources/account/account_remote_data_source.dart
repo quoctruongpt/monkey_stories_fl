@@ -5,7 +5,9 @@ import 'package:monkey_stories/data/models/account/update_user_info.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 
 abstract class AccountRemoteDataSource {
-  Future<ApiResponse<LoadUpdateResponseModel>> loadUpdate();
+  Future<ApiResponse<LoadUpdateResponseModel>> loadUpdate({
+    bool showConnectionErrorDialog = true,
+  });
 
   Future<ApiResponse<Null>> updateUserInfo(UpdateUserInfoParams params);
 }
@@ -16,8 +18,17 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   AccountRemoteDataSourceImpl({required this.dio});
 
   @override
-  Future<ApiResponse<LoadUpdateResponseModel>> loadUpdate() async {
-    final response = await dio.get(ApiEndpoints.loadUpdate);
+  Future<ApiResponse<LoadUpdateResponseModel>> loadUpdate({
+    bool showConnectionErrorDialog = true,
+  }) async {
+    final response = await dio.get(
+      ApiEndpoints.loadUpdate,
+      options: Options(
+        extra: {
+          AppConstants.showConnectionErrorDialog: showConnectionErrorDialog,
+        },
+      ),
+    );
 
     return ApiResponse.fromJson(
       response.data,

@@ -41,6 +41,9 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
       final response = await _dio.post(
         ApiEndpoints.registerDevice,
         data: {'fcm': token, 'country': await LanguageUtils.getCountryFcm()},
+        options: Options(
+          extra: {AppConstants.showConnectionErrorDialog: false},
+        ),
       );
 
       final result = ApiResponse.fromJson(response.data, (json, jsonMap) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io'; // Để kiểm tra Platform.isIOS, Platform.isAndroid
 
 import 'package:android_id/android_id.dart';
@@ -8,10 +9,16 @@ import 'package:monkey_stories/core/utils/language.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/error/exceptions.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
+import 'package:monkey_stories/di/injection_container.dart';
 
 class DioInterceptor extends Interceptor {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final Logger _logger = Logger('DioInterceptor');
+
+  DioInterceptor();
 
   Future<String?> _getDeviceId() async {
     final prefs = await SharedPreferences.getInstance();
@@ -150,15 +157,81 @@ class DioInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     _logger.severe(
       '[${err.requestOptions.method}] Error from: ${err.requestOptions.uri} -> ${err.response?.statusCode ?? 'N/A'}',
       err.error,
       err.stackTrace,
     );
+
+    final isNetworkError = switch (err.type) {
+      DioExceptionType.connectionTimeout ||
+      DioExceptionType.sendTimeout ||
+      DioExceptionType.receiveTimeout ||
+      DioExceptionType.connectionError => true,
+      DioExceptionType.unknown => err.error is SocketException,
+      _ => false,
+    };
+
+    if (isNetworkError) {
+      return _handleConnectionError(err, handler);
+    }
+
+    // Ghi log và bỏ qua cho các lỗi khác
     if (err.response?.data != null) {
       _logger.warning('Error response data: ${err.response!.data}');
     }
-    super.onError(err, handler);
+    return super.onError(err, handler);
+  }
+
+  Future<void> _handleConnectionError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // Đọc cờ từ `extra`. Mặc định là `true` nếu không được đặt.
+    final bool shouldShowDialog =
+        err.requestOptions.extra[AppConstants.showConnectionErrorDialog]
+            as bool? ??
+        true;
+
+    if (!shouldShowDialog) {
+      _logger.info(
+        'Connection error dialog is disabled for this request. Passing error along.',
+      );
+      return handler.next(err);
+    }
+
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      _logger.warning(
+        'Cannot show lost connection dialog because navigatorKey.currentContext is null. Passing error along.',
+      );
+      return handler.next(err);
+    }
+
+    final shouldRetry = await showLostConnectDialog(context: context);
+
+    if (shouldRetry) {
+      try {
+        _logger.info('Retrying request to ${err.requestOptions.uri}');
+        final response = await sl<Dio>().fetch(err.requestOptions);
+        return handler.resolve(response);
+      } catch (e) {
+        _logger.severe('Retry failed: ${e.toString()}');
+        return handler.next(e is DioException ? e : err);
+      }
+    } else {
+      _logger.info('User chose not to retry. Rejecting with original error.');
+      final networkException = NetworkException(
+        message: 'Không có kết nối internet. Vui lòng kiểm tra và thử lại.',
+      );
+      final customError = DioException(
+        requestOptions: err.requestOptions,
+        error: networkException,
+        type: err.type,
+        response: err.response,
+      );
+      return handler.reject(customError);
+    }
   }
 }

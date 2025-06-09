@@ -9,7 +9,9 @@ abstract class ProfileRepository {
     int levelId,
   );
 
-  Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile();
+  Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile({
+    bool showConnectionErrorDialog = true,
+  });
 
   Future<Either<CacheFailure, int?>> getCurrentProfile();
 

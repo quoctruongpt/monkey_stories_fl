@@ -129,13 +129,18 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> changeLanguage(String languageCode) async {
-    _logger.info('Changing language to: $languageCode');
-    final result = await _saveLanguageUseCase.call(languageCode);
-    result.fold(
-      (failure) =>
-          _logger.severe('Failed to save language: ${failure.displayMessage}'),
-      (_) => emit(state.copyWith(languageCode: languageCode)),
-    );
+    try {
+      _logger.info('Changing language to: $languageCode');
+      final result = await _saveLanguageUseCase.call(languageCode);
+      result.fold(
+        (failure) => _logger.severe(
+          'Failed to save language: ${failure.displayMessage}',
+        ),
+        (_) => emit(state.copyWith(languageCode: languageCode)),
+      );
+    } catch (e) {
+      _logger.severe('Failed to save language: $e');
+    }
   }
 
   Future<void> toggleTheme() async {

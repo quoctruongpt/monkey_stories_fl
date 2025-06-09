@@ -23,8 +23,12 @@ class AccountRepositoryImpl extends AccountRepository {
   });
 
   @override
-  Future<Either<ServerFailureWithCode, LoadUpdateEntity?>> loadUpdate() async {
-    final response = await accountRemoteDataSource.loadUpdate();
+  Future<Either<ServerFailureWithCode, LoadUpdateEntity?>> loadUpdate({
+    bool showConnectionErrorDialog = true,
+  }) async {
+    final response = await accountRemoteDataSource.loadUpdate(
+      showConnectionErrorDialog: showConnectionErrorDialog,
+    );
 
     if (response.status == ApiStatus.success) {
       final countryCode = response.data?.location.countryCode;

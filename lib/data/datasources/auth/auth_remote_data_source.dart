@@ -166,8 +166,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during sign up');
     } catch (e) {
       // Các lỗi khác
       throw ServerException(message: e.toString());
@@ -191,8 +190,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             : null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during login');
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {

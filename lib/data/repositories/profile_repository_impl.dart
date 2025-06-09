@@ -44,9 +44,12 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<Either<ServerFailureWithCode, List<ProfileEntity>>>
-  getListProfile() async {
-    final response = await profileRemoteDataSource.getListProfile();
+  Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile({
+    bool showConnectionErrorDialog = true,
+  }) async {
+    final response = await profileRemoteDataSource.getListProfile(
+      showConnectionErrorDialog: showConnectionErrorDialog,
+    );
 
     if (response.status == ApiStatus.success) {
       final list = response.data!.map((e) => e.toEntity()).toList();

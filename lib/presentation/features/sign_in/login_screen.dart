@@ -18,7 +18,6 @@ import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.d
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
-import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
 
 final logger = Logger('LoginScreen');
 
@@ -199,10 +198,6 @@ class _LoginScreenState extends State<LoginScreen>
     if (state.status == FormSubmissionStatus.failure &&
         state.errorMessageDialog != null) {
       _handleLoginFailure(state.errorMessageDialog!);
-      return;
-    }
-    if (state.status == FormSubmissionStatus.networkFailure) {
-      showLostConnectDialog(context: context, onRetry: _loginPressed);
       return;
     }
   }

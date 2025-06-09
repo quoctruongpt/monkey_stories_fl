@@ -51,9 +51,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     });
   }
 
-  Future<void> getListProfile() async {
+  Future<void> getListProfile({bool showConnectionErrorDialog = true}) async {
     try {
-      final result = await _getListProfileUsecase.call(NoParams());
+      final result = await _getListProfileUsecase.call(
+        showConnectionErrorDialog,
+      );
 
       result.fold(
         (failure) {

@@ -40,7 +40,6 @@ class ReportScreen extends StatelessWidget {
                     AppLocalizations.of(context).translate('error'),
                   ),
                   backgroundColor: Colors.red,
-                  duration: const Duration(hours: 1),
                 ),
               );
             } else {

@@ -86,9 +86,11 @@ class UserCubit extends HydratedCubit<UserState> {
     }
   }
 
-  Future<void> loadUpdate() async {
+  Future<void> loadUpdate({bool showConnectionErrorDialog = true}) async {
     try {
-      final result = await _getLoadUpdateUsecase.call(null);
+      final result = await _getLoadUpdateUsecase.call(
+        showConnectionErrorDialog,
+      );
 
       result.fold(
         (failure) {

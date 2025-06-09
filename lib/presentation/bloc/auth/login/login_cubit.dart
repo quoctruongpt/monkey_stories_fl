@@ -315,11 +315,6 @@ class LoginCubit extends Cubit<LoginState> {
       logger.severe('loginSubmitted error: $e');
       _trackingData.errorMessage = e.toString();
 
-      if (e is NetworkException) {
-        emit(state.copyWith(status: FormSubmissionStatus.networkFailure));
-        return;
-      }
-
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,
