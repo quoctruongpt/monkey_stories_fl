@@ -8,6 +8,23 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 
+class _BottomRightHigherFabLocation extends FloatingActionButtonLocation {
+  const _BottomRightHigherFabLocation({required this.currentIndex});
+
+  final int currentIndex;
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final Offset defaultOffset = FloatingActionButtonLocation.endFloat
+        .getOffset(scaffoldGeometry);
+
+    // VIP tab is at index 1
+    final double verticalOffset = (currentIndex == 1) ? 150.0 : 0.0;
+
+    return Offset(defaultOffset.dx, defaultOffset.dy - verticalOffset);
+  }
+}
+
 class ParentTab extends StatelessWidget {
   const ParentTab({super.key, required this.navigationShell});
 
@@ -23,6 +40,9 @@ class ParentTab extends StatelessWidget {
 
           return Scaffold(
             body: navigationShell,
+            floatingActionButtonLocation: _BottomRightHigherFabLocation(
+              currentIndex: navigationShell.currentIndex,
+            ),
             bottomNavigationBar: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               transitionBuilder: (Widget child, Animation<double> animation) {
