@@ -6,4 +6,5 @@ class AppConstants {
 
   // Key to control the visibility of the connection error dialog per request.
   static const String showConnectionErrorDialog = 'showConnectionErrorDialog';
+  static const String isCloseable = 'isCloseable';
 }

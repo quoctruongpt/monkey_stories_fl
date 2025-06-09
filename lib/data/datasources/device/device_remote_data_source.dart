@@ -21,7 +21,10 @@ class DeviceRemoteDataSourceImpl implements DeviceRemoteDataSource {
     try {
       // Logic gọi API giống trong splash_screen.dart cũ
       // Sử dụng dioClient đã được inject với interceptor
-      final response = await dioClient.get(ApiEndpoints.registerLocation);
+      final response = await dioClient.get(
+        ApiEndpoints.registerLocation,
+        options: Options(extra: {AppConstants.isCloseable: false}),
+      );
 
       final data = ApiResponse.fromJson(
         response.data,

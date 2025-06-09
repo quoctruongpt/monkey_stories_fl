@@ -5,10 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 
-Future<bool> showLostConnectDialog({required BuildContext context}) {
+Future<bool> showLostConnectDialog({
+  required BuildContext context,
+  bool isCloseable = true,
+}) {
   final completer = Completer<bool>();
 
   showCustomNoticeDialog(
+    isCloseable: isCloseable,
     context: context,
     titleText: AppLocalizations.of(
       context,

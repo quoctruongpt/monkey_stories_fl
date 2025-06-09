@@ -209,7 +209,11 @@ class DioInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    final shouldRetry = await showLostConnectDialog(context: context);
+    final shouldRetry = await showLostConnectDialog(
+      context: context,
+      isCloseable:
+          err.requestOptions.extra[AppConstants.isCloseable] as bool? ?? true,
+    );
 
     if (shouldRetry) {
       try {
