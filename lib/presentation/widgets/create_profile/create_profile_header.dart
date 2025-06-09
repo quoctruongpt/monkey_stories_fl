@@ -13,11 +13,14 @@ class CreateProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Lottie.asset(
-          'assets/lottie/monkey_write.lottie',
-          decoder: customDecoder,
-          width: 148,
-          height: 168,
+        Hero(
+          tag: 'monkey_write',
+          child: Lottie.asset(
+            'assets/lottie/monkey_write.lottie',
+            decoder: customDecoder,
+            width: 148,
+            height: 168,
+          ),
         ),
         const SizedBox(width: Spacing.sm),
         Flexible(
