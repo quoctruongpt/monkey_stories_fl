@@ -8,7 +8,7 @@ import 'package:monkey_stories/di/blocs.dart';
 import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
 
-class VerifyDialog extends StatelessWidget {
+class VerifyDialog extends StatefulWidget {
   final VoidCallback? onSuccessCallback;
   final VoidCallback? onCloseExplicitly;
   final VoidCallback? onSuccess;
@@ -21,6 +21,57 @@ class VerifyDialog extends StatelessWidget {
   });
 
   @override
+  State<VerifyDialog> createState() => _VerifyDialogState();
+}
+
+class _VerifyDialogState extends State<VerifyDialog>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<Offset> _shakeAnimation;
+  late final Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _shakeAnimation = TweenSequence<Offset>([
+      TweenSequenceItem(
+        tween: Tween(begin: const Offset(0, 0), end: const Offset(-0.05, 0)),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: const Offset(-0.05, 0), end: const Offset(0.05, 0)),
+        weight: 2,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: const Offset(0.05, 0), end: const Offset(0, 0)),
+        weight: 1,
+      ),
+    ]).chain(CurveTween(curve: Curves.easeInOut)).animate(_animationController);
+
+    _colorAnimation = TweenSequence<Color?>([
+      TweenSequenceItem(
+        tween: ColorTween(begin: AppTheme.azureColor, end: Colors.red),
+        weight: 1,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(begin: Colors.red, end: AppTheme.azureColor),
+        weight: 1,
+      ),
+    ]).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -29,15 +80,25 @@ class VerifyDialog extends StatelessWidget {
       body: Stack(
         children: [
           BlocConsumer<VerifyParentCubit, VerifyParentState>(
-            listenWhen:
-                (previous, current) => previous.isCorrect != current.isCorrect,
+            listenWhen: (previous, current) {
+              if (current.randomNumbers.isEmpty) return false;
+
+              final numberOfCharacters = current.randomNumbers.length;
+              final isFull = current.input.length == numberOfCharacters;
+              final wasNotFull = previous.input.length < numberOfCharacters;
+
+              return previous.isCorrect != current.isCorrect ||
+                  (wasNotFull && isFull && !current.isCorrect);
+            },
             listener: (context, state) {
               if (state.isCorrect) {
-                onSuccessCallback?.call();
-                if (onSuccess != null) {
+                widget.onSuccessCallback?.call();
+                if (widget.onSuccess != null) {
                   context.pop();
-                  onSuccess?.call();
+                  widget.onSuccess?.call();
                 }
+              } else {
+                _animationController.forward(from: 0);
               }
             },
             builder: (context, state) {
@@ -46,14 +107,13 @@ class VerifyDialog extends StatelessWidget {
                   : _buildPortraitLayout(context, state);
             },
           ),
-
           Positioned(
             top: isLandscape ? 0 : 30,
             right: 0,
             child: IconButton(
               onPressed: () {
-                if (onCloseExplicitly != null) {
-                  onCloseExplicitly?.call();
+                if (widget.onCloseExplicitly != null) {
+                  widget.onCloseExplicitly?.call();
                 } else {
                   context.pop();
                 }
@@ -167,57 +227,71 @@ class VerifyDialog extends StatelessWidget {
   }
 
   Widget _buildInputField(BuildContext context, VerifyParentState state) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Column(
-          children: [
-            Row(
-              children: List.generate(
-                numberOfCharacters,
-                (index) => Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: SizedBox(
-                    width: 60,
-                    height: 32,
-                    child: Text(
-                      index < state.input.length ? state.input[index] : '',
-                      style: Theme.of(context).textTheme.displayMedium
-                          ?.copyWith(color: AppTheme.azureColor, fontSize: 32),
-                      textAlign: TextAlign.center,
+    final numberOfCharacters = state.randomNumbers.length;
+    return SlideTransition(
+      position: _shakeAnimation,
+      child: AnimatedBuilder(
+        animation: _colorAnimation,
+        builder: (context, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: List.generate(
+                      numberOfCharacters,
+                      (index) => Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: SizedBox(
+                          width: 60,
+                          height: 32,
+                          child: Text(
+                            index < state.input.length
+                                ? state.input[index]
+                                : '',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.displayMedium?.copyWith(
+                              color: _colorAnimation.value,
+                              fontSize: 32,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Row(
-              children: List.generate(
-                numberOfCharacters,
-                (index) => Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Container(
-                    width: 60,
-                    height: 4,
-                    color: AppTheme.azureColor,
+                  Row(
+                    children: List.generate(
+                      numberOfCharacters,
+                      (index) => Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Container(
+                          width: 60,
+                          height: 4,
+                          color: _colorAnimation.value,
+                        ),
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              IconButton(
+                onPressed: () {
+                  context.read<VerifyParentCubit>().onBackspacePressed();
+                },
+                icon: Icon(
+                  Icons.backspace,
+                  size: 40,
+                  color: _colorAnimation.value,
                 ),
               ),
-            ),
-          ],
-        ),
-
-        IconButton(
-          onPressed: () {
-            context.read<VerifyParentCubit>().onBackspacePressed();
-          },
-          icon: const Icon(
-            Icons.backspace,
-            size: 40,
-            color: AppTheme.azureColor,
-          ),
-        ),
-      ],
+            ],
+          );
+        },
+      ),
     );
   }
 
