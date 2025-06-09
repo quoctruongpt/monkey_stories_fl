@@ -34,6 +34,8 @@ import 'package:monkey_stories/data/datasources/system/system_settings_data_sour
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 // Unity Datasources
 import 'package:monkey_stories/data/datasources/unity_datasource.dart';
+import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/offline/offline_local_data_source_impl.dart';
 
 final sl = GetIt.instance;
 
@@ -153,6 +155,12 @@ void initDatasourceDependencies() {
   // Report
   sl.registerLazySingleton<ReportRemoteDataSource>(
     () => ReportRemoteDataSourceImpl(dio: sl<Dio>()),
+  );
+
+  // Offline
+  sl.registerLazySingleton<OfflineLocalDataSource>(
+    () =>
+        OfflineLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
   );
 
   // Add other datasource registrations here...

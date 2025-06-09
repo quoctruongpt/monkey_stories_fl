@@ -59,6 +59,8 @@ import 'package:monkey_stories/domain/repositories/unity_repository.dart';
 import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
+import 'package:monkey_stories/data/repositories/offline_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/offline_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -169,6 +171,11 @@ void initRepositoryDependencies() {
   // Report
   sl.registerLazySingleton<ReportRepository>(
     () => ReportRepositoryImpl(remoteDataSource: sl<ReportRemoteDataSource>()),
+  );
+
+  // Offline
+  sl.registerLazySingleton<OfflineRepository>(
+    () => OfflineRepositoryImpl(localDataSource: sl(), networkInfo: sl()),
   );
 
   // Add other repository registrations here...

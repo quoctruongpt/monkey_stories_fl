@@ -127,6 +127,26 @@ class _SplashScreenState extends State<SplashScreen>
       case SplashAuthenticatedBefore():
         GoRouter.of(context).replace(AppRoutePaths.login);
         return;
+      case SplashOfflineLimitExceeded():
+        showCustomNoticeDialog(
+          isCloseable: false,
+          context: context,
+          titleText: AppLocalizations.of(
+            context,
+          ).translate('app.lost_connection.title'),
+          messageText: AppLocalizations.of(
+            context,
+          ).translate('app.lost_connection.message'),
+          imageAsset: 'assets/images/monkey_sad.png',
+          primaryActionText: AppLocalizations.of(
+            context,
+          ).translate('app.try_again'),
+          onPrimaryAction: () {
+            context.read<SplashCubit>().runApp();
+            context.pop();
+          },
+        );
+        return;
       case SplashError():
         _onSplashError(context);
         return;

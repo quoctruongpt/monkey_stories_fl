@@ -23,6 +23,8 @@ class SplashUnauthenticated extends SplashState {}
 // Chưa xác thực và đã từng đăng nhập
 class SplashAuthenticatedBefore extends SplashState {}
 
+class SplashOfflineLimitExceeded extends SplashState {}
+
 class SplashError extends SplashState {
   final String message;
 

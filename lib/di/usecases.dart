@@ -2,7 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
+import 'package:monkey_stories/domain/repositories/offline_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/report_repository.dart';
@@ -279,5 +281,10 @@ void initUsecaseDependencies() {
   // Report
   sl.registerLazySingleton(
     () => GetReportUsecase(reportRepository: sl<ReportRepository>()),
+  );
+
+  // New Usecases
+  sl.registerLazySingleton(
+    () => CheckOfflineStatusUseCase(sl<OfflineRepository>()),
   );
 }

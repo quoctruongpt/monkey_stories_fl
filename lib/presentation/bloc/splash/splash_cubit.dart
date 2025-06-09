@@ -16,6 +16,7 @@ import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // S
 import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
@@ -27,6 +28,7 @@ class SplashCubit extends Cubit<SplashState> {
   final GetHasLoggedBeforeUsecase _getHasLoggedBeforeUsecase;
   final SaveFcmUsecase _saveFcmUsecase;
   final RegisterTokenAirbridgeUsecase _registerTokenAirbridgeUsecase;
+  final CheckOfflineStatusUseCase _checkOfflineStatusUseCase;
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 4;
 
@@ -40,6 +42,7 @@ class SplashCubit extends Cubit<SplashState> {
     required GetHasLoggedBeforeUsecase getHasLoggedBeforeUsecase,
     required SaveFcmUsecase saveFcmUsecase,
     required RegisterTokenAirbridgeUsecase registerTokenAirbridgeUsecase,
+    required CheckOfflineStatusUseCase checkOfflineStatusUseCase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit,
@@ -49,6 +52,7 @@ class SplashCubit extends Cubit<SplashState> {
        _getHasLoggedBeforeUsecase = getHasLoggedBeforeUsecase,
        _saveFcmUsecase = saveFcmUsecase,
        _registerTokenAirbridgeUsecase = registerTokenAirbridgeUsecase,
+       _checkOfflineStatusUseCase = checkOfflineStatusUseCase,
        super(SplashInitial());
 
   Future<void> runApp() async {
@@ -62,7 +66,16 @@ class SplashCubit extends Cubit<SplashState> {
     final startTime = DateTime.now(); // Ghi lại thời gian bắt đầu
 
     try {
-      // 1. Ensure device is registered
+      // 1. Check offline status first
+      final offlineResult = await _checkOfflineStatusUseCase.call(NoParams());
+      final isOfflineExpired = offlineResult.getOrElse((_) => true);
+
+      if (isOfflineExpired) {
+        emit(SplashOfflineLimitExceeded());
+        return;
+      }
+
+      // 2. Ensure device is registered
       _registerTokenAirbridgeUsecase.call(NoParams());
       final deviceResult = await _registerDeviceUseCase.call(NoParams());
 

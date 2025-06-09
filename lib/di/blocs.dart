@@ -104,6 +104,7 @@ import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usec
 import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -178,6 +179,7 @@ void initBlocDependencies() {
       getHasLoggedBeforeUsecase: sl<GetHasLoggedBeforeUsecase>(),
       saveFcmUsecase: sl<SaveFcmUsecase>(),
       registerTokenAirbridgeUsecase: sl<RegisterTokenAirbridgeUsecase>(),
+      checkOfflineStatusUseCase: sl<CheckOfflineStatusUseCase>(),
     ),
   );
 
