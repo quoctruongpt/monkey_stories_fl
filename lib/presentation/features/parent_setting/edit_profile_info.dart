@@ -155,8 +155,11 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                               SizedBox(
                                 width: 132,
                                 height: 132,
-                                child: Avatar(
-                                  avatar: state.profile?.avatarPath,
+                                child: Hero(
+                                  tag: 'profile_${state.profile?.id}',
+                                  child: Avatar(
+                                    avatar: state.profile?.avatarPath,
+                                  ),
                                 ),
                               ),
                               Center(

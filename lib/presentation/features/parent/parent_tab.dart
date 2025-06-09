@@ -6,6 +6,7 @@ import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 
 class _BottomRightHigherFabLocation extends FloatingActionButtonLocation {
@@ -29,6 +30,14 @@ class ParentTab extends StatelessWidget {
   const ParentTab({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
+
+  void _handlePlayPressed(BuildContext context) {
+    if (context.read<ProfileCubit>().state.currentProfile == null) {
+      context.go(AppRoutePaths.listProfile);
+      return;
+    }
+    context.go(AppRoutePaths.unity);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +148,7 @@ class ParentTab extends StatelessWidget {
                         width: 80,
                         height: 80,
                         child: FloatingActionButton(
-                          onPressed: () {
-                            context.go(AppRoutePaths.unity);
-                          },
+                          onPressed: () => _handlePlayPressed(context),
                           backgroundColor: const Color(0xFFFFBB00),
                           mini: false,
                           shape: const CircleBorder(

@@ -69,6 +69,7 @@ class ListProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(
         title: AppLocalizations.of(context).translate('app.list_profile.title'),
+        showBackButton: false,
         actions: [
           IconButton(
             onPressed: () => _settingPressed(context),
