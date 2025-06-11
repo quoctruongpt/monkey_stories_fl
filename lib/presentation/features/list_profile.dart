@@ -154,7 +154,10 @@ class ListProfile extends StatelessWidget {
                                       width: width,
                                       child: AddProfileItem(
                                         onTap:
-                                            () => _addProfilePressed(context),
+                                            // () => _addProfilePressed(context),
+                                            () => context.push(
+                                              AppRoutePaths.audioBook,
+                                            ),
                                       ),
                                     ),
                                 ],

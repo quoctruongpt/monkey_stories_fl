@@ -105,6 +105,7 @@ import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -335,6 +336,8 @@ void initBlocDependencies() {
   );
 
   sl.registerFactory(() => BottomNavigationCubit());
+
+  sl.registerFactory(() => AudioBookCubit());
 
   // Add other Bloc/Cubit registrations here...
 }
