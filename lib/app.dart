@@ -21,6 +21,7 @@ import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
 import 'package:monkey_stories/presentation/widgets/leave_contact_dialog/leave_contact_dialog.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 
 final logger = Logger('MyApp');
 
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<ProfileCubit>()..getCurrentProfile()),
         BlocProvider(create: (_) => sl<PurchasedCubit>()),
         BlocProvider(create: (_) => DialogCubit()),
+        BlocProvider(create: (_) => sl<PlaylistCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:

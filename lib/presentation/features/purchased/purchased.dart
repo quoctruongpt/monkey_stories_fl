@@ -45,7 +45,13 @@ class PurchasedScreen extends StatelessWidget {
             showBackButton: false,
             actions: [
               IconButton(
-                onPressed: () => context.go(AppRoutePaths.unity),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go(AppRoutePaths.unity);
+                  }
+                },
                 icon: const Icon(
                   Icons.clear,
                   color: AppTheme.textColor,

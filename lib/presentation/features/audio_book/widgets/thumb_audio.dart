@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 
 class ThumbAudio extends StatelessWidget {
-  const ThumbAudio({super.key});
+  const ThumbAudio({super.key, required this.track});
+
+  final AudioBookItem? track;
 
   @override
   Widget build(BuildContext context) {
+    // A placeholder to show when the track data is not available yet.
+    final placeholder = Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.grey[300],
+    );
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 260, maxHeight: 260),
       child: AspectRatio(
@@ -29,12 +39,17 @@ class ThumbAudio extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/purchased.png',
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child:
+                  track != null && track!.localThumbPath != null
+                      ? Image.asset(
+                        track!.localThumbPath!,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => placeholder,
+                      )
+                      : placeholder,
             ),
           ),
         ),

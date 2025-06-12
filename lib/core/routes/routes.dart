@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -112,7 +114,7 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.result,
       builder: (context, state) {
         return const OrientationWrapper(
-          orientation: AppOrientation.landscapeLeft,
+          orientation: AppOrientation.landscapeRight,
           child: ResultScreen(),
         );
       },
@@ -123,7 +125,7 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.unity,
       builder: (context, state) {
         return const OrientationWrapper(
-          orientation: AppOrientation.landscapeLeft,
+          orientation: AppOrientation.landscapeRight,
           child: UnityScreen(),
         );
       },
@@ -427,9 +429,13 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.audioBook,
       name: AppRouteNames.audioBook,
       builder: (context, state) {
-        return const OrientationWrapper(
+        final String? audioSelectedId =
+            state.uri.queryParameters['audioSelectedId'];
+        final int? audioSelectedIdInt =
+            audioSelectedId != null ? int.parse(audioSelectedId) : null;
+        return OrientationWrapper(
           orientation: AppOrientation.landscapeRight,
-          child: AudioBookPage(),
+          child: AudioBookPage(audioSelectedId: audioSelectedIdInt),
         );
       },
     ),
