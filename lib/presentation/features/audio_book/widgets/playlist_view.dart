@@ -139,7 +139,7 @@ class _PlaylistViewState extends State<PlaylistView>
                       ),
                     ),
                     leading:
-                        track.isDownloading && isPlaying
+                        track.isDownloading
                             ? const SizedBox(
                               width: 24,
                               height: 24,

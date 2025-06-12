@@ -442,10 +442,11 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     if (!track.isDownloaded) {
       // If the track is not downloaded, pause playback.
       pause();
-      // Seek to the new track (it will be a placeholder). This updates the UI focus.
-      await _audioPlayer.seek(Duration.zero, index: index);
       // Start the download. The UI will show a loading indicator.
       await _downloadTrackIfNeeded(index);
+      // Seek to the new track (it will be a placeholder). This updates the UI focus.
+      await _audioPlayer.seek(Duration.zero, index: index);
+      play();
       // After downloading, the player remains paused. User must tap play.
     } else {
       // If the track is already downloaded, seek to it and play.
