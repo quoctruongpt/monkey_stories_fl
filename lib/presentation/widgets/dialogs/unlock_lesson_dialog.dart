@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 
@@ -44,7 +45,9 @@ class UnlockLessonDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Bài học mới cực thú vị đang bị khóa!',
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.audio_book.unlock_lesson_dialog.title'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
                         color: AppTheme.primaryColor,
@@ -54,7 +57,9 @@ class UnlockLessonDialog extends StatelessWidget {
                     _buildThumbnails(),
                     const SizedBox(height: 16),
                     Text(
-                      'Khi con tò mò lắm rồi – ba mẹ cùng bé mở khóa nào!',
+                      AppLocalizations.of(context).translate(
+                        'app.audio_book.unlock_lesson_dialog.description',
+                      ),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: AppTheme.textSecondaryColor,
@@ -63,7 +68,7 @@ class UnlockLessonDialog extends StatelessWidget {
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [_buildUnlockButton()],
+                      children: [_buildUnlockButton(context)],
                     ),
                   ],
                 ),
@@ -117,9 +122,11 @@ class UnlockLessonDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildUnlockButton() {
+  Widget _buildUnlockButton(BuildContext context) {
     return AppButton.primary(
-      text: 'Mở khóa toàn bộ',
+      text: AppLocalizations.of(
+        context,
+      ).translate('app.audio_book.unlock_lesson_dialog.unlock_all'),
       onPressed: onUnlock ?? () {},
       isFullWidth: false,
       icon: SvgPicture.asset(

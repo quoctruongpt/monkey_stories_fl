@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
 
@@ -36,7 +37,10 @@ class TimerDropdown extends StatelessWidget {
     final currentMinutes = state.timerDuration?.inMinutes ?? 30;
 
     String formatDuration(Duration d) {
-      return '${d.inMinutes.toString().padLeft(2, '0')} phút';
+      return AppLocalizations.of(context).translate(
+        'app.audio_book.minutes',
+        params: {'number': d.inMinutes.toString().padLeft(2, '0')},
+      );
     }
 
     return PopupMenuButton<int>(
@@ -64,7 +68,10 @@ class TimerDropdown extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                '$minutes phút',
+                AppLocalizations.of(context).translate(
+                  'app.audio_book.minutes',
+                  params: {'number': minutes.toString()},
+                ),
                 style: const TextStyle(
                   color: AppTheme.azureColor,
                   fontWeight: FontWeight.w800,

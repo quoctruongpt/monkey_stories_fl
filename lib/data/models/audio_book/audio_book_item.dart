@@ -50,6 +50,7 @@ class AudioBookItem extends Equatable {
       name: json['name'] as String,
       duration: json['duration'] as int,
       isDownloaded: json['isDownloaded'] as bool,
+      isDownloading: json['isDownloading'] ?? false,
       localAudioPath: json['localAudioPath'] as String?,
       localSyncTextPath: json['localSyncTextPath'] as String?,
       localThumbPath: json['localThumbPath'] as String?,

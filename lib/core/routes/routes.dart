@@ -432,7 +432,7 @@ final GoRouter router = GoRouter(
         final String? audioSelectedId =
             state.uri.queryParameters['audioSelectedId'];
         final int? audioSelectedIdInt =
-            audioSelectedId != null ? int.parse(audioSelectedId) : null;
+            audioSelectedId == null ? null : int.tryParse(audioSelectedId);
         return OrientationWrapper(
           orientation: AppOrientation.landscapeRight,
           child: AudioBookPage(audioSelectedId: audioSelectedIdInt),

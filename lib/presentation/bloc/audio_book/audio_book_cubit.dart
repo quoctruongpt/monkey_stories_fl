@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
@@ -31,18 +32,28 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   AudioSource _createAudioSource(AudioBookItem item) {
+    // Create a MediaItem with metadata for the notification
+    final mediaItem = MediaItem(
+      id: item.id.toString(),
+      title: item.name,
+      // For assets, the URI must be in the 'asset:///' format.
+      artUri:
+          item.isDownloaded && item.localThumbPath != null
+              ? Uri.parse('asset:///${item.localThumbPath}')
+              : null, // Placeholder can be added here if needed
+      duration: Duration(seconds: item.duration),
+    );
+
     if (item.isDownloaded && item.localAudioPath != null) {
       logger.info(
         'Creating source for ${item.name} from asset: ${item.localAudioPath}',
       );
-      return AudioSource.asset(item.localAudioPath!, tag: item.id);
+      return AudioSource.asset(item.localAudioPath!, tag: mediaItem);
     } else {
-      // Use a known, valid audio file as a placeholder for non-downloaded tracks.
-      // This ensures the player always has a valid source and avoids errors.
       logger.warning(
         'Creating placeholder source for non-downloaded track: ${item.name}',
       );
-      return AudioSource.asset('assets/audio/aaa.mp3', tag: item.id);
+      return AudioSource.asset('assets/audio/aaa.mp3', tag: mediaItem);
     }
   }
 
@@ -181,6 +192,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   void _checkPaidLockedAudio(int index) {
+    if (index < 0 || index >= state.playlist.length) return;
     final track = state.playlist[index];
     logger.info('checkPaidLockedAudio: ${track.name}');
     if (!track.isFree && !_userCubit.state.purchasedInfo!.isActive) {
@@ -190,6 +202,9 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   Future<void> _loadTranscriptForTrack(int index) async {
+    if (index < 0 || index >= state.playlist.length) {
+      return; // Index is out of bounds, do nothing.
+    }
     final track = state.playlist[index];
     if (!track.isDownloaded || track.localSyncTextPath == null) {
       // Handle case where transcript is not available
@@ -340,32 +355,81 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   Future<void> next() async {
-    // Temporarily disable LoopMode.one to allow seeking to the next track.
+    // Temporarily disable LoopMode.one to correctly check hasNext
+    // and to allow moving to the next track.
     final originalLoopMode = _audioPlayer.loopMode;
     if (originalLoopMode == LoopMode.one) {
       await _audioPlayer.setLoopMode(LoopMode.off);
     }
 
-    await _audioPlayer.seekToNext();
-    _checkPaidLockedAudio(state.currentTrackIndex + 1);
+    // Exit if there is no next track
+    if (!_audioPlayer.hasNext) {
+      if (originalLoopMode == LoopMode.one) {
+        await _audioPlayer.setLoopMode(originalLoopMode);
+      }
+      return;
+    }
 
-    // Restore the original loop mode.
+    final nextIndex = _audioPlayer.currentIndex! + 1;
+    final nextTrack = state.playlist[nextIndex];
+    _checkPaidLockedAudio(nextIndex);
+
+    if (!nextTrack.isDownloaded) {
+      // If the track is not downloaded, pause playback.
+      pause();
+      // Seek to the new track (it will be a placeholder). This updates the UI focus.
+      await _audioPlayer.seek(Duration.zero, index: nextIndex);
+      // Start the download. The UI will show a loading indicator.
+      // We await this to ensure the source is updated before any potential playback.
+      await _downloadTrackIfNeeded(nextIndex);
+      // After downloading, the player will remain paused for the user to resume.
+    } else {
+      // If the track is already downloaded, simply seek to it.
+      // The player will continue playing if it was already in a playing state.
+      await _audioPlayer.seekToNext();
+    }
+
+    // Restore the original loop mode
     if (originalLoopMode == LoopMode.one) {
       await _audioPlayer.setLoopMode(originalLoopMode);
     }
   }
 
   Future<void> previous() async {
-    // Temporarily disable LoopMode.one to allow seeking to the previous track.
+    // Temporarily disable LoopMode.one to correctly check hasPrevious
+    // and to allow moving to the previous track.
     final originalLoopMode = _audioPlayer.loopMode;
     if (originalLoopMode == LoopMode.one) {
       await _audioPlayer.setLoopMode(LoopMode.off);
     }
 
-    await _audioPlayer.seekToPrevious();
-    _checkPaidLockedAudio(state.currentTrackIndex - 1);
+    // Exit if there is no previous track
+    if (!_audioPlayer.hasPrevious) {
+      if (originalLoopMode == LoopMode.one) {
+        await _audioPlayer.setLoopMode(originalLoopMode);
+      }
+      return;
+    }
 
-    // Restore the original loop mode.
+    final prevIndex = _audioPlayer.currentIndex! - 1;
+    final prevTrack = state.playlist[prevIndex];
+    _checkPaidLockedAudio(prevIndex);
+
+    if (!prevTrack.isDownloaded) {
+      // If the track is not downloaded, pause playback.
+      pause();
+      // Seek to the new track (it will be a placeholder). This updates the UI focus.
+      await _audioPlayer.seek(Duration.zero, index: prevIndex);
+      // Start the download. The UI will show a loading indicator.
+      await _downloadTrackIfNeeded(prevIndex);
+      // After downloading, the player will remain paused for the user to resume.
+    } else {
+      // If the track is already downloaded, simply seek to it.
+      // The player will continue playing if it was already in a playing state.
+      await _audioPlayer.seekToPrevious();
+    }
+
+    // Restore the original loop mode
     if (originalLoopMode == LoopMode.one) {
       await _audioPlayer.setLoopMode(originalLoopMode);
     }
@@ -373,21 +437,22 @@ class AudioBookCubit extends Cubit<AudioBookState> {
 
   Future<void> skipToTrack(int index) async {
     final track = state.playlist[index];
+    _checkPaidLockedAudio(index);
 
-    emit(state.copyWith(currentTrackIndex: index));
-
-    // If track is not downloaded, start downloading it.
-    // The UI will show a loading indicator based on `isDownloading`.
-    // Once downloaded, the user can tap again to play.
     if (!track.isDownloaded) {
-      _audioPlayer.pause();
+      // If the track is not downloaded, pause playback.
+      pause();
+      // Seek to the new track (it will be a placeholder). This updates the UI focus.
+      await _audioPlayer.seek(Duration.zero, index: index);
+      // Start the download. The UI will show a loading indicator.
       await _downloadTrackIfNeeded(index);
-    }
-
-    // If track is already downloaded, seek and play.
-    _audioPlayer.seek(Duration.zero, index: index);
-    if (!_audioPlayer.playing) {
-      play();
+      // After downloading, the player remains paused. User must tap play.
+    } else {
+      // If the track is already downloaded, seek to it and play.
+      await _audioPlayer.seek(Duration.zero, index: index);
+      if (!_audioPlayer.playing) {
+        play();
+      }
     }
     _checkPaidLockedAudio(index);
     emit(state.copyWith(currentViewIndex: 0));

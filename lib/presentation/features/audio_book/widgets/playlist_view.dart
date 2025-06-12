@@ -100,7 +100,7 @@ class _PlaylistViewState extends State<PlaylistView>
                                     color: Colors.black.withOpacity(0.4),
                                   ),
                                 ),
-                              if (!track.isFree)
+                              if (paidLockedAudio)
                                 SvgPicture.asset(
                                   'assets/icons/svg/vip.svg',
                                   width: 24,

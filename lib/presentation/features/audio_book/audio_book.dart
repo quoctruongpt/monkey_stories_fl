@@ -14,7 +14,6 @@ import 'package:monkey_stories/presentation/features/audio_book/widgets/playlist
 import 'package:monkey_stories/presentation/features/audio_book/widgets/thumb_audio.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/timer_dropdown.dart';
 import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/unlock_lesson_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 
@@ -48,75 +47,79 @@ class _AudioBookPageState extends State<AudioBookPage>
     // Get the playlist from the shared PlaylistCubit
     final playlist = context.read<PlaylistCubit>().state.playlist;
 
-    return BlocProvider(
-      create:
-          (context) =>
-              sl<AudioBookCubit>()..loadPlaylist(
-                playlist: playlist,
-                audioSelectedId: widget.audioSelectedId,
+    return PopScope(
+      canPop: false,
+      child: BlocProvider(
+        create:
+            (context) =>
+                sl<AudioBookCubit>()..loadPlaylist(
+                  playlist: playlist,
+                  audioSelectedId: widget.audioSelectedId,
+                ),
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AudioBookCubit, AudioBookState>(
+              listenWhen: (p, c) => p.currentViewIndex != c.currentViewIndex,
+              listener: (context, state) {
+                // Programmatically switch tabs
+                _tabController.animateTo(state.currentViewIndex);
+              },
+            ),
+            BlocListener<AudioBookCubit, AudioBookState>(
+              listenWhen:
+                  (p, c) => p.shouldNavigateBack != c.shouldNavigateBack,
+              listener: (context, state) {
+                if (state.shouldNavigateBack) {
+                  context.pop();
+                }
+              },
+            ),
+            BlocListener<AudioBookCubit, AudioBookState>(
+              listenWhen:
+                  (p, c) => p.showBuyToUnlockPopup != c.showBuyToUnlockPopup,
+              listener: (context, state) {
+                if (state.showBuyToUnlockPopup) {
+                  showUnlockLessonDialog(
+                    context: context,
+                    onUnlock: () {
+                      context.pop();
+                      context.read<AudioBookCubit>().closeBuyToUnlockPopup();
+                      showVerifyDialog(
+                        context: context,
+                        onSuccess: () {
+                          context.push(AppRoutePaths.purchased);
+                        },
+                      );
+                    },
+                    onClose: () {
+                      context.pop();
+                      context.read<AudioBookCubit>().closeBuyToUnlockPopup();
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/audio_book_bg.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<AudioBookCubit, AudioBookState>(
-            listenWhen: (p, c) => p.currentViewIndex != c.currentViewIndex,
-            listener: (context, state) {
-              // Programmatically switch tabs
-              _tabController.animateTo(state.currentViewIndex);
-            },
-          ),
-          BlocListener<AudioBookCubit, AudioBookState>(
-            listenWhen: (p, c) => p.shouldNavigateBack != c.shouldNavigateBack,
-            listener: (context, state) {
-              if (state.shouldNavigateBack) {
-                context.pop();
-              }
-            },
-          ),
-          BlocListener<AudioBookCubit, AudioBookState>(
-            listenWhen:
-                (p, c) => p.showBuyToUnlockPopup != c.showBuyToUnlockPopup,
-            listener: (context, state) {
-              if (state.showBuyToUnlockPopup) {
-                showUnlockLessonDialog(
-                  context: context,
-                  onUnlock: () {
-                    context.pop();
-                    context.read<AudioBookCubit>().closeBuyToUnlockPopup();
-                    showVerifyDialog(
-                      context: context,
-                      onSuccess: () {
-                        context.push(AppRoutePaths.purchased);
-                      },
-                    );
-                  },
-                  onClose: () {
-                    context.pop();
-                    context.read<AudioBookCubit>().closeBuyToUnlockPopup();
-                  },
-                );
-              }
-            },
-          ),
-        ],
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/audio_book_bg.png'),
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
             ),
-          ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            extendBodyBehindAppBar: true,
-            appBar: _buildAppBar(context),
-            body: TabBarView(
-              // Disable manual swiping between tabs
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: const [NowPlayingView(), PlaylistView()],
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              extendBodyBehindAppBar: true,
+              appBar: _buildAppBar(context),
+              body: TabBarView(
+                // Disable manual swiping between tabs
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _tabController,
+                children: const [NowPlayingView(), PlaylistView()],
+              ),
+              bottomNavigationBar: const Footer(),
             ),
-            bottomNavigationBar: const Footer(),
           ),
         ),
       ),
@@ -153,7 +156,7 @@ class _AudioBookPageState extends State<AudioBookPage>
                     Text(
                       AppLocalizations.of(
                         context,
-                      ).translate('Tự động chuyển bài'),
+                      ).translate('app.audio_book.auto_next'),
                       style: const TextStyle(
                         color: AppTheme.textColor,
                         fontSize: 12,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:monkey_stories/app.dart';
 import 'package:monkey_stories/di/injection_container.dart' as di;
 import 'package:monkey_stories/core/env/environment_service.dart';
@@ -16,6 +17,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
 
 Future<void> main() async {
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Airbridge.startTracking();

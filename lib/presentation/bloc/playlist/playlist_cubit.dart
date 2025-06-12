@@ -16,6 +16,7 @@ class PlaylistCubit extends Cubit<PlaylistState> {
           playlistMap.map((data) => AudioBookItem.fromJson(data)).toList();
       emit(state.copyWith(playlist: playlist));
     } catch (e) {
+      print('setPlaylist error: $e');
       // Handle potential parsing errors
       emit(state.copyWith(playlist: []));
     }
