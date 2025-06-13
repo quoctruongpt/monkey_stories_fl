@@ -14,9 +14,9 @@ import 'package:monkey_stories/presentation/widgets/purchase/purchased_content.d
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_image.dart';
 
 const listContent = [
-  '6500+ hoạt động truyện tranh, thơ, bài hát, trò chơi tương tác vui nhộn',
-  'Hoạt động cập nhật mới mỗi tuần',
-  'Nội dung phù hợp với từng giai đoạn phát triển của trẻ',
+  'app.purchased.content1',
+  'app.purchased.content2',
+  'app.purchased.content3',
 ];
 
 class VipPurchasedProvider extends StatelessWidget {
