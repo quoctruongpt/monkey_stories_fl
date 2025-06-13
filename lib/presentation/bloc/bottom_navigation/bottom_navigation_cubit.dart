@@ -9,4 +9,8 @@ class BottomNavigationCubit extends Cubit<BottomNavigationState> {
   void setBottomNavVisible(bool isVisible) {
     emit(state.copyWith(isBottomNavVisible: isVisible));
   }
+
+  void setFabElevated(bool isElevated) {
+    emit(state.copyWith(isFabElevated: isElevated));
+  }
 }

@@ -2,17 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 
-class _BottomRightHigherFabLocation extends FloatingActionButtonLocation {
-  const _BottomRightHigherFabLocation({required this.currentIndex});
+void _updateVipFabElevation(
+  BuildContext context,
+  BottomNavigationCubit bottomNavigationCubit,
+) {
+  final isVipActive =
+      context.read<UserCubit>().state.purchasedInfo?.status ==
+      PurchasedStatus.active;
+  bottomNavigationCubit.setFabElevated(!isVipActive);
+}
 
-  final int currentIndex;
+class _BottomRightHigherFabLocation extends FloatingActionButtonLocation {
+  const _BottomRightHigherFabLocation({required this.isElevated});
+
+  final bool isElevated;
 
   @override
   Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
@@ -20,7 +32,7 @@ class _BottomRightHigherFabLocation extends FloatingActionButtonLocation {
         .getOffset(scaffoldGeometry);
 
     // VIP tab is at index 1
-    final double verticalOffset = (currentIndex == 1) ? 150.0 : 0.0;
+    final double verticalOffset = isElevated ? 150.0 : 0.0;
 
     return Offset(defaultOffset.dx, defaultOffset.dy - verticalOffset);
   }
@@ -42,15 +54,22 @@ class ParentTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<BottomNavigationCubit>(),
+      create: (context) {
+        final cubit = sl<BottomNavigationCubit>();
+        if (navigationShell.currentIndex == 1) {
+          _updateVipFabElevation(context, cubit);
+        }
+        return cubit;
+      },
       child: BlocBuilder<BottomNavigationCubit, BottomNavigationState>(
         builder: (context, state) {
           final isBottomNavVisible = state.isBottomNavVisible;
+          final isFabElevated = state.isFabElevated;
 
           return Scaffold(
             body: navigationShell,
             floatingActionButtonLocation: _BottomRightHigherFabLocation(
-              currentIndex: navigationShell.currentIndex,
+              isElevated: isFabElevated,
             ),
             bottomNavigationBar: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
@@ -85,6 +104,16 @@ class ParentTab extends StatelessWidget {
                           ),
                           type: BottomNavigationBarType.fixed,
                           onTap: (index) {
+                            if (index != 1) {
+                              context
+                                  .read<BottomNavigationCubit>()
+                                  .setFabElevated(false);
+                            } else {
+                              _updateVipFabElevation(
+                                context,
+                                context.read<BottomNavigationCubit>(),
+                              );
+                            }
                             if (index == navigationShell.currentIndex) {
                               return;
                             }
