@@ -118,7 +118,7 @@ class _FooterState extends State<Footer> {
                       const SizedBox(width: Spacing.sm),
                       Expanded(
                         child: Text(
-                          currentTrack?.name ?? "No track",
+                          currentTrack?.name ?? 'No track',
                           maxLines: 1,
                         ),
                       ),

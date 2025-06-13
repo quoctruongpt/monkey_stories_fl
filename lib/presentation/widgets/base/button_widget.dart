@@ -244,7 +244,7 @@ class _AppButtonState extends State<AppButton> {
                                 if (widget.icon != null)
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8),
-                                    child: widget.icon!,
+                                    child: widget.icon,
                                   ),
                               ],
                             ),

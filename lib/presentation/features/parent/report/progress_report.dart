@@ -123,7 +123,7 @@ class _ProgressReportState extends State<ProgressReport> {
                 const Divider(
                   height: Spacing.md * 2,
                   thickness: 1,
-                  color: const Color(0xFFF5F5F6),
+                  color: Color(0xFFF5F5F6),
                 ),
                 ..._buildRemainingLevels(),
               ],

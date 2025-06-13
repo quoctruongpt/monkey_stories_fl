@@ -47,11 +47,6 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
     Map<String, dynamic> event,
   ) async {
     logger.info('pushEvent: $event');
-    return KinesisModel(
-      sequenceNumber: '123',
-      shardId: '123',
-      encryptionType: EncryptionType.none,
-    );
 
     final result = await kinesisClient.putRecord(
       partitionKey: partitionKey,

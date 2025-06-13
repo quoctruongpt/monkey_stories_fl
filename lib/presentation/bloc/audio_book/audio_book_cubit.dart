@@ -242,7 +242,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
         int startingSentenceIdx = sentenceIdx;
 
         while (sentenceIdx < transcript.length) {
-          reconstructedPara += transcript[sentenceIdx].text.trim() + ' ';
+          reconstructedPara += '${transcript[sentenceIdx].text.trim()} ';
           sentenceIdx++;
           // A more robust check might be needed depending on punctuation
           if (reconstructedPara.trim().length >= paraClean.length) {
@@ -275,7 +275,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
       emit(
         state.copyWith(
           status: AudioPlayerStatus.error,
-          errorMessage: "Failed to load lyrics.",
+          errorMessage: 'Failed to load lyrics.',
         ),
       );
     }
@@ -437,7 +437,6 @@ class AudioBookCubit extends Cubit<AudioBookState> {
 
   Future<void> skipToTrack(int index) async {
     final track = state.playlist[index];
-    _checkPaidLockedAudio(index);
 
     if (!track.isDownloaded) {
       // If the track is not downloaded, pause playback.

@@ -35,7 +35,7 @@ class ThumbAudio extends StatelessWidget {
             padding: const EdgeInsets.all(3.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(23),
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 102),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),

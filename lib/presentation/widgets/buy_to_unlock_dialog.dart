@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BuyToUnlockDialog extends StatelessWidget {
   final VoidCallback? onUnlock;
 
-  const BuyToUnlockDialog({Key? key, this.onUnlock}) : super(key: key);
+  const BuyToUnlockDialog({super.key, this.onUnlock});
 
   @override
   Widget build(BuildContext context) {

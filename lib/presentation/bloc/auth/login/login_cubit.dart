@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -258,12 +257,12 @@ class LoginCubit extends Cubit<LoginState> {
         );
       },
       (loginStatus) async {
-        loginSuccess();
+        await loginSuccess();
       },
     );
   }
 
-  void loginSuccess() async {
+  Future<void> loginSuccess() async {
     await _restorePurchasedUsecase.call(NoParams());
     if (_userCubit.state.isPurchasing) {
       _userCubit.togglePurchasing();

@@ -403,8 +403,8 @@ class _CustomBarChartState extends State<CustomBarChart>
                                   color: Colors.grey[700],
                                   fontSize: 10,
                                 ),
-                            gridLineColor: widget.gridLineColor.withOpacity(
-                              0.3,
+                            gridLineColor: widget.gridLineColor.withValues(
+                              alpha: 77,
                             ),
                             gridLineWidth: widget.gridLineWidth,
                             dashArray: widget.dashArray,

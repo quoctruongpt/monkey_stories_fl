@@ -389,7 +389,7 @@ class ChartLegend extends StatelessWidget {
       ];
     }
 
-    String _formatValue(double value) {
+    String formatValue(double value) {
       return getLabel(value.toInt());
     }
 
@@ -431,7 +431,7 @@ class ChartLegend extends StatelessWidget {
         _LegendItem(
           color: getColorForIndex(order),
           label: 'Level ${validItems[i].label}',
-          value: _formatValue(validItems[i].value),
+          value: formatValue(validItems[i].value),
         ),
       );
     }
@@ -450,7 +450,7 @@ class ChartLegend extends StatelessWidget {
               _LegendItem(
                 color: getColorForIndex(order),
                 label: 'Level ${item.label}',
-                value: _formatValue(item.value),
+                value: formatValue(item.value),
               ),
             );
           }
@@ -459,7 +459,7 @@ class ChartLegend extends StatelessWidget {
             _LegendItem(
               color: getColorForIndex(order),
               label: otherLevelsLabel,
-              value: _formatValue(remainingValue),
+              value: formatValue(remainingValue),
             ),
           );
         }
@@ -477,7 +477,7 @@ class ChartLegend extends StatelessWidget {
         ..._buildLegendItems(),
         const SizedBox(height: 8),
         if (data.where((item) => item.value > 0).length > 3) ...[
-          Divider(color: Colors.grey.withOpacity(0.2), height: 1),
+          Divider(color: Colors.grey.withValues(alpha: 51), height: 1),
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -772,7 +772,7 @@ class PieChartPainter extends CustomPainter {
       text: TextSpan(
         text: '${value.toInt()}%',
         style: TextStyle(
-          color: Colors.white.withOpacity(opacity),
+          color: Colors.white.withValues(alpha: opacity * 255),
           fontSize: 16,
           fontWeight: FontWeight.bold,
           fontFamily: 'Nunito',

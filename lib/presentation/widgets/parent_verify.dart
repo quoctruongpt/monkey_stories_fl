@@ -348,7 +348,7 @@ Widget buildVerifyDialogWidget({
 
   return Material(
     key: dialogKey,
-    color: Colors.black.withOpacity(0.6),
+    color: Colors.black.withValues(alpha: 153),
     child: Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),

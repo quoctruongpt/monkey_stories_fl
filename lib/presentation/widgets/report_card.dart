@@ -23,7 +23,7 @@ class ReportCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0D0A2C).withOpacity(0.08),
+            color: const Color(0xFF0D0A2C).withValues(alpha: 20),
             offset: const Offset(0, 2),
             blurRadius: 0,
           ),

@@ -173,11 +173,11 @@ class _AudioBookPageState extends State<AudioBookPage>
                           },
                           activeTrackColor: AppTheme.azureColor,
                           inactiveTrackColor: const Color(0xFFB3E8FF),
-                          thumbColor: MaterialStateProperty.all(Colors.white),
-                          trackOutlineColor: MaterialStateProperty.all(
+                          thumbColor: WidgetStateProperty.all(Colors.white),
+                          trackOutlineColor: WidgetStateProperty.all(
                             Colors.transparent,
                           ),
-                          overlayColor: MaterialStateProperty.all(
+                          overlayColor: WidgetStateProperty.all(
                             Colors.transparent,
                           ),
                           splashRadius: 0,

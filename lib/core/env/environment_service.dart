@@ -92,20 +92,24 @@ class EnvironmentService {
 
                           // Đóng loading dialog
                           if (useRootNavigator) {
-                            if (Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).canPop()) {
+                            if (context.mounted &&
+                                Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).canPop()) {
                               Navigator.of(context, rootNavigator: true).pop();
                             }
                           } else {
-                            if (Navigator.of(context).canPop()) {
+                            if (context.mounted &&
+                                Navigator.of(context).canPop()) {
                               Navigator.of(context).pop();
                             }
                           }
 
                           // Hiển thị thông báo cần restart
-                          _showRestartDialog(context, useRootNavigator);
+                          if (context.mounted) {
+                            _showRestartDialog(context, useRootNavigator);
+                          }
                         } else {
                           Navigator.of(
                             dialogContext,
