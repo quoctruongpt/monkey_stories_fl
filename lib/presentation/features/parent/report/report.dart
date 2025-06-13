@@ -255,7 +255,7 @@ class ReportSkeleton extends StatelessWidget {
       child: Column(
         children: [
           Shimmer.fromColors(
-            baseColor: Colors.grey.withValues(alpha: 26),
+            baseColor: Colors.grey.withValues(alpha: 0.1),
             highlightColor: Colors.white,
             period: const Duration(seconds: 1),
             direction: ShimmerDirection.ltr,
@@ -270,7 +270,7 @@ class ReportSkeleton extends StatelessWidget {
           ),
           const SizedBox(height: Spacing.md),
           Shimmer.fromColors(
-            baseColor: Colors.grey.withValues(alpha: 26),
+            baseColor: Colors.grey.withValues(alpha: 0.1),
             highlightColor: Colors.white,
             direction: ShimmerDirection.rtl,
             period: const Duration(seconds: 1),

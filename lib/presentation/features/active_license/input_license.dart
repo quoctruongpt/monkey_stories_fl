@@ -321,7 +321,7 @@ class ScannerOverlay extends StatelessWidget {
             // Overlay đen với khung trong suốt ở giữa
             ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.black.withValues(alpha: 153),
+                Colors.black.withValues(alpha: 0.6),
                 BlendMode.srcOut,
               ),
               child: Stack(
@@ -329,7 +329,7 @@ class ScannerOverlay extends StatelessWidget {
                   Container(
                     width: screenWidth,
                     height: screenHeight,
-                    color: Colors.black.withValues(alpha: 153),
+                    color: Colors.black.withValues(alpha: 0.6),
                   ),
                   Positioned(
                     left: left,

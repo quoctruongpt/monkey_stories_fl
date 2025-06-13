@@ -155,7 +155,7 @@ class _LyricsViewState extends State<LyricsView> {
                   textColor =
                       isParagraphActive
                           ? const Color(0xFF182230)
-                          : const Color(0xFF182230).withValues(alpha: 31);
+                          : const Color(0xFF182230).withValues(alpha: 0.12);
                 }
 
                 spans.add(

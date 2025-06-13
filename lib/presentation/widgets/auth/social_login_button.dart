@@ -47,12 +47,12 @@ class SocialLoginButton extends StatelessWidget {
         // Style differently when disabled
         disabledBackgroundColor:
             isDisabled
-                ? backgroundColor.withValues(alpha: 128)
+                ? backgroundColor.withValues(alpha: 0.5)
                 : backgroundColor,
         disabledForegroundColor:
             isDisabled
                 ? (isGoogle ? Colors.black : Colors.white).withValues(
-                  alpha: 128,
+                  alpha: 0.5,
                 )
                 : (isGoogle ? Colors.black : Colors.white),
       ),

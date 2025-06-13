@@ -97,7 +97,7 @@ class _PlaylistViewState extends State<PlaylistView>
                                   height: 44,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
-                                    color: Colors.black.withValues(alpha: 102),
+                                    color: Colors.black.withValues(alpha: 0.4),
                                   ),
                                 ),
                               if (paidLockedAudio)

@@ -57,7 +57,7 @@ class ExpirationInfo extends StatelessWidget {
                                   alignment: Alignment.topCenter,
                                 ),
                                 Container(
-                                  color: Colors.black.withValues(alpha: 51),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                 ),
                               ],
                             ),

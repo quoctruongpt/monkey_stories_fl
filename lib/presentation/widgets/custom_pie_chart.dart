@@ -477,7 +477,7 @@ class ChartLegend extends StatelessWidget {
         ..._buildLegendItems(),
         const SizedBox(height: 8),
         if (data.where((item) => item.value > 0).length > 3) ...[
-          Divider(color: Colors.grey.withValues(alpha: 51), height: 1),
+          Divider(color: Colors.grey.withValues(alpha: 0.2), height: 1),
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -772,7 +772,7 @@ class PieChartPainter extends CustomPainter {
       text: TextSpan(
         text: '${value.toInt()}%',
         style: TextStyle(
-          color: Colors.white.withValues(alpha: opacity * 255),
+          color: Colors.white.withValues(alpha: opacity),
           fontSize: 16,
           fontWeight: FontWeight.bold,
           fontFamily: 'Nunito',
