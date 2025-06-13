@@ -77,41 +77,45 @@ class IntroScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             const SizedBox(height: Spacing.md),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/rice_flower_left.png',
-                                      height: 60,
-                                      width: 29,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      ).translate('app.intro.user'),
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.labelMedium?.copyWith(
-                                        color: AppTheme.textPrimaryColor,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/rice_flower_left.png',
+                                        height: 60,
+                                        width: 29,
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Image.asset(
-                                      'assets/images/rice_flower_right.png',
-                                      height: 60,
-                                      width: 29,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: Spacing.sm),
-                                Image.asset(
-                                  'assets/images/kid_safe.png',
-                                  height: 49,
-                                  width: 174,
-                                ),
-                              ],
+                                      Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        ).translate('app.intro.user'),
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.labelMedium?.copyWith(
+                                          color: AppTheme.textPrimaryColor,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Image.asset(
+                                        'assets/images/rice_flower_right.png',
+                                        height: 60,
+                                        width: 29,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: Spacing.sm),
+                                  Image.asset(
+                                    'assets/images/kid_safe.png',
+                                    height: 49,
+                                    width: 174,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

@@ -9,6 +9,7 @@ import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/widgets/profile/list_profile_dialog.dart';
@@ -77,6 +78,26 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
       );
       return null;
     });
+
+    _unityCubit.registerHandler(MessageTypes.openAudioBook, (
+      UnityMessageEntity message,
+    ) async {
+      final playlistPayload = message.payload['playlist'] as List<dynamic>?;
+      if (playlistPayload == null) {
+        return null;
+      }
+      final playlist =
+          playlistPayload.map((item) => item as Map<String, dynamic>).toList();
+
+      context.read<PlaylistCubit>().setPlaylist(playlist);
+      context.pushNamed(
+        AppRouteNames.audioBook,
+        queryParameters: {
+          'audioSelectedId': '${message.payload['audio_selected_id']}',
+        },
+      );
+      return null;
+    });
   }
 
   @override
@@ -119,6 +140,9 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
     routeObserver.unsubscribe(this);
     _unityCubit.unregisterHandler(MessageTypes.closeUnity);
     _unityCubit.unregisterHandler(MessageTypes.openListProfile);
+    _unityCubit.unregisterHandler(MessageTypes.openAudioBook);
+    _unityCubit.unregisterHandler(MessageTypes.buyNow);
+    _unityCubit.unregisterHandler(MessageTypes.goToPurchase);
     super.dispose();
   }
 

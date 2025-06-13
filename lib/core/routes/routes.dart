@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/presentation/features/active_license/active_license_navigator.dart';
+import 'package:monkey_stories/presentation/features/audio_book/audio_book.dart';
 import 'package:monkey_stories/presentation/features/create_profile/choose_level.dart';
 import 'package:monkey_stories/presentation/features/create_profile/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/features/create_profile/create_profile_loading.dart';
@@ -111,7 +114,7 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.result,
       builder: (context, state) {
         return const OrientationWrapper(
-          orientation: AppOrientation.landscapeLeft,
+          orientation: AppOrientation.landscapeRight,
           child: ResultScreen(),
         );
       },
@@ -122,7 +125,7 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.unity,
       builder: (context, state) {
         return const OrientationWrapper(
-          orientation: AppOrientation.landscapeLeft,
+          orientation: AppOrientation.landscapeRight,
           child: UnityScreen(),
         );
       },
@@ -419,6 +422,20 @@ final GoRouter router = GoRouter(
         return const OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: ScheduleManager(),
+        );
+      },
+    ),
+    GoRoute(
+      path: AppRoutePaths.audioBook,
+      name: AppRouteNames.audioBook,
+      builder: (context, state) {
+        final String? audioSelectedId =
+            state.uri.queryParameters['audioSelectedId'];
+        final int? audioSelectedIdInt =
+            audioSelectedId == null ? null : int.tryParse(audioSelectedId);
+        return OrientationWrapper(
+          orientation: AppOrientation.landscapeRight,
+          child: AudioBookPage(audioSelectedId: audioSelectedIdInt),
         );
       },
     ),

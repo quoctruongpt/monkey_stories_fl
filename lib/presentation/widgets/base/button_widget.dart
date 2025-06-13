@@ -20,6 +20,7 @@ class AppButton extends StatefulWidget {
   final Color? customColor; // Cho phép tùy chỉnh màu nút
   final Color? borderColor; // Màu viền cho nút
   final bool disabled; // Trạng thái vô hiệu hóa
+  final Widget? icon;
 
   const AppButton({
     super.key,
@@ -35,6 +36,7 @@ class AppButton extends StatefulWidget {
     this.customColor,
     this.borderColor,
     this.disabled = false,
+    this.icon,
   });
 
   // Factory constructors cho các loại nút phổ biến
@@ -50,6 +52,7 @@ class AppButton extends StatefulWidget {
     BorderRadius? borderRadius,
     Color? borderColor,
     bool disabled = false,
+    Widget? icon,
   }) {
     return AppButton(
       key: key,
@@ -64,6 +67,7 @@ class AppButton extends StatefulWidget {
       borderRadius: borderRadius,
       borderColor: borderColor,
       disabled: disabled,
+      icon: icon,
     );
   }
 
@@ -230,9 +234,19 @@ class _AppButtonState extends State<AppButton> {
                                 ),
                               ),
                             )
-                            : TextInButton(
-                              widget: widget,
-                              textColor: textColor,
+                            : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextInButton(
+                                  widget: widget,
+                                  textColor: textColor,
+                                ),
+                                if (widget.icon != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: widget.icon!,
+                                  ),
+                              ],
                             ),
                   ),
                 ),

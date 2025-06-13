@@ -56,6 +56,7 @@ class AppRoutePaths {
   static const String changePasswordSuccess = '/change_password_success';
   static const String generalSetting = '/general_setting';
   static const String scheduleManager = '/schedule_manager';
+  static const String audioBook = '/audio_book';
 
   static const String webView = '/web_view';
 }
@@ -119,5 +120,6 @@ class AppRouteNames {
   static const String changePasswordSuccess = 'change_password_success';
   static const String generalSetting = 'general_setting';
   static const String scheduleManager = 'schedule_manager';
+  static const String audioBook = 'audio_book';
   static const String webView = 'web_view';
 }

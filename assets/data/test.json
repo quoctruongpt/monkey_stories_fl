@@ -1,0 +1,8 @@
+{
+  "id": "abc123",
+  "type": "download_audio_book",
+  "payload": {
+    "localAudioPath": "assets/audio/aaa.mp3",
+    "localSyncTextPath": "assets/data/sync_text.json"
+  }
+}

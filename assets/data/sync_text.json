@@ -1,0 +1,562 @@
+[
+  {
+    "s": 9520.0,
+    "e": 11220.0,
+    "w": "In a small town,",
+    "ts": 0,
+    "te": 15
+  },
+  {
+    "s": 11220.0,
+    "e": 14640.0,
+    "w": "there lived a good boy named George.",
+    "ts": 17,
+    "te": 52
+  },
+  {
+    "s": 14640.0,
+    "e": 16180.0,
+    "w": "One day,",
+    "ts": 54,
+    "te": 61
+  },
+  {
+    "s": 16180.0,
+    "e": 18920.0,
+    "w": "George’s uncle gave him a shilling.",
+    "ts": 63,
+    "te": 97
+  },
+  {
+    "s": 18920.0,
+    "e": 21400.0,
+    "w": "Like other boys,",
+    "ts": 99,
+    "te": 114
+  },
+  {
+    "s": 21400.0,
+    "e": 23680.0,
+    "w": "George was very excited",
+    "ts": 116,
+    "te": 138
+  },
+  {
+    "s": 23680.0,
+    "e": 26280.0,
+    "w": "and dreamed about all the things",
+    "ts": 140,
+    "te": 171
+  },
+  {
+    "s": 26280.0,
+    "e": 28280.0,
+    "w": "he could buy with that money.",
+    "ts": 173,
+    "te": 201
+  },
+  {
+    "s": 28280.0,
+    "e": 32860.0,
+    "w": "However, because he wanted so many things,",
+    "ts": 203,
+    "te": 244
+  },
+  {
+    "s": 32860.0,
+    "e": 35720.0,
+    "w": "it was hard to make a choice.",
+    "ts": 246,
+    "te": 274
+  },
+  {
+    "s": 39680.0,
+    "e": 42400.0,
+    "w": "As he sat at the front door,",
+    "ts": 279,
+    "te": 306
+  },
+  {
+    "s": 42400.0,
+    "e": 46160.0,
+    "w": "George thought about what to do with one shilling.",
+    "ts": 308,
+    "te": 357
+  },
+  {
+    "s": 46160.0,
+    "e": 47580.0,
+    "w": "Just then,",
+    "ts": 359,
+    "te": 368
+  },
+  {
+    "s": 47580.0,
+    "e": 50940.0,
+    "w": "a woman carrying a box walked by.",
+    "ts": 370,
+    "te": 402
+  },
+  {
+    "s": 50940.0,
+    "e": 55100.0,
+    "w": "Inside the box were many little glass toys",
+    "ts": 404,
+    "te": 445
+  },
+  {
+    "s": 55100.0,
+    "e": 57100.0,
+    "w": "in different animal shapes.",
+    "ts": 447,
+    "te": 473
+  },
+  {
+    "s": 57100.0,
+    "e": 60980.0,
+    "w": "They all looked beautiful and curious.",
+    "ts": 475,
+    "te": 512
+  },
+  {
+    "s": 68040.0,
+    "e": 70300.0,
+    "w": "“How much is this?”",
+    "ts": 518,
+    "te": 536
+  },
+  {
+    "s": 70300.0,
+    "e": 72300.0,
+    "w": "George asked excitedly,",
+    "ts": 538,
+    "te": 560
+  },
+  {
+    "s": 72300.0,
+    "e": 74300.0,
+    "w": "pointing to a peacock.",
+    "ts": 562,
+    "te": 583
+  },
+  {
+    "s": 75220.0,
+    "e": 76980.0,
+    "w": "“Two shillings,”",
+    "ts": 586,
+    "te": 601
+  },
+  {
+    "s": 76980.0,
+    "e": 78980.0,
+    "w": "answered the toy seller.",
+    "ts": 603,
+    "te": 626
+  },
+  {
+    "s": 80260.0,
+    "e": 83680.0,
+    "w": "“But I've only got one shilling,”",
+    "ts": 629,
+    "te": 661
+  },
+  {
+    "s": 83680.0,
+    "e": 86280.0,
+    "w": "responded George.",
+    "ts": 663,
+    "te": 679
+  },
+  {
+    "s": 88700.0,
+    "e": 93060.0,
+    "w": "“Well, I have some toys that cost a shilling.",
+    "ts": 682,
+    "te": 726
+  },
+  {
+    "s": 93060.0,
+    "e": 95840.0,
+    "w": "Do you like this robin redbreast?",
+    "ts": 728,
+    "te": 760
+  },
+  {
+    "s": 95840.0,
+    "e": 97840.0,
+    "w": "Or maybe this deer,",
+    "ts": 762,
+    "te": 780
+  },
+  {
+    "s": 97840.0,
+    "e": 99420.0,
+    "w": "or this sheep?”",
+    "ts": 782,
+    "te": 796
+  },
+  {
+    "s": 99420.0,
+    "e": 101780.0,
+    "w": "the toy seller suggested.",
+    "ts": 798,
+    "te": 822
+  },
+  {
+    "s": 104520.0,
+    "e": 108280.0,
+    "w": "The toy seller kept trying to persuade George",
+    "ts": 827,
+    "te": 871
+  },
+  {
+    "s": 108280.0,
+    "e": 109860.0,
+    "w": "to buy other toys",
+    "ts": 873,
+    "te": 889
+  },
+  {
+    "s": 109860.0,
+    "e": 112260.0,
+    "w": "that cost only one shilling,",
+    "ts": 891,
+    "te": 918
+  },
+  {
+    "s": 112260.0,
+    "e": 116000.0,
+    "w": "but George liked the peacock best of all.",
+    "ts": 920,
+    "te": 960
+  },
+  {
+    "s": 116000.0,
+    "e": 119500.0,
+    "w": "He did not want anything else.",
+    "ts": 962,
+    "te": 991
+  },
+  {
+    "s": 119500.0,
+    "e": 122980.0,
+    "w": "Suddenly, George saw an old man",
+    "ts": 993,
+    "te": 1023
+  },
+  {
+    "s": 122980.0,
+    "e": 125720.0,
+    "w": "sitting on the other side of the street.",
+    "ts": 1025,
+    "te": 1064
+  },
+  {
+    "s": 130160.0,
+    "e": 133520.0,
+    "w": "The man desperately begged people for money",
+    "ts": 1066,
+    "te": 1108
+  },
+  {
+    "s": 133520.0,
+    "e": 135520.0,
+    "w": "but received nothing.",
+    "ts": 1110,
+    "te": 1130
+  },
+  {
+    "s": 135520.0,
+    "e": 137340.0,
+    "w": "He looked sick,",
+    "ts": 1132,
+    "te": 1146
+  },
+  {
+    "s": 137340.0,
+    "e": 140320.0,
+    "w": "feeble and very poor.",
+    "ts": 1148,
+    "te": 1168
+  },
+  {
+    "s": 140320.0,
+    "e": 143820.0,
+    "w": "George felt very sorry for the man",
+    "ts": 1173,
+    "te": 1206
+  },
+  {
+    "s": 143820.0,
+    "e": 146420.0,
+    "w": "and decided to help him.",
+    "ts": 1208,
+    "te": 1231
+  },
+  {
+    "s": 146420.0,
+    "e": 149400.0,
+    "w": "“That poor old man!",
+    "ts": 1234,
+    "te": 1252
+  },
+  {
+    "s": 149400.0,
+    "e": 151400.0,
+    "w": "I shall give him my shilling!”",
+    "ts": 1254,
+    "te": 1283
+  },
+  {
+    "s": 151400.0,
+    "e": 154260.0,
+    "w": "exclaimed George.",
+    "ts": 1285,
+    "te": 1301
+  },
+  {
+    "s": 158800.0,
+    "e": 160640.0,
+    "w": "He crossed the street,",
+    "ts": 1304,
+    "te": 1325
+  },
+  {
+    "s": 160640.0,
+    "e": 163420.0,
+    "w": "placed the shilling in the old man's hand",
+    "ts": 1327,
+    "te": 1367
+  },
+  {
+    "s": 163420.0,
+    "e": 165420.0,
+    "w": "and said,",
+    "ts": 1369,
+    "te": 1377
+  },
+  {
+    "s": 165420.0,
+    "e": 169320.0,
+    "w": "“I was about to spend this money on a glass toy",
+    "ts": 1379,
+    "te": 1425
+  },
+  {
+    "s": 169320.0,
+    "e": 171320.0,
+    "w": "that would be broken in a day.",
+    "ts": 1427,
+    "te": 1456
+  },
+  {
+    "s": 171320.0,
+    "e": 176080.0,
+    "w": "Now I want to use it for a better purpose.",
+    "ts": 1458,
+    "te": 1499
+  },
+  {
+    "s": 176080.0,
+    "e": 180180.0,
+    "w": "Take it and buy yourself some food.”",
+    "ts": 1501,
+    "te": 1536
+  },
+  {
+    "s": 180860.0,
+    "e": 183780.0,
+    "w": "The poor old man was surprised",
+    "ts": 1539,
+    "te": 1568
+  },
+  {
+    "s": 183780.0,
+    "e": 186900.0,
+    "w": "and moved by George’s good deed.",
+    "ts": 1570,
+    "te": 1601
+  },
+  {
+    "s": 186900.0,
+    "e": 188900.0,
+    "w": "He said,",
+    "ts": 1603,
+    "te": 1610
+  },
+  {
+    "s": 193240.0,
+    "e": 194660.0,
+    "w": "“Thank you,",
+    "ts": 1612,
+    "te": 1622
+  },
+  {
+    "s": 194660.0,
+    "e": 196660.0,
+    "w": "my young master!",
+    "ts": 1624,
+    "te": 1639
+  },
+  {
+    "s": 196660.0,
+    "e": 199380.0,
+    "w": "May all good things come your way,",
+    "ts": 1641,
+    "te": 1674
+  },
+  {
+    "s": 199380.0,
+    "e": 201380.0,
+    "w": "as you did to me.”",
+    "ts": 1676,
+    "te": 1693
+  },
+  {
+    "s": 205040.0,
+    "e": 208940.0,
+    "w": "Even though George did not get his favorite toy,",
+    "ts": 1698,
+    "te": 1745
+  },
+  {
+    "s": 208940.0,
+    "e": 211380.0,
+    "w": "he was glad he had helped somebody",
+    "ts": 1747,
+    "te": 1780
+  },
+  {
+    "s": 211420.0,
+    "e": 213620.0,
+    "w": "with his one shilling.",
+    "ts": 1782,
+    "te": 1803
+  },
+  {
+    "s": 213620.0,
+    "e": 217500.0,
+    "w": "He walked back to his house in a jolly mood",
+    "ts": 1805,
+    "te": 1847
+  },
+  {
+    "s": 217500.0,
+    "e": 219360.0,
+    "w": "and had no idea",
+    "ts": 1849,
+    "te": 1863
+  },
+  {
+    "s": 219360.0,
+    "e": 221280.0,
+    "w": "the toy seller had witnessed",
+    "ts": 1865,
+    "te": 1892
+  },
+  {
+    "s": 221280.0,
+    "e": 224020.0,
+    "w": "everything he had just done.",
+    "ts": 1894,
+    "te": 1921
+  },
+  {
+    "s": 224540.0,
+    "e": 227560.0,
+    "w": "“Well done, good boy!”",
+    "ts": 1924,
+    "te": 1945
+  },
+  {
+    "s": 227700.0,
+    "e": 229140.0,
+    "w": "said the toy seller",
+    "ts": 1947,
+    "te": 1965
+  },
+  {
+    "s": 229140.0,
+    "e": 231140.0,
+    "w": "when George returned.",
+    "ts": 1967,
+    "te": 1987
+  },
+  {
+    "s": 231140.0,
+    "e": 232700.0,
+    "w": "“Thanks to you,",
+    "ts": 1989,
+    "te": 2003
+  },
+  {
+    "s": 232700.0,
+    "e": 235820.0,
+    "w": "that man will not be hungry today.",
+    "ts": 2005,
+    "te": 2038
+  },
+  {
+    "s": 235820.0,
+    "e": 239080.0,
+    "w": "As a reward for your generosity",
+    "ts": 2040,
+    "te": 2070
+  },
+  {
+    "s": 239120.0,
+    "e": 240720.0,
+    "w": "and selflessness,",
+    "ts": 2072,
+    "te": 2088
+  },
+  {
+    "s": 240720.0,
+    "e": 244380.0,
+    "w": "here is the peacock you wanted so much.”",
+    "ts": 2090,
+    "te": 2129
+  },
+  {
+    "s": 244980.0,
+    "e": 247960.0,
+    "w": "George did not expect this.",
+    "ts": 2134,
+    "te": 2160
+  },
+  {
+    "s": 247960.0,
+    "e": 250120.0,
+    "w": "He was over the moon",
+    "ts": 2162,
+    "te": 2181
+  },
+  {
+    "s": 250120.0,
+    "e": 253880.0,
+    "w": "and enthralled to receive the little glass toy.",
+    "ts": 2183,
+    "te": 2229
+  },
+  {
+    "s": 257380.0,
+    "e": 260880.0,
+    "w": "He took careful care of the glass bird,",
+    "ts": 2231,
+    "te": 2269
+  },
+  {
+    "s": 260880.0,
+    "e": 263840.0,
+    "w": "as it was not only his favorite toy",
+    "ts": 2271,
+    "te": 2305
+  },
+  {
+    "s": 263840.0,
+    "e": 268540.0,
+    "w": "but also a reminder of his good deed.",
+    "ts": 2307,
+    "te": 2343
+  }
+]
