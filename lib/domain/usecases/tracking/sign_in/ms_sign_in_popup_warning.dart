@@ -44,7 +44,7 @@ class MsSignInPopupWarningParams {
 
   Map<String, dynamic> toJson() {
     return {
-      'click_type': clickType,
+      'click_type': clickType?.value,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
     };

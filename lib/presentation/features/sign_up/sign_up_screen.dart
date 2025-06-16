@@ -214,6 +214,7 @@ class _SignUpState extends State<SignUp>
           context,
         ).translate('sign_up.phone.exists.act'),
         onPrimaryAction: () {
+          context.pop();
           context.push(AppRoutePaths.login);
           context.read<SignUpCubit>().trackPopupWarning(
             MsSignInPopupWarningClickType.signIn,
