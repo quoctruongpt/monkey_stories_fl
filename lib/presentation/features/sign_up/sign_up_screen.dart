@@ -243,6 +243,9 @@ class _SignUpState extends State<SignUp>
   @override
   Widget build(BuildContext context) {
     final translate = AppLocalizations.of(context).translate;
+    final canPop =
+        context.read<SignUpCubit>().state.step != StepSignUp.phone ||
+        context.canPop();
 
     return BlocListener<SignUpCubit, SignUpState>(
       listenWhen:
@@ -264,13 +267,16 @@ class _SignUpState extends State<SignUp>
             Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBar(
-                leading: IconButton(
-                  onPressed: _handleBackPressed,
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppTheme.textColor,
-                  ),
-                ),
+                leading:
+                    canPop
+                        ? IconButton(
+                          onPressed: _handleBackPressed,
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: AppTheme.textColor,
+                          ),
+                        )
+                        : null,
 
                 backgroundColor: Colors.transparent,
               ),
