@@ -230,3 +230,30 @@ void showLeaveContactDialog(BuildContext context, VoidCallback onSuccess) {
         ),
   );
 }
+
+void showRestorePurchasedErrorDialog(
+  BuildContext context, {
+  required VoidCallback onPrimaryAction,
+}) {
+  showCustomNoticeDialog(
+    context: context,
+    titleText: AppLocalizations.of(
+      context,
+    ).translate('app.payment.restore.error'),
+    messageText: AppLocalizations.of(
+      context,
+    ).translate('app.payment.restore.double_check'),
+    imageAsset: 'assets/images/monkey_confused.png',
+    primaryActionText: AppLocalizations.of(
+      context,
+    ).translate('app.payment.restore.act'),
+    onPrimaryAction: () {
+      context.pop();
+      onPrimaryAction();
+    },
+    onClose: () {
+      context.pop();
+      onPrimaryAction();
+    },
+  );
+}

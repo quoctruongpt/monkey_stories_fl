@@ -184,14 +184,14 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
       final result = await _restorePurchasedUsecase(NoParams());
       result.fold(
         (failure) => emit(
-          state.copyWith(isPurchasing: false, errorMessage: failure.message),
+          state.copyWith(isPurchasing: false, isRestorePurchasedError: true),
         ),
         (success) => emit(
           state.copyWith(isPurchasing: false, isVerifyPurchasedSuccess: true),
         ),
       );
     } catch (e) {
-      emit(state.copyWith(isPurchasing: false, errorMessage: e.toString()));
+      emit(state.copyWith(isPurchasing: false, isRestorePurchasedError: true));
     }
   }
 

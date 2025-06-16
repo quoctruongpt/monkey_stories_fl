@@ -204,6 +204,22 @@ class _AppBuilderState extends State<AppBuilder>
                 context.read<AppCubit>().showLoading();
               },
             ),
+            BlocListener<PurchasedCubit, PurchasedState>(
+              listenWhen:
+                  (previous, current) =>
+                      previous.isRestorePurchasedError !=
+                      current.isRestorePurchasedError,
+              listener: (context, state) {
+                if (state.isRestorePurchasedError) {
+                  showRestorePurchasedErrorDialog(
+                    navigatorKey.currentContext!,
+                    onPrimaryAction: () {
+                      context.read<PurchasedCubit>().resetStatus();
+                    },
+                  );
+                }
+              },
+            ),
             BlocListener<FloatButtonCubit, FloatButtonState>(
               listenWhen:
                   (previous, current) =>
