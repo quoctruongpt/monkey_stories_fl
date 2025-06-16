@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/presentation/features/debugs/bloc_viewer_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/debug_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/logger_screen.dart';
+import 'package:monkey_stories/presentation/features/debugs/network_logger_screen.dart';
+import 'package:monkey_stories/presentation/features/debugs/remote_config.dart';
 import 'package:monkey_stories/presentation/features/debugs/shared_prefs_screen.dart';
 
 class DebugNavigator extends StatelessWidget {
@@ -25,6 +27,14 @@ class DebugNavigator extends StatelessWidget {
           GoRoute(
             path: '/bloc-viewer',
             builder: (context, state) => const BlocViewerScreen(),
+          ),
+          GoRoute(
+            path: '/network-logger',
+            builder: (context, state) => const NetworkLoggerScreen(),
+          ),
+          GoRoute(
+            path: '/remote-config',
+            builder: (context, state) => const RemoteConfigScreen(),
           ),
         ],
       ),

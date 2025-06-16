@@ -18,7 +18,6 @@ class _SettingScreenState extends State<SettingScreen> {
   DateTime? _lastTapTime;
 
   void _handleSecretTap() {
-    print('hihi $_tapCount');
     final now = DateTime.now();
     if (_lastTapTime == null ||
         now.difference(_lastTapTime!) > const Duration(seconds: 2)) {

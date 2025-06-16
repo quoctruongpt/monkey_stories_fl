@@ -80,6 +80,24 @@ class DebugScreen extends StatelessWidget {
                 );
               },
             ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/network-logger');
+                },
+                child: const Text('Network Logger'),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/remote-config');
+                },
+                child: const Text('Remote Config'),
+              ),
+            ),
           ],
         ),
       ),

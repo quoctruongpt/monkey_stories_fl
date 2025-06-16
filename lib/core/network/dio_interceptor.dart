@@ -13,6 +13,7 @@ import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/core/extensions/logger_service.dart';
 
 class DioInterceptor extends Interceptor {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -44,9 +45,6 @@ class DioInterceptor extends Interceptor {
 
     if (externalToken != null && externalToken.isNotEmpty) {
       accessToken = externalToken;
-      _logger.info(
-        'Using externally provided token from queryParameters: "$accessToken"',
-      );
       // Xóa token khỏi queryParameters vì nó sẽ được chuyển vào header
       options.queryParameters.remove('token');
     } else {
@@ -118,6 +116,7 @@ class DioInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    options.extra['startTime'] = DateTime.now();
     // --- Lấy Access Token và thêm vào Header ---
     final String? accessToken = await _getAccessToken(options);
     if (accessToken != null && accessToken.isNotEmpty) {
@@ -145,24 +144,13 @@ class DioInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _logger.info(
-      '[${response.requestOptions.method}] Response from: ${response.requestOptions.uri} -> ${response.statusCode}',
-    );
-    if (response.data != null) {
-      _logger.fine(
-        'Response data: ${response.data}',
-      ); // Use fine for potentially large data
-    }
+    Logging.logDioResponse(response);
     super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    _logger.severe(
-      '[${err.requestOptions.method}] Error from: ${err.requestOptions.uri} -> ${err.response?.statusCode ?? 'N/A'}',
-      err.error,
-      err.stackTrace,
-    );
+    Logging.logDioError(err);
 
     final isNetworkError = switch (err.type) {
       DioExceptionType.connectionTimeout ||
@@ -177,10 +165,6 @@ class DioInterceptor extends Interceptor {
       return _handleConnectionError(err, handler);
     }
 
-    // Ghi log và bỏ qua cho các lỗi khác
-    if (err.response?.data != null) {
-      _logger.warning('Error response data: ${err.response!.data}');
-    }
     return super.onError(err, handler);
   }
 

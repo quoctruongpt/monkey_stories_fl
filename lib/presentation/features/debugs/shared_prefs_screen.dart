@@ -25,17 +25,7 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
     final prefsMap = <String, dynamic>{};
 
     for (final key in keys) {
-      if (prefs.getString(key) != null) {
-        prefsMap[key] = prefs.getString(key);
-      } else if (prefs.getBool(key) != null) {
-        prefsMap[key] = prefs.getBool(key);
-      } else if (prefs.getInt(key) != null) {
-        prefsMap[key] = prefs.getInt(key);
-      } else if (prefs.getDouble(key) != null) {
-        prefsMap[key] = prefs.getDouble(key);
-      } else if (prefs.getStringList(key) != null) {
-        prefsMap[key] = prefs.getStringList(key);
-      }
+      prefsMap[key] = prefs.get(key);
     }
 
     setState(() {
