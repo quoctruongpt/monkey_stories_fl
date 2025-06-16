@@ -24,78 +24,88 @@ class DebugScreen extends StatelessWidget {
           children: [
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.cloud_outlined),
                 onPressed: () {
                   environmentService.showEnvironmentSelector(context);
                 },
-                child: const Text('Cài đặt môi trường'),
+                label: const Text('Cài đặt môi trường'),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.language),
                 onPressed: () {
                   _showDialogChangeLanguage(context);
                 },
-                child: const Text('Cài đặt ngôn ngữ'),
+                label: const Text('Cài đặt ngôn ngữ'),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.article_outlined),
                 onPressed: () {
                   context.push('/logger');
                 },
-                child: const Text('Logger'),
+                label: const Text('Logger'),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.storage),
                 onPressed: () {
                   context.push('/shared-prefs');
                 },
-                child: const Text('Shared Preferences'),
+                label: const Text('Shared Preferences'),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.memory),
                 onPressed: () {
                   context.push('/bloc-viewer');
                 },
-                child: const Text('Bloc Viewer'),
+                label: const Text('Bloc Viewer'),
               ),
             ),
             BlocBuilder<DebugCubit, DebugState>(
               builder: (context, state) {
                 return SizedBox(
                   width: double.infinity,
-                  child: FilledButton(
+                  child: FilledButton.icon(
+                    icon: Icon(
+                      state.isShowLogger ? Icons.toggle_on : Icons.toggle_off,
+                    ),
                     onPressed: () {
                       context.read<DebugCubit>().toggleLogger();
                     },
-                    child: Text('Bật logger: ${state.isShowLogger}'),
+                    label: Text('Bật logger: ${state.isShowLogger}'),
                   ),
                 );
               },
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.network_check),
                 onPressed: () {
                   context.push('/network-logger');
                 },
-                child: const Text('Network Logger'),
+                label: const Text('Network Logger'),
               ),
             ),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: FilledButton.icon(
+                icon: const Icon(Icons.settings_remote),
                 onPressed: () {
                   context.push('/remote-config');
                 },
-                child: const Text('Remote Config'),
+                label: const Text('Remote Config'),
               ),
             ),
           ],
