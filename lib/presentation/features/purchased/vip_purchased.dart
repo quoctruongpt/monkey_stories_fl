@@ -46,8 +46,12 @@ class VipPurchasedScreen extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: Spacing.md,
+                          vertical:
+                              MediaQuery.of(context).padding.top > 0
+                                  ? 0
+                                  : Spacing.lg,
                         ),
                         child: Column(
                           children: [

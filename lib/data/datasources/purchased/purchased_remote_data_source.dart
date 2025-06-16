@@ -34,6 +34,7 @@ abstract class PurchasedRemoteDataSource {
     required String receipt,
     required double price,
     required String currency,
+    bool isRestore = false,
   });
   Future<List<PurchasedItem>> restorePurchase();
   // Thêm getter cho stream lỗi
@@ -174,6 +175,7 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
     required String receipt,
     required double price,
     required String currency,
+    bool isRestore = false,
   }) async {
     final response = await dio.post(
       ApiEndpoints.verifyPurchase,
@@ -182,6 +184,7 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
         'receipt': receipt,
         'price': price,
         'currency_code': currency,
+        'is_restore': isRestore ? 1 : 0,
       },
     );
     return ApiResponse.fromJson(response.data, (json, res) => null);

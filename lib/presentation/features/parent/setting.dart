@@ -3,10 +3,38 @@ import 'package:monkey_stories/core/constants/setting.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/password_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/enhanced_setting_item.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  int _tapCount = 0;
+  DateTime? _lastTapTime;
+
+  void _handleSecretTap() {
+    print('hihi $_tapCount');
+    final now = DateTime.now();
+    if (_lastTapTime == null ||
+        now.difference(_lastTapTime!) > const Duration(seconds: 2)) {
+      _tapCount = 1;
+    } else {
+      _tapCount++;
+    }
+
+    _lastTapTime = now;
+
+    if (_tapCount >= 10) {
+      _tapCount = 0;
+      _lastTapTime = null;
+      showPasswordDialog(context: context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +53,13 @@ class SettingScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/mom_choice.png',
-                      width: 83,
-                      height: 79,
+                    GestureDetector(
+                      onTap: _handleSecretTap,
+                      child: Image.asset(
+                        'assets/images/mom_choice.png',
+                        width: 83,
+                        height: 79,
+                      ),
                     ),
                     const SizedBox(width: Spacing.md),
                     Stack(

@@ -36,6 +36,8 @@ import 'package:monkey_stories/data/datasources/system/system_local_data_source.
 import 'package:monkey_stories/data/datasources/unity_datasource.dart';
 import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/offline/offline_local_data_source_impl.dart';
+import 'package:monkey_stories/data/datasources/remote_config/remote_config_remote_data_source.dart';
+import 'package:monkey_stories/core/remote_config/remote_config_service.dart';
 
 final sl = GetIt.instance;
 
@@ -161,6 +163,11 @@ void initDatasourceDependencies() {
   sl.registerLazySingleton<OfflineLocalDataSource>(
     () =>
         OfflineLocalDataSourceImpl(sharedPreferences: sl<SharedPreferences>()),
+  );
+
+  // Remote Config
+  sl.registerLazySingleton<RemoteConfigRemoteDataSource>(
+    () => RemoteConfigRemoteDataSourceImpl(sl<RemoteConfigService>()),
   );
 
   // Add other datasource registrations here...

@@ -4,6 +4,7 @@ import 'package:monkey_stories/domain/repositories/course_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/offline_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
 import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
@@ -92,6 +93,8 @@ import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_chang
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/get_pass_debug.dart';
 
 final sl = GetIt.instance;
 
@@ -286,5 +289,13 @@ void initUsecaseDependencies() {
   // New Usecases
   sl.registerLazySingleton(
     () => CheckOfflineStatusUseCase(sl<OfflineRepository>()),
+  );
+
+  // Remote Config
+  sl.registerLazySingleton(
+    () => RemoteConfigInitialUsecase(sl<RemoteConfigRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetPassDebugUsecase(sl<RemoteConfigRepository>()),
   );
 }

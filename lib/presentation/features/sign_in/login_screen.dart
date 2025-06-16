@@ -18,6 +18,7 @@ import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.d
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/password_dialog.dart';
 
 final logger = Logger('LoginScreen');
 
@@ -60,6 +61,8 @@ class _LoginScreenState extends State<LoginScreen>
   final FocusNode _passwordFocusNode = FocusNode();
   late String Function(String key) translate =
       AppLocalizations.of(context).translate;
+  int _tapCount = 0;
+  DateTime? _lastTapTime;
 
   @override
   void initState() {
@@ -190,6 +193,24 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+  void _handleSecretTap() {
+    final now = DateTime.now();
+    if (_lastTapTime == null ||
+        now.difference(_lastTapTime!) > const Duration(seconds: 2)) {
+      _tapCount = 1;
+    } else {
+      _tapCount++;
+    }
+
+    _lastTapTime = now;
+
+    if (_tapCount >= 10) {
+      _tapCount = 0;
+      _lastTapTime = null;
+      showPasswordDialog(context: context);
+    }
+  }
+
   void _listenLoginState(LoginState state) {
     if (state.status == FormSubmissionStatus.success) {
       _handleLoginSuccess();
@@ -263,11 +284,14 @@ class _LoginScreenState extends State<LoginScreen>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Lottie.asset(
-                                  'assets/lottie/monkey_hello.lottie',
-                                  decoder: customDecoder,
-                                  width: 151,
-                                  height: 169,
+                                GestureDetector(
+                                  onTap: _handleSecretTap,
+                                  child: Lottie.asset(
+                                    'assets/lottie/monkey_hello.lottie',
+                                    decoder: customDecoder,
+                                    width: 151,
+                                    height: 169,
+                                  ),
                                 ),
 
                                 const SizedBox(height: Spacing.sm),

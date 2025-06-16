@@ -17,6 +17,7 @@ import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecas
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
@@ -29,6 +30,7 @@ class SplashCubit extends Cubit<SplashState> {
   final SaveFcmUsecase _saveFcmUsecase;
   final RegisterTokenAirbridgeUsecase _registerTokenAirbridgeUsecase;
   final CheckOfflineStatusUseCase _checkOfflineStatusUseCase;
+  final RemoteConfigInitialUsecase _remoteConfigInitialUsecase;
   final Logger _logger = Logger('SplashCubit');
   final int _splashTime = 4;
 
@@ -43,6 +45,7 @@ class SplashCubit extends Cubit<SplashState> {
     required SaveFcmUsecase saveFcmUsecase,
     required RegisterTokenAirbridgeUsecase registerTokenAirbridgeUsecase,
     required CheckOfflineStatusUseCase checkOfflineStatusUseCase,
+    required RemoteConfigInitialUsecase remoteConfigInitialUsecase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
        _appCubit = appCubit,
@@ -53,6 +56,7 @@ class SplashCubit extends Cubit<SplashState> {
        _saveFcmUsecase = saveFcmUsecase,
        _registerTokenAirbridgeUsecase = registerTokenAirbridgeUsecase,
        _checkOfflineStatusUseCase = checkOfflineStatusUseCase,
+       _remoteConfigInitialUsecase = remoteConfigInitialUsecase,
        super(SplashInitial());
 
   Future<void> runApp() async {
@@ -96,6 +100,7 @@ class SplashCubit extends Cubit<SplashState> {
           _logger.info('Device registered/retrieved successfully: $deviceId');
           _appCubit.updateDeviceInfo(deviceId: deviceId); // Cập nhật AppCubit
           _saveFcmUsecase.call(NoParams());
+          await _remoteConfigInitialUsecase.call(NoParams());
 
           // Chỉ tiếp tục kiểm tra auth nếu đăng ký device thành công
           // 2. Check authentication status

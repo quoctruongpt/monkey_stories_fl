@@ -80,6 +80,7 @@ class PurchasedRepositoryImpl extends PurchasedRepository {
             '',
         price: 0,
         currency: '',
+        isRestore: true,
       );
 
       if (response.status == ApiStatus.fail) {

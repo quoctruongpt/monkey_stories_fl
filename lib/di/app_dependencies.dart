@@ -13,6 +13,9 @@ import 'package:monkey_stories/core/network/dio_config.dart';
 // Import sl from the main container
 import 'package:monkey_stories/di/injection_container.dart';
 
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:monkey_stories/core/remote_config/remote_config_service.dart';
+
 // final sl = GetIt.instance;
 
 Future<void> initCoreAppDependencies() async {
@@ -46,6 +49,16 @@ Future<void> initCoreAppDependencies() async {
 
   // Đăng ký singleton cho FirebaseMessaging
   sl.registerLazySingleton<FirebaseMessaging>(() => FirebaseMessaging.instance);
+
+  // Đăng ký singleton cho FirebaseRemoteConfig
+  sl.registerLazySingleton<FirebaseRemoteConfig>(
+    () => FirebaseRemoteConfig.instance,
+  );
+
+  // Đăng ký RemoteConfigService
+  sl.registerLazySingleton<RemoteConfigService>(
+    () => RemoteConfigService(sl()),
+  );
 
   sl
     ..registerLazySingleton<Connectivity>(Connectivity.new)

@@ -107,6 +107,7 @@ import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_naviga
 import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -182,6 +183,7 @@ void initBlocDependencies() {
       saveFcmUsecase: sl<SaveFcmUsecase>(),
       registerTokenAirbridgeUsecase: sl<RegisterTokenAirbridgeUsecase>(),
       checkOfflineStatusUseCase: sl<CheckOfflineStatusUseCase>(),
+      remoteConfigInitialUsecase: sl<RemoteConfigInitialUsecase>(),
     ),
   );
 

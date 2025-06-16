@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -135,10 +134,11 @@ final GoRouter router = GoRouter(
       name: AppRouteNames.login,
       builder: (context, state) {
         final String? initialUsername = state.uri.queryParameters['username'];
+
         final String? initialPassword = state.uri.queryParameters['password'];
         return LoginScreenProvider(
-          initialUsername: initialUsername,
-          initialPassword: initialPassword,
+          initialUsername: initialUsername != 'null' ? initialUsername : null,
+          initialPassword: initialPassword != 'null' ? initialPassword : null,
         );
       },
     ),
