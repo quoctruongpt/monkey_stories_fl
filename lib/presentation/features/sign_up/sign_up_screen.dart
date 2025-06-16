@@ -160,7 +160,7 @@ class _SignUpState extends State<SignUp>
             '${context.read<SignUpCubit>().state.phone.value.countryCode}${_phoneController.text}',
           );
           context.pop();
-          context.push('${AppRoutePaths.login}?username=$encodedPhone');
+          _onLoginPressed(context, username: encodedPhone);
         },
         onSecondaryAction: () {
           context.pop();
@@ -195,7 +195,7 @@ class _SignUpState extends State<SignUp>
     }
   }
 
-  void _onLoginPressed(BuildContext context) {
+  void _onLoginPressed(BuildContext context, {String? username}) {
     context.read<SignUpCubit>().signInClicked();
     if (context.read<UserCubit>().state.isPurchasing) {
       showCustomNoticeDialog(
@@ -215,7 +215,7 @@ class _SignUpState extends State<SignUp>
         ).translate('sign_up.phone.exists.act'),
         onPrimaryAction: () {
           context.pop();
-          context.push(AppRoutePaths.login);
+          context.push('${AppRoutePaths.login}?username=$username');
           context.read<SignUpCubit>().trackPopupWarning(
             MsSignInPopupWarningClickType.signIn,
           );
@@ -238,7 +238,7 @@ class _SignUpState extends State<SignUp>
       );
       return;
     }
-    context.push(AppRoutePaths.login);
+    context.push('${AppRoutePaths.login}?username=$username');
   }
 
   @override
