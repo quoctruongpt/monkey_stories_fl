@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/core/constants/leave_contact.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
@@ -12,14 +13,20 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
   final SaveContactUsecase _saveContactUsecase;
   final ProfileCubit _profileCubit;
   final PurchasedCubit _purchasedCubit;
+  final MsPurchaseScreenViewRegisterTrackingUsecase
+  _msPurchaseScreenViewRegisterTrackingUsecase;
 
   LeaveContactCubit({
     required SaveContactUsecase saveContactUsecase,
     required ProfileCubit profileCubit,
     required PurchasedCubit purchasedCubit,
+    required MsPurchaseScreenViewRegisterTrackingUsecase
+    msPurchaseScreenViewRegisterTrackingUsecase,
   }) : _saveContactUsecase = saveContactUsecase,
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
+       _msPurchaseScreenViewRegisterTrackingUsecase =
+           msPurchaseScreenViewRegisterTrackingUsecase,
        super(LeaveContactState());
 
   void countryCodeInit(String countryCode) {
@@ -77,5 +84,13 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     } catch (e) {
       emit(state.copyWith(isSubmitting: false));
     }
+  }
+
+  void trackViewPopupC3() {
+    _msPurchaseScreenViewRegisterTrackingUsecase(
+      MsPurchaseScreenViewRegisterTrackingParams(
+        source: _purchasedCubit.state.source ?? '',
+      ),
+    );
   }
 }

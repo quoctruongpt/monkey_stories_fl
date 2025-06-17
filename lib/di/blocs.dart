@@ -112,6 +112,7 @@ import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usec
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 
 final sl = GetIt.instance;
 
@@ -249,6 +250,8 @@ void initBlocDependencies() {
       saveContactUsecase: sl<SaveContactUsecase>(),
       profileCubit: sl<ProfileCubit>(),
       purchasedCubit: sl<PurchasedCubit>(),
+      msPurchaseScreenViewRegisterTrackingUsecase:
+          sl<MsPurchaseScreenViewRegisterTrackingUsecase>(),
     ),
   );
 

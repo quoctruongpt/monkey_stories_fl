@@ -40,7 +40,6 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
 
   StreamSubscription? _errorSubscription;
   StreamSubscription? _purchaseUpdatedSubscription;
-  String? _source;
 
   PurchasedCubit({
     required InitialPurchasedUsecase initialPurchasedUsecase,
@@ -91,13 +90,6 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     _purchaseUpdatedSubscription?.cancel();
     _purchaseUpdatedSubscription = _listenToPurchaseUpdatesUseCase().listen(
       (purchaseItem) async {
-        _orderCompleteTrackingUsecase(
-          OrderCompleteTrackingParams(
-            totalPrice: state.purchasingItem?.price ?? 0,
-            source: _source ?? '',
-            choosePackage: state.purchasingItem?.type.value ?? '',
-          ),
-        );
         final result = await _verifyPurchasedUsecase(
           VerifyPurchasedParams(
             productId: purchaseItem.productId,
@@ -116,6 +108,13 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
           ),
           (success) async {
             await _completePurchaseUsecase(purchaseItem.transactionId);
+            _orderCompleteTrackingUsecase(
+              OrderCompleteTrackingParams(
+                totalPrice: state.purchasingItem?.price ?? 0,
+                source: state.source ?? '',
+                choosePackage: state.purchasingItem?.type.value ?? '',
+              ),
+            );
             emit(
               state.copyWith(
                 isPurchasing: false,
@@ -181,9 +180,14 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     PurchasedPackage package, {
     required String source,
   }) async {
-    _source = source;
     try {
-      emit(state.copyWith(isPurchasing: true, purchasingItem: package));
+      emit(
+        state.copyWith(
+          isPurchasing: true,
+          purchasingItem: package,
+          source: source,
+        ),
+      );
       _activatePurchaseListener();
       await _purchaseUsecase.call(package);
     } catch (e, stackTrace) {
@@ -219,7 +223,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     _orderFailedTrackingUsecase(
       OrderFailTrackingParams(
         totalPrice: state.purchasingItem?.price ?? 0,
-        source: _source ?? '',
+        source: state.source ?? '',
         choosePackage: state.purchasingItem?.type.value ?? '',
         errorMessage: state.errorMessage ?? '',
       ),

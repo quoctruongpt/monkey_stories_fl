@@ -225,7 +225,7 @@ void showLeaveContactDialog(BuildContext context, VoidCallback onSuccess) {
     context: context,
     builder:
         (context) => BlocProvider(
-          create: (context) => sl<LeaveContactCubit>(),
+          create: (context) => sl<LeaveContactCubit>()..trackViewPopupC3(),
           child: LeaveContactDialog(onSuccess: onSuccess),
         ),
   );

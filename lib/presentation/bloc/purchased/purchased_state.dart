@@ -12,6 +12,7 @@ class PurchasedState extends Equatable {
     this.errorMessage,
     this.isNeedRegister = false,
     this.isRestorePurchasedError = false,
+    this.source,
   });
 
   // Danh sách thông tin sản phẩm
@@ -44,6 +45,9 @@ class PurchasedState extends Equatable {
   // Khôi phục mua thất bại
   final bool isRestorePurchasedError;
 
+  // Source
+  final String? source;
+
   PurchasedState copyWith({
     List<PurchasedPackage>? products,
     bool? isInitialPurchased,
@@ -56,6 +60,7 @@ class PurchasedState extends Equatable {
     bool? isResetStatus,
     bool? isNeedRegister,
     bool? isRestorePurchasedError,
+    String? source,
   }) {
     return PurchasedState(
       products: products ?? this.products,
@@ -75,6 +80,7 @@ class PurchasedState extends Equatable {
           isResetStatus == true
               ? false
               : isRestorePurchasedError ?? this.isRestorePurchasedError,
+      source: source ?? this.source,
     );
   }
 
@@ -110,5 +116,6 @@ class PurchasedState extends Equatable {
     errorMessage,
     isNeedRegister,
     isRestorePurchasedError,
+    source,
   ];
 }
