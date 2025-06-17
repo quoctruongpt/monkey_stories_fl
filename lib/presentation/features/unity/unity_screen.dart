@@ -61,7 +61,7 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
     _unityCubit.registerHandler(MessageTypes.buyNow, (
       UnityMessageEntity message,
     ) async {
-      _handleBuyNow();
+      _handleBuyNow(message.payload['source'] as String);
       return null;
     });
 
@@ -152,7 +152,7 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
     return const PopScope(canPop: false, child: SizedBox.shrink());
   }
 
-  void _handleBuyNow() {
+  void _handleBuyNow(String source) {
     final dialogKey = UniqueKey();
 
     void closeDialog() {
@@ -170,7 +170,7 @@ class _UnityScreenViewState extends State<UnityScreenView> with RouteAware {
       buildVerifyDialogWidget(
         context: context,
         onSuccess: () {
-          context.read<UnityScreenCubit>().buyNow();
+          context.read<UnityScreenCubit>().buyNow(source);
           closeDialog();
         },
       ),

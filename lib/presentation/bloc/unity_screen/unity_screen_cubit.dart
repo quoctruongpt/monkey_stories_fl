@@ -14,12 +14,10 @@ class UnityScreenCubit extends Cubit<UnityScreenState> {
     : _purchasedCubit = purchasedCubit,
       super(const UnityScreenState());
 
-  void buyNow() {
-    logger.info('buyNow');
+  void buyNow(String source) {
     final packageSelected = _purchasedCubit.state.products.firstWhere(
       (element) => element.type == PackageType.oneYear,
     );
-    logger.info('packageSelected: ${packageSelected.id}');
-    _purchasedCubit.purchase(packageSelected);
+    _purchasedCubit.purchase(packageSelected, source: source);
   }
 }

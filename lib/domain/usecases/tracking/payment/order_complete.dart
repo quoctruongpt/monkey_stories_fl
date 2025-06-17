@@ -18,6 +18,8 @@ class OrderCompleteTrackingUsecase
       eventName: AirbridgeName.ORDER_COMPLETED,
       semanticProperties: params.toSemanticProperties(),
       customProperties: params.toCustomProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);

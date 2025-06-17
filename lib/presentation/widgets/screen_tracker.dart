@@ -48,7 +48,7 @@ class _ScreenTrackerState extends State<ScreenTracker>
 
   @override
   void didPushNext() {
-    widget.onTrackPush?.call();
+    widget.onTrackExit?.call();
   }
 
   @override

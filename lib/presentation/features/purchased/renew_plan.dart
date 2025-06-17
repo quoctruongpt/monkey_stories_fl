@@ -154,6 +154,7 @@ class RenewPlanView extends StatelessWidget {
                                 .trackScreenBuyNow(source);
                             context.read<PurchasedCubit>().purchase(
                               state.selectedPackage!,
+                              source: source,
                             );
                           },
                           onRestorePressed: () {},

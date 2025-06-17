@@ -15,6 +15,7 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updat
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'purchased_state.dart';
@@ -31,11 +32,13 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
   final VerifyPurchasedUsecase _verifyPurchasedUsecase;
   final RestorePurchasedUsecase _restorePurchasedUsecase;
   final CompletePurchaseUsecase _completePurchaseUsecase;
+  final OrderCompleteTrackingUsecase _orderCompleteTrackingUsecase;
 
   final UserCubit _userCubit;
 
   StreamSubscription? _errorSubscription;
   StreamSubscription? _purchaseUpdatedSubscription;
+  String? _source;
 
   PurchasedCubit({
     required InitialPurchasedUsecase initialPurchasedUsecase,
@@ -48,6 +51,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     required RestorePurchasedUsecase restorePurchasedUsecase,
     required UserCubit userCubit,
     required CompletePurchaseUsecase completePurchaseUsecase,
+    required OrderCompleteTrackingUsecase orderCompleteTrackingUsecase,
   }) : _initialPurchasedUsecase = initialPurchasedUsecase,
        _getProductsUsecase = getProductsUsecase,
        _purchaseUsecase = purchaseUsecase,
@@ -58,6 +62,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
        _restorePurchasedUsecase = restorePurchasedUsecase,
        _userCubit = userCubit,
        _completePurchaseUsecase = completePurchaseUsecase,
+       _orderCompleteTrackingUsecase = orderCompleteTrackingUsecase,
        super(const PurchasedState()) {
     _listenForErrors();
   }
@@ -82,6 +87,13 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     _purchaseUpdatedSubscription?.cancel();
     _purchaseUpdatedSubscription = _listenToPurchaseUpdatesUseCase().listen(
       (purchaseItem) async {
+        _orderCompleteTrackingUsecase(
+          OrderCompleteTrackingParams(
+            totalPrice: state.purchasingItem?.price ?? 0,
+            source: _source ?? '',
+            choosePackage: state.purchasingItem?.type.value ?? '',
+          ),
+        );
         final result = await _verifyPurchasedUsecase(
           VerifyPurchasedParams(
             productId: purchaseItem.productId,
@@ -161,7 +173,11 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     } catch (e) {}
   }
 
-  Future<void> purchase(PurchasedPackage package) async {
+  Future<void> purchase(
+    PurchasedPackage package, {
+    required String source,
+  }) async {
+    _source = source;
     try {
       emit(state.copyWith(isPurchasing: true, purchasingItem: package));
       _activatePurchaseListener();
