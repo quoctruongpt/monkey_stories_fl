@@ -115,6 +115,7 @@ import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initi
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 
 final sl = GetIt.instance;
 
@@ -256,6 +257,8 @@ void initBlocDependencies() {
           sl<MsPurchaseScreenViewRegisterTrackingUsecase>(),
       msPurchaseScreenRegisterTrackingUsecase:
           sl<MsPurchaseScreenRegisterTrackingUsecase>(),
+      msObViewPhoneNumberScreenTrackingUsecase:
+          sl<MsObViewPhoneNumberScreenTrackingUsecase>(),
     ),
   );
 

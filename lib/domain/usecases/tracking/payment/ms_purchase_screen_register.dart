@@ -57,7 +57,9 @@ class MsPurchaseScreenRegisterTrackingParams {
 
 enum MsPurchaseScreenRegisterClickType {
   submit('submit'),
-  close('close');
+  close('close'),
+  skip('skip'),
+  back('back');
 
   final String value;
 

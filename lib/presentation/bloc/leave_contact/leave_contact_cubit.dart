@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/core/constants/leave_contact.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
@@ -23,6 +24,8 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
   _msPurchaseScreenViewRegisterTrackingUsecase;
   final MsPurchaseScreenRegisterTrackingUsecase
   _msPurchaseScreenRegisterTrackingUsecase;
+  final MsObViewPhoneNumberScreenTrackingUsecase
+  _msObViewPhoneNumberScreenTrackingUsecase;
 
   final _popupC3TrackingParams = PopupC3TrackingParams();
 
@@ -34,6 +37,8 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     msPurchaseScreenViewRegisterTrackingUsecase,
     required MsPurchaseScreenRegisterTrackingUsecase
     msPurchaseScreenRegisterTrackingUsecase,
+    required MsObViewPhoneNumberScreenTrackingUsecase
+    msObViewPhoneNumberScreenTrackingUsecase,
   }) : _saveContactUsecase = saveContactUsecase,
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
@@ -41,6 +46,8 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
            msPurchaseScreenViewRegisterTrackingUsecase,
        _msPurchaseScreenRegisterTrackingUsecase =
            msPurchaseScreenRegisterTrackingUsecase,
+       _msObViewPhoneNumberScreenTrackingUsecase =
+           msObViewPhoneNumberScreenTrackingUsecase,
        super(LeaveContactState()) {
     _popupC3TrackingParams.timeStart = DateTime.now().millisecondsSinceEpoch;
   }
@@ -104,6 +111,14 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     }
   }
 
+  void onSkipPhoneScreen() {
+    _popupC3TrackingParams.clickType = MsPurchaseScreenRegisterClickType.skip;
+  }
+
+  void onBackPhoneScreen() {
+    _popupC3TrackingParams.clickType = MsPurchaseScreenRegisterClickType.back;
+  }
+
   void closePopupC3() {
     _popupC3TrackingParams.clickType = MsPurchaseScreenRegisterClickType.close;
   }
@@ -129,6 +144,24 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
         clickType: _popupC3TrackingParams.clickType!,
         isSuccess: state.isSuccess,
         source: _purchasedCubit.state.source ?? '',
+      ),
+    );
+  }
+
+  void trackObViewPhoneNumberScreen() {
+    _msObViewPhoneNumberScreenTrackingUsecase(
+      MsObViewPhoneNumberScreenTrackingParams(
+        timeOnScreen:
+            ((DateTime.now().millisecondsSinceEpoch -
+                        _popupC3TrackingParams.timeStart) /
+                    1000)
+                .round(),
+        deviceId: 334,
+        clickType: _popupC3TrackingParams.clickType,
+        isSuccess: state.isSuccess,
+        errorMessage: state.errorMessage,
+        phoneNumber:
+            '${state.phone.value.countryCode}${state.phone.value.phoneNumber}',
       ),
     );
   }
