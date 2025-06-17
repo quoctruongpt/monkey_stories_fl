@@ -34,7 +34,7 @@ class PurchasedProvider extends StatelessWidget {
         builder: (context) {
           return ScreenTracker(
             routeName: AppRouteNames.purchased,
-            child: const PurchasedScreen(),
+            child: PurchasedScreen(source: source),
             onTrackPush: () {
               context.read<PurchasedViewCubit>().trackScreenView(source);
             },
@@ -46,7 +46,8 @@ class PurchasedProvider extends StatelessWidget {
 }
 
 class PurchasedScreen extends StatelessWidget {
-  const PurchasedScreen({super.key});
+  final String source;
+  const PurchasedScreen({super.key, required this.source});
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +166,9 @@ class PurchasedScreen extends StatelessWidget {
                                     },
                                   ),
                           onPressed: () {
+                            context
+                                .read<PurchasedViewCubit>()
+                                .trackScreenBuyNow(source);
                             context.read<PurchasedCubit>().purchase(
                               state.selectedPackage!,
                             );

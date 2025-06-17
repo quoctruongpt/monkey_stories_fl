@@ -29,6 +29,7 @@ import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_chang
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
@@ -283,6 +284,8 @@ void initBlocDependencies() {
       purchasedCubit: sl<PurchasedCubit>(),
       msPurchaseScreenViewTrackingUsecase:
           sl<MsPurchaseScreenViewTrackingUsecase>(),
+      msPurchaseScreenBuyNowTrackingUsecase:
+          sl<MsPurchaseScreenBuyNowTrackingUsecase>(),
     ),
   );
 

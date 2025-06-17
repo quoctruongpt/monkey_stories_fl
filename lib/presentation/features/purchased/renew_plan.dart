@@ -17,6 +17,8 @@ import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart
 class RenewPlanScreen extends StatelessWidget {
   const RenewPlanScreen({super.key});
 
+  final String source = 'parent_setting_renew';
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -25,11 +27,9 @@ class RenewPlanScreen extends StatelessWidget {
         builder: (context) {
           return ScreenTracker(
             routeName: AppRouteNames.renewPlan,
-            child: const RenewPlanView(),
+            child: RenewPlanView(source: source),
             onTrackPush: () {
-              context.read<PurchasedViewCubit>().trackScreenView(
-                'parent_setting_renew',
-              );
+              context.read<PurchasedViewCubit>().trackScreenView(source);
             },
           );
         },
@@ -39,7 +39,8 @@ class RenewPlanScreen extends StatelessWidget {
 }
 
 class RenewPlanView extends StatelessWidget {
-  const RenewPlanView({super.key});
+  final String source;
+  const RenewPlanView({super.key, required this.source});
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +149,9 @@ class RenewPlanView extends StatelessWidget {
                                     },
                                   ),
                           onPressed: () {
+                            context
+                                .read<PurchasedViewCubit>()
+                                .trackScreenBuyNow(source);
                             context.read<PurchasedCubit>().purchase(
                               state.selectedPackage!,
                             );

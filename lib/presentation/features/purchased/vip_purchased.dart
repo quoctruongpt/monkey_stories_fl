@@ -24,6 +24,8 @@ const listContent = [
 class VipPurchasedProvider extends StatelessWidget {
   const VipPurchasedProvider({super.key});
 
+  final String source = 'parent_setting';
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -32,11 +34,9 @@ class VipPurchasedProvider extends StatelessWidget {
         builder: (context) {
           return ScreenTracker(
             routeName: AppRouteNames.vip,
-            child: const VipPurchasedScreen(),
+            child: VipPurchasedScreen(source: source),
             onTrackPush: () {
-              context.read<PurchasedViewCubit>().trackScreenView(
-                'parent_setting',
-              );
+              context.read<PurchasedViewCubit>().trackScreenView(source);
             },
           );
         },
@@ -46,7 +46,8 @@ class VipPurchasedProvider extends StatelessWidget {
 }
 
 class VipPurchasedScreen extends StatelessWidget {
-  const VipPurchasedScreen({super.key});
+  final String source;
+  const VipPurchasedScreen({super.key, required this.source});
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +150,9 @@ class VipPurchasedScreen extends StatelessWidget {
                                     },
                                   ),
                           onPressed: () {
+                            context
+                                .read<PurchasedViewCubit>()
+                                .trackScreenBuyNow(source);
                             context.read<PurchasedCubit>().purchase(
                               state.selectedPackage!,
                             );

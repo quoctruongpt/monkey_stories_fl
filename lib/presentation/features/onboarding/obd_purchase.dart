@@ -18,6 +18,8 @@ import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 class ObdPurchaseProvider extends StatelessWidget {
   const ObdPurchaseProvider({super.key});
 
+  final String source = 'onboarding';
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -26,9 +28,9 @@ class ObdPurchaseProvider extends StatelessWidget {
         builder: (context) {
           return ScreenTracker(
             routeName: AppRouteNames.obdPurchase,
-            child: const ObdPurchase(),
+            child: ObdPurchase(source: source),
             onTrackPush: () {
-              context.read<PurchasedViewCubit>().trackScreenView('onboarding');
+              context.read<PurchasedViewCubit>().trackScreenView(source);
             },
           );
         },
@@ -38,7 +40,8 @@ class ObdPurchaseProvider extends StatelessWidget {
 }
 
 class ObdPurchase extends StatelessWidget {
-  const ObdPurchase({super.key});
+  final String source;
+  const ObdPurchase({super.key, required this.source});
 
   void _onXPressed(BuildContext context) {
     context.go(AppRoutePaths.leaveContact);
@@ -161,6 +164,9 @@ class ObdPurchase extends StatelessWidget {
                           showVerifyDialog(
                             context: context,
                             onSuccess: () {
+                              context
+                                  .read<PurchasedViewCubit>()
+                                  .trackScreenBuyNow(source);
                               context.read<PurchasedCubit>().purchase(
                                 state.selectedPackage!,
                               );

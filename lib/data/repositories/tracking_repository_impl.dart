@@ -61,11 +61,10 @@ class TrackingRepositoryImpl implements TrackingRepository {
     }
 
     if (isPushAirbridge) {
-      _airbridgeRemoteDataSource.pushEvent(
-        eventName,
-        semanticProperties,
-        customProperties,
-      );
+      _airbridgeRemoteDataSource.pushEvent(eventName, semanticProperties, {
+        ...(defaultProperties.toJson()),
+        ...(customProperties ?? {}),
+      });
     }
 
     if (isPushKinesis) {
