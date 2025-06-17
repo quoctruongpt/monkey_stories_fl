@@ -16,6 +16,7 @@ import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'purchased_state.dart';
@@ -33,6 +34,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
   final RestorePurchasedUsecase _restorePurchasedUsecase;
   final CompletePurchaseUsecase _completePurchaseUsecase;
   final OrderCompleteTrackingUsecase _orderCompleteTrackingUsecase;
+  final OrderFailTrackingUsecase _orderFailedTrackingUsecase;
 
   final UserCubit _userCubit;
 
@@ -52,6 +54,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     required UserCubit userCubit,
     required CompletePurchaseUsecase completePurchaseUsecase,
     required OrderCompleteTrackingUsecase orderCompleteTrackingUsecase,
+    required OrderFailTrackingUsecase orderFailedTrackingUsecase,
   }) : _initialPurchasedUsecase = initialPurchasedUsecase,
        _getProductsUsecase = getProductsUsecase,
        _purchaseUsecase = purchaseUsecase,
@@ -63,6 +66,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
        _userCubit = userCubit,
        _completePurchaseUsecase = completePurchaseUsecase,
        _orderCompleteTrackingUsecase = orderCompleteTrackingUsecase,
+       _orderFailedTrackingUsecase = orderFailedTrackingUsecase,
        super(const PurchasedState()) {
     _listenForErrors();
   }
@@ -209,6 +213,17 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     } catch (e) {
       emit(state.copyWith(isPurchasing: false, isRestorePurchasedError: true));
     }
+  }
+
+  void trackOrderFailed() {
+    _orderFailedTrackingUsecase(
+      OrderFailTrackingParams(
+        totalPrice: state.purchasingItem?.price ?? 0,
+        source: _source ?? '',
+        choosePackage: state.purchasingItem?.type.value ?? '',
+        errorMessage: state.errorMessage ?? '',
+      ),
+    );
   }
 
   void resetStatus() {

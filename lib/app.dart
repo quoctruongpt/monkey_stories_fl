@@ -248,6 +248,7 @@ class _AppBuilderState extends State<AppBuilder>
                     context.go(AppRoutePaths.purchasedSuccess);
                   } else if (state.errorMessage != null) {
                     try {
+                      context.read<PurchasedCubit>().trackOrderFailed();
                       final unityState = context.read<UnityCubit>().state;
                       if (!unityState.isUnityVisible) {
                         showLeaveContactDialog(
