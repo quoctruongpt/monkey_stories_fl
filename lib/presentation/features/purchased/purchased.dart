@@ -9,6 +9,7 @@ import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart'
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item_with_discount.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart';
@@ -22,13 +23,24 @@ const listContent = [
 ];
 
 class PurchasedProvider extends StatelessWidget {
-  const PurchasedProvider({super.key});
+  final String source;
+  const PurchasedProvider({super.key, required this.source});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<PurchasedViewCubit>()..getPackages(),
-      child: const PurchasedScreen(),
+      child: Builder(
+        builder: (context) {
+          return ScreenTracker(
+            routeName: AppRouteNames.purchased,
+            child: const PurchasedScreen(),
+            onTrackPush: () {
+              context.read<PurchasedViewCubit>().trackScreenView(source);
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -13,6 +13,7 @@ import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart
 import 'package:monkey_stories/presentation/widgets/purchase/package_item.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 class ObdPurchaseProvider extends StatelessWidget {
   const ObdPurchaseProvider({super.key});
@@ -21,7 +22,17 @@ class ObdPurchaseProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<PurchasedViewCubit>()..getOnboardingPackages(),
-      child: const ObdPurchase(),
+      child: Builder(
+        builder: (context) {
+          return ScreenTracker(
+            routeName: AppRouteNames.obdPurchase,
+            child: const ObdPurchase(),
+            onTrackPush: () {
+              context.read<PurchasedViewCubit>().trackScreenView('onboarding');
+            },
+          );
+        },
+      ),
     );
   }
 }

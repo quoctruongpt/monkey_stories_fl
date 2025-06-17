@@ -11,6 +11,8 @@ import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/report_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
@@ -95,6 +97,12 @@ import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_chang
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
 import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 import 'package:monkey_stories/domain/usecases/remote_config/get_pass_debug.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 
 final sl = GetIt.instance;
 
@@ -279,6 +287,30 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsUpdatePasswordTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenViewTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenRegisterTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenClickExitTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewPhoneNumberScreenTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenBuyNowTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => OrderCompleteTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => OrderFailTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenViewRegisterTrackingUsecase(sl<TrackingRepository>()),
   );
 
   // Report

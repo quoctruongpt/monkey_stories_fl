@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
+import 'package:logging/logging.dart';
 
 abstract class AirbridgeRemoteDataSource {
   Future<void> registerTokenAirbridge(String token);
@@ -11,6 +12,7 @@ abstract class AirbridgeRemoteDataSource {
     String? name,
   );
   Future<String> getDeviceId();
+
   void pushEvent(
     String eventName,
     Map<String, dynamic>? semanticProperties,
@@ -19,6 +21,8 @@ abstract class AirbridgeRemoteDataSource {
 }
 
 class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
+  final Logger _logger = Logger('AirbridgeRemoteDataSourceImpl');
+
   @override
   Future<void> registerTokenAirbridge(String token) async {
     Airbridge.registerPushToken(token);
@@ -65,6 +69,10 @@ class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
     Map<String, dynamic>? semanticProperties,
     Map<String, dynamic>? customProperties,
   ) {
+    _logger.info('pushEvent: $eventName');
+    _logger.info('semanticProperties: $semanticProperties');
+    _logger.info('customProperties: $customProperties');
+
     Airbridge.trackEvent(
       category: eventName,
       semanticAttributes: semanticProperties,

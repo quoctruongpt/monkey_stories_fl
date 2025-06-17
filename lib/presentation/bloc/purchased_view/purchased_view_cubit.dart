@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 part 'purchased_view_state.dart';
@@ -17,9 +18,17 @@ const sortPackages = [
 
 class PurchasedViewCubit extends Cubit<PurchasedViewState> {
   final PurchasedCubit _purchasedCubit;
-  PurchasedViewCubit({required PurchasedCubit purchasedCubit})
-    : _purchasedCubit = purchasedCubit,
-      super(const PurchasedViewState());
+  final MsPurchaseScreenViewTrackingUsecase
+  _msPurchaseScreenViewTrackingUsecase;
+
+  PurchasedViewCubit({
+    required PurchasedCubit purchasedCubit,
+    required MsPurchaseScreenViewTrackingUsecase
+    msPurchaseScreenViewTrackingUsecase,
+  }) : _purchasedCubit = purchasedCubit,
+       _msPurchaseScreenViewTrackingUsecase =
+           msPurchaseScreenViewTrackingUsecase,
+       super(const PurchasedViewState());
 
   void selectPackage(PurchasedPackage package) {
     emit(state.copyWith(selectedPackage: package));
@@ -57,6 +66,15 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
       state.copyWith(
         packages: packages,
         selectedPackage: packages.isNotEmpty ? packages.first : null,
+      ),
+    );
+  }
+
+  void trackScreenView(String source) {
+    _msPurchaseScreenViewTrackingUsecase.call(
+      MsPurchaseScreenViewTrackingParams(
+        source: source,
+        tagName01: 'ms_flow_current',
       ),
     );
   }

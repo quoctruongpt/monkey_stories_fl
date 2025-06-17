@@ -246,9 +246,10 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.purchased,
       name: AppRouteNames.purchased,
       builder: (context, state) {
-        return const OrientationWrapper(
+        final String source = state.uri.queryParameters['source'] ?? '';
+        return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: PurchasedProvider(),
+          child: PurchasedProvider(source: source),
         );
       },
     ),

@@ -10,7 +10,7 @@ abstract class TrackingRepository {
     required String eventName,
     Map<String, dynamic>? semanticProperties,
     Map<String, dynamic>? customProperties,
-    bool isPushAirbridge = false,
-    bool isPushKinesis = true,
+    bool isPushAirbridge = true,
+    bool isPushKinesis = false,
   });
 }

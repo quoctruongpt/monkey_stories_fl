@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
@@ -8,6 +9,7 @@ import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart'
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item_with_discount.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart';
@@ -19,7 +21,19 @@ class RenewPlanScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<PurchasedViewCubit>()..getPackages(),
-      child: const RenewPlanView(),
+      child: Builder(
+        builder: (context) {
+          return ScreenTracker(
+            routeName: AppRouteNames.renewPlan,
+            child: const RenewPlanView(),
+            onTrackPush: () {
+              context.read<PurchasedViewCubit>().trackScreenView(
+                'parent_setting_renew',
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
