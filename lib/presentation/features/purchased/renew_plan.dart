@@ -51,7 +51,10 @@ class RenewPlanView extends StatelessWidget {
             showBackButton: false,
             actions: [
               IconButton(
-                onPressed: () => context.pop(),
+                onPressed: () {
+                  context.read<PurchasedViewCubit>().onClose(source);
+                  context.pop();
+                },
                 icon: const Icon(
                   Icons.clear,
                   color: AppTheme.textColor,

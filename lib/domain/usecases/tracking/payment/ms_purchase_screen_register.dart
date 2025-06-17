@@ -19,6 +19,8 @@ class MsPurchaseScreenRegisterTrackingUsecase
       eventName: 'ms_purchase_screen_register',
       semanticProperties: params.toSemanticProperties(),
       customProperties: params.toCustomProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
     return right(null);
   }

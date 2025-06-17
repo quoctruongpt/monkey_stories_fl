@@ -59,6 +59,7 @@ class PurchasedScreen extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () {
+                  context.read<PurchasedViewCubit>().onClose(source);
                   if (context.canPop()) {
                     context.pop();
                   } else {

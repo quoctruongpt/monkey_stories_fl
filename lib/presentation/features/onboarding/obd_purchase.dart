@@ -44,6 +44,7 @@ class ObdPurchase extends StatelessWidget {
   const ObdPurchase({super.key, required this.source});
 
   void _onXPressed(BuildContext context) {
+    context.read<PurchasedViewCubit>().onClose(source);
     context.go(AppRoutePaths.leaveContact);
   }
 

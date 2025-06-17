@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
@@ -23,6 +24,8 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
   _msPurchaseScreenViewTrackingUsecase;
   final MsPurchaseScreenBuyNowTrackingUsecase
   _msPurchaseScreenBuyNowTrackingUsecase;
+  final MsPurchaseScreenClickExitTrackingUsecase
+  _msPurchaseScreenClickExitTrackingUsecase;
 
   PurchasedViewCubit({
     required PurchasedCubit purchasedCubit,
@@ -30,11 +33,15 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
     msPurchaseScreenViewTrackingUsecase,
     required MsPurchaseScreenBuyNowTrackingUsecase
     msPurchaseScreenBuyNowTrackingUsecase,
+    required MsPurchaseScreenClickExitTrackingUsecase
+    msPurchaseScreenClickExitTrackingUsecase,
   }) : _purchasedCubit = purchasedCubit,
        _msPurchaseScreenViewTrackingUsecase =
            msPurchaseScreenViewTrackingUsecase,
        _msPurchaseScreenBuyNowTrackingUsecase =
            msPurchaseScreenBuyNowTrackingUsecase,
+       _msPurchaseScreenClickExitTrackingUsecase =
+           msPurchaseScreenClickExitTrackingUsecase,
        super(const PurchasedViewState());
 
   void selectPackage(PurchasedPackage package) {
@@ -74,6 +81,12 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
         packages: packages,
         selectedPackage: packages.isNotEmpty ? packages.first : null,
       ),
+    );
+  }
+
+  void onClose(String source) {
+    _msPurchaseScreenClickExitTrackingUsecase.call(
+      MsPurchaseScreenClickExitTrackingParams(source: source),
     );
   }
 
