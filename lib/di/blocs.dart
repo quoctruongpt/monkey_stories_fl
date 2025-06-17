@@ -113,6 +113,7 @@ import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dar
 import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 
 final sl = GetIt.instance;
 
@@ -252,6 +253,8 @@ void initBlocDependencies() {
       purchasedCubit: sl<PurchasedCubit>(),
       msPurchaseScreenViewRegisterTrackingUsecase:
           sl<MsPurchaseScreenViewRegisterTrackingUsecase>(),
+      msPurchaseScreenRegisterTrackingUsecase:
+          sl<MsPurchaseScreenRegisterTrackingUsecase>(),
     ),
   );
 

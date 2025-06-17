@@ -3,11 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/core/constants/leave_contact.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 part 'leave_contact_state.dart';
+
+class PopupC3TrackingParams {
+  int timeStart = DateTime.now().millisecondsSinceEpoch;
+  MsPurchaseScreenRegisterClickType? clickType;
+}
 
 class LeaveContactCubit extends Cubit<LeaveContactState> {
   final SaveContactUsecase _saveContactUsecase;
@@ -15,6 +21,10 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
   final PurchasedCubit _purchasedCubit;
   final MsPurchaseScreenViewRegisterTrackingUsecase
   _msPurchaseScreenViewRegisterTrackingUsecase;
+  final MsPurchaseScreenRegisterTrackingUsecase
+  _msPurchaseScreenRegisterTrackingUsecase;
+
+  final _popupC3TrackingParams = PopupC3TrackingParams();
 
   LeaveContactCubit({
     required SaveContactUsecase saveContactUsecase,
@@ -22,12 +32,18 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     required PurchasedCubit purchasedCubit,
     required MsPurchaseScreenViewRegisterTrackingUsecase
     msPurchaseScreenViewRegisterTrackingUsecase,
+    required MsPurchaseScreenRegisterTrackingUsecase
+    msPurchaseScreenRegisterTrackingUsecase,
   }) : _saveContactUsecase = saveContactUsecase,
        _profileCubit = profileCubit,
        _purchasedCubit = purchasedCubit,
        _msPurchaseScreenViewRegisterTrackingUsecase =
            msPurchaseScreenViewRegisterTrackingUsecase,
-       super(LeaveContactState());
+       _msPurchaseScreenRegisterTrackingUsecase =
+           msPurchaseScreenRegisterTrackingUsecase,
+       super(LeaveContactState()) {
+    _popupC3TrackingParams.timeStart = DateTime.now().millisecondsSinceEpoch;
+  }
 
   void countryCodeInit(String countryCode) {
     final phone = PhoneValidator.pure(countryCode: countryCode);
@@ -59,6 +75,8 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
   }
 
   Future<void> submit() async {
+    _popupC3TrackingParams.clickType = MsPurchaseScreenRegisterClickType.submit;
+
     emit(state.copyWith(isSubmitting: true, clearErrorMessage: true));
 
     try {
@@ -86,9 +104,30 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
     }
   }
 
+  void closePopupC3() {
+    _popupC3TrackingParams.clickType = MsPurchaseScreenRegisterClickType.close;
+  }
+
   void trackViewPopupC3() {
     _msPurchaseScreenViewRegisterTrackingUsecase(
       MsPurchaseScreenViewRegisterTrackingParams(
+        source: _purchasedCubit.state.source ?? '',
+      ),
+    );
+  }
+
+  void trackPopupC3Success() {
+    _msPurchaseScreenRegisterTrackingUsecase(
+      MsPurchaseScreenRegisterTrackingParams(
+        timeOnScreen:
+            ((DateTime.now().millisecondsSinceEpoch -
+                        _popupC3TrackingParams.timeStart) /
+                    1000)
+                .round(),
+        phone:
+            '${state.phone.value.countryCode}${state.phone.value.phoneNumber}',
+        clickType: _popupC3TrackingParams.clickType!,
+        isSuccess: state.isSuccess,
         source: _purchasedCubit.state.source ?? '',
       ),
     );

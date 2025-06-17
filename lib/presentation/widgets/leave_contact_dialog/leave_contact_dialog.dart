@@ -11,10 +11,29 @@ import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
 
-class LeaveContactDialog extends StatelessWidget {
+class LeaveContactDialog extends StatefulWidget {
   const LeaveContactDialog({super.key, required this.onSuccess});
 
   final VoidCallback onSuccess;
+
+  @override
+  State<LeaveContactDialog> createState() => _LeaveContactDialogState();
+}
+
+class _LeaveContactDialogState extends State<LeaveContactDialog> {
+  late final LeaveContactCubit _leaveContactCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _leaveContactCubit = context.read<LeaveContactCubit>();
+  }
+
+  @override
+  void dispose() {
+    _leaveContactCubit.trackPopupC3Success();
+    super.dispose();
+  }
 
   void _onSuccess(BuildContext context) {
     Navigator.of(context).pop();
@@ -31,7 +50,7 @@ class LeaveContactDialog extends StatelessWidget {
         context,
       ).translate('app.popup_c3.act.success'),
       titleColor: AppTheme.successColor,
-      onPrimaryAction: onSuccess,
+      onPrimaryAction: widget.onSuccess,
     );
   }
 
@@ -152,7 +171,7 @@ class LeaveContactDialog extends StatelessWidget {
                             );
                           }).toList(),
                       onChanged: (value) {
-                        context.read<LeaveContactCubit>().roleChanged(value);
+                        _leaveContactCubit.roleChanged(value);
                       },
                     ),
 
@@ -163,19 +182,15 @@ class LeaveContactDialog extends StatelessWidget {
                         context,
                       ).translate('app.popup_c3.phone.title'),
                       onChanged: (value) {
-                        context.read<LeaveContactCubit>().phoneChanged(value);
+                        _leaveContactCubit.phoneChanged(value);
                       },
                       errorText: state.errorMessage,
                       onCountryChange: (value) {
-                        context.read<LeaveContactCubit>().countryCodeChanged(
-                          value,
-                        );
+                        _leaveContactCubit.countryCodeChanged(value);
                       },
                       initialCountryCode: 'VN',
                       onCountryInit: (value) {
-                        context.read<LeaveContactCubit>().countryCodeInit(
-                          value,
-                        );
+                        _leaveContactCubit.countryCodeInit(value);
                       },
                       fontSize: 16,
                     ),
@@ -187,7 +202,7 @@ class LeaveContactDialog extends StatelessWidget {
                         context,
                       ).translate('app.popup_c3.act'),
                       onPressed: () {
-                        context.read<LeaveContactCubit>().submit();
+                        _leaveContactCubit.submit();
                       },
                       isFullWidth: true,
                       disabled:
@@ -204,7 +219,10 @@ class LeaveContactDialog extends StatelessWidget {
                 right: -4, // Thêm padding từ mép dialog + padding container nút
                 top: -4, // Thêm margin top container + padding container nút
                 child: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    _leaveContactCubit.closePopupC3();
+                    Navigator.of(context).pop();
+                  },
                   child: SvgPicture.asset(
                     'assets/icons/svg/X.svg',
                     width: 48,
