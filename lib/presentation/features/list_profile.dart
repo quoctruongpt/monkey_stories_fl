@@ -169,7 +169,10 @@ class ListProfile extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  context.push(AppRoutePaths.inputLicense);
+                  context.push(
+                    AppRoutePaths.inputLicense,
+                    extra: {'source': 'list_profile'},
+                  );
                 },
                 child: Text(
                   AppLocalizations.of(

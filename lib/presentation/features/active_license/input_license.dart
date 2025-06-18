@@ -6,6 +6,8 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/permission.dart';
+import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
@@ -13,11 +15,14 @@ import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class InputLicense extends StatefulWidget {
-  const InputLicense({super.key});
+  const InputLicense({super.key, required this.source});
+
+  final String source;
 
   @override
   State<InputLicense> createState() => _InputLicenseState();
@@ -26,6 +31,7 @@ class InputLicense extends StatefulWidget {
 class _InputLicenseState extends State<InputLicense> {
   final TextEditingController _controller = TextEditingController();
   final MobileScannerController _cameraController = MobileScannerController();
+  DateTime? _startTime;
 
   @override
   void initState() {
@@ -41,157 +47,175 @@ class _InputLicenseState extends State<InputLicense> {
     super.dispose();
   }
 
+  void _onTrackPush() {
+    _startTime = DateTime.now();
+  }
+
+  void _onTrackExit() {
+    sl<MsCodeEnterViewTrackingUsecase>().call(
+      MsCodeEnterViewParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTime!).inSeconds,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return KeyboardDismisser(
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
-            listenWhen:
-                (previous, current) =>
-                    current.verifyLicenseError != null &&
-                    current.verifyLicenseError != previous.verifyLicenseError,
-            listener: _errorListener,
-          ),
-          BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
-            listenWhen:
-                (previous, current) =>
-                    current.licenseInfo != null &&
-                    current.licenseInfo != previous.licenseInfo,
-            listener: _successListener,
-          ),
-          BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
-            listenWhen:
-                (previous, current) =>
-                    current.showMergeLifetimeWarning ==
-                        PositionShowWarning.inputLicense &&
-                    current.showMergeLifetimeWarning !=
-                        previous.showMergeLifetimeWarning,
-            listener: _showMergeLifetimeWarningListener,
-          ),
-        ],
-        child: BlocBuilder<ActiveLicenseCubit, ActiveLicenseState>(
-          builder: (context, state) {
-            return Stack(
-              children: [
-                Scaffold(
-                  appBar: const AppBarWidget(),
-                  body: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: Spacing.md,
-                        right: Spacing.md,
-                        bottom: Spacing.lg,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).translate(
-                              'app.active_license.input_license.title',
+    return ScreenTracker(
+      routeName: AppRouteNames.inputLicense,
+      onTrackPush: _onTrackPush,
+      onTrackExit: _onTrackExit,
+      child: KeyboardDismisser(
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.verifyLicenseError != null &&
+                      current.verifyLicenseError != previous.verifyLicenseError,
+              listener: _errorListener,
+            ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.licenseInfo != null &&
+                      current.licenseInfo != previous.licenseInfo,
+              listener: _successListener,
+            ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.showMergeLifetimeWarning ==
+                          PositionShowWarning.inputLicense &&
+                      current.showMergeLifetimeWarning !=
+                          previous.showMergeLifetimeWarning,
+              listener: _showMergeLifetimeWarningListener,
+            ),
+          ],
+          child: BlocBuilder<ActiveLicenseCubit, ActiveLicenseState>(
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  Scaffold(
+                    appBar: const AppBarWidget(),
+                    body: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: Spacing.md,
+                          right: Spacing.md,
+                          bottom: Spacing.lg,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context).translate(
+                                'app.active_license.input_license.title',
+                              ),
+                              style: Theme.of(context).textTheme.displayMedium,
                             ),
-                            style: Theme.of(context).textTheme.displayMedium,
-                          ),
 
-                          const SizedBox(height: Spacing.lg),
+                            const SizedBox(height: Spacing.lg),
 
-                          TextFieldWidget(
-                            controller: _controller,
-                            onChanged:
-                                context
-                                    .read<ActiveLicenseCubit>()
-                                    .changeLicenseCode,
-                            hintText: 'XY12345ABC',
-                            errorText: AppLocalizations.of(
-                              context,
-                            ).translate(state.licenseCode.displayError),
-                            suffixIcon:
-                                state.licenseCode.isNotValid &&
-                                        state.licenseCode.value.isNotEmpty
-                                    ? IconButton(
-                                      onPressed: () => _clearCode(context),
-                                      icon: const Icon(
-                                        Icons.cancel,
-                                        color: AppTheme.textGrayColor,
-                                      ),
-                                    )
-                                    : null,
-                            textCapitalization: TextCapitalization.characters,
-                          ),
+                            TextFieldWidget(
+                              controller: _controller,
+                              onChanged:
+                                  context
+                                      .read<ActiveLicenseCubit>()
+                                      .changeLicenseCode,
+                              hintText: 'XY12345ABC',
+                              errorText: AppLocalizations.of(
+                                context,
+                              ).translate(state.licenseCode.displayError),
+                              suffixIcon:
+                                  state.licenseCode.isNotValid &&
+                                          state.licenseCode.value.isNotEmpty
+                                      ? IconButton(
+                                        onPressed: () => _clearCode(context),
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                          color: AppTheme.textGrayColor,
+                                        ),
+                                      )
+                                      : null,
+                              textCapitalization: TextCapitalization.characters,
+                            ),
 
-                          const SizedBox(height: Spacing.lg),
+                            const SizedBox(height: Spacing.lg),
 
-                          Center(
-                            child: TextButton(
-                              onPressed: () => _handleShowScanner(context),
-                              child: Text(
-                                AppLocalizations.of(context).translate(
-                                  'app.active_license.input_license.scan_qr_code',
+                            Center(
+                              child: TextButton(
+                                onPressed: () => _handleShowScanner(context),
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                    'app.active_license.input_license.scan_qr_code',
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
 
-                          const Spacer(),
+                            const Spacer(),
 
-                          AppButton.primary(
-                            text: AppLocalizations.of(context).translate(
-                              'app.active_license.input_license.continue',
+                            AppButton.primary(
+                              text: AppLocalizations.of(context).translate(
+                                'app.active_license.input_license.continue',
+                              ),
+                              onPressed:
+                                  context
+                                      .read<ActiveLicenseCubit>()
+                                      .handlePressedContinueLicense,
+                              disabled: state.licenseCode.isNotValid,
                             ),
-                            onPressed:
-                                context
-                                    .read<ActiveLicenseCubit>()
-                                    .handlePressedContinueLicense,
-                            disabled: state.licenseCode.isNotValid,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                state.isShowScanner
-                    ? Stack(
-                      children: [
-                        MobileScanner(
-                          controller: _cameraController,
-                          onDetect:
-                              (barcodes) => _handleQrCode(context, barcodes),
+                  state.isShowScanner
+                      ? Stack(
+                        children: [
+                          MobileScanner(
+                            controller: _cameraController,
+                            onDetect:
+                                (barcodes) => _handleQrCode(context, barcodes),
 
-                          scanWindow: Rect.fromLTWH(
-                            (MediaQuery.of(context).size.width - 250) / 2,
-                            (MediaQuery.of(context).size.height - 250) / 2,
-                            250,
-                            250,
-                          ),
-                        ),
-                        const ScannerOverlay(),
-                        Positioned(
-                          top: 50,
-                          left: 20,
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 40,
+                            scanWindow: Rect.fromLTWH(
+                              (MediaQuery.of(context).size.width - 250) / 2,
+                              (MediaQuery.of(context).size.height - 250) / 2,
+                              250,
+                              250,
                             ),
-                            onPressed:
-                                () =>
-                                    context
-                                        .read<ActiveLicenseCubit>()
-                                        .hideScanner(),
                           ),
-                        ),
-                      ],
-                    )
-                    : const SizedBox.shrink(),
+                          const ScannerOverlay(),
+                          Positioned(
+                            top: 50,
+                            left: 20,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 40,
+                              ),
+                              onPressed:
+                                  () =>
+                                      context
+                                          .read<ActiveLicenseCubit>()
+                                          .hideScanner(),
+                            ),
+                          ),
+                        ],
+                      )
+                      : const SizedBox.shrink(),
 
-                state.isLoading
-                    ? const LoadingOverlay()
-                    : const SizedBox.shrink(),
-              ],
-            );
-          },
+                  state.isLoading
+                      ? const LoadingOverlay()
+                      : const SizedBox.shrink(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

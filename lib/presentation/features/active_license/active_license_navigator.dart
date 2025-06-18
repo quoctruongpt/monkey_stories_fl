@@ -146,7 +146,11 @@ final ShellRoute activeLicenseRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.inputLicense,
       name: AppRouteNames.inputLicense,
-      builder: (context, state) => const InputLicense(),
+      builder: (context, state) {
+        final extraMap = state.extra as Map<String, dynamic>?;
+        final source = extraMap?['source'] as String;
+        return InputLicense(source: source);
+      },
     ),
     GoRoute(
       path: AppRoutePaths.lastLoginInfo,

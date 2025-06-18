@@ -69,7 +69,10 @@ class ListProfileDialog extends StatelessWidget {
       buildVerifyDialogWidget(
         context: context,
         onSuccess: () {
-          navigatorKey.currentContext?.push(AppRoutePaths.inputLicense);
+          navigatorKey.currentContext?.push(
+            AppRoutePaths.inputLicense,
+            extra: {'source': 'list_profile'},
+          );
           onClose();
         },
       ),

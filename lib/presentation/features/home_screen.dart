@@ -90,12 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text('Open Unity'),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  context.push(AppRoutePaths.inputLicense);
-                },
-                child: const Text('Nhập mã kích hoạt'),
-              ),
+
               BlocBuilder<DebugCubit, DebugState>(
                 builder: (context, state) {
                   return ElevatedButton(

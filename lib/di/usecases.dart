@@ -110,6 +110,10 @@ import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_scre
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_check.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
 
 final sl = GetIt.instance;
 
@@ -351,6 +355,18 @@ void initUsecaseDependencies() {
     () => MsObViewPersonalizeLoadingScreenTrackingUsecase(
       trackingRepository: sl<TrackingRepository>(),
     ),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterViewTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterClickTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterCheckTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsActivatedCodeTrackingUsecase(sl<TrackingRepository>()),
   );
 
   // Report

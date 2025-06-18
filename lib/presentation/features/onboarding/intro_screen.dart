@@ -39,7 +39,7 @@ class IntroScreen extends StatelessWidget {
 
   void _onPressedActiveCode(BuildContext context) {
     _introTracker.clickType = ClickType.activeCode;
-    context.push(AppRoutePaths.inputLicense);
+    context.push(AppRoutePaths.inputLicense, extra: {'source': 'intro_screen'});
   }
 
   void _onTrackPush() {

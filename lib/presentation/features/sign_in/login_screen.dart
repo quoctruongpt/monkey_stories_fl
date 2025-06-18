@@ -477,7 +477,10 @@ class _LoginScreenState extends State<LoginScreen>
                                       context
                                           .read<LoginCubit>()
                                           .activeCodeClicked();
-                                      context.push(AppRoutePaths.inputLicense);
+                                      context.push(
+                                        AppRoutePaths.inputLicense,
+                                        extra: 'sign_in',
+                                      );
                                     },
                                   ),
                                 ),

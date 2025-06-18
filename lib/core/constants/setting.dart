@@ -55,7 +55,12 @@ final List<Map<String, dynamic>> settingsData = [
       SettingItem(
         icon: 'assets/icons/svg/unlock.svg',
         label: 'app.setting.license_key',
-        route: AppRouteNames.inputLicense,
+        onTap: (BuildContext context) {
+          context.push(
+            AppRoutePaths.inputLicense,
+            extra: {'source': 'parents'},
+          );
+        },
       ),
       SettingItem(
         icon: 'assets/icons/svg/password.svg',
