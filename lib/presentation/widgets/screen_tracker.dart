@@ -8,12 +8,14 @@ class ScreenTracker extends StatefulWidget {
     this.onTrackPush,
     required this.routeName,
     required this.child,
+    this.observer,
   });
 
   final VoidCallback? onTrackExit;
   final VoidCallback? onTrackPush;
   final String routeName;
   final Widget child;
+  final RouteObserver<PageRoute>? observer;
 
   @override
   State<ScreenTracker> createState() => _ScreenTrackerState();
@@ -22,10 +24,12 @@ class ScreenTracker extends StatefulWidget {
 class _ScreenTrackerState extends State<ScreenTracker>
     with WidgetsBindingObserver, RouteAware {
   bool _isExited = false;
+  late final RouteObserver<PageRoute> _observer;
 
   @override
   void initState() {
     super.initState();
+    _observer = widget.observer ?? routeObserver;
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -34,7 +38,7 @@ class _ScreenTrackerState extends State<ScreenTracker>
     super.didChangeDependencies();
     final ModalRoute? route = ModalRoute.of(context);
     if (route is PageRoute) {
-      routeObserver.subscribe(this, route);
+      _observer.subscribe(this, route);
     }
   }
 
@@ -84,7 +88,7 @@ class _ScreenTrackerState extends State<ScreenTracker>
   void dispose() {
     _trackExit();
     WidgetsBinding.instance.removeObserver(this);
-    routeObserver.unsubscribe(this);
+    _observer.unsubscribe(this);
     super.dispose();
   }
 

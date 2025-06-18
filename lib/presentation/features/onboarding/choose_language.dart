@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/usecases.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_select_language.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
@@ -63,6 +64,7 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
   Widget build(BuildContext context) {
     return ScreenTracker(
       routeName: AppRouteNames.chooseLanguage,
+      observer: obdRouteObserver,
       onTrackPush: _onTrackPush,
       onTrackExit: _onTrackExit,
       child: Scaffold(

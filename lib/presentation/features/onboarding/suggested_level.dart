@@ -5,105 +5,144 @@ import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/constants/level.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/di/usecases.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_suggest_level_screen.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
+
+class SuggestedLevelTracker {
+  DateTime timeStart = DateTime.now();
+  ClickType? clickType;
+}
 
 class SuggestedLevel extends StatelessWidget {
-  const SuggestedLevel({super.key});
+  SuggestedLevel({super.key});
+
+  final SuggestedLevelTracker _suggestedLevelTracker = SuggestedLevelTracker();
 
   void _onContinuePressed(BuildContext context) {
+    _suggestedLevelTracker.clickType = ClickType.continued;
     context.push(AppRoutePaths.onboardLoading);
+  }
+
+  void _onTrackPush() {
+    _suggestedLevelTracker.timeStart = DateTime.now();
+  }
+
+  void _onTrackExit() {
+    sl<MsObViewSuggestLevelScreenTrackingUsecase>().call(
+      MsObViewSuggestLevelScreenParams(
+        timeOnScreen:
+            DateTime.now()
+                .difference(_suggestedLevelTracker.timeStart)
+                .inSeconds,
+        clickType: _suggestedLevelTracker.clickType,
+      ),
+    );
+  }
+
+  void _onPressedBack(BuildContext context) {
+    _suggestedLevelTracker.clickType = ClickType.back;
+    context.pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarWidget(),
-      body: BlocBuilder<OnboardingCubit, OnboardingState>(
-        builder: (context, state) {
-          final suggestedLearningPhase = getSuggestedLearningPhase(
-            state.levelId!,
-          );
+    return ScreenTracker(
+      routeName: AppRouteNames.suggestedLevel,
+      observer: obdRouteObserver,
+      onTrackPush: _onTrackPush,
+      onTrackExit: () => _onTrackExit(),
+      child: Scaffold(
+        appBar: AppBarWidget(onBackPressed: () => _onPressedBack(context)),
+        body: BlocBuilder<OnboardingCubit, OnboardingState>(
+          builder: (context, state) {
+            final suggestedLearningPhase = getSuggestedLearningPhase(
+              state.levelId!,
+            );
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: Spacing.lg),
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(
-                            context,
-                          ).translate('app.suggest_level.title'),
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            color: AppTheme.azureColor,
-                          ),
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase - 1].name)}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            color: AppTheme.orangeColor,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Spacing.md,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context).translate(
-                              phase[suggestedLearningPhase - 1].description,
+            return Padding(
+              padding: const EdgeInsets.only(bottom: Spacing.lg),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            AppLocalizations.of(
+                              context,
+                            ).translate('app.suggest_level.title'),
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.azureColor,
                             ),
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            '${AppLocalizations.of(context).translate('app.suggest_level.suggest', params: {'number': suggestedLearningPhase.toString()})} - ${AppLocalizations.of(context).translate(phase[suggestedLearningPhase - 1].name)}',
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: AppTheme.orangeColor,
+                            ),
                             textAlign: TextAlign.center,
                           ),
-                        ),
-                        const SizedBox(height: Spacing.xxl),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: List.generate(
-                              phase.length + 3,
-                              (index) => Flexible(
-                                child: _LevelColumnWidget(
-                                  level: index + 1,
-                                  isSelected:
-                                      index == suggestedLearningPhase - 1,
+
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Spacing.md,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context).translate(
+                                phase[suggestedLearningPhase - 1].description,
+                              ),
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: Spacing.xxl),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: List.generate(
+                                phase.length + 3,
+                                (index) => Flexible(
+                                  child: _LevelColumnWidget(
+                                    level: index + 1,
+                                    isSelected:
+                                        index == suggestedLearningPhase - 1,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
-                  child: AppButton.primary(
-                    text: AppLocalizations.of(
-                      context,
-                    ).translate('app.onboarding.continue'),
-                    onPressed: () => _onContinuePressed(context),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
+                    child: AppButton.primary(
+                      text: AppLocalizations.of(
+                        context,
+                      ).translate('app.onboarding.continue'),
+                      onPressed: () => _onContinuePressed(context),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

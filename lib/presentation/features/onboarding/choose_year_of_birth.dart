@@ -6,6 +6,7 @@ import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_age.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_age.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/choose_year_of_birth_view.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
@@ -56,6 +57,7 @@ class ChooseYearOfBirthOBD extends StatelessWidget {
       builder: (context, state) {
         return ScreenTracker(
           routeName: AppRouteNames.chooseYearOfBirthOBD,
+          observer: obdRouteObserver,
           onTrackPush: _onTrackPush,
           onTrackExit: () => _onTrackExit(state),
           child:

@@ -27,15 +27,15 @@ class MsObViewSuggestLevelScreenTrackingUsecase
 
 class MsObViewSuggestLevelScreenParams {
   final int timeOnScreen;
-  final ClickType clickType;
+  final ClickType? clickType;
 
   MsObViewSuggestLevelScreenParams({
     required this.timeOnScreen,
-    required this.clickType,
+    this.clickType,
   });
 
   Map<String, dynamic> toSemanticProperties() {
-    return {AirbridgeAttribute.ACTION: clickType.value};
+    return {AirbridgeAttribute.ACTION: clickType?.value};
   }
 
   Map<String, dynamic> toCustomProperties() {

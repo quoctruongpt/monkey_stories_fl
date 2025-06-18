@@ -26,8 +26,13 @@ class OBDDNavigator extends StatelessWidget {
   }
 }
 
+final RouteObserver<PageRoute> obdRouteObserver = RouteObserver<PageRoute>();
+
 final ShellRoute obdRoutes = ShellRoute(
-  builder: (context, state, child) => OBDDNavigator(child: child),
+  builder:
+      (context, state, child) =>
+          PopScope(canPop: false, child: OBDDNavigator(child: child)),
+  observers: [obdRouteObserver],
   routes: [
     GoRoute(
       path: AppRoutePaths.chooseYearOfBirthOBD,
@@ -47,7 +52,7 @@ final ShellRoute obdRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.suggestedLevel,
       name: AppRouteNames.suggestedLevel,
-      builder: (context, state) => const SuggestedLevel(),
+      builder: (context, state) => SuggestedLevel(),
     ),
     GoRoute(
       path: AppRoutePaths.obdPurchase,
