@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/permission.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
@@ -60,6 +61,16 @@ class _InputLicenseState extends State<InputLicense> {
     );
   }
 
+  void _onTrackClick(ClickType clickType) {
+    sl<MsCodeEnterClickTrackingUsecase>().call(
+      MsCodeEnterClickParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTime!).inSeconds,
+        clickType: clickType,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenTracker(
@@ -98,7 +109,12 @@ class _InputLicenseState extends State<InputLicense> {
               return Stack(
                 children: [
                   Scaffold(
-                    appBar: const AppBarWidget(),
+                    appBar: AppBarWidget(
+                      onBackPressed: () {
+                        _onTrackClick(ClickType.back);
+                        context.pop();
+                      },
+                    ),
                     body: SafeArea(
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -161,10 +177,12 @@ class _InputLicenseState extends State<InputLicense> {
                               text: AppLocalizations.of(context).translate(
                                 'app.active_license.input_license.continue',
                               ),
-                              onPressed:
-                                  context
-                                      .read<ActiveLicenseCubit>()
-                                      .handlePressedContinueLicense,
+                              onPressed: () {
+                                _onTrackClick(ClickType.next);
+                                context
+                                    .read<ActiveLicenseCubit>()
+                                    .handlePressedContinueLicense();
+                              },
                               disabled: state.licenseCode.isNotValid,
                             ),
                           ],
@@ -222,6 +240,7 @@ class _InputLicenseState extends State<InputLicense> {
   }
 
   Future<void> _handleShowScanner(BuildContext context) async {
+    _onTrackClick(ClickType.qrScan);
     final isGranted = await PermissionUtil.checkCameraPermission(context);
 
     if (isGranted) {
