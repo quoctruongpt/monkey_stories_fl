@@ -117,6 +117,7 @@ import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_scre
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
 
 final sl = GetIt.instance;
 
@@ -328,6 +329,8 @@ void initBlocDependencies() {
       userCubit: sl<UserCubit>(),
       confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
       getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msUpdateUserInfoSuccessfulTrackingUsecase:
+          sl<MsUpdateUserInfoSuccessfulTrackingUsecase>(),
     ),
   );
 

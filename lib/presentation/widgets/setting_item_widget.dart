@@ -17,8 +17,10 @@ class SettingItemWidget extends StatelessWidget {
 
   void _onTap(BuildContext context) {
     if (item.clickType != null) {
-      final hasEmail = context.read<UserCubit>().state.user?.email != null;
-      final hasPhone = context.read<UserCubit>().state.user?.phone != null;
+      final hasEmail =
+          context.read<UserCubit>().state.user?.email?.isNotEmpty ?? false;
+      final hasPhone =
+          context.read<UserCubit>().state.user?.phone?.isNotEmpty ?? false;
       sl<MsParentSettingDetailTrackingUsecase>().call(
         MsParentSettingDetailParams(
           clickType: item.clickType!,

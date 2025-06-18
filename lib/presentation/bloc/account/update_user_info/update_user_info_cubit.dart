@@ -12,6 +12,7 @@ import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.
 import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
 
 part 'update_user_info_state.dart';
 
@@ -20,16 +21,24 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   final ConfirmPasswordUsecase _confirmPasswordUsecase;
   final UserCubit _userCubit;
   final GetCountryCodeUsecase _getCountryCodeUsecase;
+  final MsUpdateUserInfoSuccessfulTrackingUsecase
+  _msUpdateUserInfoSuccessfulTrackingUsecase;
+
+  final DateTime _startTime = DateTime.now();
 
   UpdateUserInfoCubit({
     required UpdateUserInfoUsecase updateUserInfoUsecase,
     required UserCubit userCubit,
     required ConfirmPasswordUsecase confirmPasswordUsecase,
     required GetCountryCodeUsecase getCountryCodeUsecase,
+    required MsUpdateUserInfoSuccessfulTrackingUsecase
+    msUpdateUserInfoSuccessfulTrackingUsecase,
   }) : _updateUserInfoUsecase = updateUserInfoUsecase,
        _confirmPasswordUsecase = confirmPasswordUsecase,
        _userCubit = userCubit,
        _getCountryCodeUsecase = getCountryCodeUsecase,
+       _msUpdateUserInfoSuccessfulTrackingUsecase =
+           msUpdateUserInfoSuccessfulTrackingUsecase,
        super(UpdateUserInfoState()) {
     init();
   }
@@ -210,7 +219,7 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
   }
 
   Future<void> updateUserInfo() async {
-    emit(state.copyWith(isLoading: true, clearErrorMessage: true));
+    // emit(state.copyWith(isLoading: true, clearErrorMessage: true));
 
     try {
       final name = state.name.value.trim();
@@ -231,6 +240,21 @@ class UpdateUserInfoCubit extends Cubit<UpdateUserInfoState> {
         },
         (success) {
           emit(state.copyWith(isSuccess: true));
+
+          _msUpdateUserInfoSuccessfulTrackingUsecase.call(
+            MsUpdateUserInfoSuccessfulParams(
+              timeOnScreen: DateTime.now().difference(_startTime).inSeconds,
+              hasClickedPhone:
+                  state.phone.value.phoneNumber !=
+                      _userCubit.state.user?.phoneInfo?.phone ||
+                  state.phone.value.countryCode !=
+                      _userCubit.state.user?.phoneInfo?.countryCode,
+              hasClickedEmail:
+                  state.email.value != _userCubit.state.user?.email,
+              hasClickedName: state.name.value != _userCubit.state.user?.name,
+            ),
+          );
+
           _userCubit.updateUser(
             _userCubit.state.user!.copyWith(
               name: name,

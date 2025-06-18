@@ -42,8 +42,10 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void _onTrackPush() {
-    final hasEmail = context.read<UserCubit>().state.user?.email != null;
-    final hasPhone = context.read<UserCubit>().state.user?.phone != null;
+    final hasEmail =
+        context.read<UserCubit>().state.user?.email?.isNotEmpty ?? false;
+    final hasPhone =
+        context.read<UserCubit>().state.user?.phone?.isNotEmpty ?? false;
 
     sl<MsViewSettingScreenTrackingUsecase>().call(
       MsViewSettingScreenParams(hasEmail: hasEmail, hasPhone: hasPhone),

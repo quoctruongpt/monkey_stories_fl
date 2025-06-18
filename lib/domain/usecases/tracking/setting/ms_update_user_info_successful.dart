@@ -46,7 +46,7 @@ class MsUpdateUserInfoSuccessfulParams {
   Map<String, dynamic> toSemanticProperties() {
     return {
       AirbridgeAttribute.ACTION:
-          '${hasClickedEmail == true ? 'email,' : ''}${hasClickedPhone == true ? 'phone,' : ''}${hasClickedPassword == true ? 'password' : ''}',
+          '${hasClickedEmail == true ? 'email,' : ''}${hasClickedPhone == true ? 'phone,' : ''}${hasClickedPassword == true ? 'password,' : ''}${hasClickedName == true ? 'name' : ''}',
     };
   }
 }
