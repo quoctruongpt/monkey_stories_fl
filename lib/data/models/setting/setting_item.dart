@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 
 class SettingItem {
   final String icon;
@@ -12,6 +13,7 @@ class SettingItem {
   final Function(BuildContext context)? onTap;
   final bool showArrow;
   final Future<bool> Function(BuildContext context)? isVisibleGetter;
+  final ClickType? clickType;
 
   SettingItem({
     required this.icon,
@@ -23,5 +25,6 @@ class SettingItem {
     this.onTap,
     this.showArrow = true,
     this.isVisibleGetter,
+    this.clickType,
   });
 }

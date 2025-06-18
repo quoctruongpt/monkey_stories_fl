@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/data/models/setting/setting_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
@@ -17,6 +18,7 @@ final List<Map<String, dynamic>> settingsData = [
         icon: 'assets/icons/svg/person.svg',
         label: 'app.user_info.title',
         route: AppRouteNames.userInfo,
+        clickType: ClickType.parentInfo,
       ),
       SettingItem(
         icon: 'assets/icons/svg/mobile.svg',
@@ -51,6 +53,7 @@ final List<Map<String, dynamic>> settingsData = [
         icon: 'assets/icons/svg/student.svg',
         label: 'app.setting.student_profile',
         route: AppRouteNames.listProfileSetting,
+        clickType: ClickType.userProfile,
       ),
       SettingItem(
         icon: 'assets/icons/svg/unlock.svg',
@@ -61,6 +64,7 @@ final List<Map<String, dynamic>> settingsData = [
             extra: {'source': 'parents'},
           );
         },
+        clickType: ClickType.licenseKey,
       ),
       SettingItem(
         icon: 'assets/icons/svg/password.svg',
@@ -70,6 +74,7 @@ final List<Map<String, dynamic>> settingsData = [
           final user = context.read<UserCubit>().state.user;
           return user?.loginType != LoginType.skip;
         },
+        clickType: ClickType.changePassword,
       ),
     ],
   },
@@ -80,11 +85,13 @@ final List<Map<String, dynamic>> settingsData = [
         icon: 'assets/icons/svg/setting_orange.svg',
         label: 'app.setting.general',
         route: AppRouteNames.generalSetting,
+        clickType: ClickType.generalSettings,
       ),
       SettingItem(
         icon: 'assets/icons/svg/alarm-check.svg',
         label: 'app.schedule_manager.title',
         route: AppRouteNames.scheduleManager,
+        clickType: ClickType.reminder,
       ),
     ],
   },
@@ -106,6 +113,7 @@ final List<Map<String, dynamic>> settingsData = [
             );
           }
         },
+        clickType: ClickType.aboutMonkey,
       ),
       SettingItem(
         icon: 'assets/icons/svg/paper.svg',
@@ -122,6 +130,7 @@ final List<Map<String, dynamic>> settingsData = [
             );
           }
         },
+        clickType: ClickType.termsOfUse,
       ),
       SettingItem(
         icon: 'assets/icons/svg/shield.svg',
@@ -138,6 +147,7 @@ final List<Map<String, dynamic>> settingsData = [
             );
           }
         },
+        clickType: ClickType.privacyPolicy,
       ),
       SettingItem(
         icon: 'assets/icons/svg/chat.svg',
@@ -154,6 +164,7 @@ final List<Map<String, dynamic>> settingsData = [
             );
           }
         },
+        clickType: ClickType.frequentlyAskedQuestions,
       ),
       SettingItem(
         icon: 'assets/icons/svg/calling.svg',
@@ -170,6 +181,7 @@ final List<Map<String, dynamic>> settingsData = [
             );
           }
         },
+        clickType: ClickType.contactMonkey,
       ),
     ],
   },
@@ -183,6 +195,7 @@ final List<Map<String, dynamic>> settingsData = [
           showLogoutDialog(context);
         },
         showArrow: false,
+        clickType: ClickType.signOut,
       ),
     ],
   },

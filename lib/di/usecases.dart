@@ -114,6 +114,11 @@ import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_e
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_check.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_view_setting_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
 
 final sl = GetIt.instance;
 
@@ -367,6 +372,21 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsActivatedCodeTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewSettingScreenTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdateUserInfoSuccessfulTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdateProfilesTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsParentSettingDetailTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsGeneralSettingDetailTrackingUsecase(sl<TrackingRepository>()),
   );
 
   // Report
