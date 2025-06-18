@@ -5,8 +5,15 @@ class DefaultProperties {
   final int? age;
   final int? userId;
   final int? profileId;
+  final int? deviceId;
 
-  DefaultProperties({this.userType, this.age, this.userId, this.profileId});
+  DefaultProperties({
+    this.userType,
+    this.age,
+    this.userId,
+    this.profileId,
+    this.deviceId,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -14,6 +21,7 @@ class DefaultProperties {
       'age': age,
       'user_id': userId,
       'profile_id': profileId,
+      'device_id': deviceId,
     };
   }
 }

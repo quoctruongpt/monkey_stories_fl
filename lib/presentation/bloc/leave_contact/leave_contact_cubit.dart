@@ -156,7 +156,6 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
                         _popupC3TrackingParams.timeStart) /
                     1000)
                 .round(),
-        deviceId: 334,
         clickType: _popupC3TrackingParams.clickType,
         isSuccess: state.isSuccess,
         errorMessage: state.errorMessage,

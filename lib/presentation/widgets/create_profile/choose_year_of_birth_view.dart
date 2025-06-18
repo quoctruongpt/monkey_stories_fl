@@ -15,6 +15,7 @@ class ChooseYearOfBirthView extends StatefulWidget {
     this.yearSelected,
     required this.onChangeYear,
     required this.years,
+    this.onPressedBack,
   });
 
   final String name;
@@ -22,6 +23,7 @@ class ChooseYearOfBirthView extends StatefulWidget {
   final int? yearSelected;
   final void Function(int year) onChangeYear;
   final List<int> years;
+  final VoidCallback? onPressedBack;
 
   @override
   State<ChooseYearOfBirthView> createState() => _ChooseYearOfBirthViewState();
@@ -71,7 +73,7 @@ class _ChooseYearOfBirthViewState extends State<ChooseYearOfBirthView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(onBackPressed: widget.onPressedBack),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(

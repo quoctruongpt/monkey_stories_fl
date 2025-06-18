@@ -21,6 +21,8 @@ class ScreenTracker extends StatefulWidget {
 
 class _ScreenTrackerState extends State<ScreenTracker>
     with WidgetsBindingObserver, RouteAware {
+  bool _isExited = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,19 +38,37 @@ class _ScreenTrackerState extends State<ScreenTracker>
     }
   }
 
+  void _trackPush() {
+    _isExited = false;
+    widget.onTrackPush?.call();
+  }
+
+  void _trackExit() {
+    if (_isExited) {
+      return;
+    }
+    _isExited = true;
+    widget.onTrackExit?.call();
+  }
+
   @override
   void didPush() {
-    widget.onTrackPush?.call();
+    _trackPush();
+  }
+
+  @override
+  void didPopNext() {
+    _trackPush();
   }
 
   @override
   void didPop() {
-    widget.onTrackExit?.call();
+    _trackExit();
   }
 
   @override
   void didPushNext() {
-    widget.onTrackExit?.call();
+    _trackExit();
   }
 
   @override
@@ -56,11 +76,13 @@ class _ScreenTrackerState extends State<ScreenTracker>
     if (state == AppLifecycleState.paused &&
         RouteTracker.currentRouteName == widget.routeName) {
       widget.onTrackExit?.call();
+      return;
     }
   }
 
   @override
   void dispose() {
+    _trackExit();
     WidgetsBinding.instance.removeObserver(this);
     routeObserver.unsubscribe(this);
     super.dispose();

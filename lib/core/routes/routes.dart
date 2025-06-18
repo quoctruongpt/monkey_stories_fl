@@ -79,7 +79,7 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.intro,
       name: AppRouteNames.intro,
       builder: (context, state) {
-        return const OrientationWrapper(
+        return OrientationWrapper(
           orientation: AppOrientation.portrait,
           child: IntroScreen(),
         );

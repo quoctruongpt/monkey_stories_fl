@@ -27,7 +27,6 @@ class MsObViewPhoneNumberScreenTrackingUsecase
 
 class MsObViewPhoneNumberScreenTrackingParams {
   final int timeOnScreen;
-  final int deviceId;
   final bool isSuccess;
   final String? errorMessage;
   final String? phoneNumber;
@@ -35,7 +34,6 @@ class MsObViewPhoneNumberScreenTrackingParams {
 
   MsObViewPhoneNumberScreenTrackingParams({
     required this.timeOnScreen,
-    required this.deviceId,
     required this.isSuccess,
     this.errorMessage,
     this.clickType,
@@ -49,7 +47,6 @@ class MsObViewPhoneNumberScreenTrackingParams {
   Map<String, dynamic> toCustomProperties() {
     return {
       'time_on_screen': timeOnScreen,
-      'device_id': deviceId,
       'is_success': isSuccess,
       'error_message': errorMessage,
       'phone_number': phoneNumber,

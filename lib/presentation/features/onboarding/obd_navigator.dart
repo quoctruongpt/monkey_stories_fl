@@ -32,7 +32,7 @@ final ShellRoute obdRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.chooseYearOfBirthOBD,
       name: AppRouteNames.chooseYearOfBirthOBD,
-      builder: (context, state) => const ChooseYearOfBirthOBD(),
+      builder: (context, state) => ChooseYearOfBirthOBD(),
     ),
     GoRoute(
       path: AppRoutePaths.chooseLevelOBD,

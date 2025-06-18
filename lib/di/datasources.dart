@@ -151,6 +151,7 @@ void initDatasourceDependencies() {
     () => TrackingLocalDataSourceImpl(
       profileLocalDataSource: sl<ProfileLocalDataSource>(),
       accountLocalDataSource: sl<AccountLocalDataSource>(),
+      deviceLocalDataSource: sl<DeviceLocalDataSource>(),
     ),
   );
 

@@ -11,6 +11,13 @@ import 'package:monkey_stories/domain/repositories/profile_repository.dart';
 import 'package:monkey_stories/domain/repositories/report_repository.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_age.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_choose_account_type.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_select_language.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_age.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_personalize_loading_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_suggest_level_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_view_account_type.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
@@ -311,6 +318,39 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsPurchaseScreenViewRegisterTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewAccountTypeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObChooseAccountTypeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObSelectLanguageTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewAgeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObAgeTrackingUsecase(trackingRepository: sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewSuggestLevelScreenTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewPersonalizeLoadingScreenTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
   );
 
   // Report
