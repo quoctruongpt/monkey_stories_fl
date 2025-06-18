@@ -9,9 +9,9 @@ class FormValues {
 }
 
 class ForgotPasswordState extends Equatable {
-  const ForgotPasswordState({
+  ForgotPasswordState({
     this.method = ForgotPasswordType.phone,
-    this.phone = const PhoneValidator.pure(),
+    PhoneValidator? phone,
     this.email = const EmailValidator.pure(),
     this.otp = const OtpValidator.pure(),
     this.isLoading = false,
@@ -26,7 +26,8 @@ class ForgotPasswordState extends Equatable {
     this.otpBlockTime,
     this.isShowOtpBlockDialog = false,
     this.formValues = const FormValues(),
-  });
+    this.countryCodeByIp,
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   // Phương thức gửi OTP
   final ForgotPasswordType method;
@@ -59,6 +60,7 @@ class ForgotPasswordState extends Equatable {
   // Hiển thị dialog lỗi gửi OTP quá nhiều lần
   final bool isShowOtpBlockDialog;
   final FormValues formValues;
+  final String? countryCodeByIp;
 
   ForgotPasswordState copyWith({
     ForgotPasswordType? method,
@@ -79,6 +81,8 @@ class ForgotPasswordState extends Equatable {
     int? otpBlockTime,
     bool? isShowOtpBlockDialog,
     FormValues? formValues,
+    bool? clearOtpError,
+    String? countryCodeByIp,
   }) {
     return ForgotPasswordState(
       method: method ?? this.method,
@@ -86,7 +90,7 @@ class ForgotPasswordState extends Equatable {
       email: email ?? this.email,
       otp: otp ?? this.otp,
       isLoading: isLoading ?? this.isLoading,
-      otpError: otpError ?? this.otpError,
+      otpError: clearOtpError == true ? null : otpError ?? this.otpError,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       isShowPassword: isShowPassword ?? this.isShowPassword,
@@ -102,6 +106,7 @@ class ForgotPasswordState extends Equatable {
           clearOtpBlockTime == true ? null : otpBlockTime ?? this.otpBlockTime,
       isShowOtpBlockDialog: isShowOtpBlockDialog ?? this.isShowOtpBlockDialog,
       formValues: formValues ?? this.formValues,
+      countryCodeByIp: countryCodeByIp ?? this.countryCodeByIp,
     );
   }
 
@@ -123,5 +128,6 @@ class ForgotPasswordState extends Equatable {
     otpBlockTime,
     isShowOtpBlockDialog,
     formValues,
+    countryCodeByIp,
   ];
 }

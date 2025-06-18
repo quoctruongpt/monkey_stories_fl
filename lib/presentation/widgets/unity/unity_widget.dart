@@ -19,12 +19,12 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _unityCubit = context.read<UnityCubit>();
   }
 
   @override
   void initState() {
     super.initState();
+    _unityCubit = context.read<UnityCubit>();
     WidgetsBinding.instance.addObserver(this);
   }
 

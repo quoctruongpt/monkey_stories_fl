@@ -10,16 +10,18 @@ class SignUpState extends Equatable {
   final int? phoneErrorCode;
   final bool isPhoneValid;
   final bool isShowPassword;
+  final bool isShowConfirmPassword;
   final bool isConfirmPasswordCorrect;
   final bool isSignUpSuccess;
   final bool isSignUpLoading;
   final String? signUpErrorMessage;
   final String? popupErrorMessage;
 
-  const SignUpState({
+  SignUpState({
     required this.step,
-    required this.isShowPassword,
-    this.phone = const PhoneValidator.pure(),
+    this.isShowPassword = false,
+    this.isShowConfirmPassword = false,
+    PhoneValidator? phone,
     this.password = const Password.pure(),
     this.confirmPassword = const Password.pure(),
     this.isCheckingPhone = false,
@@ -31,7 +33,7 @@ class SignUpState extends Equatable {
     this.isSignUpLoading = false,
     this.signUpErrorMessage,
     this.popupErrorMessage,
-  });
+  }) : phone = phone ?? PhoneValidator.pure(countryCode: '');
 
   SignUpState copyWith({
     StepSignUp? step,
@@ -49,6 +51,7 @@ class SignUpState extends Equatable {
     bool? isSignUpLoading,
     String? signUpErrorMessage,
     String? popupErrorMessage,
+    bool? isShowConfirmPassword,
   }) {
     return SignUpState(
       step: step ?? this.step,
@@ -78,6 +81,8 @@ class SignUpState extends Equatable {
           clearPhoneErrorMessage == true
               ? null
               : popupErrorMessage ?? this.popupErrorMessage,
+      isShowConfirmPassword:
+          isShowConfirmPassword ?? this.isShowConfirmPassword,
     );
   }
 
@@ -97,5 +102,6 @@ class SignUpState extends Equatable {
     isSignUpLoading,
     signUpErrorMessage,
     popupErrorMessage,
+    isShowConfirmPassword,
   ];
 }

@@ -1,8 +1,50 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
@@ -27,6 +69,10 @@ import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/schedule_manager/schedule_manager_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
 
@@ -45,6 +91,34 @@ import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
 
+// Kinesis Usecases
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
+
 final sl = GetIt.instance;
 
 void initBlocDependencies() {
@@ -53,13 +127,20 @@ void initBlocDependencies() {
   sl.registerFactory(() => FloatButtonCubit());
 
   // Create Profile Blocs/Cubits
-  sl.registerFactory(() => InputNameCubit());
-  sl.registerFactory(() => ChooseYearOfBirthCubit());
-  sl.registerFactory(() => ChooseLevelCubit());
   sl.registerFactory(
-    () => CreateProfileLoadingCubit(
-      createProfileUsecase: sl<CreateProfileUsecase>(),
+    () => InputNameCubit(
+      profileCubit: sl<ProfileCubit>(),
+      msProfileNameTrackingUsecase: sl<MsProfileNameTrackingUsecase>(),
     ),
+  );
+  sl.registerFactory(() => ChooseYearOfBirthCubit());
+  sl.registerFactory(
+    () => ChooseLevelCubit(
+      msSelectLevelTrackingUsecase: sl<MsSelectLevelTrackingUsecase>(),
+    ),
+  );
+  sl.registerFactory(
+    () => CreateProfileLoadingCubit(profileCubit: sl<ProfileCubit>()),
   );
 
   // Auth & Account Blocs/Cubits
@@ -67,6 +148,10 @@ void initBlocDependencies() {
     () => UserCubit(
       logoutUsecase: sl<LogoutUsecase>(),
       getLoadUpdateUsecase: sl<GetLoadUpdateUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
+      saveFcmUsecase: sl<SaveFcmUsecase>(),
+      setUserUsecase: sl<SetUserUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -76,6 +161,10 @@ void initBlocDependencies() {
       loginWithLastLoginUsecase: sl<LoginWithLastLoginUsecase>(),
       getLastLoginUsecase: sl<GetLastLoginUsecase>(),
       getUserSocialUsecase: sl<GetUserSocialUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      verifyCodUserCrmUsecase: sl<VerifyCodUserCrmUseCase>(),
+      msSignInTrackingUsecase: sl<MsSignInTrackingUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -84,6 +173,10 @@ void initBlocDependencies() {
       signUpUsecase: sl<SignUpUsecase>(),
       loginUsecase: sl<LoginUsecase>(),
       checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      appCubit: sl<AppCubit>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msSignInPopupWarningUsecase: sl<MsSignInPopupWarningUsecase>(),
+      msSignUpTrackingUsecase: sl<MsSignUpTrackingUsecase>(),
     ),
   );
 
@@ -94,6 +187,13 @@ void initBlocDependencies() {
       registerDeviceUseCase: sl<RegisterDeviceUseCase>(),
       appCubit: sl<AppCubit>(),
       userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
+      getHasLoggedBeforeUsecase: sl<GetHasLoggedBeforeUsecase>(),
+      saveFcmUsecase: sl<SaveFcmUsecase>(),
+      registerTokenAirbridgeUsecase: sl<RegisterTokenAirbridgeUsecase>(),
+      checkOfflineStatusUseCase: sl<CheckOfflineStatusUseCase>(),
+      remoteConfigInitialUsecase: sl<RemoteConfigInitialUsecase>(),
     ),
   );
 
@@ -118,6 +218,8 @@ void initBlocDependencies() {
       saveThemeUseCase: sl<SaveThemeUseCase>(),
       setPreferredOrientationsUseCase: sl<SetPreferredOrientationsUseCase>(),
       unityCubit: sl<UnityCubit>(), // UnityCubit is now also registered here
+      saveSoundTrackUsecase: sl<SaveSoundTrackUsecase>(),
+      getSoundTrackUseCase: sl<GetSoundTrackUseCase>(),
     ),
   );
 
@@ -126,8 +228,150 @@ void initBlocDependencies() {
       verifyOtpUsecase: sl<VerifyOtpUsecase>(),
       sendOtpUsecase: sl<SendOtpUsecase>(),
       changePasswordUsecase: sl<ChangePasswordUsecase>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msChangePasswordMethodTrackingUsecase:
+          sl<MsChangePasswordMethodTrackingUsecase>(),
+      userCubit: sl<UserCubit>(),
+      msChangePasswordSentOTPTrackingUsecase:
+          sl<MsChangePasswordSentOTPTrackingUseCase>(),
+      msChangePasswordConfirmOTPTrackingUsecase:
+          sl<MsChangePasswordConfirmOTPTrackingUseCase>(),
+      msUpdatePasswordTrackingUsecase: sl<MsUpdatePasswordTrackingUseCase>(),
     ),
   );
+
+  sl.registerFactory(
+    () => OnboardingCubit(
+      getLanguageUseCase: sl<GetLanguageUseCase>(),
+      signUpSkipUsecase: sl<SignUpSkipUsecase>(),
+      userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+      appCubit: sl<AppCubit>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => LeaveContactCubit(
+      saveContactUsecase: sl<SaveContactUsecase>(),
+      profileCubit: sl<ProfileCubit>(),
+      purchasedCubit: sl<PurchasedCubit>(),
+      msPurchaseScreenViewRegisterTrackingUsecase:
+          sl<MsPurchaseScreenViewRegisterTrackingUsecase>(),
+      msPurchaseScreenRegisterTrackingUsecase:
+          sl<MsPurchaseScreenRegisterTrackingUsecase>(),
+      msObViewPhoneNumberScreenTrackingUsecase:
+          sl<MsObViewPhoneNumberScreenTrackingUsecase>(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => ProfileCubit(
+      getListProfileUsecase: sl<GetListProfileUsecase>(),
+      createProfileUsecase: sl<CreateProfileUsecase>(),
+      getCurrentProfileUsecase: sl<GetCurrentProfileUsecase>(),
+      activeCourseUsecase: sl<ActiveCourseUsecase>(),
+      putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
+      getListProfileLocalUsecase: sl<GetListProfileLocalUsecase>(),
+      saveCurrentProfileUsecase: sl<SaveCurrentProfileUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(() => VerifyParentCubit());
+
+  sl.registerLazySingleton(
+    () => PurchasedCubit(
+      initialPurchasedUsecase: sl<InitialPurchasedUsecase>(),
+      getProductsUsecase: sl<GetProductsUsecase>(),
+      purchaseUsecase: sl<PurchaseUsecase>(),
+      listenToPurchaseErrorsUseCase: sl<ListenToPurchaseErrorsUseCase>(),
+      disposePurchasedUseCase: sl<DisposePurchasedUseCase>(),
+      listenToPurchaseUpdatesUseCase: sl<ListenToPurchaseUpdatesUseCase>(),
+      verifyPurchasedUsecase: sl<VerifyPurchasedUsecase>(),
+      restorePurchasedUsecase: sl<RestorePurchasedUsecase>(),
+      userCubit: sl<UserCubit>(),
+      completePurchaseUsecase: sl<CompletePurchaseUsecase>(),
+      orderCompleteTrackingUsecase: sl<OrderCompleteTrackingUsecase>(),
+      orderFailedTrackingUsecase: sl<OrderFailTrackingUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => PurchasedViewCubit(
+      purchasedCubit: sl<PurchasedCubit>(),
+      msPurchaseScreenViewTrackingUsecase:
+          sl<MsPurchaseScreenViewTrackingUsecase>(),
+      msPurchaseScreenBuyNowTrackingUsecase:
+          sl<MsPurchaseScreenBuyNowTrackingUsecase>(),
+      msPurchaseScreenClickExitTrackingUsecase:
+          sl<MsPurchaseScreenClickExitTrackingUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ActiveLicenseCubit(
+      verifyLicenseCodeUseCase: sl<VerifyLicenseCodeUseCase>(),
+      checkPhoneNumberUsecase: sl<CheckPhoneNumberUsecase>(),
+      signUpUsecase: sl<SignUpUsecase>(),
+      linkCodToThisAccountUseCase: sl<LinkCodToThisAccountUseCase>(),
+      linkCodToAccountUseCase: sl<LinkCodToAccountUseCase>(),
+      loginUsecase: sl<LoginUsecase>(),
+      userCubit: sl<UserCubit>(),
+      profileCubit: sl<ProfileCubit>(),
+      sendOtpUsecase: sl<SendOtpUsecase>(),
+      verifyOtpUsecase: sl<VerifyOtpUsecase>(),
+      msActivatedCodeTrackingUsecase: sl<MsActivatedCodeTrackingUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UpdateUserInfoCubit(
+      updateUserInfoUsecase: sl<UpdateUserInfoUsecase>(),
+      userCubit: sl<UserCubit>(),
+      confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+      getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
+      msUpdateUserInfoSuccessfulTrackingUsecase:
+          sl<MsUpdateUserInfoSuccessfulTrackingUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UpdateProfileInfoCubit(
+      profileCubit: sl<ProfileCubit>(),
+      updateProfileUsecase: sl<UpdateProfileUsecase>(),
+      userCubit: sl<UserCubit>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ChangePasswordCubit(
+      confirmPasswordUsecase: sl<ConfirmPasswordUsecase>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ScheduleManagerCubit(
+      saveScheduleUsecase: sl<SaveScheduleUsecase>(),
+      settingsLocalDataSource: sl<SettingsLocalDataSource>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ReportCubit(
+      profileCubit: sl<ProfileCubit>(),
+      getReportUsecase: sl<GetReportUsecase>(),
+      userCubit: sl<UserCubit>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => UnityScreenCubit(purchasedCubit: sl<PurchasedCubit>()),
+  );
+
+  sl.registerFactory(() => BottomNavigationCubit());
+
+  sl.registerFactory(() => AudioBookCubit(userCubit: sl<UserCubit>()));
+
+  sl.registerFactory(() => PlaylistCubit());
 
   // Add other Bloc/Cubit registrations here...
 }

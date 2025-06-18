@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
@@ -12,6 +14,10 @@ import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 
 part 'sign_up_state.dart';
 
@@ -19,24 +25,55 @@ final logger = Logger('SignUpCubit');
 
 enum StepSignUp { phone, password }
 
+class SignUpTrackingData {
+  String type = '';
+  String phone = '';
+  bool haveClickedSignIn = false;
+  String? errorMessage;
+}
+
 class SignUpCubit extends Cubit<SignUpState> {
   final SignUpUsecase _signUpUsecase;
   final LoginUsecase _loginUsecase;
   final CheckPhoneNumberUsecase _checkPhoneNumberUsecase;
+  final GetCountryCodeUsecase _getCountryCodeUsecase;
+  final AppCubit _appCubit;
+  final MsSignInPopupWarningUsecase _msSignInPopupWarningUsecase;
+  final MsSignUpTrackingUsecase _msSignUpTrackingUsecase;
+
   final UserCubit _userCubit;
+
   Timer? _debounce;
   CancelToken? _cancelCheckPhoneNumberToken;
+  final _signUpTrackingData = SignUpTrackingData();
 
   SignUpCubit({
     required UserCubit userCubit,
     required SignUpUsecase signUpUsecase,
     required LoginUsecase loginUsecase,
     required CheckPhoneNumberUsecase checkPhoneNumberUsecase,
+    required AppCubit appCubit,
+    required GetCountryCodeUsecase getCountryCodeUsecase,
+    required MsSignInPopupWarningUsecase msSignInPopupWarningUsecase,
+    required MsSignUpTrackingUsecase msSignUpTrackingUsecase,
   }) : _userCubit = userCubit,
        _signUpUsecase = signUpUsecase,
        _loginUsecase = loginUsecase,
        _checkPhoneNumberUsecase = checkPhoneNumberUsecase,
-       super(const SignUpState(step: StepSignUp.phone, isShowPassword: false));
+       _appCubit = appCubit,
+       _getCountryCodeUsecase = getCountryCodeUsecase,
+       _msSignInPopupWarningUsecase = msSignInPopupWarningUsecase,
+       _msSignUpTrackingUsecase = msSignUpTrackingUsecase,
+       super(SignUpState(step: StepSignUp.phone));
+
+  Future<void> countryCodeInit() async {
+    final response = await _getCountryCodeUsecase.call(NoParams());
+    response.fold((failure) {}, (success) {
+      final code = CountryCode.fromCountryCode(success);
+      final phone = PhoneValidator.pure(countryCode: code.dialCode);
+      emit(state.copyWith(phone: phone));
+    });
+  }
 
   void countryCodeChanged(String countryCode) {
     final phone = PhoneValidator.dirty(
@@ -71,7 +108,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       state.copyWith(
         phone: phone,
         isPhoneValid: false,
-        phoneErrorMessage: null,
+        clearPhoneErrorMessage: true,
       ),
     );
     checkPhoneNumber(phone);
@@ -87,6 +124,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           value,
           state.confirmPassword.value,
         ),
+        clearPhoneErrorMessage: true,
       ),
     );
   }
@@ -134,6 +172,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
         response.fold(
           (failure) {
+            _signUpTrackingData.errorMessage = failure.message;
             emit(
               state.copyWith(
                 isPhoneValid: false,
@@ -153,18 +192,24 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpPressed() async {
+    _signUpTrackingData.type = 'phone';
     emit(state.copyWith(isSignUpLoading: true, clearPhoneErrorMessage: true));
     try {
       final response = await _signUpUsecase.call(
         SignUpParams(
           countryCode: state.phone.value.countryCode,
-          phoneNumber: state.phone.value.phoneNumber,
+          phoneNumber:
+              state.phone.value.phoneNumber.startsWith('0')
+                  ? state.phone.value.phoneNumber.substring(1)
+                  : state.phone.value.phoneNumber,
           password: state.password.value,
+          isUpgrade: _userCubit.state.user?.loginType == LoginType.skip,
         ),
       );
 
       response.fold(
         (failure) {
+          _signUpTrackingData.errorMessage = failure.message;
           emit(
             state.copyWith(
               signUpErrorMessage: failure.message,
@@ -173,12 +218,16 @@ class SignUpCubit extends Cubit<SignUpState> {
           );
         },
         (success) async {
-          logger.info('success');
+          if (_userCubit.state.isPurchasing) {
+            _userCubit.togglePurchasing();
+          }
+          _appCubit.changeLanguage(_appCubit.state.languageCode);
           await _userCubit.loadUpdate();
           emit(state.copyWith(isSignUpSuccess: true));
         },
       );
     } catch (e) {
+      _signUpTrackingData.errorMessage = e.toString();
       if (e is ApiResponse) {
         emit(state.copyWith(signUpErrorMessage: e.message));
       } else {
@@ -194,6 +243,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       final result = await _loginUsecase.call(params);
       result.fold(
         (failure) {
+          _signUpTrackingData.errorMessage = failure.message;
           throw failure;
         },
         (loginStatus) async {
@@ -202,6 +252,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         },
       );
     } catch (e) {
+      _signUpTrackingData.errorMessage = e.toString();
       emit(state.copyWith(isSignUpLoading: false));
       switch (params.loginType) {
         case LoginType.facebook:
@@ -240,19 +291,26 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   void signUpWithGoogle() async {
+    _signUpTrackingData.type = 'google';
     _signUpWithSocial(const LoginParams(loginType: LoginType.email));
   }
 
   void signUpWithFacebook() async {
+    _signUpTrackingData.type = 'facebook';
     _signUpWithSocial(const LoginParams(loginType: LoginType.facebook));
   }
 
   void signUpWithApple() async {
+    _signUpTrackingData.type = 'apple';
     _signUpWithSocial(const LoginParams(loginType: LoginType.apple));
   }
 
   void toggleShowPassword() {
     emit(state.copyWith(isShowPassword: !state.isShowPassword));
+  }
+
+  void toggleShowConfirmPassword() {
+    emit(state.copyWith(isShowConfirmPassword: !state.isShowConfirmPassword));
   }
 
   void nextToPassword() {
@@ -265,5 +323,29 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   void clearPopupErrorMessage() {
     emit(state.copyWith(popupErrorMessage: null));
+  }
+
+  void trackPopupWarning(MsSignInPopupWarningClickType clickType) {
+    _msSignInPopupWarningUsecase.call(
+      MsSignInPopupWarningParams(clickType: clickType),
+    );
+  }
+
+  void signInClicked() {
+    _signUpTrackingData.haveClickedSignIn = true;
+  }
+
+  void trackSignUp() {
+    _msSignUpTrackingUsecase.call(
+      MsSignUpTrackingParams(
+        type: _signUpTrackingData.type,
+        phone:
+            '${state.phone.value.countryCode}${state.phone.value.phoneNumber}',
+        isSuccessful: state.isSignUpSuccess,
+        haveClickedSignIn: _signUpTrackingData.haveClickedSignIn,
+        haveOccurredError: _signUpTrackingData.errorMessage != null,
+        errorMessage: _signUpTrackingData.errorMessage,
+      ),
+    );
   }
 }

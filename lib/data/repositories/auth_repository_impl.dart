@@ -6,7 +6,9 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
+import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
 import 'package:monkey_stories/data/models/auth/last_login_model.dart';
+import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/login_with_last_login_entity.dart';
 import 'package:monkey_stories/domain/entities/auth/user_sosial_entity.dart';
@@ -42,7 +44,6 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, LastLoginEntity?>> getLastLogin() async {
     try {
       final result = await localDataSource.getLastLogin();
-      // logger.info('lastLogin: ${result?.loginType}');
       return Right(result?.toEntity());
     } catch (e) {
       return const Left(CacheFailure());
@@ -106,15 +107,18 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<ServerFailureWithCode, bool>> signUp(
-    String countryCode,
-    String phoneNumber,
-    String password,
+    String? countryCode,
+    String? phoneNumber,
+    String? password,
+    LoginType signUpType,
+    bool isUpgrade,
   ) async {
     final result = await remoteDataSource.signUp(
-      LoginType.phone,
-      countryCode,
-      phoneNumber,
-      password,
+      signUpType,
+      countryCode ?? '',
+      phoneNumber ?? '',
+      password ?? '',
+      isUpgrade,
     );
 
     if (result.status == ApiStatus.success) {
@@ -122,12 +126,12 @@ class AuthRepositoryImpl implements AuthRepository {
       await localDataSource.cacheRefreshToken(result.data?.refreshToken ?? '');
       await localDataSource.cacheLastLogin(
         LastLoginModel(
-          loginType: LoginType.phone,
-          phone: '$countryCode$phoneNumber',
+          loginType: signUpType,
+          phone: '0$phoneNumber',
           isSocial: false,
         ),
       );
-
+      await localDataSource.cacheHasLoggedBefore();
       return const Right(true);
     }
 
@@ -137,10 +141,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<ServerFailureWithCode, bool>> checkPhoneNumber(
-    String countryCode,
-    String phoneNumber,
-  ) async {
+  Future<Either<ServerFailureWithCode<AccountInfoEntity?>, bool>>
+  checkPhoneNumber(String countryCode, String phoneNumber) async {
     final result = await remoteDataSource.checkPhoneNumber(
       countryCode,
       phoneNumber,
@@ -151,7 +153,12 @@ class AuthRepositoryImpl implements AuthRepository {
     }
 
     return Left(
-      ServerFailureWithCode(message: result.message, code: result.code),
+      ServerFailureWithCode<AccountInfoEntity?>(
+        message: result.message,
+        code: result.code,
+        data:
+            result.data is AccountInfoResModel ? result.data!.toEntity() : null,
+      ),
     );
   }
 
@@ -173,23 +180,47 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     if (result.status == ApiStatus.success) {
-      await localDataSource.cacheToken(result.data?.accessToken ?? '');
-      await localDataSource.cacheRefreshToken(result.data?.refreshToken ?? '');
-      await localDataSource.cacheLastLogin(
-        LastLoginModel(
-          loginType: loginType,
-          phone: phone,
-          email: email,
-          isSocial: password == null,
-        ),
+      await cacheDataLogin(
+        accessToken: result.data?.accessToken ?? '',
+        refreshToken: result.data?.refreshToken ?? '',
+        loginType: loginType,
+        phone: phone,
+        email: email,
+        isSocial: password == null,
       );
-
       return const Right(true);
     }
 
     return Left(
       ServerFailureWithCode(message: result.message, code: result.code),
     );
+  }
+
+  @override
+  Future<Either<Failure, void>> cacheDataLogin({
+    required String accessToken,
+    required String refreshToken,
+    required LoginType loginType,
+    String? phone,
+    String? email,
+    required bool isSocial,
+  }) async {
+    try {
+      await localDataSource.cacheToken(accessToken);
+      await localDataSource.cacheRefreshToken(refreshToken);
+      await localDataSource.cacheLastLogin(
+        LastLoginModel(
+          loginType: loginType,
+          phone: phone,
+          email: email,
+          isSocial: isSocial,
+        ),
+      );
+      await localDataSource.cacheHasLoggedBefore();
+      return const Right(null);
+    } catch (e) {
+      return const Left(CacheFailure());
+    }
   }
 
   Future<SocialLoginData> _loginWithGoogle() async {
@@ -216,7 +247,8 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<SocialLoginData> _loginWithFacebook() async {
     try {
       final LoginResult result = await FacebookAuth.instance.login(
-        permissions: ['email'],
+        permissions: ['email', 'public_profile'],
+        loginTracking: LoginTracking.enabled,
       );
       if (result.status == LoginStatus.success) {
         final token = (result.accessToken?.tokenString ?? '');
@@ -267,11 +299,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   Future<Either<Failure, Map<String, dynamic>?>> getUserFacebook() async {
     try {
-      final userData = await FacebookAuth.instance.getUserData();
+      final userData = await FacebookAuth.instance.getUserData(
+        fields: 'name,email',
+      );
       return Right(userData);
     } catch (e) {
       return const Left(
-        ServerFailure(message: 'Lấy thông tin người dùng thất bại'),
+        ServerFailure(message: 'Lấy thông tin người dùng facebook thất bại'),
       );
     }
   }
@@ -438,6 +472,40 @@ class AuthRepositoryImpl implements AuthRepository {
     }
 
     return Left(ServerFailure(message: result.message));
+  }
+
+  @override
+  Future<Either<Failure, bool>> getHasLoggedBefore() async {
+    try {
+      final result = await localDataSource.getHasLoggedBefore();
+      if (result == true) {
+        return const Right(true);
+      }
+      return const Left(
+        ServerFailure(message: 'Người dùng chưa từng đăng nhập'),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(message: 'Lấy thông tin người dùng thất bại'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ServerFailureWithCode, void>> confirmPassword(
+    String? password,
+    String? newPassword,
+  ) async {
+    final result = await remoteDataSource.confirmPassword(
+      password,
+      newPassword,
+    );
+    if (result.status == ApiStatus.success) {
+      return const Right(null);
+    }
+    return Left(
+      ServerFailureWithCode(message: result.message, code: result.code),
+    );
   }
 }
 

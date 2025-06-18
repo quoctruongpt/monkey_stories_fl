@@ -7,14 +7,26 @@ class DioConfig {
     final dio = Dio(
       BaseOptions(
         baseUrl: dotenv.env['BASE_URL']!,
-        connectTimeout: const Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 30),
         responseType: ResponseType.json,
         contentType: 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
       ),
     );
 
     dio.interceptors.add(DioInterceptor());
+    dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestBody: true,
+        responseBody: true,
+        error: true,
+      ),
+    );
     return dio;
   }
 }

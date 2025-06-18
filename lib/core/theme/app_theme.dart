@@ -8,6 +8,7 @@ class AppTheme {
   static const Color successColor = Color(0xFF92C73D);
   static const Color blueLightColor = Color(0xFFEDF9FF);
   static const Color skyLightColor = Color(0xFFD2F1FF);
+  static const Color lightGrayColor = Color(0xFFD9D9D9);
 
   static const Color errorColor = Color(0xFFFF4B4B);
   static const Color textColor = Color(0xFF4B4B4B);
@@ -15,6 +16,10 @@ class AppTheme {
   static const Color textGrayColor = Color(0xFFA3A3A3);
   static const Color textGrayLightColor = Color(0xFFAFAFAF);
   static const Color textBlueColor = Color(0xFF3393FF);
+  static const Color textPrimaryColor = Color(0xFF00BBFF);
+  static const Color azureColor = Color(0xFF00AAFF);
+  static const Color pinkColor = Color(0xFFFF6CA5);
+  static const Color orangeColor = Color(0xFFFFAE01);
 
   // Button colors
   static const Color buttonPrimaryDisabledBackground = Color(0xFFE5E5E5);
@@ -45,34 +50,54 @@ class AppTheme {
         fontSize: 36,
         fontWeight: FontWeight.w800,
         color: textColor,
+        letterSpacing: -1.44,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 32,
+        fontWeight: FontWeight.w800,
+        color: textColor,
+        letterSpacing: -1.28,
       ),
       displayLarge: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.w900,
         color: textColor,
+        letterSpacing: -1.12,
       ),
       displayMedium: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w900,
         color: textColor,
+        letterSpacing: -0.96,
       ),
       displaySmall: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w800,
         color: textColor,
+        letterSpacing: -0.8,
       ),
       bodyLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w800,
         color: textColor,
+        letterSpacing: -0.64,
       ),
       bodyMedium: TextStyle(
         fontSize: 14,
         color: textColor,
         fontWeight: FontWeight.w800,
+        letterSpacing: -0.56,
       ),
-      labelLarge: TextStyle(fontSize: 14, color: textSecondaryColor),
-      labelMedium: TextStyle(fontSize: 12, color: textSecondaryColor),
+      labelLarge: TextStyle(
+        fontSize: 14,
+        color: textSecondaryColor,
+        letterSpacing: -0.56,
+      ),
+      labelMedium: TextStyle(
+        fontSize: 12,
+        color: textSecondaryColor,
+        letterSpacing: -0.48,
+      ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -85,6 +110,7 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textColor,
           fontFamily: 'Nunito',
+          letterSpacing: -0.8,
         ),
       ),
     ),
@@ -101,6 +127,7 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textSecondaryColor,
           fontFamily: 'Nunito',
+          letterSpacing: -0.8,
         ),
       ),
     ),
@@ -115,6 +142,7 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: backgroundColor,
           fontFamily: 'Nunito',
+          letterSpacing: -0.8,
         ),
       ),
     ),
@@ -125,11 +153,12 @@ class AppTheme {
           fontWeight: FontWeight.w800,
           color: textSecondaryColor,
           fontFamily: 'Nunito',
-          decoration: TextDecoration.underline,
+          decoration: TextDecoration.none,
+          letterSpacing: -0.72,
         ),
       ),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: surfaceColor,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -160,12 +189,14 @@ class AppTheme {
         color: textGrayLightColor,
         fontWeight: FontWeight.w800,
         fontFamily: 'Nunito',
+        letterSpacing: -0.8,
       ),
       labelStyle: TextStyle(
         fontSize: 20,
         color: textGrayLightColor,
         fontWeight: FontWeight.w800,
         fontFamily: 'Nunito',
+        letterSpacing: -0.8,
       ),
     ),
   );

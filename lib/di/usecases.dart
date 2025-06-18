@@ -1,8 +1,40 @@
 import 'package:get_it/get_it.dart';
+import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
+import 'package:monkey_stories/domain/repositories/course_repository.dart';
+import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
+import 'package:monkey_stories/domain/repositories/offline_repository.dart';
+import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
+import 'package:monkey_stories/domain/repositories/report_repository.dart';
+import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_age.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_choose_account_type.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_select_language.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_age.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_personalize_loading_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_suggest_level_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_view_account_type.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 
 // Auth & Account Usecases
@@ -23,6 +55,11 @@ import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart'; // Used by Splash
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
@@ -36,6 +73,52 @@ import 'package:monkey_stories/domain/usecases/unity/register_handler_usecase.da
 import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_usecase.dart';
 import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_with_response_usecase.dart';
 import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.dart';
+
+// Kinesis Usecases
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+
+// Purchased Usecases
+import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/get_pass_debug.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_check.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_view_setting_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
 
 final sl = GetIt.instance;
 
@@ -60,6 +143,13 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(() => SendOtpUsecase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => VerifyOtpUsecase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => ChangePasswordUsecase(sl<AuthRepository>()));
+  sl.registerLazySingleton(
+    () => UpdateUserInfoUsecase(accountRepository: sl<AccountRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => ConfirmPasswordUsecase(repository: sl<AuthRepository>()),
+  );
+
   // Other App Features (Device, Settings, System)
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl<DeviceRepository>()));
   sl.registerLazySingleton(() => GetLanguageUseCase(sl<SettingsRepository>()));
@@ -69,7 +159,10 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => SetPreferredOrientationsUseCase(sl<SystemSettingsRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () =>
+        GetCountryCodeUsecase(systemRepository: sl<SystemSettingsRepository>()),
+  );
   // Unity
   sl.registerLazySingleton(
     () => SendMessageToUnityUseCase(sl<UnityRepository>()),
@@ -85,5 +178,232 @@ void initUsecaseDependencies() {
     () => UnregisterHandlerUseCase(sl<UnityRepository>()),
   );
 
-  // Add other usecase registrations here...
+  // Leave Contact
+  sl.registerLazySingleton(
+    () => SaveContactUsecase(sl<LeaveContactRepository>()),
+  );
+
+  // Onboarding
+  sl.registerLazySingleton(() => SignUpSkipUsecase(sl<AuthRepository>()));
+
+  // Profile
+  sl.registerLazySingleton(
+    () => GetListProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetCurrentProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(() => UpdateProfileUsecase(sl<ProfileRepository>()));
+
+  // Course
+  sl.registerLazySingleton(() => ActiveCourseUsecase(sl<CourseRepository>()));
+
+  // Kinesis
+  sl.registerLazySingleton(
+    () => PutSettingKinesisUsecase(sl<KinesisRepository>()),
+  );
+
+  // Purchased
+  sl.registerLazySingleton(() => GetProductsUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => InitialPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(() => PurchaseUsecase(sl<PurchasedRepository>()));
+  sl.registerLazySingleton(
+    () => ListenToPurchaseErrorsUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => DisposePurchasedUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => ListenToPurchaseUpdatesUseCase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => VerifyPurchasedUsecase(sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => RestorePurchasedUsecase(sl<PurchasedRepository>()),
+  );
+
+  // Active license
+  sl.registerLazySingleton(
+    () => VerifyLicenseCodeUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => LinkCodToThisAccountUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => LinkCodToAccountUseCase(
+      sl<ActiveLicenseRepository>(),
+      sl<AuthRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => VerifyCodUserCrmUseCase(sl<ActiveLicenseRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetHasLoggedBeforeUsecase(sl<AuthRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => CompletePurchaseUsecase(repository: sl<PurchasedRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => SaveSoundTrackUsecase(repository: sl<SettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetSoundTrackUseCase(sl<SettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => SaveScheduleUsecase(settingsRepository: sl<SettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetListProfileLocalUsecase(repository: sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => SaveCurrentProfileUsecase(sl<ProfileRepository>()),
+  );
+  // Notification
+  sl.registerLazySingleton(
+    () => SaveFcmUsecase(notificationRepository: sl<NotificationRepository>()),
+  );
+
+  // Tracking
+  sl.registerLazySingleton(
+    () => RegisterTokenAirbridgeUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+
+  sl.registerLazySingleton(
+    () => SetUserUsecase(trackingRepository: sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignInTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignInPopupWarningUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSignUpTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsProfileNameTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsSelectLevelTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordMethodTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordSentOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangePasswordConfirmOTPTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdatePasswordTrackingUseCase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenViewTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenRegisterTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenClickExitTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewPhoneNumberScreenTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenBuyNowTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => OrderCompleteTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => OrderFailTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsPurchaseScreenViewRegisterTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewAccountTypeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObChooseAccountTypeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObSelectLanguageTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewAgeTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObAgeTrackingUsecase(trackingRepository: sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewSuggestLevelScreenTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsObViewPersonalizeLoadingScreenTrackingUsecase(
+      trackingRepository: sl<TrackingRepository>(),
+    ),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterViewTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterClickTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsCodeEnterCheckTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsActivatedCodeTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewSettingScreenTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdateUserInfoSuccessfulTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsUpdateProfilesTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsParentSettingDetailTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsGeneralSettingDetailTrackingUsecase(sl<TrackingRepository>()),
+  );
+
+  // Report
+  sl.registerLazySingleton(
+    () => GetReportUsecase(reportRepository: sl<ReportRepository>()),
+  );
+
+  // New Usecases
+  sl.registerLazySingleton(
+    () => CheckOfflineStatusUseCase(sl<OfflineRepository>()),
+  );
+
+  // Remote Config
+  sl.registerLazySingleton(
+    () => RemoteConfigInitialUsecase(sl<RemoteConfigRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetPassDebugUsecase(sl<RemoteConfigRepository>()),
+  );
 }

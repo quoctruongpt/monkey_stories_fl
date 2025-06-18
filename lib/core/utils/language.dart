@@ -23,4 +23,24 @@ class LanguageUtils {
         return 'en-US';
     }
   }
+
+  static Future<String> getCountryFcm() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode =
+        prefs.getString('language_code') ??
+        Languages.defaultLanguage; // Mặc định là 'en' nếu không tìm thấy
+
+    switch (languageCode) {
+      case 'vi':
+        return 'VN';
+      case 'th':
+        return 'TH';
+      case 'ms':
+        return 'MY';
+      case 'id':
+        return 'ID';
+      default:
+        return 'US';
+    }
+  }
 }

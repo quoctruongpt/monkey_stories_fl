@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/presentation/widgets/horizontal_line_text.dart';
+import 'package:monkey_stories/presentation/widgets/base/horizontal_line_text.dart';
 import 'package:monkey_stories/presentation/widgets/auth/social_login_button.dart';
-import 'package:monkey_stories/presentation/widgets/text_and_action.dart';
+import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 
 class FooterAuthentication extends StatelessWidget {
   const FooterAuthentication({

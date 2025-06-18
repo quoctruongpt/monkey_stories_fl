@@ -1,21 +1,23 @@
 import 'package:formz/formz.dart';
 
+const otpLength = 4;
+
 class OtpValidator extends FormzInput<String, String> {
   const OtpValidator.pure() : super.pure('');
-  const OtpValidator.dirty([String value = '']) : super.dirty(value);
+  const OtpValidator.dirty([super.value = '']) : super.dirty();
 
   static final _otpRegex = RegExp(r'^[0-9]{4}$');
 
   @override
   String? validator(String value) {
     if (value.isEmpty) {
-      return 'Vui lòng nhập OTP';
+      return 'app.otp.empty';
     }
-    if (value.length != 4) {
-      return 'OTP phải có 4 chữ số';
+    if (value.length != otpLength) {
+      return 'app.otp.length';
     }
     if (!_otpRegex.hasMatch(value)) {
-      return 'OTP không hợp lệ';
+      return 'app.otp.invalid';
     }
     return null;
   }

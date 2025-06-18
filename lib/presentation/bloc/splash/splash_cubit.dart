@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/core/error/failures.dart';
@@ -8,35 +10,77 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
 import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart'; // Assuming this exists
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;
-  final RegisterDeviceUseCase _registerDeviceUseCase; // Assuming this exists
-  final AppCubit _appCubit; // Thêm dependency AppCubit
-  final UserCubit _userCubit; // Thêm dependency UserCubit
-
+  final RegisterDeviceUseCase _registerDeviceUseCase;
+  final AppCubit _appCubit;
+  final UserCubit _userCubit;
+  final ProfileCubit _profileCubit;
+  final PurchasedCubit _purchasedCubit;
+  final GetHasLoggedBeforeUsecase _getHasLoggedBeforeUsecase;
+  final SaveFcmUsecase _saveFcmUsecase;
+  final RegisterTokenAirbridgeUsecase _registerTokenAirbridgeUsecase;
+  final CheckOfflineStatusUseCase _checkOfflineStatusUseCase;
+  final RemoteConfigInitialUsecase _remoteConfigInitialUsecase;
   final Logger _logger = Logger('SplashCubit');
-  final int _splashTime = 3;
+  final int _splashTime = 4;
 
   SplashCubit({
     required CheckAuthStatusUseCase checkAuthStatusUseCase,
     required RegisterDeviceUseCase registerDeviceUseCase,
-    required AppCubit appCubit, // Inject AppCubit
-    required UserCubit userCubit, // Inject UserCubit
+    required AppCubit appCubit,
+    required UserCubit userCubit,
+    required ProfileCubit profileCubit,
+    required PurchasedCubit purchasedCubit,
+    required GetHasLoggedBeforeUsecase getHasLoggedBeforeUsecase,
+    required SaveFcmUsecase saveFcmUsecase,
+    required RegisterTokenAirbridgeUsecase registerTokenAirbridgeUsecase,
+    required CheckOfflineStatusUseCase checkOfflineStatusUseCase,
+    required RemoteConfigInitialUsecase remoteConfigInitialUsecase,
   }) : _checkAuthStatusUseCase = checkAuthStatusUseCase,
        _registerDeviceUseCase = registerDeviceUseCase,
-       _appCubit = appCubit, // Gán AppCubit
-       _userCubit = userCubit, // Gán UserCubit
+       _appCubit = appCubit,
+       _userCubit = userCubit,
+       _profileCubit = profileCubit,
+       _purchasedCubit = purchasedCubit,
+       _getHasLoggedBeforeUsecase = getHasLoggedBeforeUsecase,
+       _saveFcmUsecase = saveFcmUsecase,
+       _registerTokenAirbridgeUsecase = registerTokenAirbridgeUsecase,
+       _checkOfflineStatusUseCase = checkOfflineStatusUseCase,
+       _remoteConfigInitialUsecase = remoteConfigInitialUsecase,
        super(SplashInitial());
 
-  Future<void> initializeApp() async {
+  Future<void> runApp() async {
+    _initializeApp();
+    await _purchasedCubit.initialPurchased();
+    await _purchasedCubit.getProducts();
+  }
+
+  Future<void> _initializeApp() async {
     emit(SplashLoading());
     final startTime = DateTime.now(); // Ghi lại thời gian bắt đầu
 
     try {
-      // 1. Ensure device is registered
+      // 1. Check offline status first
+      final offlineResult = await _checkOfflineStatusUseCase.call(NoParams());
+      final isOfflineExpired = offlineResult.getOrElse((_) => true);
+
+      if (isOfflineExpired) {
+        emit(SplashOfflineLimitExceeded());
+        return;
+      }
+
+      // 2. Ensure device is registered
+      _registerTokenAirbridgeUsecase.call(NoParams());
       final deviceResult = await _registerDeviceUseCase.call(NoParams());
 
       // Xử lý kết quả đăng ký device. Nếu lỗi, dừng ngay.
@@ -55,6 +99,8 @@ class SplashCubit extends Cubit<SplashState> {
           // Đăng ký device thành công
           _logger.info('Device registered/retrieved successfully: $deviceId');
           _appCubit.updateDeviceInfo(deviceId: deviceId); // Cập nhật AppCubit
+          _saveFcmUsecase.call(NoParams());
+          await _remoteConfigInitialUsecase.call(NoParams());
 
           // Chỉ tiếp tục kiểm tra auth nếu đăng ký device thành công
           // 2. Check authentication status
@@ -112,11 +158,35 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<SplashState> _handleLogicAuthenticated() async {
-    await _userCubit.loadUpdate();
-    return SplashAuthenticated();
+    try {
+      // Chạy cả hai tác vụ load dữ liệu người dùng và danh sách profile đồng thời
+      await Future.wait([
+        _userCubit.loadUpdate(showConnectionErrorDialog: false),
+        _profileCubit.getListProfile(showConnectionErrorDialog: false),
+      ]);
+
+      final user = _userCubit.state.user;
+      final purchasedInfo = _userCubit.state.purchasedInfo;
+
+      if (user?.loginType == LoginType.skip &&
+          purchasedInfo?.isActive == true) {
+        return SplashNeedCreateAccount();
+      }
+
+      return SplashAuthenticated();
+    } catch (e) {
+      _logger.severe('Error during authenticated logic', e);
+      return _userCubit.state.user != null
+          ? SplashAuthenticated()
+          : SplashAuthenticatedBefore();
+    }
   }
 
   Future<SplashState> _handleLogicUnauthenticated() async {
+    final hasLoggedBefore = await _getHasLoggedBeforeUsecase.call(NoParams());
+    if (hasLoggedBefore.isRight()) {
+      return SplashAuthenticatedBefore();
+    }
     return SplashUnauthenticated();
   }
 }

@@ -1,11 +1,28 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
 
-class ProfileRepository {
-  Future<Either<ServerFailureWithCode, void>> createProfile(
+abstract class ProfileRepository {
+  Future<Either<ServerFailureWithCode, ProfileEntity>> createProfile(
     String name,
     int yearOfBirth,
-  ) async {
-    return right(null);
-  }
+    int levelId,
+  );
+
+  Future<Either<ServerFailureWithCode, List<ProfileEntity>>> getListProfile({
+    bool showConnectionErrorDialog = true,
+  });
+
+  Future<Either<CacheFailure, int?>> getCurrentProfile();
+
+  Future<Either<CacheFailure, void>> saveCurrentProfile(int profileId);
+
+  Future<Either<CacheFailure, List<ProfileEntity>>> getListProfileLocal();
+
+  Future<Either<ServerFailureWithCode, ProfileEntity>> updateProfile({
+    required int id,
+    String? name,
+    int? yearOfBirth,
+    String? localAvatarPath,
+  });
 }

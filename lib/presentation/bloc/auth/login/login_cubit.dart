@@ -8,6 +8,9 @@ import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart'
 import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/validators/password.dart';
@@ -15,8 +18,21 @@ import 'dart:async';
 
 import 'package:monkey_stories/core/validators/username.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 
 final logger = Logger('LoginCubit');
+
+class LoginTrackingData {
+  String type = '';
+  String username = '';
+  String phone = '';
+  String email = '';
+  bool isSuccess = false;
+  bool forgotPassword = false;
+  String? errorMessage;
+  bool haveClickedSignUp = false;
+  bool haveClickedActiveCode = false;
+}
 
 class LoginCubit extends Cubit<LoginState> {
   final UserCubit _userCubit;
@@ -24,8 +40,14 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginWithLastLoginUsecase _loginWithLastLoginUsecase;
   final GetLastLoginUsecase _getLastLoginUsecase;
   final GetUserSocialUsecase _getUserSocialUsecase;
+  final RestorePurchasedUsecase _restorePurchasedUsecase;
+  final VerifyCodUserCrmUseCase _verifyCodUserCrmUsecase;
+  final MsSignInTrackingUsecase _msSignInTrackingUsecase;
+
+  final ProfileCubit _profileCubit;
 
   UserSocialEntity? _lastLogin;
+  final _trackingData = LoginTrackingData();
 
   LoginCubit({
     required UserCubit userCubit,
@@ -33,12 +55,20 @@ class LoginCubit extends Cubit<LoginState> {
     required LoginWithLastLoginUsecase loginWithLastLoginUsecase,
     required GetLastLoginUsecase getLastLoginUsecase,
     required GetUserSocialUsecase getUserSocialUsecase,
+    required RestorePurchasedUsecase restorePurchasedUsecase,
+    required ProfileCubit profileCubit,
+    required VerifyCodUserCrmUseCase verifyCodUserCrmUsecase,
+    required MsSignInTrackingUsecase msSignInTrackingUsecase,
   }) : _userCubit = userCubit,
        _loginUsecase = loginUsecase,
        _loginWithLastLoginUsecase = loginWithLastLoginUsecase,
        _getLastLoginUsecase = getLastLoginUsecase,
        _getUserSocialUsecase = getUserSocialUsecase,
-       super(const LoginState(username: Username.dirty('')));
+       _restorePurchasedUsecase = restorePurchasedUsecase,
+       _profileCubit = profileCubit,
+       _verifyCodUserCrmUsecase = verifyCodUserCrmUsecase,
+       _msSignInTrackingUsecase = msSignInTrackingUsecase,
+       super(const LoginState());
 
   void loadLastLogin(String? initialUsername) async {
     try {
@@ -108,7 +138,7 @@ class LoginCubit extends Cubit<LoginState> {
         },
       );
     } catch (e) {
-      logger.severe('loadLastLogin error: ${e}');
+      logger.severe('loadLastLogin error: $e');
     }
   }
 
@@ -129,6 +159,7 @@ class LoginCubit extends Cubit<LoginState> {
         result.fold(
           (failure) {
             if (!isClosed) {
+              _trackingData.errorMessage = failure.message;
               emit(
                 state.copyWith(
                   status: FormSubmissionStatus.failure,
@@ -138,10 +169,11 @@ class LoginCubit extends Cubit<LoginState> {
             }
           },
           (response) {
-            emit(state.copyWith(status: FormSubmissionStatus.success));
+            loginSuccess();
           },
         );
       } catch (e) {
+        _trackingData.errorMessage = e.toString();
         emit(state.copyWith(status: FormSubmissionStatus.failure));
       }
     }
@@ -183,6 +215,7 @@ class LoginCubit extends Cubit<LoginState> {
 
         switch (params.loginType) {
           case LoginType.facebook:
+            _trackingData.errorMessage = 'login.popup_error.facebook';
             emit(
               state.copyWith(
                 status: FormSubmissionStatus.failure,
@@ -191,6 +224,7 @@ class LoginCubit extends Cubit<LoginState> {
             );
             return;
           case LoginType.apple:
+            _trackingData.errorMessage = 'login.popup_error.apple';
             emit(
               state.copyWith(
                 status: FormSubmissionStatus.failure,
@@ -202,6 +236,7 @@ class LoginCubit extends Cubit<LoginState> {
             if (params.email != null) {
               break;
             }
+            _trackingData.errorMessage = 'login.popup_error.google';
             emit(
               state.copyWith(
                 status: FormSubmissionStatus.failure,
@@ -213,6 +248,7 @@ class LoginCubit extends Cubit<LoginState> {
             break;
         }
 
+        _trackingData.errorMessage = failure.message;
         emit(
           state.copyWith(
             status: FormSubmissionStatus.failure,
@@ -221,24 +257,22 @@ class LoginCubit extends Cubit<LoginState> {
         );
       },
       (loginStatus) async {
-        await _userCubit.loadUpdate();
-        emit(state.copyWith(status: FormSubmissionStatus.success));
+        await loginSuccess();
       },
     );
   }
 
-  Future<void> loginSubmitted() async {
-    if (!state.isValidForm) {
-      emit(
-        state.copyWith(
-          status: FormSubmissionStatus.failure,
-          errorMessage: 'Vui lòng nhập đúng tên đăng nhập và mật khẩu',
-          clearErrorMessage: false,
-        ),
-      );
-      return;
+  Future<void> loginSuccess() async {
+    await _restorePurchasedUsecase.call(NoParams());
+    if (_userCubit.state.isPurchasing) {
+      _userCubit.togglePurchasing();
     }
+    await _userCubit.loadUpdate();
+    await _profileCubit.getListProfile();
+    emit(state.copyWith(status: FormSubmissionStatus.success));
+  }
 
+  Future<void> loginSubmitted() async {
     emit(
       state.copyWith(
         status: FormSubmissionStatus.loading,
@@ -250,30 +284,92 @@ class LoginCubit extends Cubit<LoginState> {
       // Xác định loại đăng nhập (email hoặc số điện thoại)
       final username = state.username.value;
       final password = state.password.value;
-      final isEmail = username.contains('@');
+
+      final loginType = getLoginType(username);
+
+      if (loginType == LoginType.userCrm) {
+        _trackingData.type = 'username';
+        _trackingData.username = username;
+        await loginWithUserCrm(username, password);
+        return;
+      }
+
+      if (loginType == LoginType.email) {
+        _trackingData.type = 'email';
+        _trackingData.email = username;
+      }
+
+      _trackingData.type = 'phone';
+      _trackingData.phone = username;
 
       await login(
         LoginParams(
-          loginType: isEmail ? LoginType.email : LoginType.phone,
-          phone: isEmail ? '' : username,
-          email: isEmail ? username : '',
+          loginType: loginType,
+          phone: loginType == LoginType.phone ? username : '',
+          email: loginType == LoginType.email ? username : '',
           password: password,
         ),
       );
     } catch (e) {
-      logger.severe('loginSubmitted error: ${e}');
+      logger.severe('loginSubmitted error: $e');
+      _trackingData.errorMessage = e.toString();
 
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,
           errorMessage: e.toString(),
-          clearErrorMessage: false,
         ),
       );
     }
   }
 
+  LoginType getLoginType(String username) {
+    LoginType loginType;
+    final isEmail = username.contains('@');
+    final isPhone = RegExp(
+      r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',
+    ).hasMatch(username);
+
+    if (isEmail) {
+      loginType = LoginType.email;
+    } else if (isPhone) {
+      loginType = LoginType.phone;
+    } else {
+      loginType = LoginType.userCrm;
+    }
+
+    return loginType;
+  }
+
+  Future<void> loginWithUserCrm(String username, String password) async {
+    final result = await _verifyCodUserCrmUsecase.call(
+      VerifyCodUserCrmParams(username: username, password: password),
+    );
+
+    result.fold(
+      (failure) {
+        _trackingData.errorMessage = failure.message;
+        emit(
+          state.copyWith(
+            status: FormSubmissionStatus.failure,
+            errorMessage: failure.message,
+          ),
+        );
+      },
+      (response) {
+        emit(
+          state.copyWith(
+            status: FormSubmissionStatus.success,
+            licenseCodeInfo: response,
+          ),
+        );
+      },
+    );
+  }
+
   void loginWithGoogle() async {
+    _trackingData.type = 'gg';
+
     emit(
       state.copyWith(
         status: FormSubmissionStatus.loading,
@@ -283,6 +379,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await login(const LoginParams(loginType: LoginType.email));
     } catch (e) {
+      _trackingData.errorMessage = e.toString();
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,
@@ -293,6 +390,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginWithApple() async {
+    _trackingData.type = 'apple';
+
     emit(
       state.copyWith(
         status: FormSubmissionStatus.loading,
@@ -303,6 +402,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await login(const LoginParams(loginType: LoginType.apple));
     } catch (e) {
+      _trackingData.errorMessage = e.toString();
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,
@@ -313,6 +413,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void loginWithFacebook() async {
+    _trackingData.type = 'fb';
+
     emit(
       state.copyWith(
         status: FormSubmissionStatus.loading,
@@ -323,6 +425,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       await login(const LoginParams(loginType: LoginType.facebook));
     } catch (e) {
+      _trackingData.errorMessage = e.toString();
       emit(
         state.copyWith(
           status: FormSubmissionStatus.failure,
@@ -348,9 +451,33 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(failedAttempts: 0));
   }
 
-  // Đừng quên hủy subscription khi Cubit bị đóng
-  @override
-  Future<void> close() {
-    return super.close();
+  void forgotPasswordClicked() {
+    _trackingData.forgotPassword = true;
   }
+
+  void signUpClicked() {
+    _trackingData.haveClickedSignUp = true;
+  }
+
+  void activeCodeClicked() {
+    _trackingData.haveClickedActiveCode = true;
+  }
+
+  void signInTracking() {
+    final params = MsSignInTrackingParams(
+      type: _trackingData.type,
+      username: _trackingData.username,
+      phone: _trackingData.phone,
+      email: _trackingData.email,
+      isSuccess: state.status == FormSubmissionStatus.success,
+      forgotPassword: _trackingData.forgotPassword,
+      haveClickedSignUp: _trackingData.haveClickedSignUp,
+      haveClickedActiveCode: _trackingData.haveClickedActiveCode,
+      errorMessage: _trackingData.errorMessage,
+      haveOccurredError: _trackingData.errorMessage != null,
+    );
+    _msSignInTrackingUsecase.call(params);
+  }
+
+  // Đừng quên hủy subscription khi Cubit bị đóng
 }

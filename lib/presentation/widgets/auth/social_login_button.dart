@@ -46,10 +46,14 @@ class SocialLoginButton extends StatelessWidget {
         elevation: 1,
         // Style differently when disabled
         disabledBackgroundColor:
-            isDisabled ? backgroundColor.withOpacity(0.5) : backgroundColor,
+            isDisabled
+                ? backgroundColor.withValues(alpha: 0.5)
+                : backgroundColor,
         disabledForegroundColor:
             isDisabled
-                ? (isGoogle ? Colors.black : Colors.white).withOpacity(0.5)
+                ? (isGoogle ? Colors.black : Colors.white).withValues(
+                  alpha: 0.5,
+                )
                 : (isGoogle ? Colors.black : Colors.white),
       ),
       child:
@@ -62,15 +66,15 @@ class SocialLoginButton extends StatelessWidget {
                 colorFilter:
                     isDisabled
                         ? ColorFilter.mode(
-                          Colors.black.withOpacity(0.5),
+                          Colors.black.withValues(alpha: 0.5),
                           BlendMode.srcIn,
                         )
                         : null,
               )
               : Icon(
-                iconData!,
+                iconData,
                 size: 24,
-                color: isDisabled ? Colors.white.withOpacity(0.5) : null,
+                color: isDisabled ? Colors.white.withValues(alpha: 0.5) : null,
               ),
     );
   }

@@ -11,6 +11,7 @@ class UserEntity {
   final String? avatar;
   final String? country;
   final PhoneEntity? phoneInfo;
+  final bool? hasPassword;
 
   UserEntity({
     required this.userId,
@@ -22,5 +23,65 @@ class UserEntity {
     this.avatar,
     this.country,
     this.phoneInfo,
+    this.hasPassword,
   });
+
+  UserEntity copyWith({
+    int? userId,
+    int? maxProfile,
+    LoginType? loginType,
+    String? name,
+    String? email,
+    String? phone,
+    String? avatar,
+    String? country,
+    PhoneEntity? phoneInfo,
+    bool? hasPassword,
+  }) {
+    return UserEntity(
+      userId: userId ?? this.userId,
+      maxProfile: maxProfile ?? this.maxProfile,
+      loginType: loginType ?? this.loginType,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      avatar: avatar ?? this.avatar,
+      country: country ?? this.country,
+      phoneInfo: phoneInfo ?? this.phoneInfo,
+      hasPassword: hasPassword ?? this.hasPassword,
+    );
+  }
+
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    return UserEntity(
+      userId: json['userId'],
+      maxProfile: json['maxProfile'],
+      loginType: LoginType.fromValue(json['loginType']),
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      avatar: json['avatar'],
+      country: json['country'],
+      phoneInfo:
+          json['phoneInfo'] != null
+              ? PhoneEntity.fromJson(json['phoneInfo'])
+              : null,
+      hasPassword: json['hasPassword'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'maxProfile': maxProfile,
+      'loginType': loginType.value,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'avatar': avatar,
+      'country': country,
+      'phoneInfo': phoneInfo?.toJson(),
+      'hasPassword': hasPassword,
+    };
+  }
 }

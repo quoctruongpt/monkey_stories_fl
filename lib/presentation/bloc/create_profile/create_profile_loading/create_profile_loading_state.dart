@@ -1,6 +1,6 @@
 part of 'create_profile_loading_cubit.dart';
 
-enum LoadingProcess { init, createAccount, createProfile, updateSetting, done }
+enum LoadingProcess { init, createProfile, updateSetting, done }
 
 class CreateProfileLoadingState extends Equatable {
   const CreateProfileLoadingState({

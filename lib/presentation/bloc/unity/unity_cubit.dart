@@ -38,6 +38,10 @@ class UnityCubit extends Cubit<UnityState> {
        _unregisterHandlerUseCase = unregisterHandlerUseCase,
        super(const UnityState(isUnityVisible: false));
 
+  void setUnityLoading(bool isUnityLoading) {
+    emit(state.copyWith(isUnityLoading: isUnityLoading));
+  }
+
   /// Hiển thị Unity
   void showUnity() {
     _logger.info('showUnity: ${state.isUnityVisible}');

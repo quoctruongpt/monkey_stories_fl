@@ -1,0 +1,433 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/utils/permission.dart';
+import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_check.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
+import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
+import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+
+class InputLicense extends StatefulWidget {
+  const InputLicense({super.key, required this.source});
+
+  final String source;
+
+  @override
+  State<InputLicense> createState() => _InputLicenseState();
+}
+
+class _InputLicenseState extends State<InputLicense> {
+  final TextEditingController _controller = TextEditingController();
+  final MobileScannerController _cameraController = MobileScannerController();
+  DateTime? _startTime;
+  DateTime? _startTimeQrScan;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _cameraController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void _onTrackPush() {
+    _startTime = DateTime.now();
+  }
+
+  void _onTrackExit() {
+    sl<MsCodeEnterViewTrackingUsecase>().call(
+      MsCodeEnterViewParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTime!).inSeconds,
+      ),
+    );
+  }
+
+  void _onTrackClick(ClickType clickType) {
+    sl<MsCodeEnterClickTrackingUsecase>().call(
+      MsCodeEnterClickParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTime!).inSeconds,
+        clickType: clickType,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenTracker(
+      routeName: AppRouteNames.inputLicense,
+      onTrackPush: _onTrackPush,
+      onTrackExit: _onTrackExit,
+      child: KeyboardDismisser(
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.verifyLicenseError != null &&
+                      current.verifyLicenseError != previous.verifyLicenseError,
+              listener: _errorListener,
+            ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.licenseInfo != null &&
+                      current.licenseInfo != previous.licenseInfo,
+              listener: _successListener,
+            ),
+            BlocListener<ActiveLicenseCubit, ActiveLicenseState>(
+              listenWhen:
+                  (previous, current) =>
+                      current.showMergeLifetimeWarning ==
+                          PositionShowWarning.inputLicense &&
+                      current.showMergeLifetimeWarning !=
+                          previous.showMergeLifetimeWarning,
+              listener: _showMergeLifetimeWarningListener,
+            ),
+          ],
+          child: BlocBuilder<ActiveLicenseCubit, ActiveLicenseState>(
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  Scaffold(
+                    appBar: AppBarWidget(
+                      onBackPressed: () {
+                        _onTrackClick(ClickType.back);
+                        context.pop();
+                      },
+                    ),
+                    body: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: Spacing.md,
+                          right: Spacing.md,
+                          bottom: Spacing.lg,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context).translate(
+                                'app.active_license.input_license.title',
+                              ),
+                              style: Theme.of(context).textTheme.displayMedium,
+                            ),
+
+                            const SizedBox(height: Spacing.lg),
+
+                            TextFieldWidget(
+                              controller: _controller,
+                              onChanged:
+                                  context
+                                      .read<ActiveLicenseCubit>()
+                                      .changeLicenseCode,
+                              hintText: 'XY12345ABC',
+                              errorText: AppLocalizations.of(
+                                context,
+                              ).translate(state.licenseCode.displayError),
+                              suffixIcon:
+                                  state.licenseCode.isNotValid &&
+                                          state.licenseCode.value.isNotEmpty
+                                      ? IconButton(
+                                        onPressed: () => _clearCode(context),
+                                        icon: const Icon(
+                                          Icons.cancel,
+                                          color: AppTheme.textGrayColor,
+                                        ),
+                                      )
+                                      : null,
+                              textCapitalization: TextCapitalization.characters,
+                            ),
+
+                            const SizedBox(height: Spacing.lg),
+
+                            Center(
+                              child: TextButton(
+                                onPressed: () => _handleShowScanner(context),
+                                child: Text(
+                                  AppLocalizations.of(context).translate(
+                                    'app.active_license.input_license.scan_qr_code',
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const Spacer(),
+
+                            AppButton.primary(
+                              text: AppLocalizations.of(context).translate(
+                                'app.active_license.input_license.continue',
+                              ),
+                              onPressed: () {
+                                _onTrackClick(ClickType.next);
+                                context
+                                    .read<ActiveLicenseCubit>()
+                                    .handlePressedContinueLicense();
+                              },
+                              disabled: state.licenseCode.isNotValid,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  state.isShowScanner
+                      ? _ScannerWidget(
+                        cameraController: _cameraController,
+                        onDetect:
+                            (barcodes) => _handleQrCode(context, barcodes),
+                      )
+                      : const SizedBox.shrink(),
+
+                  state.isLoading
+                      ? const LoadingOverlay()
+                      : const SizedBox.shrink(),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleShowScanner(BuildContext context) async {
+    _startTimeQrScan = DateTime.now();
+    _onTrackClick(ClickType.qrScan);
+    final isGranted = await PermissionUtil.checkCameraPermission(context);
+
+    if (isGranted) {
+      context.read<ActiveLicenseCubit>().showScanner();
+    }
+  }
+
+  void _handleQrCode(BuildContext context, BarcodeCapture barcodes) {
+    final code = barcodes.barcodes.firstOrNull?.displayValue ?? '';
+    final isValid = context.read<ActiveLicenseCubit>().checkValidLicense(code);
+
+    sl<MsCodeEnterCheckTrackingUsecase>().call(
+      MsCodeEnterCheckParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTimeQrScan!).inSeconds,
+        enterStatus: isValid,
+        errorMessage: !isValid ? 'invalid_code' : null,
+      ),
+    );
+
+    if (isValid) {
+      _controller.text = code;
+      context.read<ActiveLicenseCubit>().changeLicenseCode(code);
+      context.read<ActiveLicenseCubit>().hideScanner();
+      context.read<ActiveLicenseCubit>().handlePressedContinueLicense();
+      return;
+    }
+
+    _cameraController.stop();
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.input_license.invalid_code'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.input_license.please_try_again'),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(context).translate('Ok'),
+      onPrimaryAction: () {
+        context.pop();
+        _cameraController.start();
+      },
+      isCloseable: false,
+    );
+  }
+
+  void _clearCode(BuildContext context) {
+    _controller.text = '';
+    context.read<ActiveLicenseCubit>().changeLicenseCode('');
+  }
+
+  void _errorListener(BuildContext context, ActiveLicenseState state) {
+    showCustomNoticeDialog(
+      context: context,
+      titleText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.error'),
+      messageText: AppLocalizations.of(
+        context,
+      ).translate(state.verifyLicenseError ?? ''),
+      imageAsset: 'assets/images/monkey_confused.png',
+      primaryActionText: AppLocalizations.of(
+        context,
+      ).translate('app.active_license.close'),
+      isCloseable: false,
+      onPrimaryAction: () {
+        context.pop();
+        context.read<ActiveLicenseCubit>().clearVerifyError();
+      },
+    );
+  }
+
+  void _successListener(BuildContext context, ActiveLicenseState state) {
+    final user = context.read<UserCubit>().state.user;
+
+    if (user == null || user.loginType == LoginType.skip) {
+      if (state.licenseInfo?.accountInfo != null &&
+          user?.loginType != LoginType.skip) {
+        context.go(AppRoutePaths.lastLoginInfo);
+      } else {
+        context.go(AppRoutePaths.activeLicenseInputPhone);
+      }
+    } else {
+      context.read<ActiveLicenseCubit>().activateLicenseWithCurrentAccount(
+        PositionShowWarning.inputLicense,
+        true,
+      );
+    }
+  }
+
+  void _showMergeLifetimeWarningListener(
+    BuildContext context,
+    ActiveLicenseState state,
+  ) {
+    showPopupWarningMergeLifetimeToPaid(
+      context: context,
+      onContinue: () {
+        context.read<ActiveLicenseCubit>().activateLicenseWithCurrentAccount(
+          PositionShowWarning.inputLicense,
+          false,
+        );
+        context.read<ActiveLicenseCubit>().closeMergeLifetimeWarning();
+        context.pop();
+      },
+      onCancel: () {
+        context.read<ActiveLicenseCubit>().closeMergeLifetimeWarning();
+        context.pop();
+      },
+    );
+  }
+}
+
+class ScannerOverlay extends StatelessWidget {
+  final double borderRadius = 20;
+  final double windowSize = 250;
+
+  const ScannerOverlay({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
+        final left = (screenWidth - windowSize) / 2;
+        final top = (screenHeight - windowSize) / 2;
+
+        return Stack(
+          children: [
+            // Overlay đen với khung trong suốt ở giữa
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Colors.black.withValues(alpha: 0.6),
+                BlendMode.srcOut,
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: screenWidth,
+                    height: screenHeight,
+                    color: Colors.black.withValues(alpha: 0.6),
+                  ),
+                  Positioned(
+                    left: left,
+                    top: top,
+                    child: Container(
+                      width: windowSize,
+                      height: windowSize,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(borderRadius),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Viền trắng bo góc
+            Positioned(
+              left: left,
+              top: top,
+              child: Container(
+                width: windowSize,
+                height: windowSize,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 2),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ScannerWidget extends StatelessWidget {
+  const _ScannerWidget({
+    required this.cameraController,
+    required this.onDetect,
+  });
+
+  final MobileScannerController cameraController;
+  final Function(BarcodeCapture) onDetect;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        MobileScanner(
+          controller: cameraController,
+          onDetect: (barcodes) => onDetect(barcodes),
+
+          scanWindow: Rect.fromLTWH(
+            (MediaQuery.of(context).size.width - 250) / 2,
+            (MediaQuery.of(context).size.height - 250) / 2,
+            250,
+            250,
+          ),
+        ),
+        const ScannerOverlay(),
+        Positioned(
+          top: 50,
+          left: 20,
+          child: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white, size: 40),
+            onPressed: () => context.read<ActiveLicenseCubit>().hideScanner(),
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -1,13 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
 
 class SystemSettingsRepositoryImpl implements SystemSettingsRepository {
   final SystemSettingsDataSource dataSource;
+  final SystemLocalDataSource settingsLocalDataSource;
 
-  SystemSettingsRepositoryImpl({required this.dataSource});
+  SystemSettingsRepositoryImpl({
+    required this.dataSource,
+    required this.settingsLocalDataSource,
+  });
 
   @override
   Future<Either<Failure, void>> setPreferredOrientations(
@@ -25,6 +30,16 @@ class SystemSettingsRepositoryImpl implements SystemSettingsRepository {
           message: 'Unexpected error setting orientations: ${e.toString()}',
         ),
       );
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getCountryCode() async {
+    try {
+      final countryCode = await settingsLocalDataSource.getCountryCode();
+      return Right(countryCode);
+    } catch (e) {
+      return Left(SystemFailure(message: e.toString()));
     }
   }
 }

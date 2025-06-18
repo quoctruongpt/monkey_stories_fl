@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
@@ -11,11 +13,15 @@ import 'package:monkey_stories/core/localization/app_localizations_delegate.dart
 import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
-import 'package:monkey_stories/presentation/screens/debugs/debug_navigator.dart';
+import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:monkey_stories/presentation/widgets/loading/orientation_loading_widget.dart';
+import 'package:monkey_stories/presentation/widgets/leave_contact_dialog/leave_contact_dialog.dart';
+import 'package:monkey_stories/presentation/bloc/dialog/dialog_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 
 final logger = Logger('MyApp');
 
@@ -31,6 +37,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<DebugCubit>()),
         BlocProvider(create: (_) => sl<FloatButtonCubit>()),
         BlocProvider(create: (_) => sl<UserCubit>()),
+        BlocProvider(create: (_) => sl<ProfileCubit>()..getCurrentProfile()),
+        BlocProvider(create: (_) => sl<PurchasedCubit>()),
+        BlocProvider(create: (_) => DialogCubit()),
+        BlocProvider(create: (_) => sl<PlaylistCubit>()),
       ],
       child: BlocBuilder<AppCubit, AppState>(
         buildWhen:
@@ -51,7 +61,12 @@ class MyApp extends StatelessWidget {
             supportedLocales: Languages.getSupportedLocales(),
             locale: Locale(state.languageCode),
             builder: (context, child) {
-              return AppBuilder(child: child);
+              return MediaQuery(
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: const TextScaler.linear(1.0)),
+                child: AppBuilder(child: child),
+              );
             },
           );
         },
@@ -90,6 +105,7 @@ class _AppBuilderState extends State<AppBuilder>
 
     // Lắng nghe thay đổi trạng thái của DebugCubit để bật/tắt logging
     context.read<DebugCubit>().stream.listen((state) {
+      if (!mounted) return;
       if (state.isShowLogger) {
         Logging.debugCubit = context.read<DebugCubit>();
       } else {
@@ -141,6 +157,31 @@ class _AppBuilderState extends State<AppBuilder>
           },
         ),
 
+        // === Dialog Layer ===
+        // Lắng nghe DialogCubit và hiển thị các dialog trong một Stack riêng
+        BlocBuilder<DialogCubit, DialogState>(
+          builder: (context, state) {
+            logger.info('Dialog state: ${state.dialogs}');
+            if (state.dialogs.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            // Stack này sẽ chứa tất cả các dialog
+            // Chúng sẽ được hiển thị chồng lên nhau theo thứ tự trong list
+            return Stack(
+              children:
+                  state.dialogs.map((dialogInfo) {
+                    // Đảm bảo mỗi dialog widget có key duy nhất đã được gán
+                    // để Flutter và Cubit có thể quản lý chính xác
+                    return KeyedSubtree(
+                      key: dialogInfo.key,
+                      child: dialogInfo.widget,
+                    );
+                  }).toList(),
+            );
+          },
+        ),
+        // === End Dialog Layer ===
+
         // Debug view
         BlocSelector<DebugCubit, DebugState, bool>(
           selector: (state) => state.isShowDebugView,
@@ -163,6 +204,22 @@ class _AppBuilderState extends State<AppBuilder>
                 context.read<AppCubit>().showLoading();
               },
             ),
+            BlocListener<PurchasedCubit, PurchasedState>(
+              listenWhen:
+                  (previous, current) =>
+                      previous.isRestorePurchasedError !=
+                      current.isRestorePurchasedError,
+              listener: (context, state) {
+                if (state.isRestorePurchasedError) {
+                  showRestorePurchasedErrorDialog(
+                    navigatorKey.currentContext!,
+                    onPrimaryAction: () {
+                      context.read<PurchasedCubit>().resetStatus();
+                    },
+                  );
+                }
+              },
+            ),
             BlocListener<FloatButtonCubit, FloatButtonState>(
               listenWhen:
                   (previous, current) =>
@@ -170,6 +227,40 @@ class _AppBuilderState extends State<AppBuilder>
               listener: (context, state) {
                 _animationController.reset();
                 _animationController.forward();
+              },
+            ),
+            // Lắng nghe trạng thái mua hàng
+            BlocListener<PurchasedCubit, PurchasedState>(
+              listenWhen: (previous, current) {
+                // Lắng nghe khi isVerifyPurchasedSuccess thay đổi thành true
+                // Hoặc khi errorMessage thay đổi từ null thành có giá trị
+                return (previous.isVerifyPurchasedSuccess !=
+                            current.isVerifyPurchasedSuccess &&
+                        current.isVerifyPurchasedSuccess == true) ||
+                    (previous.errorMessage == null &&
+                        current.errorMessage != null);
+              },
+              listener: (context, state) {
+                final context = navigatorKey.currentContext;
+                if (context != null) {
+                  context.read<PurchasedCubit>().resetStatus();
+                  if (state.isVerifyPurchasedSuccess == true) {
+                    context.go(AppRoutePaths.purchasedSuccess);
+                  } else if (state.errorMessage != null) {
+                    try {
+                      context.read<PurchasedCubit>().trackOrderFailed();
+                      final unityState = context.read<UnityCubit>().state;
+                      if (!unityState.isUnityVisible) {
+                        showLeaveContactDialog(
+                          navigatorKey.currentContext!,
+                          () => context.go(AppRoutePaths.home),
+                        );
+                      }
+                    } catch (e) {
+                      logger.severe('Error showing dialog: $e');
+                    }
+                  }
+                }
               },
             ),
           ],

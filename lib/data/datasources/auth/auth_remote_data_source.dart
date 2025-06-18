@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
+import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
 import 'package:monkey_stories/data/models/auth/forgot_password_model.dart';
 import 'package:monkey_stories/data/models/login_data.dart';
 import 'package:monkey_stories/data/models/sign_up_data.dart';
@@ -33,9 +34,10 @@ abstract class AuthRemoteDataSource {
     String countryCode,
     String phoneNumber,
     String password,
+    bool isUpgrade,
   );
 
-  Future<ApiResponse<Null>> checkPhoneNumber(
+  Future<ApiResponse<AccountInfoResModel?>> checkPhoneNumber(
     String countryCode,
     String phoneNumber,
   );
@@ -64,6 +66,11 @@ abstract class AuthRemoteDataSource {
     String? countryCode,
     String password,
     String tokenChangePassword,
+  );
+
+  Future<ApiResponse<Null>> confirmPassword(
+    String? password,
+    String? newPassword,
   );
 }
 
@@ -98,15 +105,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             ).toJson(),
       );
 
-      return ApiResponse.fromJson(response.data, (json) {
+      return ApiResponse.fromJson(response.data, (json, res) {
         if (json is Map<String, dynamic>) {
           return LoginResponseData.fromJson(json);
         }
         return null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during login');
     } catch (e) {
       // Các lỗi khác
       throw ServerException(message: e.toString());
@@ -139,6 +145,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String countryCode,
     String phoneNumber,
     String password,
+    bool isUpgrade,
   ) async {
     try {
       final response = await dioClient.post(
@@ -148,18 +155,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'country_code': countryCode,
           'phone': phoneNumber,
           'password': password,
+          'is_upgrade': isUpgrade,
         },
       );
 
-      return ApiResponse.fromJson(response.data, (json) {
+      return ApiResponse.fromJson(response.data, (json, res) {
         if (json is Map<String, dynamic>) {
           return SignUpResponseData.fromJson(json);
         }
         return null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during sign up');
     } catch (e) {
       // Các lỗi khác
       throw ServerException(message: e.toString());
@@ -167,7 +174,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<Null>> checkPhoneNumber(
+  Future<ApiResponse<AccountInfoResModel?>> checkPhoneNumber(
     String countryCode,
     String phoneNumber,
   ) async {
@@ -177,17 +184,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: {'country_code': countryCode, 'phone': phoneNumber},
       );
 
-      logger.info('response: ${response.data}');
-
-      return ApiResponse.fromJson(response.data, (json) {
-        return null;
+      return ApiResponse.fromJson(response.data, (json, res) {
+        return json is Map<String, dynamic>
+            ? AccountInfoResModel.fromJson(json)
+            : null;
       });
     } on DioException catch (e) {
-      // Các lỗi khác
-      throw ServerException(message: e.message ?? 'Dio Error during login');
+      throw NetworkException(message: e.message ?? 'Dio Error during login');
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     } catch (e) {
+      logger.severe('checkPhoneNumber $e');
       // Các lỗi khác
       throw ServerException(message: e.toString());
     }
@@ -210,7 +217,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return null;
     });
   }
@@ -225,7 +232,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       data: {'code': otp, 'email': email},
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return VerifyOtpResponseModel.fromJson(json);
     });
   }
@@ -241,7 +248,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       data: {'code': otp, 'phone': phone, 'country_code': countryCode},
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
       return VerifyOtpResponseModel.fromJson(json);
     });
   }
@@ -265,7 +272,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return ApiResponse.fromJson(response.data, (json) {
+    return ApiResponse.fromJson(response.data, (json, res) {
+      return null;
+    });
+  }
+
+  @override
+  Future<ApiResponse<Null>> confirmPassword(
+    String? password,
+    String? newPassword,
+  ) async {
+    final response = await dioClient.post(
+      ApiEndpoints.confirmPassword,
+      data: {'old_password': password, 'new_password': newPassword},
+    );
+
+    return ApiResponse.fromJson(response.data, (json, res) {
       return null;
     });
   }

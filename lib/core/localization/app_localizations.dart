@@ -22,14 +22,22 @@ class AppLocalizations {
     return true;
   }
 
-  String translate(String? key, {Map<String, String>? params}) {
+  String translate(String? key, {Map<String, String?>? params}) {
     if (key == null) return '';
 
-    var translation = _localizedStrings[key]?.toString() ?? key;
+    String finalKey = key;
+    if (params != null && params.containsKey('count')) {
+      final value = int.tryParse(params['count'] ?? '');
+      if (value != null) {
+        finalKey = '$key${value == 1 ? '.one' : '.other'}';
+      }
+    }
+
+    var translation = _localizedStrings[finalKey]?.toString() ?? key;
 
     if (params != null) {
       params.forEach((paramKey, paramValue) {
-        translation = translation.replaceAll('{{${paramKey}}}', paramValue);
+        translation = translation.replaceAll('{{$paramKey}}', paramValue ?? '');
       });
     }
 
