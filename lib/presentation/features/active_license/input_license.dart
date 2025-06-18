@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/permission.dart';
 import 'package:monkey_stories/di/injection_container.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_check.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_click.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_code_enter_view.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
@@ -33,6 +34,7 @@ class _InputLicenseState extends State<InputLicense> {
   final TextEditingController _controller = TextEditingController();
   final MobileScannerController _cameraController = MobileScannerController();
   DateTime? _startTime;
+  DateTime? _startTimeQrScan;
 
   @override
   void initState() {
@@ -192,38 +194,10 @@ class _InputLicenseState extends State<InputLicense> {
                   ),
 
                   state.isShowScanner
-                      ? Stack(
-                        children: [
-                          MobileScanner(
-                            controller: _cameraController,
-                            onDetect:
-                                (barcodes) => _handleQrCode(context, barcodes),
-
-                            scanWindow: Rect.fromLTWH(
-                              (MediaQuery.of(context).size.width - 250) / 2,
-                              (MediaQuery.of(context).size.height - 250) / 2,
-                              250,
-                              250,
-                            ),
-                          ),
-                          const ScannerOverlay(),
-                          Positioned(
-                            top: 50,
-                            left: 20,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                              onPressed:
-                                  () =>
-                                      context
-                                          .read<ActiveLicenseCubit>()
-                                          .hideScanner(),
-                            ),
-                          ),
-                        ],
+                      ? _ScannerWidget(
+                        cameraController: _cameraController,
+                        onDetect:
+                            (barcodes) => _handleQrCode(context, barcodes),
                       )
                       : const SizedBox.shrink(),
 
@@ -240,6 +214,7 @@ class _InputLicenseState extends State<InputLicense> {
   }
 
   Future<void> _handleShowScanner(BuildContext context) async {
+    _startTimeQrScan = DateTime.now();
     _onTrackClick(ClickType.qrScan);
     final isGranted = await PermissionUtil.checkCameraPermission(context);
 
@@ -251,6 +226,16 @@ class _InputLicenseState extends State<InputLicense> {
   void _handleQrCode(BuildContext context, BarcodeCapture barcodes) {
     final code = barcodes.barcodes.firstOrNull?.displayValue ?? '';
     final isValid = context.read<ActiveLicenseCubit>().checkValidLicense(code);
+
+    sl<MsCodeEnterCheckTrackingUsecase>().call(
+      MsCodeEnterCheckParams(
+        source: widget.source,
+        timeOnScreen: DateTime.now().difference(_startTimeQrScan!).inSeconds,
+        enterStatus: isValid,
+        errorMessage: !isValid ? 'invalid_code' : null,
+      ),
+    );
+
     if (isValid) {
       _controller.text = code;
       context.read<ActiveLicenseCubit>().changeLicenseCode(code);
@@ -405,6 +390,44 @@ class ScannerOverlay extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _ScannerWidget extends StatelessWidget {
+  const _ScannerWidget({
+    required this.cameraController,
+    required this.onDetect,
+  });
+
+  final MobileScannerController cameraController;
+  final Function(BarcodeCapture) onDetect;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        MobileScanner(
+          controller: cameraController,
+          onDetect: (barcodes) => onDetect(barcodes),
+
+          scanWindow: Rect.fromLTWH(
+            (MediaQuery.of(context).size.width - 250) / 2,
+            (MediaQuery.of(context).size.height - 250) / 2,
+            250,
+            250,
+          ),
+        ),
+        const ScannerOverlay(),
+        Positioned(
+          top: 50,
+          left: 20,
+          child: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white, size: 40),
+            onPressed: () => context.read<ActiveLicenseCubit>().hideScanner(),
+          ),
+        ),
+      ],
     );
   }
 }
