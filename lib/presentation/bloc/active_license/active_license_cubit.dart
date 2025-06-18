@@ -19,6 +19,7 @@ import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/core/constants/active_license.dart';
@@ -42,6 +43,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
   final SignUpUsecase _signUpUsecase;
   final LinkCodToThisAccountUseCase _linkCodToThisAccountUseCase;
   final LinkCodToAccountUseCase _linkCodToAccountUseCase;
+  final MsActivatedCodeTrackingUsecase _msActivatedCodeTrackingUsecase;
   final LoginUsecase _loginUsecase;
   final SendOtpUsecase _sendOtpUsecase;
   final VerifyOtpUsecase _verifyOtpUsecase;
@@ -56,6 +58,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     required SignUpUsecase signUpUsecase,
     required LinkCodToThisAccountUseCase linkCodToThisAccountUseCase,
     required LinkCodToAccountUseCase linkCodToAccountUseCase,
+    required MsActivatedCodeTrackingUsecase msActivatedCodeTrackingUsecase,
     required LoginUsecase loginUsecase,
     required SendOtpUsecase sendOtpUsecase,
     required VerifyOtpUsecase verifyOtpUsecase,
@@ -66,6 +69,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
        _signUpUsecase = signUpUsecase,
        _linkCodToThisAccountUseCase = linkCodToThisAccountUseCase,
        _linkCodToAccountUseCase = linkCodToAccountUseCase,
+       _msActivatedCodeTrackingUsecase = msActivatedCodeTrackingUsecase,
        _loginUsecase = loginUsecase,
        _sendOtpUsecase = sendOtpUsecase,
        _verifyOtpUsecase = verifyOtpUsecase,
@@ -202,7 +206,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
       );
 
       if (linkAccountResult.isRight()) {
-        emit(state.copyWith(isSuccess: true));
+        _handleActiveLicenseSuccess();
       } else {
         final failure = linkAccountResult.swap().getOrElse(
           (e) => throw Exception(),
@@ -342,7 +346,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
           }
         },
         (_) {
-          emit(state.copyWith(isSuccess: true));
+          _handleActiveLicenseSuccess();
         },
       );
     } catch (e) {
@@ -455,7 +459,7 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
         );
 
         if (linkAccountResult.isRight()) {
-          emit(state.copyWith(isSuccess: true));
+          _handleActiveLicenseSuccess();
         } else {
           final failure = linkAccountResult.swap().getOrElse(
             (e) => throw Exception(),
@@ -489,6 +493,11 @@ class ActiveLicenseCubit extends Cubit<ActiveLicenseState> {
     } finally {
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  void _handleActiveLicenseSuccess() {
+    _msActivatedCodeTrackingUsecase.call(MsActivatedCodeParams(couponCode: ''));
+    emit(state.copyWith(isSuccess: true));
   }
 
   Future<void> handleSuccess() async {
