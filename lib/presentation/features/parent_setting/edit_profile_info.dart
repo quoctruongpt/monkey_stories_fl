@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
@@ -12,6 +13,7 @@ import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/profile/avatar.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 import 'package:monkey_stories/presentation/widgets/year_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -134,153 +136,168 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
         }
       },
       builder: (context, state) {
-        return KeyboardDismisser(
-          child: Stack(
-            children: [
-              Scaffold(
-                appBar: AppBarWidget(
-                  title: AppLocalizations.of(context).translate(
-                    'app.profile.title',
-                    params: {'name': state.profile?.name ?? ''},
+        return ScreenTracker(
+          routeName: AppRouteNames.editProfileInfo,
+          onTrackPush: context.read<UpdateProfileInfoCubit>().startTracking,
+          onTrackExit:
+              context.read<UpdateProfileInfoCubit>().trackUpdateProfile,
+          child: KeyboardDismisser(
+            child: Stack(
+              children: [
+                Scaffold(
+                  appBar: AppBarWidget(
+                    title: AppLocalizations.of(context).translate(
+                      'app.profile.title',
+                      params: {'name': state.profile?.name ?? ''},
+                    ),
+                    onBackPressed: () {
+                      context.read<UpdateProfileInfoCubit>().trackBack();
+                      context.pop();
+                    },
                   ),
-                ),
-                body: SafeArea(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 132,
-                                height: 132,
-                                child: Hero(
-                                  tag: 'profile_${state.profile?.id}',
-                                  child: Avatar(
-                                    avatar: state.profile?.avatarPath,
+                  body: SafeArea(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 132,
+                                  height: 132,
+                                  child: Hero(
+                                    tag: 'profile_${state.profile?.id}',
+                                    child: Avatar(
+                                      avatar: state.profile?.avatarPath,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Center(
-                                child: TextButton(
-                                  onPressed: _changeAvatar,
-                                  style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        AppTheme.textSecondaryColor,
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(Icons.photo_camera),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        AppLocalizations.of(context).translate(
-                                          'app.profile.change_avatar',
+                                Center(
+                                  child: TextButton(
+                                    onPressed: _changeAvatar,
+                                    style: TextButton.styleFrom(
+                                      foregroundColor:
+                                          AppTheme.textSecondaryColor,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.photo_camera),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          ).translate(
+                                            'app.profile.change_avatar',
+                                          ),
+                                          style: const TextStyle(fontSize: 16),
                                         ),
-                                        style: const TextStyle(fontSize: 16),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  thickness: 1,
+                                  color:
+                                      AppTheme.buttonPrimaryDisabledBackground,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: Spacing.md,
+                                    right: Spacing.md,
+                                    top: Spacing.md,
+                                    bottom: 24,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      TextFieldWidget(
+                                        controller: nameController,
+                                        onChanged: (value) {
+                                          context
+                                              .read<UpdateProfileInfoCubit>()
+                                              .updateName(value);
+                                        },
+                                        labelTopText: AppLocalizations.of(
+                                          context,
+                                        ).translate('app.profile.name.label'),
+                                        hintText: AppLocalizations.of(
+                                          context,
+                                        ).translate('app.profile.name.hint'),
+                                        errorText: AppLocalizations.of(
+                                          context,
+                                        ).translate(
+                                          state.isNameTaken
+                                              ? 'app.create_profile.name.error_existed'
+                                              : state.name.displayError,
+                                        ),
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      YearSelector(
+                                        years: state.years ?? [],
+                                        onChangeYear: (year) {
+                                          context
+                                              .read<UpdateProfileInfoCubit>()
+                                              .updateBirthYear(year);
+                                        },
+                                        yearSelected: state.birthYear,
+                                        onSelectorPressed:
+                                            context
+                                                        .read<UserCubit>()
+                                                        .state
+                                                        .purchasedInfo
+                                                        ?.isPaidUser ==
+                                                    false
+                                                ? () =>
+                                                    showPermissionDeniedDialog(
+                                                      context,
+                                                    )
+                                                : state.numberChangeAge >= 1
+                                                ? () =>
+                                                    _showAgeChangeLimitDialog(
+                                                      context,
+                                                    )
+                                                : null,
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              const Divider(
-                                thickness: 1,
-                                color: AppTheme.buttonPrimaryDisabledBackground,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: Spacing.md,
-                                  right: Spacing.md,
-                                  top: Spacing.md,
-                                  bottom: 24,
-                                ),
-                                child: Column(
-                                  children: [
-                                    TextFieldWidget(
-                                      controller: nameController,
-                                      onChanged: (value) {
-                                        context
-                                            .read<UpdateProfileInfoCubit>()
-                                            .updateName(value);
-                                      },
-                                      labelTopText: AppLocalizations.of(
-                                        context,
-                                      ).translate('app.profile.name.label'),
-                                      hintText: AppLocalizations.of(
-                                        context,
-                                      ).translate('app.profile.name.hint'),
-                                      errorText: AppLocalizations.of(
-                                        context,
-                                      ).translate(
-                                        state.isNameTaken
-                                            ? 'app.create_profile.name.error_existed'
-                                            : state.name.displayError,
-                                      ),
-                                      textCapitalization:
-                                          TextCapitalization.words,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    YearSelector(
-                                      years: state.years ?? [],
-                                      onChangeYear: (year) {
-                                        context
-                                            .read<UpdateProfileInfoCubit>()
-                                            .updateBirthYear(year);
-                                      },
-                                      yearSelected: state.birthYear,
-                                      onSelectorPressed:
-                                          context
-                                                      .read<UserCubit>()
-                                                      .state
-                                                      .purchasedInfo
-                                                      ?.isPaidUser ==
-                                                  false
-                                              ? () =>
-                                                  showPermissionDeniedDialog(
-                                                    context,
-                                                  )
-                                              : state.numberChangeAge >= 1
-                                              ? () => _showAgeChangeLimitDialog(
-                                                context,
-                                              )
-                                              : null,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: const EdgeInsets.all(Spacing.md),
-                        child: AppButton.primary(
-                          text: AppLocalizations.of(
-                            context,
-                          ).translate('app.user_info.save'),
-                          onPressed: () {
-                            if (state.hasChangedAge) {
-                              _showAgeChangeWarningDialog(context);
-                            } else {
-                              context
-                                  .read<UpdateProfileInfoCubit>()
-                                  .updateProfile();
-                            }
-                          },
-                          disabled: !state.isButtonEnabled || state.isNameTaken,
+                        Padding(
+                          padding: const EdgeInsets.all(Spacing.md),
+                          child: AppButton.primary(
+                            text: AppLocalizations.of(
+                              context,
+                            ).translate('app.user_info.save'),
+                            onPressed: () {
+                              if (state.hasChangedAge) {
+                                _showAgeChangeWarningDialog(context);
+                              } else {
+                                context
+                                    .read<UpdateProfileInfoCubit>()
+                                    .updateProfile();
+                              }
+                            },
+                            disabled:
+                                !state.isButtonEnabled || state.isNameTaken,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              state.isLoading
-                  ? const LoadingOverlay()
-                  : const SizedBox.shrink(),
-            ],
+                state.isLoading
+                    ? const LoadingOverlay()
+                    : const SizedBox.shrink(),
+              ],
+            ),
           ),
         );
       },
