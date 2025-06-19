@@ -13,11 +13,13 @@ class ReportHeader extends StatelessWidget {
     required this.profile,
     required this.profiles,
     required this.onSelectProfile,
+    this.onPressSwitchProfile,
   });
 
   final ProfileEntity profile;
   final List<ProfileEntity> profiles;
   final Function(ProfileEntity) onSelectProfile;
+  final VoidCallback? onPressSwitchProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +62,7 @@ class ReportHeader extends StatelessWidget {
                 constraints: const BoxConstraints(minWidth: 150.0),
                 child: OutlinedButton(
                   onPressed: () {
+                    onPressSwitchProfile?.call();
                     _showListProfile(context);
                   },
                   style: OutlinedButton.styleFrom(

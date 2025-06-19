@@ -119,6 +119,10 @@ import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_i
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
 
 final sl = GetIt.instance;
 
@@ -387,6 +391,18 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsGeneralSettingDetailTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsLearningReportScreenTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsLearningReportStoriesLevelTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsLearningReportPhonicsTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsLearningReportRCTrackingUsecase(sl<TrackingRepository>()),
   );
 
   // Report
