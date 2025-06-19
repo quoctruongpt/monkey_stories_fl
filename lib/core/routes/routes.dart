@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
+import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/features/active_license/active_license_navigator.dart';
 import 'package:monkey_stories/presentation/features/audio_book/audio_book.dart';
 import 'package:monkey_stories/presentation/features/create_profile/choose_level.dart';
@@ -46,10 +48,13 @@ class RouteTracker extends NavigatorObserver {
 
   @override
   void didPush(Route route, Route? previousRoute) {
-    currentRouteName =
-        route.settings.name ??
-        route.settings.name ??
-        route.settings.arguments?.toString();
+    currentRouteName = route.settings.name;
+    if (currentRouteName != null) {
+      sl<TrackingRemoteDataSource>().firebaseLogEvent('screen_view', {
+        'firebase_screen': currentRouteName!,
+        'firebase_screen_class': currentRouteName!,
+      });
+    }
     super.didPush(route, previousRoute);
   }
 
@@ -288,6 +293,7 @@ final GoRouter router = GoRouter(
       branches: <StatefulShellBranch>[
         // Branch for Report Tab
         StatefulShellBranch(
+          observers: [RouteTracker()],
           navigatorKey: _reportTabNavigatorKey,
           routes: <RouteBase>[
             GoRoute(
@@ -304,6 +310,7 @@ final GoRouter router = GoRouter(
         ),
         // Branch for VIP Tab
         StatefulShellBranch(
+          observers: [RouteTracker()],
           navigatorKey: _vipTabNavigatorKey,
           routes: <RouteBase>[
             GoRoute(
@@ -320,6 +327,7 @@ final GoRouter router = GoRouter(
         ),
         // Branch for Setting Tab
         StatefulShellBranch(
+          observers: [RouteTracker()],
           navigatorKey: _settingTabNavigatorKey,
           routes: <RouteBase>[
             GoRoute(

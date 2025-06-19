@@ -1,6 +1,6 @@
 {
   "autoStartTrackingEnabled": false,
-  "logLevel": "debug",
+  "logLevel": "warning",
   "trackMetaDeferredAppLinkEnabled": true,
   "metaInstallReferrerAppID": "520137134992261",
   "sdkSignatureID": "92e32c98-271c-4df3-9b95-4cdceb5d38bf",

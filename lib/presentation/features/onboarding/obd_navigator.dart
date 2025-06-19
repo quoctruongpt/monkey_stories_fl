@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'package:monkey_stories/presentation/features/onboarding/choose_language.dart';
@@ -32,7 +33,7 @@ final ShellRoute obdRoutes = ShellRoute(
   builder:
       (context, state, child) =>
           PopScope(canPop: false, child: OBDDNavigator(child: child)),
-  observers: [obdRouteObserver],
+  observers: [obdRouteObserver, RouteTracker()],
   routes: [
     GoRoute(
       path: AppRoutePaths.chooseYearOfBirthOBD,

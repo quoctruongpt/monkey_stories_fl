@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/constants/unity_constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
@@ -142,6 +143,7 @@ final ShellRoute activeLicenseRoutes = ShellRoute(
       child: child,
     );
   },
+  observers: [RouteTracker()],
   routes: [
     GoRoute(
       path: AppRoutePaths.inputLicense,

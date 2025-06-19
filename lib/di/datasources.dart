@@ -1,5 +1,6 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -18,6 +19,7 @@ import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Auth Datasources
@@ -152,6 +154,11 @@ void initDatasourceDependencies() {
       profileLocalDataSource: sl<ProfileLocalDataSource>(),
       accountLocalDataSource: sl<AccountLocalDataSource>(),
       deviceLocalDataSource: sl<DeviceLocalDataSource>(),
+    ),
+  );
+  sl.registerLazySingleton<TrackingRemoteDataSource>(
+    () => TrackingRemoteDataSourceImpl(
+      firebaseAnalytics: sl<FirebaseAnalytics>(),
     ),
   );
 

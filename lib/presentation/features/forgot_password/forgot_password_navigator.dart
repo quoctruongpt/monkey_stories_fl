@@ -104,7 +104,7 @@ final RouteObserver<PageRoute> forgotPasswordRouteObserver =
 
 final ShellRoute forgotPasswordRoutes = ShellRoute(
   builder: (context, state, child) => ForgotPasswordNavigator(child: child),
-  observers: [forgotPasswordRouteObserver],
+  observers: [forgotPasswordRouteObserver, RouteTracker()],
   routes: [
     GoRoute(
       path: AppRoutePaths.chooseMethodFp,

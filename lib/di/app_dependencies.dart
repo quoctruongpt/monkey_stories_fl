@@ -1,4 +1,5 @@
 import 'package:aws_client/kinesis_2013_12_02.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
@@ -59,6 +60,9 @@ Future<void> initCoreAppDependencies() async {
   sl.registerLazySingleton<RemoteConfigService>(
     () => RemoteConfigService(sl()),
   );
+
+  // Đăng ký FirebaseAnalytics
+  sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
 
   sl
     ..registerLazySingleton<Connectivity>(Connectivity.new)
