@@ -5,6 +5,8 @@ import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/features/parent/report/overview_report.dart';
@@ -161,6 +163,11 @@ class ReportScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: Spacing.md),
                                   ReportStories(
+                                    onTabChanged: (index) {
+                                      context
+                                          .read<ReportCubit>()
+                                          .trackStoriesLevel(index);
+                                    },
                                     weeklyData:
                                         state
                                             .data!
@@ -200,6 +207,16 @@ class ReportScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: Spacing.md),
                                   ProgressReport(
+                                    onShowMore: () {
+                                      context.read<ReportCubit>().trackPhonics(
+                                        PhonicsClickType.showMore,
+                                      );
+                                    },
+                                    onShowLess: () {
+                                      context.read<ReportCubit>().trackPhonics(
+                                        PhonicsClickType.showLess,
+                                      );
+                                    },
                                     nurseryTotalLessons:
                                         state.data!.levelProgress.nursery.total,
                                     kindergartenTotalLessons:
@@ -239,6 +256,16 @@ class ReportScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: Spacing.md),
                                   ProgressReport(
+                                    onShowMore: () {
+                                      context.read<ReportCubit>().trackRC(
+                                        RCClickType.showMore,
+                                      );
+                                    },
+                                    onShowLess: () {
+                                      context.read<ReportCubit>().trackRC(
+                                        RCClickType.showLess,
+                                      );
+                                    },
                                     nurseryTotalLessons:
                                         state.data!.levelProgress.nursery.total,
                                     kindergartenTotalLessons:

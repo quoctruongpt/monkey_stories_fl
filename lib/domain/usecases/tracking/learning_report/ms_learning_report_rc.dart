@@ -23,7 +23,7 @@ class MsLearningReportRCTrackingUsecase
 }
 
 class MsLearningReportRCParams {
-  final ClickType clickType;
+  final RCClickType clickType;
   final int profileId;
   final int timeOnScreen;
   final bool hasOccurredError;
@@ -51,11 +51,11 @@ class MsLearningReportRCParams {
   }
 }
 
-enum ClickType {
+enum RCClickType {
   showMore('show_more'),
   showLess('show_less');
 
   final String value;
 
-  const ClickType(this.value);
+  const RCClickType(this.value);
 }

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
 import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:monkey_stories/presentation/widgets/report_card.dart';
 
 class ReportStories extends StatelessWidget {
   final List<PieChartData> weeklyData;
   final List<PieChartData> totalData;
+  final Function(int) onTabChanged;
 
   const ReportStories({
     super.key,
     required this.weeklyData,
     required this.totalData,
+    required this.onTabChanged,
   });
 
   @override
@@ -19,7 +22,11 @@ class ReportStories extends StatelessWidget {
     return ReportCard(
       title: AppLocalizations.of(context).translate('app.report.stories.title'),
       iconWidget: SvgPicture.asset('assets/icons/svg/stories.svg'),
-      child: StoriesTabView(weeklyData: weeklyData, totalData: totalData),
+      child: StoriesTabView(
+        weeklyData: weeklyData,
+        totalData: totalData,
+        onTabChanged: onTabChanged,
+      ),
     );
   }
 }
@@ -27,10 +34,12 @@ class ReportStories extends StatelessWidget {
 class StoriesTabView extends StatefulWidget {
   final List<PieChartData> weeklyData;
   final List<PieChartData> totalData;
+  final Function(int) onTabChanged;
   const StoriesTabView({
     super.key,
     required this.weeklyData,
     required this.totalData,
+    required this.onTabChanged,
   });
 
   @override
@@ -68,7 +77,10 @@ class _StoriesTabViewState extends State<StoriesTabView>
         Center(
           child: SizedBox(
             width: 500,
-            child: CustomTabBar(tabController: _tabController),
+            child: CustomTabBar(
+              tabController: _tabController,
+              onTabChanged: widget.onTabChanged,
+            ),
           ),
         ),
         const SizedBox(height: 36),
@@ -94,8 +106,13 @@ class _StoriesTabViewState extends State<StoriesTabView>
 
 class CustomTabBar extends StatelessWidget {
   final TabController tabController;
+  final Function(int) onTabChanged;
 
-  const CustomTabBar({super.key, required this.tabController});
+  const CustomTabBar({
+    super.key,
+    required this.tabController,
+    required this.onTabChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +123,7 @@ class CustomTabBar extends StatelessWidget {
       ),
       child: TabBar(
         controller: tabController,
+        onTap: onTabChanged,
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         indicator: BoxDecoration(

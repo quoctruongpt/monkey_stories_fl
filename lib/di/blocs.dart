@@ -122,6 +122,9 @@ import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profil
 import 'package:monkey_stories/presentation/bloc/general_setting/general_setting_cubit.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
 
 final sl = GetIt.instance;
 
@@ -367,6 +370,12 @@ void initBlocDependencies() {
       userCubit: sl<UserCubit>(),
       msLearningReportScreenTrackingUsecase:
           sl<MsLearningReportScreenTrackingUsecase>(),
+      msLearningReportStoriesLevelTrackingUsecase:
+          sl<MsLearningReportStoriesLevelTrackingUsecase>(),
+      msLearningReportPhonicsTrackingUsecase:
+          sl<MsLearningReportPhonicsTrackingUsecase>(),
+      msLearningReportRCTrackingUsecase:
+          sl<MsLearningReportRCTrackingUsecase>(),
     ),
   );
 

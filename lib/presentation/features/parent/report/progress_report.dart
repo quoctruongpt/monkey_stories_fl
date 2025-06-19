@@ -17,6 +17,8 @@ class ProgressReport extends StatefulWidget {
     this.phonicsLevelSelected = PhonicsLevelSelected.nursery,
     this.title = '',
     this.icon = const SizedBox.shrink(),
+    this.onShowMore,
+    this.onShowLess,
   });
 
   final int nurseryTotalLessons;
@@ -29,6 +31,8 @@ class ProgressReport extends StatefulWidget {
 
   final String title;
   final Widget icon;
+  final VoidCallback? onShowMore;
+  final VoidCallback? onShowLess;
 
   @override
   State<ProgressReport> createState() => _ProgressReportState();
@@ -144,6 +148,11 @@ class _ProgressReportState extends State<ProgressReport> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
+                if (_isExpanded) {
+                  widget.onShowLess?.call();
+                } else {
+                  widget.onShowMore?.call();
+                }
                 setState(() {
                   _isExpanded = !_isExpanded;
                 });

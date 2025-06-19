@@ -25,7 +25,7 @@ class MsLearningReportStoriesLevelTrackingUsecase
 }
 
 class MsLearningReportStoriesLevelParams {
-  final ClickType clickType;
+  final StoriesLevelClickType clickType;
   final int profileId;
   final int timeOnScreen;
   final bool hasOccurredError;
@@ -53,7 +53,7 @@ class MsLearningReportStoriesLevelParams {
   }
 }
 
-enum ClickType {
+enum StoriesLevelClickType {
   thisWeek('this_week'),
   thisMonth('this_month'),
   showMore('show_more'),
@@ -61,5 +61,5 @@ enum ClickType {
 
   final String value;
 
-  const ClickType(this.value);
+  const StoriesLevelClickType(this.value);
 }

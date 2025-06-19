@@ -25,7 +25,7 @@ class MsLearningReportPhonicsTrackingUsecase
 }
 
 class MsLearningReportPhonicsParams {
-  final ClickType clickType;
+  final PhonicsClickType clickType;
   final int profileId;
   final int timeOnScreen;
   final bool hasOccurredError;
@@ -53,11 +53,11 @@ class MsLearningReportPhonicsParams {
   }
 }
 
-enum ClickType {
+enum PhonicsClickType {
   showMore('show_more'),
   showLess('show_less');
 
   final String value;
 
-  const ClickType(this.value);
+  const PhonicsClickType(this.value);
 }
