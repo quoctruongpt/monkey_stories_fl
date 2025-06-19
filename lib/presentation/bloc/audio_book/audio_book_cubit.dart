@@ -9,6 +9,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -21,13 +22,17 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   StreamSubscription<int?>? _currentIndexSubscription;
   StreamSubscription<Duration?>? _durationSubscription;
   final Logger logger = Logger('AudioBookCubit');
+  final MsListenAllTrackingUsecase _msListenAllTrackingUsecase;
   Timer? _countdownTimer;
 
   final UserCubit _userCubit;
 
-  AudioBookCubit({required UserCubit userCubit})
-    : _userCubit = userCubit,
-      super(const AudioBookState()) {
+  AudioBookCubit({
+    required UserCubit userCubit,
+    required MsListenAllTrackingUsecase msListenAllTrackingUsecase,
+  }) : _userCubit = userCubit,
+       _msListenAllTrackingUsecase = msListenAllTrackingUsecase,
+       super(const AudioBookState()) {
     _init();
   }
 
@@ -606,6 +611,15 @@ class AudioBookCubit extends Cubit<AudioBookState> {
 
   void closeBuyToUnlockPopup() {
     emit(state.copyWith(showBuyToUnlockPopup: false));
+  }
+
+  void trackListenAll() {
+    _msListenAllTrackingUsecase.call(
+      MsListenAllParams(
+        autoNextOrNot: state.isAutoplayEnabled,
+        setTime: state.timerDuration?.inMinutes ?? 0,
+      ),
+    );
   }
 
   @override

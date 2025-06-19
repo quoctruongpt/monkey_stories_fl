@@ -125,6 +125,7 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 
 final sl = GetIt.instance;
 
@@ -385,7 +386,12 @@ void initBlocDependencies() {
 
   sl.registerFactory(() => BottomNavigationCubit());
 
-  sl.registerFactory(() => AudioBookCubit(userCubit: sl<UserCubit>()));
+  sl.registerFactory(
+    () => AudioBookCubit(
+      userCubit: sl<UserCubit>(),
+      msListenAllTrackingUsecase: sl<MsListenAllTrackingUsecase>(),
+    ),
+  );
 
   sl.registerFactory(() => PlaylistCubit());
 

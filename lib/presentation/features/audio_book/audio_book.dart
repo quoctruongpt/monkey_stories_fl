@@ -16,6 +16,7 @@ import 'package:monkey_stories/presentation/features/audio_book/widgets/timer_dr
 import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/unlock_lesson_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 class AudioBookPage extends StatefulWidget {
   const AudioBookPage({super.key, this.audioSelectedId});
@@ -108,17 +109,25 @@ class _AudioBookPageState extends State<AudioBookPage>
                 alignment: Alignment.topCenter,
               ),
             ),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              extendBodyBehindAppBar: true,
-              appBar: _buildAppBar(context),
-              body: TabBarView(
-                // Disable manual swiping between tabs
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabController,
-                children: const [NowPlayingView(), PlaylistView()],
-              ),
-              bottomNavigationBar: const Footer(),
+            child: Builder(
+              builder: (context) {
+                return ScreenTracker(
+                  routeName: AppRouteNames.audioBook,
+                  onTrackExit: context.read<AudioBookCubit>().trackListenAll,
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    extendBodyBehindAppBar: true,
+                    appBar: _buildAppBar(context),
+                    body: TabBarView(
+                      // Disable manual swiping between tabs
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: const [NowPlayingView(), PlaylistView()],
+                    ),
+                    bottomNavigationBar: const Footer(),
+                  ),
+                );
+              },
             ),
           ),
         ),

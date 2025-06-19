@@ -123,6 +123,9 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 
 final sl = GetIt.instance;
 
@@ -403,6 +406,15 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsLearningReportRCTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsListenAllTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewListAudiobookTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsChangeOrderListAudiobookTrackingUsecase(sl<TrackingRepository>()),
   );
 
   // Report
