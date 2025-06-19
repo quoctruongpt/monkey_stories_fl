@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
@@ -172,6 +173,13 @@ class DioInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
+    final endPoint = Uri.tryParse(err.requestOptions.uri.toString())?.path;
+    if (endPoint != null) {
+      sl<LostConnectionUsecase>().call(
+        LostConnectionParams(endPoint: endPoint),
+      );
+    }
+
     // Đọc cờ từ `extra`. Mặc định là `true` nếu không được đặt.
     final bool shouldShowDialog =
         err.requestOptions.extra[AppConstants.showConnectionErrorDialog]

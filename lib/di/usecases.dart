@@ -126,6 +126,7 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
 
 final sl = GetIt.instance;
 
@@ -415,6 +416,9 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => MsChangeOrderListAudiobookTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => LostConnectionUsecase(sl<TrackingRepository>()),
   );
 
   // Report

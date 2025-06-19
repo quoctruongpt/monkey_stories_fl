@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
-import 'package:monkey_stories/presentation/features/debugs/http_log.dart';
 import 'package:monkey_stories/presentation/features/debugs/network_log_details_screen.dart';
 
 class NetworkLoggerScreen extends StatelessWidget {
