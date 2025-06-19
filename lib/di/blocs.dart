@@ -126,6 +126,8 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 
 final sl = GetIt.instance;
 
@@ -390,6 +392,10 @@ void initBlocDependencies() {
     () => AudioBookCubit(
       userCubit: sl<UserCubit>(),
       msListenAllTrackingUsecase: sl<MsListenAllTrackingUsecase>(),
+      msChangeOrderListAudiobookTrackingUsecase:
+          sl<MsChangeOrderListAudiobookTrackingUsecase>(),
+      msViewListAudiobookTrackingUsecase:
+          sl<MsViewListAudiobookTrackingUsecase>(),
     ),
   );
 

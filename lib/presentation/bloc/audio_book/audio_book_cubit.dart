@@ -9,7 +9,10 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -23,15 +26,27 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   StreamSubscription<Duration?>? _durationSubscription;
   final Logger logger = Logger('AudioBookCubit');
   final MsListenAllTrackingUsecase _msListenAllTrackingUsecase;
+  final MsChangeOrderListAudiobookTrackingUsecase
+  _msChangeOrderListAudiobookTrackingUsecase;
+  final MsViewListAudiobookTrackingUsecase _msViewListAudiobookTrackingUsecase;
   Timer? _countdownTimer;
 
   final UserCubit _userCubit;
 
+  DateTime? _startTimeViewList;
+
   AudioBookCubit({
     required UserCubit userCubit,
     required MsListenAllTrackingUsecase msListenAllTrackingUsecase,
+    required MsChangeOrderListAudiobookTrackingUsecase
+    msChangeOrderListAudiobookTrackingUsecase,
+    required MsViewListAudiobookTrackingUsecase
+    msViewListAudiobookTrackingUsecase,
   }) : _userCubit = userCubit,
        _msListenAllTrackingUsecase = msListenAllTrackingUsecase,
+       _msChangeOrderListAudiobookTrackingUsecase =
+           msChangeOrderListAudiobookTrackingUsecase,
+       _msViewListAudiobookTrackingUsecase = msViewListAudiobookTrackingUsecase,
        super(const AudioBookState()) {
     _init();
   }
@@ -545,7 +560,13 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   void togglePlaylistView() {
+    if (state.currentViewIndex == 1) {
+      trackViewListAudiobook();
+    }
     final nextIndex = state.currentViewIndex == 0 ? 1 : 0;
+    if (nextIndex == 1) {
+      startTimerViewListAudiobook();
+    }
     emit(state.copyWith(currentViewIndex: nextIndex));
   }
 
@@ -566,6 +587,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   }
 
   void reorderPlaylist(int oldIndex, int newIndex) {
+    _trackChangeOrderListAudiobook();
     logger.info('Reordering playlist from $oldIndex to $newIndex');
 
     // The `onReorder` callback in ReorderableListView gives the new index
@@ -620,6 +642,22 @@ class AudioBookCubit extends Cubit<AudioBookState> {
         setTime: state.timerDuration?.inMinutes ?? 0,
       ),
     );
+  }
+
+  void trackViewListAudiobook() {
+    _msViewListAudiobookTrackingUsecase.call(
+      MsViewListAudiobookParams(
+        timeOnScreen: DateTime.now().difference(_startTimeViewList!).inSeconds,
+      ),
+    );
+  }
+
+  void startTimerViewListAudiobook() {
+    _startTimeViewList = DateTime.now();
+  }
+
+  void _trackChangeOrderListAudiobook() {
+    _msChangeOrderListAudiobookTrackingUsecase.call(NoParams());
   }
 
   @override
