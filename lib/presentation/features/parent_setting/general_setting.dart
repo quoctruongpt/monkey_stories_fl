@@ -4,43 +4,57 @@ import 'package:flutter_svg/svg.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/general_setting/general_setting_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/select_bottom_sheet.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 class GeneralSettingScreen extends StatelessWidget {
   const GeneralSettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        title: AppLocalizations.of(context).translate('app.setting.general'),
-      ),
-
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.md),
-        child: Column(
-          children: [
-            ChangeLanguage(),
-            Divider(color: AppTheme.skyLightColor),
-
-            SizedBox(height: Spacing.sm),
-            ChangeBackgroundMusic(),
-            SizedBox(height: Spacing.sm),
-            Divider(color: AppTheme.skyLightColor),
-
-            SizedBox(height: Spacing.md),
-            ChangeNotification(),
-            SizedBox(height: Spacing.sm),
-            Divider(color: AppTheme.skyLightColor),
-
-            SizedBox(height: Spacing.md),
-            VersionApp(),
-            SizedBox(height: Spacing.md),
-            Divider(color: AppTheme.skyLightColor),
-          ],
-        ),
+    return BlocProvider(
+      create: (context) => sl<GeneralSettingCubit>(),
+      child: Builder(
+        builder: (context) {
+          return ScreenTracker(
+            routeName: AppRouteNames.generalSetting,
+            onTrackPush: context.read<GeneralSettingCubit>().startTracking,
+            onTrackExit:
+                context.read<GeneralSettingCubit>().trackGeneralSetting,
+            child: Scaffold(
+              appBar: AppBarWidget(
+                title: AppLocalizations.of(
+                  context,
+                ).translate('app.setting.general'),
+              ),
+              body: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: Spacing.md),
+                child: Column(
+                  children: [
+                    ChangeLanguage(),
+                    Divider(color: AppTheme.skyLightColor),
+                    SizedBox(height: Spacing.sm),
+                    ChangeBackgroundMusic(),
+                    SizedBox(height: Spacing.sm),
+                    Divider(color: AppTheme.skyLightColor),
+                    SizedBox(height: Spacing.md),
+                    ChangeNotification(),
+                    SizedBox(height: Spacing.sm),
+                    Divider(color: AppTheme.skyLightColor),
+                    SizedBox(height: Spacing.md),
+                    VersionApp(),
+                    SizedBox(height: Spacing.md),
+                    Divider(color: AppTheme.skyLightColor),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -98,7 +112,7 @@ class ChangeBackgroundMusic extends StatelessWidget {
             Switch(
               value: state.isBackgroundMusicEnabled,
               onChanged: (value) {
-                context.read<AppCubit>().toggleBackgroundMusic();
+                context.read<GeneralSettingCubit>().toggleBackgroundMusic();
               },
               activeTrackColor: AppTheme.successColor,
               inactiveThumbColor: AppTheme.textSecondaryColor,
@@ -141,7 +155,7 @@ class ChangeNotification extends StatelessWidget {
             Switch(
               value: state.isNotificationEnabled,
               onChanged: (value) {
-                context.read<AppCubit>().toggleNotification();
+                context.read<GeneralSettingCubit>().toggleNotification();
               },
               activeTrackColor: AppTheme.successColor,
               inactiveThumbColor: AppTheme.textSecondaryColor,
@@ -183,7 +197,7 @@ class ChangeLanguage extends StatelessWidget {
           ).translate(state.languageCode),
           items: Languages.supportedLanguages,
           onChange: (item) {
-            context.read<AppCubit>().changeLanguage(item.code);
+            context.read<GeneralSettingCubit>().changeLanguage(item.code);
           },
           itemWidget:
               (item) => Container(

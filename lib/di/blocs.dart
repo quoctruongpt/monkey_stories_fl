@@ -119,6 +119,8 @@ import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
+import 'package:monkey_stories/presentation/bloc/general_setting/general_setting_cubit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
 
 final sl = GetIt.instance;
 
@@ -374,6 +376,14 @@ void initBlocDependencies() {
   sl.registerFactory(() => AudioBookCubit(userCubit: sl<UserCubit>()));
 
   sl.registerFactory(() => PlaylistCubit());
+
+  sl.registerFactory(
+    () => GeneralSettingCubit(
+      appCubit: sl<AppCubit>(),
+      msGeneralSettingDetailTrackingUsecase:
+          sl<MsGeneralSettingDetailTrackingUsecase>(),
+    ),
+  );
 
   // Add other Bloc/Cubit registrations here...
 }
