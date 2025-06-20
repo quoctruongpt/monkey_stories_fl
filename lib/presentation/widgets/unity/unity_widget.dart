@@ -200,7 +200,28 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
             child: const Text('Audio Book'),
           ),
         ),
-
+        Positioned(
+          top: 350,
+          left: 0,
+          right: 0,
+          child: FilledButton(
+            onPressed: () {
+              _handleUnityMessage(
+                const JsonEncoder.withIndent('').convert({
+                  'id': '123',
+                  'type': MessageTypes.pushEventToKinesis,
+                  'response': true,
+                  'payload': {
+                    'stream_name': 'app_event',
+                    'partition_key': 'test_partition_key',
+                    'data': {'test': 'test_data'},
+                  },
+                }),
+              );
+            },
+            child: const Text('Push event to kinesis'),
+          ),
+        ),
         BlocBuilder<PurchasedCubit, PurchasedState>(
           builder: (context, state) {
             return state.isPurchasing

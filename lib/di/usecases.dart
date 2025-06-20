@@ -77,6 +77,7 @@ import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.
 // Kinesis Usecases
 import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_record_kinesis_usecase.dart';
 
 // Purchased Usecases
 import 'package:monkey_stories/domain/usecases/purchased/initial_purchased_usecase.dart';
@@ -127,6 +128,7 @@ import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
+import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
 
 final sl = GetIt.instance;
 
@@ -210,7 +212,9 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => PutSettingKinesisUsecase(sl<KinesisRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () => PutRecordKinesisUsecase(sl<KinesisRepository>()),
+  );
   // Purchased
   sl.registerLazySingleton(() => GetProductsUsecase(sl<PurchasedRepository>()));
   sl.registerLazySingleton(
@@ -420,7 +424,9 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => LostConnectionUsecase(sl<TrackingRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () => PutEventToAirbridgeUsecase(sl<TrackingRepository>()),
+  );
   // Report
   sl.registerLazySingleton(
     () => GetReportUsecase(reportRepository: sl<ReportRepository>()),

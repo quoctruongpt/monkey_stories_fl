@@ -9,6 +9,6 @@ class KinesisModel extends PutRecordOutput {
   });
 
   KinesisEntity toEntity() {
-    return KinesisEntity(sequenceNumber: sequenceNumber);
+    return KinesisEntity(sequenceNumber: sequenceNumber, shardId: shardId);
   }
 }

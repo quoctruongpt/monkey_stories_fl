@@ -38,6 +38,10 @@ class UnityRepositoryImpl implements UnityRepository {
     }
   }
 
+  /// Xử lý tin nhắn nhận được từ Unity
+  /// [message] tin nhắn nhận được từ Unity
+  /// Trả về true nếu tin nhắn đã được xử lý
+  /// Trả về false nếu tin nhắn chưa được xử lý
   @override
   Future<bool> handleUnityMessage(String message) async {
     try {
@@ -60,6 +64,7 @@ class UnityRepositoryImpl implements UnityRepository {
 
       // Tìm handler tương ứng
       final handler = _messageHandlers[type];
+      _logger.info('Đã tìm thấy handler: $handler');
       if (handler != null) {
         final unityMessage = UnityMessageEntity(
           id: parsedMessage['id'] as String?,
@@ -68,7 +73,22 @@ class UnityRepositoryImpl implements UnityRepository {
           response: response,
         );
 
-        await Future.value(handler(unityMessage));
+        try {
+          // Thực thi handler và nhận kết quả trả về
+          final result = await Future.value(handler(unityMessage));
+
+          // Nếu tin nhắn ban đầu có ID, gửi phản hồi thành công
+          if (unityMessage.id != null) {
+            _sendResponseMessage(unityMessage, result);
+          }
+        } catch (e, s) {
+          _logger.severe('Error executing handler for type "$type"', e, s);
+          // Nếu có lỗi, và tin nhắn gốc cần phản hồi, gửi lại tin nhắn lỗi cho Unity
+          if (unityMessage.id != null) {
+            _sendErrorMessage(unityMessage, e);
+          }
+        }
+
         return true;
       }
 
@@ -77,6 +97,26 @@ class UnityRepositoryImpl implements UnityRepository {
       _logger.severe('Error handling Unity message: $e');
       return false;
     }
+  }
+
+  void _sendResponseMessage(UnityMessageEntity message, dynamic result) {
+    final responseMessage = UnityMessageEntity(
+      id: message.id,
+      type: message.type,
+      payload: {...result, 'success': true},
+      response: false,
+    );
+    sendMessageToUnity(responseMessage);
+  }
+
+  void _sendErrorMessage(UnityMessageEntity message, Object error) {
+    final errorMessage = UnityMessageEntity(
+      id: message.id,
+      type: message.type,
+      payload: {'success': false, 'message': error.toString()},
+      response: false,
+    );
+    sendMessageToUnity(errorMessage);
   }
 
   @override

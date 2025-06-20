@@ -5,6 +5,11 @@ abstract class KinesisRepository {
     String partitionKey,
     Map<String, dynamic> data,
   );
+  Future<KinesisEntity?> putRecordToKinesis(
+    String streamName,
+    String partitionKey,
+    Map<String, dynamic> event,
+  );
   // Future<KinesisEntity> putEvent(
   //   String partitionKey,
   //   Map<String, dynamic> data,

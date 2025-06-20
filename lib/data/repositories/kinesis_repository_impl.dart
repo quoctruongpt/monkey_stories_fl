@@ -18,4 +18,18 @@ class KinesisRepositoryImpl extends KinesisRepository {
     );
     return result?.toEntity();
   }
+
+  @override
+  Future<KinesisEntity?> putRecordToKinesis(
+    String streamName,
+    String partitionKey,
+    Map<String, dynamic> event,
+  ) async {
+    final result = await kinesisRemoteDataSource.putRecordToKinesis(
+      streamName: streamName,
+      partitionKey: partitionKey,
+      event: event,
+    );
+    return result?.toEntity();
+  }
 }

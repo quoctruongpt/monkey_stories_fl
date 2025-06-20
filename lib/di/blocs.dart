@@ -93,6 +93,7 @@ import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations
 
 // Kinesis Usecases
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_record_kinesis_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
@@ -128,6 +129,7 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
 
 final sl = GetIt.instance;
 
@@ -216,6 +218,8 @@ void initBlocDependencies() {
       handleUnityMessageUseCase: sl<HandleUnityMessageUseCase>(),
       registerHandlerUseCase: sl<RegisterHandlerUseCase>(),
       unregisterHandlerUseCase: sl<UnregisterHandlerUseCase>(),
+      putRecordKinesisUseCase: sl<PutRecordKinesisUsecase>(),
+      putEventToAirbridgeUseCase: sl<PutEventToAirbridgeUsecase>(),
     ),
   );
 

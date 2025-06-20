@@ -90,8 +90,7 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
       return null;
     } catch (e) {
       logger.severe(
-        'An unexpected error occurred while sending event to Kinesis. Caching...',
-        e,
+        'An unexpected error occurred while sending event to Kinesis. Caching... $e',
       );
       await cacheDataSource.cacheRecord(streamName, partitionKey, event);
       return null;

@@ -20,6 +20,8 @@ class MessageTypes {
   static const String buyNow = 'buy_now';
   static const String goToPurchase = 'go_to_purchase';
   static const String openAudioBook = 'audio_book';
+  static const String pushEventToKinesis = 'push_event_to_kinesis';
+  static const String putEventToAirbridge = 'push_event_to_airbridge';
 }
 
 class Orientation {
