@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_cache_data_source.dart';
 import 'package:monkey_stories/data/models/kinesis/kinesis_model.dart';
+import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
 
 final logger = Logger('KinesisRemoteDataSource');
 
@@ -100,7 +101,8 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
   @override
   Future<void> retryCachedEvents() async {
     logger.info('Retrying cached Kinesis events...');
-    final cachedRecords = await cacheDataSource.getCachedRecords();
+    final List<CacheKinesisModel> cachedRecords =
+        await cacheDataSource.getCachedRecords();
 
     if (cachedRecords.isEmpty) {
       logger.info('No cached Kinesis events to retry.');
@@ -121,7 +123,7 @@ class KinesisRemoteDataSourceImpl implements KinesisRemoteDataSource {
         );
 
         // If successful, remove from cache
-        await cacheDataSource.deleteCachedRecord(record.id);
+        await cacheDataSource.deleteCachedRecord(record);
         logger.info(
           'Successfully retried and removed cached event: ${record.id} -> ${result.sequenceNumber}',
         );

@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
 
 abstract class KinesisCacheDataSource {
@@ -10,18 +8,17 @@ abstract class KinesisCacheDataSource {
     String partitionKey,
     Map<String, dynamic> event,
   );
-  Future<List<CachedKinesisRecord>> getCachedRecords();
-  Future<void> deleteCachedRecord(String id);
+  Future<List<CacheKinesisModel>> getCachedRecords();
+  Future<void> deleteCachedRecord(CacheKinesisModel record);
   Future<void> clearCache();
 }
 
 class KinesisCacheDataSourceImpl implements KinesisCacheDataSource {
-  static const _cacheFileName = 'kinesis_cache.json';
+  // Use a constant for the box name for safety and consistency.
+  static const _boxName = kinesisCacheBoxName;
 
-  Future<File> get _localFile async {
-    final directory = await getApplicationDocumentsDirectory();
-    return File('${directory.path}/$_cacheFileName');
-  }
+  // Getter for the Hive box. Assumes the box is already opened.
+  Box<CacheKinesisModel> get _box => Hive.box<CacheKinesisModel>(_boxName);
 
   @override
   Future<void> cacheRecord(
@@ -29,60 +26,32 @@ class KinesisCacheDataSourceImpl implements KinesisCacheDataSource {
     String partitionKey,
     Map<String, dynamic> event,
   ) async {
-    final file = await _localFile;
-    final records = await getCachedRecords();
-
-    final newRecord = CachedKinesisRecord(
+    final newRecord = CacheKinesisModel(
       streamName: streamName,
       partitionKey: partitionKey,
       event: event,
-      id: DateTime.now().toIso8601String() + partitionKey, // simple unique id
+      // Using a key that is more likely to be unique
+      id: '${DateTime.now().toIso8601String()}-${partitionKey}',
     );
-
-    records.add(newRecord);
-
-    await file.writeAsString(
-      jsonEncode(records.map((r) => r.toJson()).toList()),
-    );
+    // Use the record's ID as the key in the Hive box.
+    await _box.put(newRecord.id, newRecord);
   }
 
   @override
-  Future<List<CachedKinesisRecord>> getCachedRecords() async {
-    try {
-      final file = await _localFile;
-      if (!await file.exists()) {
-        return [];
-      }
-      final contents = await file.readAsString();
-      if (contents.isEmpty) {
-        return [];
-      }
-      final List<dynamic> jsonList = jsonDecode(contents);
-      return jsonList
-          .map((json) => CachedKinesisRecord.fromJson(json))
-          .toList();
-    } catch (e) {
-      // If there's an error reading the file (e.g., corrupted), clear it.
-      await clearCache();
-      return [];
-    }
+  Future<List<CacheKinesisModel>> getCachedRecords() async {
+    // Hive's .values returns an iterable, so we convert it to a list.
+    return _box.values.toList();
   }
 
   @override
-  Future<void> deleteCachedRecord(String id) async {
-    final file = await _localFile;
-    final records = await getCachedRecords();
-    records.removeWhere((record) => record.id == id);
-    await file.writeAsString(
-      jsonEncode(records.map((r) => r.toJson()).toList()),
-    );
+  Future<void> deleteCachedRecord(CacheKinesisModel record) async {
+    // HiveObjects can be deleted directly, which is very convenient.
+    await record.delete();
   }
 
   @override
   Future<void> clearCache() async {
-    final file = await _localFile;
-    if (await file.exists()) {
-      await file.delete();
-    }
+    // This clears all items from the box.
+    await _box.clear();
   }
 }

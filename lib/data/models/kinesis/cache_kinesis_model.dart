@@ -1,29 +1,25 @@
-// A model to represent a cached Kinesis record.
-class CachedKinesisRecord {
-  final String streamName;
-  final String partitionKey;
-  final Map<String, dynamic> event;
-  final String id; // Unique ID for each record to make deletion easier.
+import 'package:hive/hive.dart';
 
-  CachedKinesisRecord({
+part 'cache_kinesis_model.g.dart';
+
+@HiveType(typeId: 0)
+class CacheKinesisModel extends HiveObject {
+  @HiveField(0)
+  final String streamName;
+
+  @HiveField(1)
+  final String partitionKey;
+
+  @HiveField(2)
+  final Map<String, dynamic> event;
+
+  @HiveField(3)
+  final String id;
+
+  CacheKinesisModel({
     required this.streamName,
     required this.partitionKey,
     required this.event,
     required this.id,
   });
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'streamName': streamName,
-    'partitionKey': partitionKey,
-    'event': event,
-  };
-
-  factory CachedKinesisRecord.fromJson(Map<String, dynamic> json) =>
-      CachedKinesisRecord(
-        id: json['id'],
-        streamName: json['streamName'],
-        partitionKey: json['partitionKey'],
-        event: Map<String, dynamic>.from(json['event']),
-      );
 }

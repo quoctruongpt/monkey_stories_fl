@@ -16,6 +16,9 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
+import 'package:monkey_stories/core/constants/kinesis.dart';
 
 Future<void> main() async {
   await JustAudioBackground.init(
@@ -83,6 +86,10 @@ Future<void> main() async {
   // Đặt hướng màn hình mặc định ban đầu (ví dụ: portrait)
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(CacheKinesisModelAdapter());
+  await Hive.openBox<CacheKinesisModel>(kinesisCacheBoxName);
 
   di.sl<KinesisRemoteDataSource>().retryCachedEvents();
 
