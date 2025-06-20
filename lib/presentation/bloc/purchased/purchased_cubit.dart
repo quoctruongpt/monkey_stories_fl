@@ -211,7 +211,13 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
           state.copyWith(isPurchasing: false, isRestorePurchasedError: true),
         ),
         (success) => emit(
-          state.copyWith(isPurchasing: false, isVerifyPurchasedSuccess: true),
+          state.copyWith(
+            isPurchasing: false,
+            isRestorePurchasedSuccess: true,
+            isNeedRegister:
+                _userCubit.state.user == null ||
+                _userCubit.state.user?.loginType == LoginType.skip,
+          ),
         ),
       );
     } catch (e) {

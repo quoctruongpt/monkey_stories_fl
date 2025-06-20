@@ -15,6 +15,7 @@ import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/purchase/restore_success_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/unity/unity_widget.dart';
 import 'package:monkey_stories/presentation/features/debugs/debug_navigator.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
@@ -260,6 +261,27 @@ class _AppBuilderState extends State<AppBuilder>
                       logger.severe('Error showing dialog: $e');
                     }
                   }
+                }
+              },
+            ),
+            BlocListener<PurchasedCubit, PurchasedState>(
+              listenWhen: (previous, current) {
+                // Lắng nghe khi isVerifyPurchasedSuccess thay đổi thành true
+                // Hoặc khi errorMessage thay đổi từ null thành có giá trị
+                return (previous.isRestorePurchasedSuccess !=
+                        current.isRestorePurchasedSuccess &&
+                    current.isRestorePurchasedSuccess == true);
+              },
+              listener: (context, state) {
+                final context = navigatorKey.currentContext;
+                if (context != null) {
+                  context.read<PurchasedCubit>().resetStatus();
+                  showRestoreSuccessDialog(
+                    navigatorKey.currentContext!,
+                    onPrimaryAction: () {
+                      context.go(AppRoutePaths.purchasedSuccess);
+                    },
+                  );
                 }
               },
             ),

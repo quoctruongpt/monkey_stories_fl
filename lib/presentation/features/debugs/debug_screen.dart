@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/core/constants/language.dart';
 import 'package:monkey_stories/core/env/environment_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:monkey_stories/core/constants/kinesis.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({super.key});
@@ -108,9 +116,86 @@ class DebugScreen extends StatelessWidget {
                 label: const Text('Remote Config'),
               ),
             ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                icon: const Icon(Icons.delete_forever),
+                onPressed: () {
+                  _showDialogDeleteAllData(context);
+                },
+                label: const Text('Xóa toàn bộ dữ liệu'),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showDialogDeleteAllData(BuildContext context) {
+    void deleteAllData() async {
+      // 1. Clear SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // 3. Clear HydratedBloc storage
+      await HydratedBloc.storage.clear();
+
+      // 4. Delete files in documents directory
+      try {
+        final documentsDir = await getApplicationDocumentsDirectory();
+        if (documentsDir.existsSync()) {
+          documentsDir.listSync().forEach((entity) {
+            if (entity is File) {
+              entity.deleteSync();
+            } else if (entity is Directory) {
+              entity.deleteSync(recursive: true);
+            }
+          });
+        }
+      } catch (_) {}
+
+      // 5. Delete files in temporary directory
+      try {
+        final tempDir = await getTemporaryDirectory();
+        if (tempDir.existsSync()) {
+          tempDir.listSync().forEach((entity) {
+            if (entity is File) {
+              entity.deleteSync();
+            } else if (entity is Directory) {
+              entity.deleteSync(recursive: true);
+            }
+          });
+        }
+      } catch (_) {}
+
+      await prefs.reload();
+
+      if (context.mounted) {
+        context.read<UserCubit>().logout();
+        Navigator.of(context).pop();
+      }
+    }
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Xóa toàn bộ dữ liệu'),
+          content: const Text(
+            'Bạn có chắc chắn muốn xóa toàn bộ dữ liệu không? Hành động này không thể hoàn tác và sẽ khởi động lại ứng dụng.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Hủy'),
+            ),
+            TextButton(onPressed: deleteAllData, child: const Text('Xóa')),
+          ],
+        );
+      },
     );
   }
 
