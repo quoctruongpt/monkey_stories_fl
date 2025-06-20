@@ -167,7 +167,8 @@ class _EditProfileInfoViewState extends State<EditProfileInfoView> {
                                   width: 132,
                                   height: 132,
                                   child: Hero(
-                                    tag: 'profile_${state.profile?.id}',
+                                    tag: 'avatar_setting_${state.profile?.id}',
+                                    transitionOnUserGestures: true,
                                     child: Avatar(
                                       avatar: state.profile?.avatarPath,
                                     ),

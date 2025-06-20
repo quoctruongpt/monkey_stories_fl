@@ -22,6 +22,8 @@ class IAPItemFlutter {
     final originalPrice = price / (1 - appliedSaleOff);
     final canUseTrial = _canUserUseTrial(localPackage.type, item);
 
+    print('hihi item: $item');
+
     return PurchasedPackage(
       id: item.productId ?? '',
       name: localPackage.name, // Map title to name based on previous usage

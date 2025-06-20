@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:go_router/go_router.dart';
+import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/constants/purchased.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/terms_bottomsheet.dart';
 
-class PurchaseFooter extends StatelessWidget {
+class PurchaseFooter extends StatefulWidget {
   const PurchaseFooter({
     super.key,
     required this.onPressed,
@@ -23,41 +27,75 @@ class PurchaseFooter extends StatelessWidget {
   final String description;
   final String actionText;
 
+  @override
+  State<PurchaseFooter> createState() => _PurchaseFooterState();
+}
+
+class _PurchaseFooterState extends State<PurchaseFooter> {
+  late PurchasedCubit _purchasedCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _purchasedCubit = context.read<PurchasedCubit>();
+  }
+
   void _onTermsPressed(BuildContext context) {
     showTermsBottomSheet(context);
-    onTermsPressed();
+    widget.onTermsPressed();
   }
 
   void _onRestorePressed(BuildContext context) {
     context.read<PurchasedCubit>().restorePurchase();
-    onRestorePressed();
+    widget.onRestorePressed();
+  }
+
+  void _onPressed(BuildContext context) {
+    if (!_purchasedCubit.state.isInappPurchaseAvailable) {
+      final langId = context.read<AppCubit>().state.languageCode;
+      final link = linkLandingPagePurchased[langId];
+      if (link != null) {
+        context.pushNamed(
+          AppRouteNames.webView,
+          queryParameters: {'url': link},
+        );
+      }
+      return;
+    }
+
+    widget.onPressed();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FittedBox(
-          child: Html(
-            data: description,
-            style: {
-              'b': Style(
-                color: AppTheme.textColor,
-                fontWeight: FontWeight.w700,
+        _purchasedCubit.state.isInappPurchaseAvailable
+            ? FittedBox(
+              child: Html(
+                data: widget.description,
+                style: {
+                  'b': Style(
+                    color: AppTheme.textColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  'body': Style(
+                    textAlign: TextAlign.center,
+                    color: AppTheme.textSecondaryColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: FontSize(14),
+                    maxLines: 1,
+                    textOverflow: TextOverflow.clip,
+                  ),
+                },
               ),
-              'body': Style(
-                textAlign: TextAlign.center,
-                color: AppTheme.textSecondaryColor,
-                fontWeight: FontWeight.w600,
-                fontSize: FontSize(14),
-                maxLines: 1,
-                textOverflow: TextOverflow.clip,
-              ),
-            },
-          ),
-        ),
+            )
+            : const SizedBox.shrink(),
         const SizedBox(height: Spacing.sm),
-        AppButton.primary(text: actionText, onPressed: onPressed),
+        AppButton.primary(
+          text: widget.actionText,
+          onPressed: () => _onPressed(context),
+        ),
         FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(

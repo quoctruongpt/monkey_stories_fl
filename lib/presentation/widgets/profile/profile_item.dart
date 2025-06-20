@@ -10,12 +10,14 @@ class ProfileItem extends StatefulWidget {
     this.avatar,
     this.isActive = false,
     this.onTap,
+    this.heroTag,
   });
 
   final String name;
   final String? avatar;
   final bool isActive;
   final VoidCallback? onTap;
+  final String? heroTag;
 
   @override
   State<ProfileItem> createState() => _ProfileItemState();
@@ -49,7 +51,17 @@ class _ProfileItemState extends State<ProfileItem> {
                         ? Border.all(width: 2, color: _activeColor)
                         : null,
               ),
-              child: Avatar(avatar: widget.avatar, randomColor: randomColor),
+              child:
+                  widget.heroTag != null
+                      ? Hero(
+                        tag: widget.heroTag!,
+                        transitionOnUserGestures: true,
+                        child: Avatar(
+                          avatar: widget.avatar,
+                          randomColor: randomColor,
+                        ),
+                      )
+                      : Avatar(avatar: widget.avatar, randomColor: randomColor),
             ),
           ),
           const SizedBox(height: 10),

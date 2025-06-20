@@ -28,9 +28,13 @@ class ReportHeader extends StatelessWidget {
         SizedBox(
           width: 132,
           height: 132,
-          child: Avatar(
-            avatar: profile.avatarPath,
-            randomColor: AvatarColor.green,
+          child: Hero(
+            tag: 'avatar_${profile.id}',
+            transitionOnUserGestures: true,
+            child: Avatar(
+              avatar: profile.avatarPath,
+              randomColor: AvatarColor.green,
+            ),
           ),
         ),
         const SizedBox(width: Spacing.md),

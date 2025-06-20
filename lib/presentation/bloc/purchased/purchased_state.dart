@@ -14,6 +14,7 @@ class PurchasedState extends Equatable {
     this.isRestorePurchasedError = false,
     this.source,
     this.isRestorePurchasedSuccess = false,
+    this.isInappPurchaseAvailable = false,
   });
 
   // Danh sách thông tin sản phẩm
@@ -52,6 +53,9 @@ class PurchasedState extends Equatable {
   // Source
   final String? source;
 
+  // Tính năng mua hàng inapp có khả dụng không
+  final bool isInappPurchaseAvailable;
+
   PurchasedState copyWith({
     List<PurchasedPackage>? products,
     bool? isInitialPurchased,
@@ -66,6 +70,7 @@ class PurchasedState extends Equatable {
     bool? isRestorePurchasedError,
     String? source,
     bool? isRestorePurchasedSuccess,
+    bool? isInappPurchaseAvailable,
   }) {
     return PurchasedState(
       products: products ?? this.products,
@@ -90,6 +95,8 @@ class PurchasedState extends Equatable {
           isResetStatus == true
               ? false
               : isRestorePurchasedSuccess ?? this.isRestorePurchasedSuccess,
+      isInappPurchaseAvailable:
+          isInappPurchaseAvailable ?? this.isInappPurchaseAvailable,
     );
   }
 

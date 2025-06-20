@@ -130,6 +130,7 @@ import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
+import 'package:monkey_stories/domain/usecases/purchased/check_available_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -306,6 +307,7 @@ void initBlocDependencies() {
       completePurchaseUsecase: sl<CompletePurchaseUsecase>(),
       orderCompleteTrackingUsecase: sl<OrderCompleteTrackingUsecase>(),
       orderFailedTrackingUsecase: sl<OrderFailTrackingUsecase>(),
+      checkAvailableUsecase: sl<CheckAvailableUsecase>(),
     ),
   );
 

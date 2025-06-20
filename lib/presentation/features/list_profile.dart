@@ -140,6 +140,7 @@ class ListProfile extends StatelessWidget {
                                               context,
                                               profile.id,
                                             ),
+                                        heroTag: 'avatar_${profile.id}',
                                       ),
                                     ),
                                   ),

@@ -43,6 +43,7 @@ abstract class PurchasedRemoteDataSource {
   // Thêm phương thức dọn dẹp
   void dispose();
   Future<void> completePurchase(String transactionId);
+  Future<bool> isInappPurchaseAvailable();
 }
 
 class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
@@ -211,5 +212,10 @@ class PurchasedRemoteDataSourceImpl extends PurchasedRemoteDataSource {
     if (Platform.isIOS) {
       await flutterInappPurchase.finishTransactionIOS(transactionId);
     }
+  }
+
+  @override
+  Future<bool> isInappPurchaseAvailable() async {
+    return await flutterInappPurchase.isReady();
   }
 }

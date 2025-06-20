@@ -70,19 +70,15 @@ class ListProfileSetting extends StatelessWidget {
                             ...state.profiles.map(
                               (profile) => SizedBox(
                                 width: width,
-                                child: Hero(
-                                  tag: 'profile_${profile.id}',
-                                  child: ProfileItem(
-                                    name: profile.name,
-                                    avatar:
-                                        profile.localAvatarPath ??
-                                        profile.avatarPath,
-                                    onTap:
-                                        () => _profilePressed(
-                                          context,
-                                          profile.id,
-                                        ),
-                                  ),
+                                child: ProfileItem(
+                                  name: profile.name,
+                                  avatar:
+                                      profile.localAvatarPath ??
+                                      profile.avatarPath,
+                                  onTap:
+                                      () =>
+                                          _profilePressed(context, profile.id),
+                                  heroTag: 'avatar_setting_${profile.id}',
                                 ),
                               ),
                             ),

@@ -99,4 +99,9 @@ class PurchasedRepositoryImpl extends PurchasedRepository {
   Future<void> completePurchase(String transactionId) async {
     return await remoteDataSource.completePurchase(transactionId);
   }
+
+  @override
+  Future<bool> isInappPurchaseAvailable() async {
+    return await remoteDataSource.isInappPurchaseAvailable();
+  }
 }

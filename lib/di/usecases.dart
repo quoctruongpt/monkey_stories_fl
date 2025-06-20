@@ -129,6 +129,7 @@ import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
 import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
+import 'package:monkey_stories/domain/usecases/purchased/check_available_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -236,7 +237,9 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => RestorePurchasedUsecase(sl<PurchasedRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () => CheckAvailableUsecase(sl<PurchasedRepository>()),
+  );
   // Active license
   sl.registerLazySingleton(
     () => VerifyLicenseCodeUseCase(sl<ActiveLicenseRepository>()),

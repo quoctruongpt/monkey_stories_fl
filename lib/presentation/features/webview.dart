@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 final logger = Logger('WebViewScreen');
 
@@ -60,29 +61,68 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = _progress < 1.0 && _progress > 0.0;
     return Scaffold(
       appBar: AppBarWidget(
         title: AppLocalizations.of(context).translate(widget.title),
         // Add the progress bar to the AppBar for a cleaner look,
         // or keep it in a Stack as shown below.
       ),
+      extendBodyBehindAppBar: widget.title.isEmpty,
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
-          if (_progress < 1.0 &&
-              _progress > 0.0) // Show progress only during loading
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: LinearProgressIndicator(
-                value: _progress,
-                backgroundColor: Colors.grey[200],
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
+
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            child:
+                isLoading
+                    ? Positioned(
+                      key: const ValueKey('logo_loading'),
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        color: Colors.black.withAlpha(10),
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Shimmer.fromColors(
+                                baseColor: Colors.transparent,
+                                highlightColor: Colors.white.withAlpha(128),
+                                child: Image.asset(
+                                  'assets/images/logo.png',
+                                  width: 150,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                width: 150,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8),
+                                  ),
+                                  child: LinearProgressIndicator(
+                                    value: _progress,
+                                    backgroundColor: Colors.grey[200],
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    : const SizedBox.shrink(key: ValueKey('logo_done')),
+          ),
         ],
       ),
     );

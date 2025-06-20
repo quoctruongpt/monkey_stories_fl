@@ -82,231 +82,274 @@ class ReportScreen extends StatelessWidget {
                           ),
                         ),
 
-                        state.isLoading || state.data == null
-                            ? const ReportSkeleton()
-                            : Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(Spacing.md),
-                              color: const Color(0xFFF2F4F7),
-                              child: Column(
-                                children: [
-                                  WeeklyStudyDurationChart(
-                                    weeklyStudyDuration: [
-                                      state.data!.recentWeeklyReport.week1,
-                                      state.data!.recentWeeklyReport.week2,
-                                      state.data!.recentWeeklyReport.week3,
-                                      state.data!.recentWeeklyReport.week4,
-                                    ],
-                                  ),
-                                  const SizedBox(height: Spacing.md),
-                                  OverviewReport(
-                                    numberStoriesWeek:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .generalReport
-                                            .totalStory,
-                                    numberLessonsWeek:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .generalReport
-                                            .totalLesson,
-                                    numberVideosWeek:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .generalReport
-                                            .totalVideo,
-                                    numberAudioBooksWeek:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .generalReport
-                                            .totalAudioBook,
-                                    numberMinutesWeek:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .generalReport
-                                            .totalDuration,
-                                    numberStoriesTotal:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .generalReport
-                                            .totalStory,
-                                    numberLessonsTotal:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .generalReport
-                                            .totalLesson,
-                                    numberVideosTotal:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .generalReport
-                                            .totalVideo,
-                                    numberAudioBooksTotal:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .generalReport
-                                            .totalAudioBook,
-                                    numberMinutesTotal:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .generalReport
-                                            .totalDuration,
-                                  ),
-                                  const SizedBox(height: Spacing.md),
-                                  ReportStories(
-                                    onTabChanged: (index) {
-                                      context
-                                          .read<ReportCubit>()
-                                          .trackStoriesLevel(index);
-                                    },
-                                    weeklyData:
-                                        state
-                                            .data!
-                                            .weeklyReport
-                                            .storyByLevel
-                                            .keys
-                                            .map(
-                                              (key) => PieChartData(
-                                                value:
-                                                    state
-                                                        .data!
-                                                        .weeklyReport
-                                                        .storyByLevel[key]!
-                                                        .toDouble(),
-                                                label: key,
-                                              ),
-                                            )
-                                            .toList(),
-                                    totalData:
-                                        state
-                                            .data!
-                                            .totalLearned
-                                            .storyByLevel
-                                            .keys
-                                            .map(
-                                              (key) => PieChartData(
-                                                value:
-                                                    state
-                                                        .data!
-                                                        .totalLearned
-                                                        .storyByLevel[key]!
-                                                        .toDouble(),
-                                                label: key,
-                                              ),
-                                            )
-                                            .toList(),
-                                  ),
-                                  const SizedBox(height: Spacing.md),
-                                  ProgressReport(
-                                    onShowMore: () {
-                                      context.read<ReportCubit>().trackPhonics(
-                                        PhonicsClickType.showMore,
-                                      );
-                                    },
-                                    onShowLess: () {
-                                      context.read<ReportCubit>().trackPhonics(
-                                        PhonicsClickType.showLess,
-                                      );
-                                    },
-                                    nurseryTotalLessons:
-                                        state.data!.levelProgress.nursery.total,
-                                    kindergartenTotalLessons:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .kindergarten
-                                            .total,
-                                    grade1TotalLessons:
-                                        state.data!.levelProgress.grade1.total,
-                                    nurseryValue:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .nursery
-                                            .current,
-                                    kindergartenValue:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .kindergarten
-                                            .current,
-                                    grade1Value:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .grade1
-                                            .current,
-                                    phonicsLevelSelected:
-                                        PhonicsLevelSelected.nursery,
-                                    title: AppLocalizations.of(
-                                      context,
-                                    ).translate('app.report.progress.phonics'),
-                                    icon: SvgPicture.asset(
-                                      'assets/icons/svg/phonics.svg',
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child:
+                              state.isLoading || state.data == null
+                                  ? const ReportSkeleton(
+                                    key: ValueKey('ReportSkeleton'),
+                                  )
+                                  : Container(
+                                    key: const ValueKey('ReportContent'),
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(Spacing.md),
+                                    color: const Color(0xFFF2F4F7),
+                                    child: Column(
+                                      children: [
+                                        WeeklyStudyDurationChart(
+                                          weeklyStudyDuration: [
+                                            state
+                                                .data!
+                                                .recentWeeklyReport
+                                                .week1,
+                                            state
+                                                .data!
+                                                .recentWeeklyReport
+                                                .week2,
+                                            state
+                                                .data!
+                                                .recentWeeklyReport
+                                                .week3,
+                                            state
+                                                .data!
+                                                .recentWeeklyReport
+                                                .week4,
+                                          ],
+                                        ),
+                                        const SizedBox(height: Spacing.md),
+                                        OverviewReport(
+                                          numberStoriesWeek:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .generalReport
+                                                  .totalStory,
+                                          numberLessonsWeek:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .generalReport
+                                                  .totalLesson,
+                                          numberVideosWeek:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .generalReport
+                                                  .totalVideo,
+                                          numberAudioBooksWeek:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .generalReport
+                                                  .totalAudioBook,
+                                          numberMinutesWeek:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .generalReport
+                                                  .totalDuration,
+                                          numberStoriesTotal:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .generalReport
+                                                  .totalStory,
+                                          numberLessonsTotal:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .generalReport
+                                                  .totalLesson,
+                                          numberVideosTotal:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .generalReport
+                                                  .totalVideo,
+                                          numberAudioBooksTotal:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .generalReport
+                                                  .totalAudioBook,
+                                          numberMinutesTotal:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .generalReport
+                                                  .totalDuration,
+                                        ),
+                                        const SizedBox(height: Spacing.md),
+                                        ReportStories(
+                                          onTabChanged: (index) {
+                                            context
+                                                .read<ReportCubit>()
+                                                .trackStoriesLevel(index);
+                                          },
+                                          weeklyData:
+                                              state
+                                                  .data!
+                                                  .weeklyReport
+                                                  .storyByLevel
+                                                  .keys
+                                                  .map(
+                                                    (key) => PieChartData(
+                                                      value:
+                                                          state
+                                                              .data!
+                                                              .weeklyReport
+                                                              .storyByLevel[key]!
+                                                              .toDouble(),
+                                                      label: key,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                          totalData:
+                                              state
+                                                  .data!
+                                                  .totalLearned
+                                                  .storyByLevel
+                                                  .keys
+                                                  .map(
+                                                    (key) => PieChartData(
+                                                      value:
+                                                          state
+                                                              .data!
+                                                              .totalLearned
+                                                              .storyByLevel[key]!
+                                                              .toDouble(),
+                                                      label: key,
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                        ),
+                                        const SizedBox(height: Spacing.md),
+                                        ProgressReport(
+                                          onShowMore: () {
+                                            context
+                                                .read<ReportCubit>()
+                                                .trackPhonics(
+                                                  PhonicsClickType.showMore,
+                                                );
+                                          },
+                                          onShowLess: () {
+                                            context
+                                                .read<ReportCubit>()
+                                                .trackPhonics(
+                                                  PhonicsClickType.showLess,
+                                                );
+                                          },
+                                          nurseryTotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .nursery
+                                                  .total,
+                                          kindergartenTotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .kindergarten
+                                                  .total,
+                                          grade1TotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .grade1
+                                                  .total,
+                                          nurseryValue:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .nursery
+                                                  .current,
+                                          kindergartenValue:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .kindergarten
+                                                  .current,
+                                          grade1Value:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .grade1
+                                                  .current,
+                                          phonicsLevelSelected:
+                                              PhonicsLevelSelected.nursery,
+                                          title: AppLocalizations.of(
+                                            context,
+                                          ).translate(
+                                            'app.report.progress.phonics',
+                                          ),
+                                          icon: SvgPicture.asset(
+                                            'assets/icons/svg/phonics.svg',
+                                          ),
+                                        ),
+                                        const SizedBox(height: Spacing.md),
+                                        ProgressReport(
+                                          onShowMore: () {
+                                            context.read<ReportCubit>().trackRC(
+                                              RCClickType.showMore,
+                                            );
+                                          },
+                                          onShowLess: () {
+                                            context.read<ReportCubit>().trackRC(
+                                              RCClickType.showLess,
+                                            );
+                                          },
+                                          nurseryTotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .nursery
+                                                  .total,
+                                          kindergartenTotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .kindergarten
+                                                  .total,
+                                          grade1TotalLessons:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .grade1
+                                                  .total,
+                                          nurseryValue:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .nursery
+                                                  .current,
+                                          kindergartenValue:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .kindergarten
+                                                  .current,
+                                          grade1Value:
+                                              state
+                                                  .data!
+                                                  .levelProgress
+                                                  .grade1
+                                                  .current,
+                                          phonicsLevelSelected:
+                                              PhonicsLevelSelected.nursery,
+                                          title: AppLocalizations.of(
+                                            context,
+                                          ).translate(
+                                            'app.report.progress.reading',
+                                          ),
+                                          icon: SvgPicture.asset(
+                                            'assets/icons/svg/read.svg',
+                                          ),
+                                        ),
+                                        const SizedBox(height: 100),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(height: Spacing.md),
-                                  ProgressReport(
-                                    onShowMore: () {
-                                      context.read<ReportCubit>().trackRC(
-                                        RCClickType.showMore,
-                                      );
-                                    },
-                                    onShowLess: () {
-                                      context.read<ReportCubit>().trackRC(
-                                        RCClickType.showLess,
-                                      );
-                                    },
-                                    nurseryTotalLessons:
-                                        state.data!.levelProgress.nursery.total,
-                                    kindergartenTotalLessons:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .kindergarten
-                                            .total,
-                                    grade1TotalLessons:
-                                        state.data!.levelProgress.grade1.total,
-                                    nurseryValue:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .nursery
-                                            .current,
-                                    kindergartenValue:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .kindergarten
-                                            .current,
-                                    grade1Value:
-                                        state
-                                            .data!
-                                            .levelProgress
-                                            .grade1
-                                            .current,
-                                    phonicsLevelSelected:
-                                        PhonicsLevelSelected.nursery,
-                                    title: AppLocalizations.of(
-                                      context,
-                                    ).translate('app.report.progress.reading'),
-                                    icon: SvgPicture.asset(
-                                      'assets/icons/svg/read.svg',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 100),
-                                ],
-                              ),
-                            ),
+                        ),
                       ],
                     ),
                   );
@@ -329,38 +372,16 @@ class ReportSkeleton extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(Spacing.md),
       color: const Color(0xFFF2F4F7),
-      child: Column(
-        children: [
-          Shimmer.fromColors(
-            baseColor: Colors.grey.withValues(alpha: 0.1),
-            highlightColor: Colors.white,
-            period: const Duration(seconds: 1),
-            direction: ShimmerDirection.ltr,
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-          const SizedBox(height: Spacing.md),
-          Shimmer.fromColors(
-            baseColor: Colors.grey.withValues(alpha: 0.1),
-            highlightColor: Colors.white,
-            direction: ShimmerDirection.rtl,
-            period: const Duration(seconds: 1),
-            child: Container(
-              height: 300,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-        ],
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        child: Shimmer.fromColors(
+          baseColor: Colors.transparent,
+          highlightColor: Colors.white.withAlpha(128),
+          child: Image.asset('assets/images/report_skeleton.png'),
+        ),
       ),
     );
   }

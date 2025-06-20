@@ -24,4 +24,6 @@ abstract class PurchasedRepository {
 
   // Hoàn tất mua hàng
   Future<void> completePurchase(String transactionId);
+  // Kiểm tra tính năng mua hàng inapp có khả dụng không
+  Future<bool> isInappPurchaseAvailable();
 }

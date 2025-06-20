@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
+import 'package:monkey_stories/domain/usecases/purchased/check_available_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
@@ -35,6 +36,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
   final CompletePurchaseUsecase _completePurchaseUsecase;
   final OrderCompleteTrackingUsecase _orderCompleteTrackingUsecase;
   final OrderFailTrackingUsecase _orderFailedTrackingUsecase;
+  final CheckAvailableUsecase _checkAvailableUsecase;
 
   final UserCubit _userCubit;
 
@@ -54,6 +56,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
     required CompletePurchaseUsecase completePurchaseUsecase,
     required OrderCompleteTrackingUsecase orderCompleteTrackingUsecase,
     required OrderFailTrackingUsecase orderFailedTrackingUsecase,
+    required CheckAvailableUsecase checkAvailableUsecase,
   }) : _initialPurchasedUsecase = initialPurchasedUsecase,
        _getProductsUsecase = getProductsUsecase,
        _purchaseUsecase = purchaseUsecase,
@@ -66,6 +69,7 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
        _completePurchaseUsecase = completePurchaseUsecase,
        _orderCompleteTrackingUsecase = orderCompleteTrackingUsecase,
        _orderFailedTrackingUsecase = orderFailedTrackingUsecase,
+       _checkAvailableUsecase = checkAvailableUsecase,
        super(const PurchasedState()) {
     _listenForErrors();
   }
@@ -173,7 +177,15 @@ class PurchasedCubit extends HydratedCubit<PurchasedState> {
           );
         },
       );
-    } catch (e) {}
+      final availableResult = await _checkAvailableUsecase();
+      availableResult.fold(
+        (failure) => emit(state.copyWith(isInappPurchaseAvailable: false)),
+        (available) =>
+            emit(state.copyWith(isInappPurchaseAvailable: available)),
+      );
+    } catch (e) {
+      emit(state.copyWith(isInappPurchaseAvailable: false));
+    }
   }
 
   Future<void> purchase(

@@ -147,3 +147,10 @@ class Purchase {
     return packages.firstWhere((element) => element.id == id);
   }
 }
+
+const Map<String, String> linkLandingPagePurchased = {
+  'vi': 'https://truyentranh.monkeystories.vn/ms-inapp-mj4',
+  'th': 'https://th.monkeyenglish.net/ms-inapp-mj4',
+  'ms': 'https://my.monkeyenglish.net/ms-inapp-mj4',
+  'en': 'https://us.monkeyenglish.net/ms-inapp-mj4',
+};
