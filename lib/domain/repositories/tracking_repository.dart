@@ -5,6 +5,8 @@ abstract class TrackingRepository {
     String? email,
     String? phone,
     String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
   });
   Future<void> pushEvent({
     required String eventName,

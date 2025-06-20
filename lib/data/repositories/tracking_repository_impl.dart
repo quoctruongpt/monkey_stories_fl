@@ -2,6 +2,7 @@ import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_sour
 import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
 import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
 class TrackingRepositoryImpl implements TrackingRepository {
@@ -9,16 +10,19 @@ class TrackingRepositoryImpl implements TrackingRepository {
   final NotificationRemoteDataSource _notificationRemoteDataSource;
   final TrackingLocalDataSource _trackingLocalDataSource;
   final KinesisRemoteDataSource _kinesisRemoteDataSource;
+  final TrackingRemoteDataSource _trackingRemoteDataSource;
 
   TrackingRepositoryImpl({
     required AirbridgeRemoteDataSource airbridgeRemoteDataSource,
     required NotificationRemoteDataSource notificationRemoteDataSource,
     required TrackingLocalDataSource trackingLocalDataSource,
     required KinesisRemoteDataSource kinesisRemoteDataSource,
+    required TrackingRemoteDataSource trackingRemoteDataSource,
   }) : _airbridgeRemoteDataSource = airbridgeRemoteDataSource,
        _notificationRemoteDataSource = notificationRemoteDataSource,
        _trackingLocalDataSource = trackingLocalDataSource,
-       _kinesisRemoteDataSource = kinesisRemoteDataSource;
+       _kinesisRemoteDataSource = kinesisRemoteDataSource,
+       _trackingRemoteDataSource = trackingRemoteDataSource;
 
   @override
   Future<void> registerToken() async {
@@ -34,8 +38,25 @@ class TrackingRepositoryImpl implements TrackingRepository {
     String? email,
     String? phone,
     String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
   }) async {
-    await _airbridgeRemoteDataSource.setUserInfo(userId, email, phone, name);
+    await _airbridgeRemoteDataSource.setUserInfo(
+      userId,
+      email,
+      phone,
+      name,
+      isPaid,
+      isAuthenticated,
+    );
+    await _trackingRemoteDataSource.firebaseLogin(userId);
+    await _trackingRemoteDataSource.firebaseSetUserProperty(
+      name: name,
+      isPaid: isPaid,
+      isAuthenticated: isAuthenticated,
+      phone: phone,
+      email: email,
+    );
   }
 
   @override

@@ -111,6 +111,8 @@ class UserCubit extends HydratedCubit<UserState> {
               email: state.user!.email,
               phone: state.user!.phone,
               name: state.user!.name,
+              isPaid: state.purchasedInfo?.isActive,
+              isAuthenticated: state.user?.loginType != LoginType.skip,
             ),
           );
           emit(

@@ -16,6 +16,8 @@ class SetUserUsecase implements UseCase<void, SetUserParams> {
       email: params.email,
       phone: params.phone,
       name: params.name,
+      isPaid: params.isPaid,
+      isAuthenticated: params.isAuthenticated,
     );
     return const Right(null);
   }
@@ -26,6 +28,15 @@ class SetUserParams {
   final String? email;
   final String? phone;
   final String? name;
+  final bool? isPaid;
+  final bool? isAuthenticated;
 
-  SetUserParams({required this.userId, this.email, this.phone, this.name});
+  SetUserParams({
+    required this.userId,
+    this.email,
+    this.phone,
+    this.name,
+    this.isPaid,
+    this.isAuthenticated,
+  });
 }

@@ -5,6 +5,16 @@ abstract class TrackingRemoteDataSource {
     String eventName,
     Map<String, Object>? eventData,
   );
+
+  Future<void> firebaseLogin(String userId);
+
+  Future<void> firebaseSetUserProperty({
+    String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
+    String? phone,
+    String? email,
+  });
 }
 
 class TrackingRemoteDataSourceImpl implements TrackingRemoteDataSource {
@@ -19,5 +29,29 @@ class TrackingRemoteDataSourceImpl implements TrackingRemoteDataSource {
     Map<String, Object>? eventData,
   ) async {
     await _firebaseAnalytics.logEvent(name: eventName, parameters: eventData);
+  }
+
+  @override
+  Future<void> firebaseLogin(String userId) async {
+    await _firebaseAnalytics.setUserId(id: userId);
+  }
+
+  @override
+  Future<void> firebaseSetUserProperty({
+    String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
+    String? phone,
+    String? email,
+  }) async {
+    await _firebaseAnalytics.setUserProperty(name: 'name', value: name);
+    await _firebaseAnalytics.setUserProperty(
+      name: 'isPaid',
+      value: isPaid?.toString(),
+    );
+    await _firebaseAnalytics.setUserProperty(
+      name: 'isAuthenticated',
+      value: isAuthenticated?.toString(),
+    );
   }
 }

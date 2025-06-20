@@ -12,6 +12,7 @@ import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
 import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
@@ -168,6 +169,7 @@ void initRepositoryDependencies() {
       notificationRemoteDataSource: sl<NotificationRemoteDataSource>(),
       trackingLocalDataSource: sl<TrackingLocalDataSource>(),
       kinesisRemoteDataSource: sl<KinesisRemoteDataSource>(),
+      trackingRemoteDataSource: sl<TrackingRemoteDataSource>(),
     ),
   );
 

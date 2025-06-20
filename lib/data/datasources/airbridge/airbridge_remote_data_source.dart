@@ -10,6 +10,8 @@ abstract class AirbridgeRemoteDataSource {
     String? email,
     String? phone,
     String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
   );
   Future<String> getDeviceId();
 
@@ -34,6 +36,8 @@ class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
     String? email,
     String? phone,
     String? name,
+    bool? isPaid,
+    bool? isAuthenticated,
   ) async {
     Airbridge.setUserID(userId);
     if (email != null && email.isNotEmpty) {
@@ -45,6 +49,8 @@ class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
     if (name != null && name.isNotEmpty) {
       Airbridge.setUserAttribute(key: 'name', value: name);
     }
+    Airbridge.setUserAttribute(key: 'isPaid', value: isPaid);
+    Airbridge.setUserAttribute(key: 'isAuthenticated', value: isAuthenticated);
   }
 
   @override
