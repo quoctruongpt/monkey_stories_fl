@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
 import 'package:monkey_stories/data/datasources/download/download_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/kinesis/kinesis_cache_data_source.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
@@ -115,7 +116,13 @@ void initDatasourceDependencies() {
 
   // Kinesis
   sl.registerLazySingleton<KinesisRemoteDataSource>(
-    () => KinesisRemoteDataSourceImpl(kinesisClient: sl<Kinesis>()),
+    () => KinesisRemoteDataSourceImpl(
+      kinesisClient: sl<Kinesis>(),
+      cacheDataSource: sl<KinesisCacheDataSource>(),
+    ),
+  );
+  sl.registerLazySingleton<KinesisCacheDataSource>(
+    () => KinesisCacheDataSourceImpl(),
   );
 
   // Purchased

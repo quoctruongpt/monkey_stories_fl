@@ -8,7 +8,7 @@ class KinesisRepositoryImpl extends KinesisRepository {
   KinesisRepositoryImpl({required this.kinesisRemoteDataSource});
 
   @override
-  Future<KinesisEntity> putSetting(
+  Future<KinesisEntity?> putSetting(
     String partitionKey,
     Map<String, dynamic> data,
   ) async {
@@ -16,6 +16,6 @@ class KinesisRepositoryImpl extends KinesisRepository {
       partitionKey,
       data,
     );
-    return result.toEntity();
+    return result?.toEntity();
   }
 }

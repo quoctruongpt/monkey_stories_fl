@@ -5,13 +5,13 @@ import 'package:monkey_stories/domain/entities/kinesis/kinesis_entity.dart';
 import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 
 class PutSettingKinesisUsecase
-    extends UseCase<KinesisEntity, PutSettingKinesisUsecaseParams> {
+    extends UseCase<KinesisEntity?, PutSettingKinesisUsecaseParams> {
   final KinesisRepository kinesisRepository;
 
   PutSettingKinesisUsecase(this.kinesisRepository);
 
   @override
-  Future<Either<ServerFailure, KinesisEntity>> call(
+  Future<Either<ServerFailure, KinesisEntity?>> call(
     PutSettingKinesisUsecaseParams params,
   ) async {
     try {
