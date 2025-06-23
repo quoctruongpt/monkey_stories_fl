@@ -17,6 +17,8 @@ class MsObChooseAccountTypeTrackingUsecase
       eventName: 'ms_ob_choose_account_type',
       customProperties: params.toCustomProperties(),
       semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);

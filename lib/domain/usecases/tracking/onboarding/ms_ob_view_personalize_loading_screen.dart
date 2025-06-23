@@ -19,6 +19,8 @@ class MsObViewPersonalizeLoadingScreenTrackingUsecase
     trackingRepository.pushEvent(
       eventName: 'ms_ob_view_personalize_loading_screen',
       customProperties: params.toCustomProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);

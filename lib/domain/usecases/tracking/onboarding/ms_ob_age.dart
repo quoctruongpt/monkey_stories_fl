@@ -15,6 +15,8 @@ class MsObAgeTrackingUsecase extends UseCase<void, MsObAgeParams> {
       eventName: 'ms_ob_age',
       customProperties: params.toCustomProperties(),
       semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);
@@ -22,26 +24,27 @@ class MsObAgeTrackingUsecase extends UseCase<void, MsObAgeParams> {
 }
 
 class MsObAgeParams {
-  final int age;
+  final int yob;
   final int timeOnScreen;
   final String source;
   final ClickType? clickType;
 
   MsObAgeParams({
-    required this.age,
+    required this.yob,
     required this.timeOnScreen,
     required this.source,
     this.clickType,
   });
 
   Map<String, dynamic> toCustomProperties() {
-    return {'age': age, 'time_on_screen': timeOnScreen};
+    return {'time_on_screen': timeOnScreen};
   }
 
   Map<String, dynamic> toSemanticProperties() {
     return {
       AirbridgeAttribute.LABEL: source,
       AirbridgeAttribute.ACTION: clickType?.value,
+      AirbridgeAttribute.VALUE: yob,
     };
   }
 }

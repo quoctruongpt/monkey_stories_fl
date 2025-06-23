@@ -17,6 +17,8 @@ class MsObSelectLanguageTrackingUsecase
       eventName: 'ms_ob_select_language',
       customProperties: params.toCustomProperties(),
       semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);
@@ -37,6 +39,6 @@ class MsObSelectLanguageParams {
   }
 
   Map<String, dynamic> toSemanticProperties() {
-    return {AirbridgeAttribute.LABEL: language};
+    return {AirbridgeAttribute.VALUE: language};
   }
 }

@@ -43,7 +43,7 @@ final ShellRoute obdRoutes = ShellRoute(
     GoRoute(
       path: AppRoutePaths.chooseLevelOBD,
       name: AppRouteNames.chooseLevelOBD,
-      builder: (context, state) => const ChooseLevelOBD(),
+      builder: (context, state) => ChooseLevelOBD(),
     ),
     GoRoute(
       path: AppRoutePaths.chooseLanguage,

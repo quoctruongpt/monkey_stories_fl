@@ -4,10 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/di/blocs.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_choose_account_type.dart';
-import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_view_account_type.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
@@ -44,7 +42,6 @@ class IntroScreen extends StatelessWidget {
 
   void _onTrackPush() {
     _introTracker.timeStart = DateTime.now();
-    sl<MsViewAccountTypeTrackingUsecase>().call(NoParams());
   }
 
   void _onTrackExit() {

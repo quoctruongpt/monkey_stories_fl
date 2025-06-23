@@ -93,9 +93,11 @@ class TrackingRepositoryImpl implements TrackingRepository {
         'event_name': eventName,
         'time_record': DateTime.now().microsecondsSinceEpoch ~/ 1000,
         'properties': {
+          'custom_properties': {
+            ...(customProperties ?? {}),
+            ...(defaultProperties.toJson()),
+          },
           ...(semanticProperties ?? {}),
-          ...(customProperties ?? {}),
-          ...(defaultProperties.toJson()),
         },
       });
     }

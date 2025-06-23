@@ -19,6 +19,8 @@ class MsObViewSuggestLevelScreenTrackingUsecase
       eventName: 'ms_ob_view_suggest_level_screen',
       customProperties: params.toCustomProperties(),
       semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
 
     return right(null);
