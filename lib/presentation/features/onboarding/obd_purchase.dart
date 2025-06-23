@@ -136,31 +136,32 @@ class ObdPurchase extends StatelessWidget {
                   child: BlocBuilder<PurchasedViewCubit, PurchasedViewState>(
                     builder: (context, state) {
                       final canUseTrial = state.selectedPackage?.canUseTrial;
+                      final description =
+                          canUseTrial == true
+                              ? AppLocalizations.of(context).translate(
+                                'app.obd_payment.desc.trial',
+                                params: {
+                                  'price': state.selectedPackage?.localPrice,
+                                  'time': AppLocalizations.of(
+                                    context,
+                                  ).translate(
+                                    state.selectedPackage?.type.value,
+                                  ),
+                                },
+                              )
+                              : AppLocalizations.of(context).translate(
+                                'app.obd_payment.desc.not_trial',
+                                params: {
+                                  'price': state.selectedPackage?.localPrice,
+                                  'time': AppLocalizations.of(
+                                    context,
+                                  ).translate(
+                                    state.selectedPackage?.type.value,
+                                  ),
+                                },
+                              );
                       return PurchaseFooter(
-                        description:
-                            canUseTrial == true
-                                ? AppLocalizations.of(context).translate(
-                                  'app.obd_payment.desc.trial',
-                                  params: {
-                                    'price': state.selectedPackage?.localPrice,
-                                    'time': AppLocalizations.of(
-                                      context,
-                                    ).translate(
-                                      state.selectedPackage?.type.value,
-                                    ),
-                                  },
-                                )
-                                : AppLocalizations.of(context).translate(
-                                  'app.obd_payment.desc.not_trial',
-                                  params: {
-                                    'price': state.selectedPackage?.localPrice,
-                                    'time': AppLocalizations.of(
-                                      context,
-                                    ).translate(
-                                      state.selectedPackage?.type.value,
-                                    ),
-                                  },
-                                ),
+                        description: description,
                         onPressed: () {
                           showVerifyDialog(
                             context: context,
@@ -182,6 +183,7 @@ class ObdPurchase extends StatelessWidget {
                               ? 'app.obd_payment.act.trial'
                               : 'app.obd_payment.act.not_trial',
                         ),
+                        source: source,
                       );
                     },
                   ),

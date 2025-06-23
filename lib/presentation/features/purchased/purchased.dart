@@ -127,45 +127,44 @@ class PurchasedScreen extends StatelessWidget {
                       final canUseTrial = state.selectedPackage?.canUseTrial;
                       final isLifetime =
                           state.selectedPackage?.isSubscription == false;
+                      final description =
+                          isLifetime
+                              ? AppLocalizations.of(context).translate(
+                                'app.obd_payment.desc.life_time',
+                                params: {
+                                  'price': state.selectedPackage?.localPrice,
+                                },
+                              )
+                              : canUseTrial == true
+                              ? AppLocalizations.of(context).translate(
+                                'app.obd_payment.desc.trial',
+                                params: {
+                                  'price': state.selectedPackage?.localPrice,
+                                  'time': AppLocalizations.of(
+                                    context,
+                                  ).translate(
+                                    state.selectedPackage?.type.value,
+                                  ),
+                                },
+                              )
+                              : AppLocalizations.of(context).translate(
+                                'app.obd_payment.desc.not_trial',
+                                params: {
+                                  'price': state.selectedPackage?.localPrice,
+                                  'time': AppLocalizations.of(
+                                    context,
+                                  ).translate(
+                                    state.selectedPackage?.type.value,
+                                  ),
+                                },
+                              );
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: Spacing.md,
                         ),
                         child: PurchaseFooter(
-                          description:
-                              isLifetime
-                                  ? AppLocalizations.of(context).translate(
-                                    'app.obd_payment.desc.life_time',
-                                    params: {
-                                      'price':
-                                          state.selectedPackage?.localPrice,
-                                    },
-                                  )
-                                  : canUseTrial == true
-                                  ? AppLocalizations.of(context).translate(
-                                    'app.obd_payment.desc.trial',
-                                    params: {
-                                      'price':
-                                          state.selectedPackage?.localPrice,
-                                      'time': AppLocalizations.of(
-                                        context,
-                                      ).translate(
-                                        state.selectedPackage?.type.value,
-                                      ),
-                                    },
-                                  )
-                                  : AppLocalizations.of(context).translate(
-                                    'app.obd_payment.desc.not_trial',
-                                    params: {
-                                      'price':
-                                          state.selectedPackage?.localPrice,
-                                      'time': AppLocalizations.of(
-                                        context,
-                                      ).translate(
-                                        state.selectedPackage?.type.value,
-                                      ),
-                                    },
-                                  ),
+                          description: description,
                           onPressed: () {
                             context
                                 .read<PurchasedViewCubit>()
@@ -182,6 +181,7 @@ class PurchasedScreen extends StatelessWidget {
                                 ? 'app.obd_payment.act.trial'
                                 : 'app.obd_payment.act.not_trial',
                           ),
+                          source: source,
                         ),
                       );
                     },

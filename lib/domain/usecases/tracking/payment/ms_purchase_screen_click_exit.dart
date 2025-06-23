@@ -18,6 +18,9 @@ class MsPurchaseScreenClickExitTrackingUsecase
     _trackingRepository.pushEvent(
       eventName: 'ms_purchase_screen_click_exit',
       semanticProperties: params.toSemanticProperties(),
+      customProperties: params.toCustomProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
     return right(null);
   }
@@ -25,10 +28,18 @@ class MsPurchaseScreenClickExitTrackingUsecase
 
 class MsPurchaseScreenClickExitTrackingParams {
   final String source;
+  final int timeOnScreen;
 
-  MsPurchaseScreenClickExitTrackingParams({required this.source});
+  MsPurchaseScreenClickExitTrackingParams({
+    required this.source,
+    required this.timeOnScreen,
+  });
 
   Map<String, dynamic> toSemanticProperties() {
     return {AirbridgeAttribute.LABEL: source};
+  }
+
+  Map<String, dynamic> toCustomProperties() {
+    return {'time_on_screen': timeOnScreen};
   }
 }

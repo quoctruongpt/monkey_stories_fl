@@ -240,9 +240,11 @@ final GoRouter router = GoRouter(
       path: AppRoutePaths.purchasedSuccess,
       name: AppRouteNames.purchasedSuccess,
       builder: (context, state) {
-        return const OrientationWrapper(
+        final String source = state.uri.queryParameters['source'] ?? '';
+
+        return OrientationWrapper(
           orientation: AppOrientation.portrait,
-          child: PurchasedSuccessScreen(),
+          child: PurchasedSuccessScreen(source: source),
         );
       },
     ),

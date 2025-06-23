@@ -27,6 +27,8 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
   final MsPurchaseScreenClickExitTrackingUsecase
   _msPurchaseScreenClickExitTrackingUsecase;
 
+  final DateTime _timeStart = DateTime.now();
+
   PurchasedViewCubit({
     required PurchasedCubit purchasedCubit,
     required MsPurchaseScreenViewTrackingUsecase
@@ -86,7 +88,10 @@ class PurchasedViewCubit extends Cubit<PurchasedViewState> {
 
   void onClose(String source) {
     _msPurchaseScreenClickExitTrackingUsecase.call(
-      MsPurchaseScreenClickExitTrackingParams(source: source),
+      MsPurchaseScreenClickExitTrackingParams(
+        source: source,
+        timeOnScreen: DateTime.now().difference(_timeStart).inSeconds,
+      ),
     );
   }
 

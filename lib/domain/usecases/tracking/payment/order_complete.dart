@@ -30,11 +30,13 @@ class OrderCompleteTrackingParams {
   final String source;
   final String choosePackage;
   final double totalPrice;
+  final ClickType clickType;
 
   OrderCompleteTrackingParams({
     required this.source,
     required this.choosePackage,
     required this.totalPrice,
+    required this.clickType,
   });
 
   Map<String, dynamic> toSemanticProperties() {
@@ -45,6 +47,16 @@ class OrderCompleteTrackingParams {
   }
 
   Map<String, dynamic> toCustomProperties() {
-    return {'choose_package': choosePackage};
+    return {'choose_package': choosePackage, 'click_type': clickType.value};
   }
+}
+
+enum ClickType {
+  learnNow('learn_now'),
+  register('register'),
+  killApp('kill_app');
+
+  const ClickType(this.value);
+
+  final String value;
 }

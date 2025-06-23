@@ -16,6 +16,7 @@ import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_choose_
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_select_language.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_personalize_loading_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/onboarding/ms_ob_view_suggest_level_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_order_complete_crash_popup.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
@@ -106,6 +107,7 @@ import 'package:monkey_stories/domain/usecases/remote_config/get_pass_debug.dart
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_policy.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
@@ -327,6 +329,9 @@ void initUsecaseDependencies() {
     () => MsPurchaseScreenClickExitTrackingUsecase(sl<TrackingRepository>()),
   );
   sl.registerLazySingleton(
+    () => MsPurchaseScreenClickPolicyTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
     () => MsObViewPhoneNumberScreenTrackingUsecase(sl<TrackingRepository>()),
   );
   sl.registerLazySingleton(
@@ -418,6 +423,10 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => PutEventToAirbridgeUsecase(sl<TrackingRepository>()),
   );
+  sl.registerLazySingleton(
+    () => MsOrderCompleteCrashPopupTrackingUsecase(sl<TrackingRepository>()),
+  );
+
   // Report
   sl.registerLazySingleton(
     () => GetReportUsecase(reportRepository: sl<ReportRepository>()),

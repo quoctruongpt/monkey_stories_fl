@@ -246,7 +246,10 @@ class _AppBuilderState extends State<AppBuilder>
                 if (context != null) {
                   context.read<PurchasedCubit>().resetStatus();
                   if (state.isVerifyPurchasedSuccess == true) {
-                    context.go(AppRoutePaths.purchasedSuccess);
+                    context.goNamed(
+                      AppRouteNames.purchasedSuccess,
+                      pathParameters: {'source': state.source ?? ''},
+                    );
                   } else if (state.errorMessage != null) {
                     try {
                       context.read<PurchasedCubit>().trackOrderFailed();

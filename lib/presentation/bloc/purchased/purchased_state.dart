@@ -101,7 +101,11 @@ class PurchasedState extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {'products': products.map((e) => e.toJson()).toList()};
+    return {
+      'products': products.map((e) => e.toJson()).toList(),
+      'source': source,
+      'purchasingItem': purchasingItem?.toJson(),
+    };
   }
 
   static PurchasedState fromJson(Map<String, dynamic> json) {
@@ -114,7 +118,18 @@ class PurchasedState extends Equatable {
           }).toList() ??
           <PurchasedPackage>[];
 
-      return PurchasedState(products: products);
+      final purchasingItemJson =
+          json['purchasingItem'] as Map<String, dynamic>?;
+      final purchasingItem =
+          purchasingItemJson != null
+              ? PurchasedPackage.fromJson(purchasingItemJson)
+              : null;
+
+      return PurchasedState(
+        products: products,
+        purchasingItem: purchasingItem,
+        source: json['source'] as String?,
+      );
     } catch (e) {
       return const PurchasedState();
     }

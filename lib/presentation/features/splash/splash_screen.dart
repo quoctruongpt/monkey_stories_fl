@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/di/injection_container.dart';
-import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/required_create_acc_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -105,24 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
         GoRouter.of(context).replace(AppRoutePaths.intro);
         return;
       case SplashNeedCreateAccount():
-        showCustomNoticeDialog(
-          context: context,
-          titleText: AppLocalizations.of(
-            context,
-          ).translate('app.obd_payment.created_account.title'),
-          messageText: AppLocalizations.of(
-            context,
-          ).translate('app.obd_payment.created_account.desc'),
-          imageAsset: 'assets/images/max_warning.png',
-          primaryActionText: AppLocalizations.of(
-            context,
-          ).translate('app.obd_payment.created_account.act'),
-          onPrimaryAction: () {
-            context.read<UserCubit>().togglePurchasing();
-            context.replace(AppRoutePaths.signUp);
-          },
-          isCloseable: false,
-        );
+        showRequiredCreateAccDialog(context);
         return;
       case SplashAuthenticatedBefore():
         GoRouter.of(context).replace(AppRoutePaths.login);

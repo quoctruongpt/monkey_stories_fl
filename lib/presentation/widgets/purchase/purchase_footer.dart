@@ -6,10 +6,12 @@ import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/constants/purchased.dart';
+import 'package:monkey_stories/di/repositories.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/terms_bottomsheet.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_policy.dart';
 
 class PurchaseFooter extends StatefulWidget {
   const PurchaseFooter({
@@ -19,6 +21,7 @@ class PurchaseFooter extends StatefulWidget {
     required this.onTermsPressed,
     required this.description,
     required this.actionText,
+    required this.source,
   });
 
   final VoidCallback onPressed;
@@ -26,6 +29,7 @@ class PurchaseFooter extends StatefulWidget {
   final VoidCallback onTermsPressed;
   final String description;
   final String actionText;
+  final String source;
 
   @override
   State<PurchaseFooter> createState() => _PurchaseFooterState();
@@ -41,6 +45,9 @@ class _PurchaseFooterState extends State<PurchaseFooter> {
   }
 
   void _onTermsPressed(BuildContext context) {
+    sl<MsPurchaseScreenClickPolicyTrackingUsecase>().call(
+      MsPurchaseScreenClickPolicyTrackingParams(source: widget.source),
+    );
     showTermsBottomSheet(context);
     widget.onTermsPressed();
   }
@@ -51,7 +58,7 @@ class _PurchaseFooterState extends State<PurchaseFooter> {
   }
 
   void _onPressed(BuildContext context) {
-    if (!_purchasedCubit.state.isInappPurchaseAvailable) {
+    if (_purchasedCubit.state.products.isEmpty) {
       final langId = context.read<AppCubit>().state.languageCode;
       final link = linkLandingPagePurchased[langId];
       if (link != null) {
