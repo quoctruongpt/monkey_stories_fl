@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
 class MsSignUpTrackingUsecase extends UseCase<void, MsSignUpTrackingParams> {
@@ -12,7 +13,10 @@ class MsSignUpTrackingUsecase extends UseCase<void, MsSignUpTrackingParams> {
   Future<Either<Failure, void>> call(MsSignUpTrackingParams params) async {
     _trackingRepository.pushEvent(
       eventName: 'ms_sign_up',
-      customProperties: params.toJson(),
+      customProperties: params.toCustomProperties(),
+      semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
     return right(null);
   }
@@ -35,14 +39,17 @@ class MsSignUpTrackingParams {
     this.errorMessage = '',
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCustomProperties() {
     return {
-      'type': type,
       'phone': phone,
       'is_successful': isSuccessful,
       'have_clicked_sign_in': haveClickedSignIn,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
     };
+  }
+
+  Map<String, dynamic> toSemanticProperties() {
+    return {AirbridgeAttribute.LABEL: type};
   }
 }

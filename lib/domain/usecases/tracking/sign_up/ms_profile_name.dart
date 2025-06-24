@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
 class MsProfileNameTrackingUsecase
@@ -13,7 +14,10 @@ class MsProfileNameTrackingUsecase
   Future<Either<Failure, void>> call(MsProfileNameTrackingParams params) async {
     _trackingRepository.pushEvent(
       eventName: 'ms_profile_name',
-      customProperties: params.toJson(),
+      customProperties: params.toCustomProperties(),
+      semanticProperties: params.toSemanticProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
     return right(null);
   }
@@ -42,12 +46,17 @@ class MsProfileNameTrackingParams {
     this.errorMessage = '',
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCustomProperties() {
     return {
-      'source': source,
-      'click_type': clickType.value,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
+    };
+  }
+
+  Map<String, dynamic> toSemanticProperties() {
+    return {
+      AirbridgeAttribute.LABEL: source,
+      AirbridgeAttribute.ACTION: clickType.value,
     };
   }
 }
