@@ -176,7 +176,11 @@ class DioInterceptor extends Interceptor {
     final endPoint = Uri.tryParse(err.requestOptions.uri.toString())?.path;
     if (endPoint != null) {
       sl<LostConnectionUsecase>().call(
-        LostConnectionParams(endPoint: endPoint),
+        LostConnectionParams(
+          endPoint: endPoint,
+          errorMessage: err.response?.data['message'] ?? 'network_error',
+          screenName: RouteTracker.currentRouteName,
+        ),
       );
     }
 

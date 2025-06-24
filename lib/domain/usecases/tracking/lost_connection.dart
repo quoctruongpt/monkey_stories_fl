@@ -14,6 +14,9 @@ class LostConnectionUsecase extends UseCase<void, LostConnectionParams> {
     trackingRepository.pushEvent(
       eventName: 'lost_connection',
       semanticProperties: params.toSemanticProperties(),
+      customProperties: params.toCustomProperties(),
+      isPushAirbridge: true,
+      isPushKinesis: true,
     );
     return const Right(null);
   }
@@ -21,10 +24,20 @@ class LostConnectionUsecase extends UseCase<void, LostConnectionParams> {
 
 class LostConnectionParams {
   final String endPoint;
+  final String? errorMessage;
+  final String? screenName;
 
-  LostConnectionParams({required this.endPoint});
+  LostConnectionParams({
+    required this.endPoint,
+    this.errorMessage,
+    this.screenName,
+  });
 
   Map<String, dynamic> toSemanticProperties() {
     return {AirbridgeAttribute.LABEL: endPoint};
+  }
+
+  Map<String, dynamic> toCustomProperties() {
+    return {'error_message': errorMessage, 'screen_name': screenName};
   }
 }
