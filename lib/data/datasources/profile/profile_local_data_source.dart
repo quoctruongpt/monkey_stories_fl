@@ -12,6 +12,10 @@ abstract class ProfileLocalDataSource {
   Future<void> cacheCurrentProfile(int profileId, int? age);
   Future<int?> getCurrentProfile();
   Future<int?> getCurrentProfileAge();
+  Future<int?> getVersionProfile();
+  Future<void> saveVersionProfile(int version);
+  Future<void> cacheVersionProfileRemote(int version);
+  Future<int?> getVersionProfileRemote();
 }
 
 class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
@@ -60,5 +64,28 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
   @override
   Future<int?> getCurrentProfileAge() async {
     return sharedPreferences.getInt(SharedPrefKeys.currentProfileAge);
+  }
+
+  @override
+  Future<int?> getVersionProfile() async {
+    return sharedPreferences.getInt(SharedPrefKeys.versionProfile);
+  }
+
+  @override
+  Future<void> saveVersionProfile(int version) async {
+    await sharedPreferences.setInt(SharedPrefKeys.versionProfile, version);
+  }
+
+  @override
+  Future<void> cacheVersionProfileRemote(int version) async {
+    await sharedPreferences.setInt(
+      SharedPrefKeys.versionProfileRemote,
+      version,
+    );
+  }
+
+  @override
+  Future<int?> getVersionProfileRemote() async {
+    return sharedPreferences.getInt(SharedPrefKeys.versionProfileRemote);
   }
 }

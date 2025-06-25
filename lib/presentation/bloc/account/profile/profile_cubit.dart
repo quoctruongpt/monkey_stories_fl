@@ -7,10 +7,13 @@ import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
 part 'profile_state.dart';
 
 final Logger logger = Logger('ProfileCubit');
@@ -23,6 +26,9 @@ class ProfileCubit extends Cubit<ProfileState> {
   final PutSettingKinesisUsecase _putSettingKinesisUsecase;
   final GetListProfileLocalUsecase _getListProfileLocalUsecase;
   final SaveCurrentProfileUsecase _saveCurrentProfileUsecase;
+  final GetVersionProfileUsecase _getVersionProfileUsecase;
+  final CacheVersionProfileUsecase _cacheVersionProfileUsecase;
+  final GetVersionProfileRemoteUsecase _getVersionProfileRemoteUsecase;
 
   ProfileCubit({
     required GetListProfileUsecase getListProfileUsecase,
@@ -32,6 +38,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     required PutSettingKinesisUsecase putSettingKinesisUsecase,
     required GetListProfileLocalUsecase getListProfileLocalUsecase,
     required SaveCurrentProfileUsecase saveCurrentProfileUsecase,
+    required GetVersionProfileUsecase getVersionProfileUsecase,
+    required CacheVersionProfileUsecase cacheVersionProfileUsecase,
+    required GetVersionProfileRemoteUsecase getVersionProfileRemoteUsecase,
   }) : _getListProfileUsecase = getListProfileUsecase,
        _createProfileUsecase = createProfileUsecase,
        _getCurrentProfileUsecase = getCurrentProfileUsecase,
@@ -39,6 +48,9 @@ class ProfileCubit extends Cubit<ProfileState> {
        _putSettingKinesisUsecase = putSettingKinesisUsecase,
        _getListProfileLocalUsecase = getListProfileLocalUsecase,
        _saveCurrentProfileUsecase = saveCurrentProfileUsecase,
+       _getVersionProfileUsecase = getVersionProfileUsecase,
+       _cacheVersionProfileUsecase = cacheVersionProfileUsecase,
+       _getVersionProfileRemoteUsecase = getVersionProfileRemoteUsecase,
        super(const ProfileState());
 
   Future<void> getCurrentProfile() async {
@@ -53,6 +65,29 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> getListProfile({bool showConnectionErrorDialog = true}) async {
     try {
+      int? versionProfile;
+      int? versionProfileRemote;
+      final versionProfileResult = await _getVersionProfileUsecase.call(
+        GetVersionProfileUsecaseParams(),
+      );
+      final versionProfileRemoteResult = await _getVersionProfileRemoteUsecase
+          .call(GetVersionProfileRemoteUsecaseParams());
+      versionProfileRemoteResult.fold(
+        (failure) => {},
+        (version) => versionProfileRemote = version,
+      );
+      versionProfileResult.fold(
+        (failure) => {},
+        (version) => versionProfile = version,
+      );
+
+      if (versionProfile != null &&
+          versionProfileRemote != null &&
+          versionProfile! >= versionProfileRemote!) {
+        getListProfileLocal();
+        return;
+      }
+
       final result = await _getListProfileUsecase.call(
         showConnectionErrorDialog,
       );
@@ -64,6 +99,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         (profiles) {
           emit(
             state.copyWith(status: ProfileStatus.loaded, profiles: profiles),
+          );
+          _cacheVersionProfileUsecase.call(
+            CacheVersionProfileUsecaseParams(version: versionProfileRemote!),
           );
         },
       );

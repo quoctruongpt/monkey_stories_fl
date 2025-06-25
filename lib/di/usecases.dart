@@ -35,6 +35,10 @@ import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
 
 // Auth & Account Usecases
 import 'package:monkey_stories/domain/repositories/account_repository.dart';
@@ -136,7 +140,18 @@ final sl = GetIt.instance;
 void initUsecaseDependencies() {
   // Profile
   sl.registerLazySingleton(() => CreateProfileUsecase(sl<ProfileRepository>()));
-
+  sl.registerLazySingleton(
+    () => GetVersionProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => CacheVersionProfileUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => GetVersionProfileRemoteUsecase(sl<ProfileRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => CacheVersionProfileRemoteUsecase(sl<ProfileRepository>()),
+  );
   // Auth & Account
   sl.registerLazySingleton(() => LoginUsecase(sl<AuthRepository>()));
   sl.registerLazySingleton(

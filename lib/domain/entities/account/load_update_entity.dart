@@ -6,10 +6,12 @@ class LoadUpdateEntity {
   final UserEntity user;
   final PurchasedInfoEntity purchasedInfo;
   final SyncUserEntity syncUser;
+  final int versionProfileRemote;
 
   LoadUpdateEntity({
     required this.user,
     required this.purchasedInfo,
     required this.syncUser,
+    required this.versionProfileRemote,
   });
 }

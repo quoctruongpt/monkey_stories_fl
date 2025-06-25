@@ -10,6 +10,7 @@ import 'package:monkey_stories/domain/entities/account/user_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
@@ -25,6 +26,7 @@ class UserCubit extends HydratedCubit<UserState> {
   final AppCubit _appCubit;
   final SaveFcmUsecase _saveFcmUsecase;
   final SetUserUsecase _setUserUsecase;
+  final CacheVersionProfileRemoteUsecase _cacheVersionProfileRemoteUsecase;
   // Khởi tạo với trạng thái ban đầu
   UserCubit({
     required LogoutUsecase logoutUsecase,
@@ -33,12 +35,14 @@ class UserCubit extends HydratedCubit<UserState> {
     required AppCubit appCubit,
     required SaveFcmUsecase saveFcmUsecase,
     required SetUserUsecase setUserUsecase,
+    required CacheVersionProfileRemoteUsecase cacheVersionProfileRemoteUsecase,
   }) : _logoutUsecase = logoutUsecase,
        _getLoadUpdateUsecase = getLoadUpdateUsecase,
        _profileCubit = profileCubit,
        _appCubit = appCubit,
        _saveFcmUsecase = saveFcmUsecase,
        _setUserUsecase = setUserUsecase,
+       _cacheVersionProfileRemoteUsecase = cacheVersionProfileRemoteUsecase,
        super(const UserState());
 
   void updateUser(UserEntity user) {
@@ -121,6 +125,11 @@ class UserCubit extends HydratedCubit<UserState> {
                   loadUpdate.user.loginType == LoginType.skip
                       ? AccountType.trial
                       : AccountType.verified,
+            ),
+          );
+          _cacheVersionProfileRemoteUsecase.call(
+            CacheVersionProfileRemoteUsecaseParams(
+              version: loadUpdate.versionProfileRemote,
             ),
           );
         },

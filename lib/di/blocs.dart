@@ -129,6 +129,10 @@ import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -163,6 +167,7 @@ void initBlocDependencies() {
       appCubit: sl<AppCubit>(),
       saveFcmUsecase: sl<SaveFcmUsecase>(),
       setUserUsecase: sl<SetUserUsecase>(),
+      cacheVersionProfileRemoteUsecase: sl<CacheVersionProfileRemoteUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -286,6 +291,9 @@ void initBlocDependencies() {
       putSettingKinesisUsecase: sl<PutSettingKinesisUsecase>(),
       getListProfileLocalUsecase: sl<GetListProfileLocalUsecase>(),
       saveCurrentProfileUsecase: sl<SaveCurrentProfileUsecase>(),
+      getVersionProfileUsecase: sl<GetVersionProfileUsecase>(),
+      cacheVersionProfileUsecase: sl<CacheVersionProfileUsecase>(),
+      getVersionProfileRemoteUsecase: sl<GetVersionProfileRemoteUsecase>(),
     ),
   );
 

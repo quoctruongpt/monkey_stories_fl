@@ -10,12 +10,14 @@ class LoadUpdateResponseModel {
   final LocationModel location;
   final PurchasedInfoModel purchasedInfo;
   final SyncUserModel syncUser;
+  final int versionProfileRemote;
 
   LoadUpdateResponseModel({
     required this.userInfo,
     required this.location,
     required this.purchasedInfo,
     required this.syncUser,
+    required this.versionProfileRemote,
   });
 
   factory LoadUpdateResponseModel.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,7 @@ class LoadUpdateResponseModel {
         purchasedMap?[AppConstants.courseId.toString()],
       ),
       syncUser: SyncUserModel.fromJson(json['sync_user']['data']),
+      versionProfileRemote: json['version_profile'],
     );
   }
 
@@ -42,6 +45,7 @@ class LoadUpdateResponseModel {
       'location': location.toJson(),
       'purchasedInfo': purchasedInfo.toJson(),
       'syncUser': syncUser.toJson(),
+      'versionProfileRemote': versionProfileRemote,
     };
   }
 
@@ -50,6 +54,7 @@ class LoadUpdateResponseModel {
       user: userInfo.toEntity(),
       purchasedInfo: purchasedInfo.toEntity(),
       syncUser: syncUser.toEntity(),
+      versionProfileRemote: versionProfileRemote,
     );
   }
 }

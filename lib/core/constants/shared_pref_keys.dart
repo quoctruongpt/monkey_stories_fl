@@ -21,6 +21,8 @@ class SharedPrefKeys {
   static const String isNotificationEnabled = 'isNotificationEnabled';
   static const String scheduleDayOfWeek = 'scheduleDayOfWeek';
   static const String scheduleTime = 'scheduleTime';
+  static const String versionProfile = 'versionProfile';
+  static const String versionProfileRemote = 'versionProfileRemote';
 }
 
 final keysToKeep = [

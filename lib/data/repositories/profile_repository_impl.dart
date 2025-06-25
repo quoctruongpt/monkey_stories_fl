@@ -119,4 +119,46 @@ class ProfileRepositoryImpl extends ProfileRepository {
       return left(const CacheFailure());
     }
   }
+
+  @override
+  Future<Either<CacheFailure, int?>> getVersionProfile() async {
+    try {
+      final response = await profileLocalDataSource.getVersionProfile();
+      return right(response);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<CacheFailure, void>> saveVersionProfile(int version) async {
+    try {
+      await profileLocalDataSource.saveVersionProfile(version);
+      return right(null);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<CacheFailure, int?>> getVersionProfileRemote() async {
+    try {
+      final response = await profileLocalDataSource.getVersionProfileRemote();
+      return right(response);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<CacheFailure, void>> saveVersionProfileRemote(
+    int version,
+  ) async {
+    try {
+      await profileLocalDataSource.cacheVersionProfileRemote(version);
+      return right(null);
+    } catch (e) {
+      return left(const CacheFailure());
+    }
+  }
 }

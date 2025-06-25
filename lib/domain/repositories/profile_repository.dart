@@ -25,4 +25,12 @@ abstract class ProfileRepository {
     int? yearOfBirth,
     String? localAvatarPath,
   });
+
+  Future<Either<CacheFailure, int?>> getVersionProfile();
+
+  Future<Either<CacheFailure, void>> saveVersionProfile(int version);
+
+  Future<Either<CacheFailure, int?>> getVersionProfileRemote();
+
+  Future<Either<CacheFailure, void>> saveVersionProfileRemote(int version);
 }
