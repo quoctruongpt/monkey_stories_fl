@@ -3,6 +3,7 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
 
 class MsChangePasswordMethodTrackingUsecase
     extends UseCase<void, MsChangePasswordMethodTrackingParams> {
@@ -16,7 +17,8 @@ class MsChangePasswordMethodTrackingUsecase
   ) async {
     _trackingRepository.pushEvent(
       eventName: 'ms_change_password_method_screen',
-      customProperties: params.toJson(),
+      customProperties: params.toCustomProperties(),
+      semanticProperties: params.toSemanticProperties(),
     );
     return right(null);
   }
@@ -48,13 +50,16 @@ class MsChangePasswordMethodTrackingParams {
     required this.accountType,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCustomProperties() {
     return {
-      'click_type': clickType.value,
       'time_on_screen': timeOnScreen,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
       'account_type': accountType.value,
     };
+  }
+
+  Map<String, dynamic> toSemanticProperties() {
+    return {AirbridgeAttribute.ACTION: clickType.value};
   }
 }

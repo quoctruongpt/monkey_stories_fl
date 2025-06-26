@@ -3,6 +3,7 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
 
 enum MsChangePasswordSentOTPClickType {
   sendOTP('send_OTP'),
@@ -30,15 +31,18 @@ class MsChangePasswordSentOTPTrackingParams {
     required this.isSuccessful,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCustomProperties() {
     return {
-      'click_type': clickType.value,
       'account_type': accountType.value,
       'time_on_screen': timeOnScreen,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
       'is_successful': isSuccessful,
     };
+  }
+
+  Map<String, dynamic> toSemanticProperties() {
+    return {AirbridgeAttribute.ACTION: clickType.value};
   }
 }
 
@@ -54,7 +58,8 @@ class MsChangePasswordSentOTPTrackingUseCase
   ) async {
     _trackingRepository.pushEvent(
       eventName: 'ms_change_password_input_info_receive_otp',
-      customProperties: params.toJson(),
+      customProperties: params.toCustomProperties(),
+      semanticProperties: params.toSemanticProperties(),
     );
     return right(null);
   }

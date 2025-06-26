@@ -50,7 +50,7 @@ enum ClickType {
   startNow('start_now'),
   killApp('kill_app'),
   activeCode('active_code'),
-  language('language');
+  language('change_language');
 
   final String value;
 

@@ -3,6 +3,7 @@ import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
 
 enum MsUpdatePasswordClickType {
   update('update'),
@@ -30,15 +31,18 @@ class MsUpdatePasswordTrackingParams {
     this.isSuccessful = false,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toCustomProperties() {
     return {
-      'have_clicked_type': clickType.value,
       'account_type': accountType.value,
       'time_on_screen': timeOnScreen,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
       'is_successful': isSuccessful,
     };
+  }
+
+  Map<String, dynamic> toSemanticProperties() {
+    return {AirbridgeAttribute.ACTION: clickType.value};
   }
 }
 
@@ -54,7 +58,8 @@ class MsUpdatePasswordTrackingUseCase
   ) async {
     _trackingRepository.pushEvent(
       eventName: 'ms_change_password_update_password',
-      customProperties: params.toJson(),
+      customProperties: params.toCustomProperties(),
+      semanticProperties: params.toSemanticProperties(),
     );
     return right(null);
   }
