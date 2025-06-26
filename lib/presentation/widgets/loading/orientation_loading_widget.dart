@@ -50,7 +50,7 @@ class _OrientationLoadingState extends State<OrientationLoading> {
                 duration: _animationDuration,
                 curve: Curves.easeInOut,
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue,
+                  color: Colors.lightBlue.withAlpha(200),
                   borderRadius: BorderRadius.circular(borderRadiusValue),
                 ),
                 child: Center(
