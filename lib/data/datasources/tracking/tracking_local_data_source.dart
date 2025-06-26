@@ -77,8 +77,8 @@ class TrackingLocalDataSourceImpl implements TrackingLocalDataSource {
       osName: deviceInfo['osName'],
       osVersion: deviceInfo['osVersion'],
       appVersion: deviceInfo['appVersion'],
-      channel: channel,
-      campaign: campaign,
+      channel: channel ?? 'unattributed',
+      campaign: campaign ?? 'unattributed',
     );
   }
 }
