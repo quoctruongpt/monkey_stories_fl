@@ -55,7 +55,7 @@ class MsLearningReportStoriesLevelParams {
 
 enum StoriesLevelClickType {
   thisWeek('this_week'),
-  thisMonth('this_month'),
+  thisMonth('total'),
   showMore('show_more'),
   showLess('show_less');
 
