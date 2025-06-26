@@ -5,16 +5,21 @@ import 'package:monkey_stories/data/models/setting/schedule.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tzd;
 
 final logger = Logger('Schedule');
 
 Future<void> initNotification(
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
 ) async {
-  tz.initializeTimeZones();
+  tzd.initializeTimeZones();
   final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  try {
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  } on tz.LocationNotFoundException {
+    const fallbackTimeZone = 'Asia/Ho_Chi_Minh';
+    tz.setLocalLocation(tz.getLocation(fallbackTimeZone));
+  }
 
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');

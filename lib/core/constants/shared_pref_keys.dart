@@ -15,6 +15,8 @@ class SharedPrefKeys {
   static const String currentProfileAge = 'currentProfileAge';
   static const String countryCode = 'countryCode';
   static const String purchasedProducts = 'purchasedProducts';
+  static const String airbridgeChannel = 'airbridgeChannel';
+  static const String airbridgeCampaign = 'airbridgeCampaign';
   static const String purchasedLatest = 'purchasedLatest';
   static const String hasLoggedBefore = 'hasLoggedBefore';
   static const String isBackgroundMusicEnabled = 'isBackgroundMusicEnabled';

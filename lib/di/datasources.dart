@@ -161,6 +161,8 @@ void initDatasourceDependencies() {
       profileLocalDataSource: sl<ProfileLocalDataSource>(),
       accountLocalDataSource: sl<AccountLocalDataSource>(),
       deviceLocalDataSource: sl<DeviceLocalDataSource>(),
+      sharedPreferences: sl<SharedPreferences>(),
+      airbridgeRemoteDataSource: sl<AirbridgeRemoteDataSource>(),
     ),
   );
   sl.registerLazySingleton<TrackingRemoteDataSource>(

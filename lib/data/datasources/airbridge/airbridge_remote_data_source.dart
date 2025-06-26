@@ -20,10 +20,29 @@ abstract class AirbridgeRemoteDataSource {
     Map<String, dynamic>? semanticProperties,
     Map<String, dynamic>? customProperties,
   );
+  Stream<Map<String, dynamic>> get attributionDataStream;
+  void listenToAttribution();
 }
 
 class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
   final Logger _logger = Logger('AirbridgeRemoteDataSourceImpl');
+  final _attributionDataController =
+      StreamController<Map<String, dynamic>>.broadcast();
+
+  @override
+  Stream<Map<String, dynamic>> get attributionDataStream =>
+      _attributionDataController.stream;
+
+  @override
+  void listenToAttribution() {
+    Airbridge.setOnAttributionReceived((result) {
+      _logger.info('Attribution result received: $result');
+      if (result != null) {
+        final data = Map<String, dynamic>.from(result);
+        _attributionDataController.add(data);
+      }
+    });
+  }
 
   @override
   Future<void> registerTokenAirbridge(String token) async {
