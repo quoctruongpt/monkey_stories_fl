@@ -36,9 +36,11 @@ import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_view_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_view_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
@@ -181,6 +183,7 @@ void initBlocDependencies() {
       profileCubit: sl<ProfileCubit>(),
       verifyCodUserCrmUsecase: sl<VerifyCodUserCrmUseCase>(),
       msSignInTrackingUsecase: sl<MsSignInTrackingUsecase>(),
+      msViewSignInTrackingUsecase: sl<MsViewSignInTrackingUsecase>(),
     ),
   );
   sl.registerFactory(
@@ -193,6 +196,7 @@ void initBlocDependencies() {
       getCountryCodeUsecase: sl<GetCountryCodeUsecase>(),
       msSignInPopupWarningUsecase: sl<MsSignInPopupWarningUsecase>(),
       msSignUpTrackingUsecase: sl<MsSignUpTrackingUsecase>(),
+      msViewSignUpTrackingUsecase: sl<MsViewSignUpTrackingUsecase>(),
     ),
   );
 

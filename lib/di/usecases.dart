@@ -21,6 +21,8 @@ import 'package:monkey_stories/domain/usecases/tracking/payment/order_complete.d
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_view_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_view_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
@@ -441,7 +443,12 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () => MsOrderCompleteCrashPopupTrackingUsecase(sl<TrackingRepository>()),
   );
-
+  sl.registerLazySingleton(
+    () => MsViewSignInTrackingUsecase(sl<TrackingRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => MsViewSignUpTrackingUsecase(sl<TrackingRepository>()),
+  );
   // Report
   sl.registerLazySingleton(
     () => GetReportUsecase(reportRepository: sl<ReportRepository>()),

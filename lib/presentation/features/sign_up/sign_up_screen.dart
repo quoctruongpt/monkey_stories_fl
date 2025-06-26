@@ -61,6 +61,7 @@ class _SignUpState extends State<SignUp>
     _confirmPasswordController = TextEditingController();
     _pageController = PageController();
     _passwordFocusNode = FocusNode();
+    context.read<SignUpCubit>().viewSignUpTracking();
   }
 
   @override

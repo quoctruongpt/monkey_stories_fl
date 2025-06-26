@@ -10,6 +10,7 @@ import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_view_sign_in.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart'; // Import Login State
 import 'package:monkey_stories/core/constants/constants.dart';
@@ -43,6 +44,7 @@ class LoginCubit extends Cubit<LoginState> {
   final RestorePurchasedUsecase _restorePurchasedUsecase;
   final VerifyCodUserCrmUseCase _verifyCodUserCrmUsecase;
   final MsSignInTrackingUsecase _msSignInTrackingUsecase;
+  final MsViewSignInTrackingUsecase _msViewSignInTrackingUsecase;
 
   final ProfileCubit _profileCubit;
 
@@ -59,6 +61,7 @@ class LoginCubit extends Cubit<LoginState> {
     required ProfileCubit profileCubit,
     required VerifyCodUserCrmUseCase verifyCodUserCrmUsecase,
     required MsSignInTrackingUsecase msSignInTrackingUsecase,
+    required MsViewSignInTrackingUsecase msViewSignInTrackingUsecase,
   }) : _userCubit = userCubit,
        _loginUsecase = loginUsecase,
        _loginWithLastLoginUsecase = loginWithLastLoginUsecase,
@@ -68,6 +71,7 @@ class LoginCubit extends Cubit<LoginState> {
        _profileCubit = profileCubit,
        _verifyCodUserCrmUsecase = verifyCodUserCrmUsecase,
        _msSignInTrackingUsecase = msSignInTrackingUsecase,
+       _msViewSignInTrackingUsecase = msViewSignInTrackingUsecase,
        super(const LoginState());
 
   void loadLastLogin(String? initialUsername) async {
@@ -477,6 +481,10 @@ class LoginCubit extends Cubit<LoginState> {
       haveOccurredError: _trackingData.errorMessage != null,
     );
     _msSignInTrackingUsecase.call(params);
+  }
+
+  void viewSignInTracking() {
+    _msViewSignInTrackingUsecase.call(NoParams());
   }
 
   // Đừng quên hủy subscription khi Cubit bị đóng

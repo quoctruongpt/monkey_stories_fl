@@ -76,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen>
       if (mounted) {
         // Check if the state is still mounted
         context.read<LoginCubit>().loadLastLogin(widget.initialUsername);
+        context.read<LoginCubit>().viewSignInTracking();
         if (widget.initialPassword != null) {
           context.read<LoginCubit>().passwordChanged(
             widget.initialPassword ?? '',
