@@ -61,7 +61,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = _progress < 1.0 && _progress > 0.0;
+    final isLoading = _progress < 1.0;
     return Scaffold(
       appBar: AppBarWidget(
         title: AppLocalizations.of(context).translate(widget.title),
@@ -72,56 +72,46 @@ class _WebViewScreenState extends State<WebViewScreen> {
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
-
-          AnimatedSwitcher(
+          AnimatedOpacity(
+            opacity: isLoading ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
-            transitionBuilder: (child, animation) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            child:
-                isLoading
-                    ? Positioned(
-                      key: const ValueKey('logo_loading'),
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        color: Colors.black.withAlpha(10),
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Shimmer.fromColors(
-                                baseColor: Colors.transparent,
-                                highlightColor: Colors.white.withAlpha(128),
-                                child: Image.asset(
-                                  'assets/images/logo.png',
-                                  width: 150,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              SizedBox(
-                                width: 150,
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                  child: LinearProgressIndicator(
-                                    value: _progress,
-                                    backgroundColor: Colors.grey[200],
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+            child: IgnorePointer(
+              ignoring: !isLoading,
+              child: Container(
+                color: Colors.black.withAlpha(10),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Shimmer.fromColors(
+                        baseColor: Colors.transparent,
+                        highlightColor: Colors.white.withAlpha(128),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          width: 150,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 150,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          child: LinearProgressIndicator(
+                            value: _progress,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).primaryColor,
+                            ),
                           ),
                         ),
                       ),
-                    )
-                    : const SizedBox.shrink(key: ValueKey('logo_done')),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
