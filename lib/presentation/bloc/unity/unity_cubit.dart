@@ -45,7 +45,7 @@ class UnityCubit extends Cubit<UnityState> {
        _unregisterHandlerUseCase = unregisterHandlerUseCase,
        _putRecordKinesisUseCase = putRecordKinesisUseCase,
        _putEventToAirbridgeUseCase = putEventToAirbridgeUseCase,
-       super(const UnityState(isUnityVisible: false)) {
+       super(const UnityState(isUnityVisible: true)) {
     _registerHandlerDefault();
   }
 
