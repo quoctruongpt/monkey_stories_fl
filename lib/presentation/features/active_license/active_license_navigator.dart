@@ -134,7 +134,8 @@ class ActiveLicenseNavigator extends StatelessWidget {
 
 final ShellRoute activeLicenseRoutes = ShellRoute(
   builder: (context, state, child) {
-    final extraMap = state.extra as Map<String, dynamic>?;
+    final extra = state.extra;
+    final extraMap = extra is Map<String, dynamic> ? extra : null;
     final licenseInfo = extraMap?['licenseInfo'] as LicenseCodeInfoEntity?;
     final isUsernameCrm = extraMap?['isUsernameCrm'] as bool?;
     return ActiveLicenseNavigator(
@@ -149,8 +150,9 @@ final ShellRoute activeLicenseRoutes = ShellRoute(
       path: AppRoutePaths.inputLicense,
       name: AppRouteNames.inputLicense,
       builder: (context, state) {
-        final extraMap = state.extra as Map<String, dynamic>?;
-        final source = extraMap?['source'] as String;
+        final extra = state.extra;
+        final extraMap = extra is Map<String, dynamic> ? extra : null;
+        final source = extraMap?['source'] as String? ?? '';
         return InputLicense(source: source);
       },
     ),
