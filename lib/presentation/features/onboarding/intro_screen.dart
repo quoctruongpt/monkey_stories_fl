@@ -21,8 +21,7 @@ class IntroScreen extends StatelessWidget {
   final _introTracker = IntroTracker();
 
   void _onPressedStart(BuildContext context) {
-    _introTracker.clickType = ClickType.startNow;
-    context.push(AppRoutePaths.chooseYearOfBirthOBD);
+    context.go(AppRoutePaths.unity);
   }
 
   void _onPressedLogin(BuildContext context) {
@@ -167,25 +166,11 @@ class IntroScreen extends StatelessWidget {
                         AppButton.primary(
                           text: AppLocalizations.of(
                             context,
-                          ).translate('app.intro.start_trial'),
+                          ).translate('Mở Unity'),
                           onPressed: () => _onPressedStart(context),
                         ),
-                        const SizedBox(height: Spacing.md),
-                        AppButton.secondary(
-                          text: AppLocalizations.of(
-                            context,
-                          ).translate('app.intro.login'),
-                          onPressed: () => _onPressedLogin(context),
-                        ),
-                        const SizedBox(height: Spacing.md),
-                        TextButton(
-                          onPressed: () => _onPressedActiveCode(context),
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('app.intro.enter_activation_code'),
-                          ),
-                        ),
+
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ),
