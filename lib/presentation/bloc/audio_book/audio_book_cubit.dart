@@ -58,13 +58,13 @@ class AudioBookCubit extends Cubit<AudioBookState> {
       title: item.name,
       // For assets, the URI must be in the 'asset:///' format.
       artUri:
-          item.isDownloaded && item.localThumbPath != null
+          item.localThumbPath != null
               ? Uri.parse('asset:///${item.localThumbPath}')
               : null, // Placeholder can be added here if needed
       duration: Duration(seconds: item.duration),
     );
 
-    if (item.isDownloaded && item.localAudioPath != null) {
+    if (item.localAudioPath != null) {
       logger.info(
         'Creating source for ${item.name} from asset: ${item.localAudioPath}',
       );
@@ -226,7 +226,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
       return; // Index is out of bounds, do nothing.
     }
     final track = state.playlist[index];
-    if (!track.isDownloaded || track.localSyncTextPath == null) {
+    if (track.localSyncTextPath == null) {
       // Handle case where transcript is not available
       emit(
         state.copyWith(
@@ -318,7 +318,8 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     if (index >= state.playlist.length || index < 0) return; // Out of bounds
 
     var trackToDownload = state.playlist[index];
-    if (trackToDownload.isDownloaded || trackToDownload.isDownloading) {
+    if (trackToDownload.localAudioPath != null ||
+        trackToDownload.isDownloading) {
       return; // Already downloaded or currently downloading
     }
 
@@ -338,7 +339,6 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     // Mark as downloaded
     final updatedTrack = trackToDownload.copyWith(
       isDownloading: false,
-      isDownloaded: true,
       localAudioPath: fakeAudioPath,
       localSyncTextPath: fakeSyncTextPath,
     );
@@ -394,7 +394,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     final nextTrack = state.playlist[nextIndex];
     _checkPaidLockedAudio(nextIndex);
 
-    if (!nextTrack.isDownloaded) {
+    if (nextTrack.localAudioPath == null) {
       // If the track is not downloaded, pause playback.
       pause();
       // Seek to the new track (it will be a placeholder). This updates the UI focus.
@@ -435,7 +435,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     final prevTrack = state.playlist[prevIndex];
     _checkPaidLockedAudio(prevIndex);
 
-    if (!prevTrack.isDownloaded) {
+    if (prevTrack.localAudioPath == null) {
       // If the track is not downloaded, pause playback.
       pause();
       // Seek to the new track (it will be a placeholder). This updates the UI focus.
@@ -458,7 +458,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   Future<void> skipToTrack(int index) async {
     final track = state.playlist[index];
 
-    if (!track.isDownloaded) {
+    if (track.localAudioPath == null) {
       // If the track is not downloaded, pause playback.
       pause();
       // Start the download. The UI will show a loading indicator.

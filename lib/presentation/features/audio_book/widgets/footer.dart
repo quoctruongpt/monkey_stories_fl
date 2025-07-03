@@ -50,10 +50,10 @@ class _FooterState extends State<Footer> {
         final isPlaying = status == AudioPlayerStatus.playing;
         final hasPrevious =
             state.currentTrackIndex > 0 &&
-            state.playlist[state.currentTrackIndex - 1].isDownloaded;
+            state.playlist[state.currentTrackIndex - 1].localAudioPath != null;
         final hasNext =
             state.currentTrackIndex < state.playlist.length - 1 &&
-            state.playlist[state.currentTrackIndex + 1].isDownloaded;
+            state.playlist[state.currentTrackIndex + 1].localAudioPath != null;
 
         return Container(
           color: Colors.white,
