@@ -9,6 +9,8 @@ class AppState extends Equatable {
   final bool isBackgroundMusicEnabled;
   final bool isNotificationEnabled;
   final String appVersion;
+  final bool isDeletingData;
+  final bool isDeletingDataSuccess;
 
   const AppState({
     required this.isOrientationLoading,
@@ -19,6 +21,8 @@ class AppState extends Equatable {
     this.isBackgroundMusicEnabled = true,
     this.isNotificationEnabled = true,
     this.appVersion = '',
+    this.isDeletingData = false,
+    this.isDeletingDataSuccess = false,
   });
 
   AppState copyWith({
@@ -30,6 +34,9 @@ class AppState extends Equatable {
     bool? isBackgroundMusicEnabled,
     bool? isNotificationEnabled,
     String? appVersion,
+    bool? isDeletingData,
+    bool? isDeletingDataSuccess,
+    bool? resetStatusDeletingData,
   }) {
     return AppState(
       isOrientationLoading: isOrientationLoading ?? this.isOrientationLoading,
@@ -42,6 +49,14 @@ class AppState extends Equatable {
       isNotificationEnabled:
           isNotificationEnabled ?? this.isNotificationEnabled,
       appVersion: appVersion ?? this.appVersion,
+      isDeletingData:
+          resetStatusDeletingData == true
+              ? false
+              : isDeletingData ?? this.isDeletingData,
+      isDeletingDataSuccess:
+          resetStatusDeletingData == true
+              ? false
+              : isDeletingDataSuccess ?? this.isDeletingDataSuccess,
     );
   }
 
@@ -55,5 +70,7 @@ class AppState extends Equatable {
     isBackgroundMusicEnabled,
     isNotificationEnabled,
     appVersion,
+    isDeletingData,
+    isDeletingDataSuccess,
   ];
 }

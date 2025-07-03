@@ -42,6 +42,16 @@ class SystemSettingsRepositoryImpl implements SystemSettingsRepository {
       return Left(SystemFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteDataFolder(String path) async {
+    try {
+      await settingsLocalDataSource.deleteDataFolder(path);
+      return const Right(null);
+    } catch (e) {
+      return Left(SystemFailure(message: e.toString()));
+    }
+  }
 }
 
 // Định nghĩa SystemFailure nếu chưa có trong core/error/failures.dart

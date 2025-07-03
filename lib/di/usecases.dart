@@ -100,6 +100,7 @@ import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
@@ -190,6 +191,11 @@ void initUsecaseDependencies() {
   sl.registerLazySingleton(
     () =>
         GetCountryCodeUsecase(systemRepository: sl<SystemSettingsRepository>()),
+  );
+  sl.registerLazySingleton(
+    () => DeleteDataFolderUsecase(
+      systemRepository: sl<SystemSettingsRepository>(),
+    ),
   );
   // Unity
   sl.registerLazySingleton(

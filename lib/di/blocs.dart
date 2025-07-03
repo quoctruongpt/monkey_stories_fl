@@ -91,6 +91,7 @@ import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.da
 import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
 
 // Kinesis Usecases
 import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
@@ -242,6 +243,7 @@ void initBlocDependencies() {
       unityCubit: sl<UnityCubit>(), // UnityCubit is now also registered here
       saveSoundTrackUsecase: sl<SaveSoundTrackUsecase>(),
       getSoundTrackUseCase: sl<GetSoundTrackUseCase>(),
+      deleteDataFolderUseCase: sl<DeleteDataFolderUsecase>(),
     ),
   );
 

@@ -20,6 +20,9 @@ import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
+import 'package:monkey_stories/core/constants/setting.dart';
+
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
@@ -31,6 +34,7 @@ class AppCubit extends Cubit<AppState> {
   final SetPreferredOrientationsUseCase _setPreferredOrientationsUseCase;
   final UnityCubit _unityCubit;
   final GetSoundTrackUseCase _getSoundTrackUseCase;
+  final DeleteDataFolderUsecase _deleteDataFolderUseCase;
   final Logger _logger = Logger('AppCubit');
 
   AppCubit({
@@ -42,6 +46,7 @@ class AppCubit extends Cubit<AppState> {
     required UnityCubit unityCubit,
     required SaveSoundTrackUsecase saveSoundTrackUsecase,
     required GetSoundTrackUseCase getSoundTrackUseCase,
+    required DeleteDataFolderUsecase deleteDataFolderUseCase,
   }) : _getLanguageUseCase = getLanguageUseCase,
        _saveLanguageUseCase = saveLanguageUseCase,
        _getThemeUseCase = getThemeUseCase,
@@ -50,6 +55,7 @@ class AppCubit extends Cubit<AppState> {
        _unityCubit = unityCubit,
        _saveSoundTrackUsecase = saveSoundTrackUsecase,
        _getSoundTrackUseCase = getSoundTrackUseCase,
+       _deleteDataFolderUseCase = deleteDataFolderUseCase,
        super(
          const AppState(
            isOrientationLoading: false,
@@ -223,5 +229,22 @@ class AppCubit extends Cubit<AppState> {
 
   void toggleNotification() {
     emit(state.copyWith(isNotificationEnabled: !state.isNotificationEnabled));
+  }
+
+  Future<void> deleteDataDownloaded() async {
+    try {
+      emit(state.copyWith(isDeletingData: true));
+      for (var path in folderPaths) {
+        await _deleteDataFolderUseCase.call(DeleteDataFolderParams(path: path));
+      }
+    } finally {
+      emit(state.copyWith(isDeletingData: false, isDeletingDataSuccess: true));
+
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!isClosed) {
+          emit(state.copyWith(resetStatusDeletingData: true));
+        }
+      });
+    }
   }
 }

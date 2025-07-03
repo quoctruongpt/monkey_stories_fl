@@ -47,6 +47,7 @@ enum ClickType {
   userProfile('user_profile'),
   changePassword('change_password'),
   generalSettings('general_settings'),
+  deleteData('delete_data'),
   reminder('reminder'),
   monkeySupport('monkey_support'),
   signOut('sign_out'),

@@ -8,4 +8,6 @@ abstract class SystemSettingsRepository {
   );
 
   Future<Either<Failure, String>> getCountryCode();
+
+  Future<Either<Failure, void>> deleteDataFolder(String path);
 }

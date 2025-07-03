@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/delete_data_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/logout_dialog.dart';
 
 final List<Map<String, dynamic>> settingsData = [
@@ -86,6 +87,14 @@ final List<Map<String, dynamic>> settingsData = [
         label: 'app.setting.general',
         route: AppRouteNames.generalSetting,
         clickType: ClickType.generalSettings,
+      ),
+      SettingItem(
+        icon: 'assets/icons/svg/trash.svg',
+        label: 'app.setting.delete_data',
+        clickType: ClickType.deleteData,
+        onTap: (BuildContext context) {
+          showDeleteDataDialog(context);
+        },
       ),
       SettingItem(
         icon: 'assets/icons/svg/alarm-check.svg',
@@ -242,3 +251,5 @@ String getLocalizedLink(BuildContext context, Map<String, String> linkMap) {
   }
   return ''; // Return an empty string or handle error as needed
 }
+
+final List<String> folderPaths = [];
