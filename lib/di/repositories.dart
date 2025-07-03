@@ -66,6 +66,11 @@ import 'package:monkey_stories/data/datasources/remote_config/remote_config_remo
 import 'package:monkey_stories/data/repositories/remote_config_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
 
+// Audio Datasources & Repositories
+import 'package:monkey_stories/data/datasources/audio/audio_local_data_source.dart';
+import 'package:monkey_stories/data/repositories/audio_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/audio_repository.dart';
+
 final sl = GetIt.instance;
 
 void initRepositoryDependencies() {
@@ -186,6 +191,11 @@ void initRepositoryDependencies() {
   // Remote Config
   sl.registerLazySingleton<RemoteConfigRepository>(
     () => RemoteConfigRepositoryImpl(sl<RemoteConfigRemoteDataSource>()),
+  );
+
+  // Audio
+  sl.registerLazySingleton<AudioRepository>(
+    () => AudioRepositoryImpl(audioLocalDataSource: sl<AudioLocalDataSource>()),
   );
 
   // Add other repository registrations here...

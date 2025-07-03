@@ -136,6 +136,7 @@ import 'package:monkey_stories/domain/usecases/profile/get_version_profile_useca
 import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -412,6 +413,7 @@ void initBlocDependencies() {
           sl<MsChangeOrderListAudiobookTrackingUsecase>(),
       msViewListAudiobookTrackingUsecase:
           sl<MsViewListAudiobookTrackingUsecase>(),
+      getSyncTextUsecase: sl<GetSyncTextUsecase>(),
     ),
   );
 

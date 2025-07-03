@@ -138,6 +138,10 @@ import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
 import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
 import 'package:monkey_stories/domain/usecases/purchased/check_available_usecase.dart';
 
+// Audio Usecases
+import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
+import 'package:monkey_stories/domain/repositories/audio_repository.dart';
+
 final sl = GetIt.instance;
 
 void initUsecaseDependencies() {
@@ -471,5 +475,10 @@ void initUsecaseDependencies() {
   );
   sl.registerLazySingleton(
     () => GetPassDebugUsecase(sl<RemoteConfigRepository>()),
+  );
+
+  // Audio
+  sl.registerLazySingleton(
+    () => GetSyncTextUsecase(audioRepository: sl<AudioRepository>()),
   );
 }

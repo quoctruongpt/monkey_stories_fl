@@ -9,9 +9,7 @@ import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/core/constants/language.dart';
 import 'package:monkey_stories/core/env/environment_service.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DebugScreen extends StatelessWidget {
@@ -28,105 +26,117 @@ class DebugScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.cloud_outlined),
-                onPressed: () {
-                  environmentService.showEnvironmentSelector(context);
-                },
-                label: const Text('Cài đặt môi trường'),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.cloud_outlined),
+                  onPressed: () {
+                    environmentService.showEnvironmentSelector(context);
+                  },
+                  label: const Text('Cài đặt môi trường'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.language),
-                onPressed: () {
-                  _showDialogChangeLanguage(context);
-                },
-                label: const Text('Cài đặt ngôn ngữ'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.language),
+                  onPressed: () {
+                    _showDialogChangeLanguage(context);
+                  },
+                  label: const Text('Cài đặt ngôn ngữ'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.article_outlined),
-                onPressed: () {
-                  context.push('/logger');
-                },
-                label: const Text('Logger'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.article_outlined),
+                  onPressed: () {
+                    context.push('/logger');
+                  },
+                  label: const Text('Logger'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.storage),
-                onPressed: () {
-                  context.push('/shared-prefs');
-                },
-                label: const Text('Shared Preferences'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.storage),
+                  onPressed: () {
+                    context.push('/shared-prefs');
+                  },
+                  label: const Text('Shared Preferences'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.memory),
-                onPressed: () {
-                  context.push('/bloc-viewer');
-                },
-                label: const Text('Bloc Viewer'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.memory),
+                  onPressed: () {
+                    context.push('/bloc-viewer');
+                  },
+                  label: const Text('Bloc Viewer'),
+                ),
               ),
-            ),
-            BlocBuilder<DebugCubit, DebugState>(
-              builder: (context, state) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: FilledButton.icon(
-                    icon: Icon(
-                      state.isShowLogger ? Icons.toggle_on : Icons.toggle_off,
+              BlocBuilder<DebugCubit, DebugState>(
+                builder: (context, state) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      icon: Icon(
+                        state.isShowLogger ? Icons.toggle_on : Icons.toggle_off,
+                      ),
+                      onPressed: () {
+                        context.read<DebugCubit>().toggleLogger();
+                      },
+                      label: Text('Bật logger: ${state.isShowLogger}'),
                     ),
-                    onPressed: () {
-                      context.read<DebugCubit>().toggleLogger();
-                    },
-                    label: Text('Bật logger: ${state.isShowLogger}'),
-                  ),
-                );
-              },
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.network_check),
-                onPressed: () {
-                  context.push('/network-logger');
+                  );
                 },
-                label: const Text('Network Logger'),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.settings_remote),
-                onPressed: () {
-                  context.push('/remote-config');
-                },
-                label: const Text('Remote Config'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.network_check),
+                  onPressed: () {
+                    context.push('/network-logger');
+                  },
+                  label: const Text('Network Logger'),
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                icon: const Icon(Icons.delete_forever),
-                onPressed: () {
-                  _showDialogDeleteAllData(context);
-                },
-                label: const Text('Xóa toàn bộ dữ liệu'),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.settings_remote),
+                  onPressed: () {
+                    context.push('/remote-config');
+                  },
+                  label: const Text('Remote Config'),
+                ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.delete_forever),
+                  onPressed: () {
+                    _showDialogDeleteAllData(context);
+                  },
+                  label: const Text('Xóa toàn bộ dữ liệu'),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.folder_open),
+                  onPressed: () {
+                    context.push('/files');
+                  },
+                  label: const Text('Duyệt File'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

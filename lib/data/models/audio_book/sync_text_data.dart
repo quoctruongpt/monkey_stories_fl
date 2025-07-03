@@ -19,6 +19,10 @@ class SyncTextData extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {'s': startTime, 'e': endTime, 'w': text};
+  }
+
   @override
   List<Object?> get props => [startTime, endTime, text];
 }

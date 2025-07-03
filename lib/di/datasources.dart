@@ -35,6 +35,10 @@ import 'package:monkey_stories/data/datasources/device/device_remote_data_source
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
+
+// Audio Datasources
+import 'package:monkey_stories/data/datasources/audio/audio_local_data_source.dart';
+
 // Unity Datasources
 import 'package:monkey_stories/data/datasources/unity_datasource.dart';
 import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';
@@ -185,6 +189,11 @@ void initDatasourceDependencies() {
   // Remote Config
   sl.registerLazySingleton<RemoteConfigRemoteDataSource>(
     () => RemoteConfigRemoteDataSourceImpl(sl<RemoteConfigService>()),
+  );
+
+  // Audio
+  sl.registerLazySingleton<AudioLocalDataSource>(
+    () => AudioLocalDataSourceImpl(),
   );
 
   // Add other datasource registrations here...

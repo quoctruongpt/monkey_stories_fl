@@ -4,12 +4,14 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logging/logging.dart';
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
@@ -29,6 +31,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   final MsChangeOrderListAudiobookTrackingUsecase
   _msChangeOrderListAudiobookTrackingUsecase;
   final MsViewListAudiobookTrackingUsecase _msViewListAudiobookTrackingUsecase;
+  final GetSyncTextUsecase _getSyncTextUsecase;
   Timer? _countdownTimer;
 
   final UserCubit _userCubit;
@@ -42,38 +45,36 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     msChangeOrderListAudiobookTrackingUsecase,
     required MsViewListAudiobookTrackingUsecase
     msViewListAudiobookTrackingUsecase,
+    required GetSyncTextUsecase getSyncTextUsecase,
   }) : _userCubit = userCubit,
        _msListenAllTrackingUsecase = msListenAllTrackingUsecase,
        _msChangeOrderListAudiobookTrackingUsecase =
            msChangeOrderListAudiobookTrackingUsecase,
        _msViewListAudiobookTrackingUsecase = msViewListAudiobookTrackingUsecase,
+       _getSyncTextUsecase = getSyncTextUsecase,
        super(const AudioBookState()) {
     _init();
   }
 
-  AudioSource _createAudioSource(AudioBookItem item) {
+  AudioSource? _createAudioSource(AudioBookItem item) {
     // Create a MediaItem with metadata for the notification
     final mediaItem = MediaItem(
       id: item.id.toString(),
       title: item.name,
-      // For assets, the URI must be in the 'asset:///' format.
+      // Handle both file paths and asset paths for thumbnails
       artUri:
-          item.localThumbPath != null
-              ? Uri.parse('asset:///${item.localThumbPath}')
-              : null, // Placeholder can be added here if needed
+          item.localThumbPath != null ? Uri.file(item.localThumbPath!) : null,
       duration: Duration(seconds: item.duration),
     );
 
     if (item.localAudioPath != null) {
-      logger.info(
-        'Creating source for ${item.name} from asset: ${item.localAudioPath}',
-      );
-      return AudioSource.asset(item.localAudioPath!, tag: mediaItem);
+      final path = item.localAudioPath!;
+      return AudioSource.file(path, tag: mediaItem);
     } else {
       logger.warning(
         'Creating placeholder source for non-downloaded track: ${item.name}',
       );
-      return AudioSource.asset('assets/audio/aaa.mp3', tag: mediaItem);
+      return null;
     }
   }
 
@@ -173,7 +174,8 @@ class AudioBookCubit extends Cubit<AudioBookState> {
         }
       }
 
-      final audioSources = playlist.map(_createAudioSource).toList();
+      final audioSources =
+          playlist.map(_createAudioSource).whereType<AudioSource>().toList();
       final concatenatingAudioSource = ConcatenatingAudioSource(
         children: audioSources,
       );
@@ -226,7 +228,15 @@ class AudioBookCubit extends Cubit<AudioBookState> {
       return; // Index is out of bounds, do nothing.
     }
     final track = state.playlist[index];
-    if (track.localSyncTextPath == null) {
+    final audioPath = track.localAudioPath;
+    final content = track.content;
+    List<SyncTextData> transcript = [];
+    final result = await _getSyncTextUsecase.call(
+      GetSyncTextParams(audioPath: audioPath!, content: content),
+    );
+    result.fold((failure) => [], (success) => transcript = success);
+
+    if (transcript.isEmpty) {
       // Handle case where transcript is not available
       emit(
         state.copyWith(
@@ -239,18 +249,7 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     }
 
     try {
-      final syncTextPath = track.localSyncTextPath!;
-      final transcriptString = await rootBundle.loadString(syncTextPath);
-      final transcriptJson = json.decode(transcriptString) as List;
-      final transcript =
-          transcriptJson.map((item) => SyncTextData.fromJson(item)).toList();
-
-      // Assuming data.json is now coupled with the track or we use a convention
-      // For now, let's assume a corresponding data.json for the first track for demo purposes
-      final dataString = await rootBundle.loadString('assets/data/data.json');
-      final dataJson = json.decode(dataString) as Map<String, dynamic>;
-      final contentPath = dataJson['content_path'] as String;
-      final paragraphs = contentPath.split('\n');
+      final paragraphs = content.split('\n');
 
       final sentenceToParaMap = <int>[];
       int sentenceIdx = 0;
@@ -306,12 +305,8 @@ class AudioBookCubit extends Cubit<AudioBookState> {
     final dataString = await rootBundle.loadString('assets/data/test.json');
     final dataJson = json.decode(dataString) as Map<String, dynamic>;
     final localAudioPath = dataJson['payload']['localAudioPath'] as String;
-    final localSyncTextPath =
-        dataJson['payload']['localSyncTextPath'] as String;
-    return {
-      'localAudioPath': localAudioPath,
-      'localSyncTextPath': localSyncTextPath,
-    };
+
+    return {'localAudioPath': localAudioPath};
   }
 
   Future<void> _downloadTrackIfNeeded(int index) async {
@@ -334,13 +329,11 @@ class AudioBookCubit extends Cubit<AudioBookState> {
 
     // In a real app, you would get these paths from your download manager.
     final fakeAudioPath = fakeDownload['localAudioPath'] as String;
-    final fakeSyncTextPath = fakeDownload['localSyncTextPath'] as String;
 
     // Mark as downloaded
     final updatedTrack = trackToDownload.copyWith(
       isDownloading: false,
       localAudioPath: fakeAudioPath,
-      localSyncTextPath: fakeSyncTextPath,
     );
     _updateTrackInPlaylist(index, updatedTrack);
 
@@ -353,8 +346,10 @@ class AudioBookCubit extends Cubit<AudioBookState> {
         logger.info('Updating audio source in player for track index: $index');
         final newSource = _createAudioSource(updatedTrack);
         // Atomically remove the old source and insert the new one.
-        await currentSource.removeAt(index);
-        await currentSource.insert(index, newSource);
+        if (newSource != null) {
+          await currentSource.removeAt(index);
+          await currentSource.insert(index, newSource);
+        }
         logger.info(
           'Successfully updated audio source for track index: $index',
         );

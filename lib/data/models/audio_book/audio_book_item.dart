@@ -4,9 +4,9 @@ class AudioBookItem extends Equatable {
   final int id;
   final String name;
   final int duration;
+  final String content;
   final bool isDownloading;
   final String? localAudioPath;
-  final String? localSyncTextPath;
   final String? localThumbPath;
   final bool isFree;
 
@@ -14,17 +14,17 @@ class AudioBookItem extends Equatable {
     required this.id,
     required this.name,
     required this.duration,
+    required this.content,
     this.isDownloading = false,
     this.localAudioPath,
-    this.localSyncTextPath,
     this.localThumbPath,
     this.isFree = false,
   });
 
   AudioBookItem copyWith({
+    String? content,
     bool? isDownloading,
     String? localAudioPath,
-    String? localSyncTextPath,
     String? localThumbPath,
     bool? isFree,
   }) {
@@ -32,9 +32,9 @@ class AudioBookItem extends Equatable {
       id: id,
       name: name,
       duration: duration,
+      content: content ?? this.content,
       isDownloading: isDownloading ?? this.isDownloading,
       localAudioPath: localAudioPath ?? this.localAudioPath,
-      localSyncTextPath: localSyncTextPath ?? this.localSyncTextPath,
       localThumbPath: localThumbPath ?? this.localThumbPath,
       isFree: isFree ?? this.isFree,
     );
@@ -45,9 +45,9 @@ class AudioBookItem extends Equatable {
       id: json['id'] as int,
       name: json['name'] as String,
       duration: json['duration'] as int,
+      content: json['content'] as String,
       isDownloading: json['isDownloading'] ?? false,
       localAudioPath: json['localAudioPath'] as String?,
-      localSyncTextPath: json['localSyncTextPath'] as String?,
       localThumbPath: json['localThumbPath'] as String?,
       isFree: json['isFree'] as bool,
     );
@@ -58,9 +58,9 @@ class AudioBookItem extends Equatable {
     id,
     name,
     duration,
+    content,
     isDownloading,
     localAudioPath,
-    localSyncTextPath,
     localThumbPath,
     isFree,
   ];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/presentation/features/debugs/bloc_viewer_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/debug_screen.dart';
+import 'package:monkey_stories/presentation/features/debugs/files_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/logger_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/network_logger_screen.dart';
 import 'package:monkey_stories/presentation/features/debugs/remote_config.dart';
@@ -35,6 +36,10 @@ class DebugNavigator extends StatelessWidget {
           GoRoute(
             path: '/remote-config',
             builder: (context, state) => const RemoteConfigScreen(),
+          ),
+          GoRoute(
+            path: '/files',
+            builder: (context, state) => const FilesScreen(),
           ),
         ],
       ),
