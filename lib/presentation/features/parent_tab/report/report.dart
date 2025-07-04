@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monkey_stories/core/constants/lesson.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -9,11 +10,11 @@ import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learn
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
-import 'package:monkey_stories/presentation/features/parent/report/overview_report.dart';
-import 'package:monkey_stories/presentation/features/parent/report/progress_report.dart';
-import 'package:monkey_stories/presentation/features/parent/report/report_stories.dart';
-import 'package:monkey_stories/presentation/features/parent/report/report_header.dart';
-import 'package:monkey_stories/presentation/features/parent/report/weekly_study_duration_dart.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/overview_report.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/progress_report.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/report_stories.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/report_header.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/weekly_study_duration_dart.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
@@ -180,6 +181,7 @@ class ReportScreen extends StatelessWidget {
                                                   .totalDuration,
                                         ),
                                         const SizedBox(height: Spacing.md),
+
                                         ReportStories(
                                           onTabChanged: (index) {
                                             context
@@ -224,7 +226,13 @@ class ReportScreen extends StatelessWidget {
                                                   .toList(),
                                         ),
                                         const SizedBox(height: Spacing.md),
+
                                         ProgressReport(
+                                          selectedLevelId:
+                                              state
+                                                  .data!
+                                                  .stageFocusLearnToRead ??
+                                              StageId.one.value,
                                           onShowMore: () {
                                             context
                                                 .read<ReportCubit>()
@@ -239,44 +247,71 @@ class ReportScreen extends StatelessWidget {
                                                   PhonicsClickType.showLess,
                                                 );
                                           },
-                                          nurseryTotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .nursery
-                                                  .total,
-                                          kindergartenTotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .kindergarten
-                                                  .total,
-                                          grade1TotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .grade1
-                                                  .total,
-                                          nurseryValue:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .nursery
-                                                  .current,
-                                          kindergartenValue:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .kindergarten
-                                                  .current,
-                                          grade1Value:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .grade1
-                                                  .current,
-                                          phonicsLevelSelected:
-                                              PhonicsLevelSelected.nursery,
+                                          progressData: [
+                                            ProgressData(
+                                              id: StageId.one.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '1'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .one
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .one
+                                                      .total,
+                                            ),
+                                            ProgressData(
+                                              id: StageId.two.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '2'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .two
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .two
+                                                      .total,
+                                            ),
+                                            ProgressData(
+                                              id: StageId.three.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '3'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .three
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .three
+                                                      .total,
+                                            ),
+                                          ],
                                           title: AppLocalizations.of(
                                             context,
                                           ).translate(
@@ -287,7 +322,13 @@ class ReportScreen extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: Spacing.md),
+
                                         ProgressReport(
+                                          selectedLevelId:
+                                              state
+                                                  .data!
+                                                  .stageFocusEarlyReader ??
+                                              StageId.four.value,
                                           onShowMore: () {
                                             context.read<ReportCubit>().trackRC(
                                               RCClickType.showMore,
@@ -298,44 +339,92 @@ class ReportScreen extends StatelessWidget {
                                               RCClickType.showLess,
                                             );
                                           },
-                                          nurseryTotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .nursery
-                                                  .total,
-                                          kindergartenTotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .kindergarten
-                                                  .total,
-                                          grade1TotalLessons:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .grade1
-                                                  .total,
-                                          nurseryValue:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .nursery
-                                                  .current,
-                                          kindergartenValue:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .kindergarten
-                                                  .current,
-                                          grade1Value:
-                                              state
-                                                  .data!
-                                                  .levelProgress
-                                                  .grade1
-                                                  .current,
-                                          phonicsLevelSelected:
-                                              PhonicsLevelSelected.nursery,
+                                          progressData: [
+                                            ProgressData(
+                                              id: StageId.four.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '4'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .four
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .four
+                                                      .total,
+                                            ),
+                                            ProgressData(
+                                              id: StageId.five.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '5'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .five
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .five
+                                                      .total,
+                                            ),
+                                            ProgressData(
+                                              id: StageId.six.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '6'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .six
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .six
+                                                      .total,
+                                            ),
+                                            ProgressData(
+                                              id: StageId.seven.value,
+                                              title: AppLocalizations.of(
+                                                context,
+                                              ).translate(
+                                                'app.report.stage',
+                                                params: {'stage': '7'},
+                                              ),
+                                              value:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .seven
+                                                      .current,
+                                              total:
+                                                  state
+                                                      .data!
+                                                      .levelProgress
+                                                      .seven
+                                                      .total,
+                                            ),
+                                          ],
                                           title: AppLocalizations.of(
                                             context,
                                           ).translate(

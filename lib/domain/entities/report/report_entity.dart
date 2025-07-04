@@ -3,12 +3,16 @@ class LearningReportEntity {
   final TotalReportEntity totalLearned;
   final RecentWeeklyReportEntity recentWeeklyReport;
   final LevelProgressEntity levelProgress;
+  final String? stageFocusLearnToRead;
+  final String? stageFocusEarlyReader;
 
   LearningReportEntity({
     required this.weeklyReport,
     required this.totalLearned,
     required this.recentWeeklyReport,
     required this.levelProgress,
+    this.stageFocusLearnToRead,
+    this.stageFocusEarlyReader,
   });
 }
 
@@ -57,13 +61,21 @@ class ProgressEntity {
 }
 
 class LevelProgressEntity {
-  final ProgressEntity nursery;
-  final ProgressEntity kindergarten;
-  final ProgressEntity grade1;
+  final ProgressEntity one;
+  final ProgressEntity two;
+  final ProgressEntity three;
+  final ProgressEntity four;
+  final ProgressEntity five;
+  final ProgressEntity six;
+  final ProgressEntity seven;
 
   const LevelProgressEntity({
-    this.nursery = const ProgressEntity(),
-    this.kindergarten = const ProgressEntity(),
-    this.grade1 = const ProgressEntity(),
+    this.one = const ProgressEntity(),
+    this.two = const ProgressEntity(),
+    this.three = const ProgressEntity(),
+    this.four = const ProgressEntity(),
+    this.five = const ProgressEntity(),
+    this.six = const ProgressEntity(),
+    this.seven = const ProgressEntity(),
   });
 }

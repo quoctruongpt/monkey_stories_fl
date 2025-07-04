@@ -3,35 +3,59 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/widgets/report_card.dart';
 
-enum PhonicsLevelSelected { nursery, kindergarten, grade1 }
+/// Lớp chứa dữ liệu cho mỗi mục tiến độ.
+class ProgressData {
+  const ProgressData({
+    required this.id,
+    required this.title,
+    this.value = 0,
+    this.total = 0,
+  });
 
+  /// Định danh duy nhất cho mỗi cấp độ.
+  final Object id;
+
+  /// Tiêu đề của cấp độ.
+  final String title;
+
+  /// Giá trị tiến độ hiện tại.
+  final int value;
+
+  /// Tổng giá trị tiến độ.
+  final int total;
+}
+
+/// Widget hiển thị báo cáo tiến độ học tập.
+///
+/// Widget này có thể hiển thị một cấp độ được chọn và một danh sách
+/// các cấp độ khác có thể được mở rộng hoặc thu gọn.
 class ProgressReport extends StatefulWidget {
   const ProgressReport({
     super.key,
-    this.nurseryTotalLessons = 0,
-    this.kindergartenTotalLessons = 0,
-    this.grade1TotalLessons = 0,
-    this.nurseryValue = 0,
-    this.kindergartenValue = 0,
-    this.grade1Value = 0,
-    this.phonicsLevelSelected = PhonicsLevelSelected.nursery,
+    required this.progressData,
+    required this.selectedLevelId,
     this.title = '',
     this.icon = const SizedBox.shrink(),
     this.onShowMore,
     this.onShowLess,
   });
 
-  final int nurseryTotalLessons;
-  final int kindergartenTotalLessons;
-  final int grade1TotalLessons;
-  final int nurseryValue;
-  final int kindergartenValue;
-  final int grade1Value;
-  final PhonicsLevelSelected phonicsLevelSelected;
+  /// Danh sách dữ liệu tiến độ của các cấp độ.
+  final List<ProgressData> progressData;
 
+  /// ID của cấp độ đang được chọn để hiển thị mặc định.
+  final Object selectedLevelId;
+
+  /// Tiêu đề của thẻ báo cáo.
   final String title;
+
+  /// Biểu tượng hiển thị bên cạnh tiêu đề.
   final Widget icon;
+
+  /// Callback được gọi khi người dùng nhấn "Xem thêm".
   final VoidCallback? onShowMore;
+
+  /// Callback được gọi khi người dùng nhấn "Ẩn bớt".
   final VoidCallback? onShowLess;
 
   @override
@@ -41,64 +65,37 @@ class ProgressReport extends StatefulWidget {
 class _ProgressReportState extends State<ProgressReport> {
   bool _isExpanded = false;
 
-  Map<String, dynamic> _getLevelData(PhonicsLevelSelected level) {
-    switch (level) {
-      case PhonicsLevelSelected.nursery:
-        return {
-          'title': AppLocalizations.of(
-            context,
-          ).translate('app.report.progress.nursery'),
-          'value': widget.nurseryValue,
-          'total': widget.nurseryTotalLessons,
-        };
-      case PhonicsLevelSelected.kindergarten:
-        return {
-          'title': AppLocalizations.of(
-            context,
-          ).translate('app.report.progress.kindergarten'),
-          'value': widget.kindergartenValue,
-          'total': widget.kindergartenTotalLessons,
-        };
-      case PhonicsLevelSelected.grade1:
-        return {
-          'title': AppLocalizations.of(
-            context,
-          ).translate('app.report.progress.grade1'),
-          'value': widget.grade1Value,
-          'total': widget.grade1TotalLessons,
-        };
-    }
-  }
-
+  /// Xây dựng widget cho cấp độ được chọn (chế độ thu gọn).
   Widget _buildSelectedLevel() {
-    final data = _getLevelData(widget.phonicsLevelSelected);
+    final selectedLevel = widget.progressData.firstWhere(
+      (level) => level.id == widget.selectedLevelId,
+      orElse: () {
+        if (widget.progressData.isNotEmpty) {
+          return widget.progressData.first;
+        }
+        return const ProgressData(id: '', title: 'No data');
+      },
+    );
+
     return ProgressItem(
-      title: data['title'],
-      value: data['value'],
-      total: data['total'],
+      title: selectedLevel.title,
+      value: selectedLevel.value,
+      total: selectedLevel.total,
     );
   }
 
-  List<Widget> _buildRemainingLevels() {
-    final levels =
-        PhonicsLevelSelected.values
-            .where((level) => level != widget.phonicsLevelSelected)
-            .map(_getLevelData)
-            .toList();
-
-    levels.sort((a, b) => b['value'].compareTo(a['value']));
-
+  /// Xây dựng danh sách tất cả các cấp độ theo thứ tự (chế độ mở rộng).
+  Widget _buildAllLevelsInOrder() {
     final widgets = <Widget>[];
-    for (int i = 0; i < levels.length; i++) {
-      widgets.add(const SizedBox(height: Spacing.md));
+    for (int i = 0; i < widget.progressData.length; i++) {
       widgets.add(
         ProgressItem(
-          title: levels[i]['title'],
-          value: levels[i]['value'],
-          total: levels[i]['total'],
+          title: widget.progressData[i].title,
+          value: widget.progressData[i].value,
+          total: widget.progressData[i].total,
         ),
       );
-      if (i < levels.length - 1) {
+      if (i < widget.progressData.length - 1) {
         widgets.add(
           const Divider(
             height: Spacing.md * 2,
@@ -108,7 +105,10 @@ class _ProgressReportState extends State<ProgressReport> {
         );
       }
     }
-    return widgets;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgets,
+    );
   }
 
   @override
@@ -119,19 +119,9 @@ class _ProgressReportState extends State<ProgressReport> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSelectedLevel(),
           AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
-            secondChild: Column(
-              children: [
-                const Divider(
-                  height: Spacing.md * 2,
-                  thickness: 1,
-                  color: Color(0xFFF5F5F6),
-                ),
-                ..._buildRemainingLevels(),
-              ],
-            ),
+            firstChild: _buildSelectedLevel(),
+            secondChild: _buildAllLevelsInOrder(),
             crossFadeState:
                 _isExpanded
                     ? CrossFadeState.showSecond
@@ -185,6 +175,8 @@ class _ProgressReportState extends State<ProgressReport> {
   }
 }
 
+/// Widget hiển thị một mục tiến độ duy nhất với tiêu đề,
+/// thanh tiến trình và giá trị phần trăm.
 class ProgressItem extends StatelessWidget {
   const ProgressItem({
     super.key,
@@ -193,8 +185,13 @@ class ProgressItem extends StatelessWidget {
     this.total = 0,
   });
 
+  /// Tiêu đề của mục tiến độ.
   final String title;
+
+  /// Giá trị tiến độ hiện tại.
   final int value;
+
+  /// Tổng giá trị tiến độ.
   final int total;
 
   double _calculateProgress() {

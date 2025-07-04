@@ -1,3 +1,4 @@
+import 'package:monkey_stories/core/constants/lesson.dart';
 import 'package:monkey_stories/domain/entities/report/report_entity.dart';
 
 class ApiReportResponse {
@@ -5,12 +6,16 @@ class ApiReportResponse {
   final TotalReport totalLearned;
   final RecentWeeklyReport recentWeeklyReport;
   final LevelProgress levelProgress;
+  final String? stageFocusLearnToRead;
+  final String? stageFocusEarlyReader;
 
   ApiReportResponse({
     required this.weeklyReport,
     required this.totalLearned,
     required this.recentWeeklyReport,
     required this.levelProgress,
+    this.stageFocusLearnToRead,
+    this.stageFocusEarlyReader,
   });
 
   ApiReportResponse.fromJson(Map<String, dynamic> json)
@@ -19,7 +24,9 @@ class ApiReportResponse {
       recentWeeklyReport = RecentWeeklyReport.fromJson(
         json['RecentWeeklyReport'],
       ),
-      levelProgress = LevelProgress.fromJson(json['Progress']['Level']);
+      levelProgress = LevelProgress.fromJson(json['Progress']['Level']),
+      stageFocusLearnToRead = json['StageFocusLearnToRead'],
+      stageFocusEarlyReader = json['StageFocusEarlyReader'];
 
   LearningReportEntity toEntity() => LearningReportEntity(
     weeklyReport: weeklyReport.toEntity(),
@@ -109,32 +116,48 @@ class Progress {
 
   const Progress({this.current = 0, this.total = 1});
 
-  Progress.fromJson(Map<String, dynamic> json)
-    : current = json['Current'],
-      total = json['Total'];
+  Progress.fromJson(Map<String, dynamic>? json)
+    : current = json?['Current'] ?? 0,
+      total = json?['Total'] ?? 0;
 
   ProgressEntity toEntity() => ProgressEntity(current: current, total: total);
 }
 
 class LevelProgress {
-  final Progress nursery;
-  final Progress kindergarten;
-  final Progress grade1;
+  final Progress one;
+  final Progress two;
+  final Progress three;
+  final Progress four;
+  final Progress five;
+  final Progress six;
+  final Progress seven;
 
   const LevelProgress({
-    this.nursery = const Progress(),
-    this.kindergarten = const Progress(),
-    this.grade1 = const Progress(),
+    this.one = const Progress(),
+    this.two = const Progress(),
+    this.three = const Progress(),
+    this.four = const Progress(),
+    this.five = const Progress(),
+    this.six = const Progress(),
+    this.seven = const Progress(),
   });
 
   LevelProgress.fromJson(Map<String, dynamic> json)
-    : nursery = Progress.fromJson(json['Nursery']),
-      kindergarten = Progress.fromJson(json['Kindergarten']),
-      grade1 = Progress.fromJson(json['Grade1']);
+    : one = Progress.fromJson(json[StageId.one.value]),
+      two = Progress.fromJson(json[StageId.two.value]),
+      three = Progress.fromJson(json[StageId.three.value]),
+      four = Progress.fromJson(json[StageId.four.value]),
+      five = Progress.fromJson(json[StageId.five.value]),
+      six = Progress.fromJson(json[StageId.six.value]),
+      seven = Progress.fromJson(json[StageId.seven.value]);
 
   LevelProgressEntity toEntity() => LevelProgressEntity(
-    nursery: nursery.toEntity(),
-    kindergarten: kindergarten.toEntity(),
-    grade1: grade1.toEntity(),
+    one: one.toEntity(),
+    two: two.toEntity(),
+    three: three.toEntity(),
+    four: four.toEntity(),
+    five: five.toEntity(),
+    six: six.toEntity(),
+    seven: seven.toEntity(),
   );
 }

@@ -14,11 +14,11 @@ import 'package:monkey_stories/presentation/features/forgot_password/forgot_pass
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
-import 'package:monkey_stories/presentation/features/parent/parent_tab.dart';
-import 'package:monkey_stories/presentation/features/parent/report/report.dart';
-import 'package:monkey_stories/presentation/features/parent/setting.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/parent_tab.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/report.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/setting.dart';
 import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
-import 'package:monkey_stories/presentation/features/parent/vip.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/vip.dart';
 import 'package:monkey_stories/presentation/features/purchased/purchased.dart';
 import 'package:monkey_stories/presentation/features/purchased/renew_plan.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
