@@ -30,14 +30,14 @@ class MsPurchaseScreenRegisterTrackingParams {
   final String source;
   final int timeOnScreen;
   final String phone;
-  final MsPurchaseScreenRegisterClickType clickType;
+  final MsPurchaseScreenRegisterClickType? clickType;
   final bool isSuccess;
 
   MsPurchaseScreenRegisterTrackingParams({
     required this.source,
     required this.timeOnScreen,
     required this.phone,
-    required this.clickType,
+    this.clickType,
     required this.isSuccess,
   });
 
@@ -49,7 +49,7 @@ class MsPurchaseScreenRegisterTrackingParams {
     return {
       'time_on_screen': timeOnScreen,
       'phone_number': phone,
-      'click_type': clickType.value,
+      'click_type': clickType?.value,
       'is_success': isSuccess,
     };
   }

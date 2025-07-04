@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_footer.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
@@ -15,7 +14,6 @@ class ChooseYearOfBirthView extends StatefulWidget {
     this.yearSelected,
     required this.onChangeYear,
     required this.years,
-    this.onPressedBack,
   });
 
   final String name;
@@ -23,7 +21,6 @@ class ChooseYearOfBirthView extends StatefulWidget {
   final int? yearSelected;
   final void Function(int year) onChangeYear;
   final List<int> years;
-  final VoidCallback? onPressedBack;
 
   @override
   State<ChooseYearOfBirthView> createState() => _ChooseYearOfBirthViewState();
@@ -72,9 +69,8 @@ class _ChooseYearOfBirthViewState extends State<ChooseYearOfBirthView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(onBackPressed: widget.onPressedBack),
-      body: SafeArea(
+    return Expanded(
+      child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             left: Spacing.md,

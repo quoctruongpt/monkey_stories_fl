@@ -8,6 +8,7 @@ import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/choose_level_view.dart';
+import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 
 final logger = Logger('ChooseLevelScreen');
 
@@ -109,17 +110,24 @@ class _ChooseLevelScreenState extends State<ChooseLevelScreen>
     context.go(uri.toString());
   }
 
+  void _onPressedBack(BuildContext context) {
+    context.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChooseLevelCubit, ChooseLevelState>(
       builder: (context, state) {
-        return ChooseLevelView(
-          onContinuePressed: () => _onContinuePressed(context),
-          levels: onboardingLevels,
-          levelSelected: state.levelSelected,
-          onPressedLevel: (levelId) {
-            context.read<ChooseLevelCubit>().onPressedLevel(levelId);
-          },
+        return Scaffold(
+          appBar: AppBarWidget(onBackPressed: () => _onPressedBack(context)),
+          body: ChooseLevelView(
+            onContinuePressed: () => _onContinuePressed(context),
+            levels: onboardingLevels,
+            levelSelected: state.levelSelected,
+            onPressedLevel: (levelId) {
+              context.read<ChooseLevelCubit>().onPressedLevel(levelId);
+            },
+          ),
         );
       },
     );

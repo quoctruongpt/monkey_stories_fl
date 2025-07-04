@@ -11,6 +11,7 @@ import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/create_profile/create_profile_header.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
+import 'package:monkey_stories/presentation/widgets/onboard_progress.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
 
@@ -83,6 +84,20 @@ class LeaveContact extends StatelessWidget {
                         ),
                         child: Column(
                           children: [
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                left: Spacing.md,
+                                right: Spacing.md,
+                                bottom: Spacing.lg,
+                              ),
+                              child: Hero(
+                                tag: 'onboard_progress',
+                                child: OnboardProgress(
+                                  currentStep: 4,
+                                  totalSteps: 4,
+                                ),
+                              ),
+                            ),
                             Expanded(
                               child: Column(
                                 children: [

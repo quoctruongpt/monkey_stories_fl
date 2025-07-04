@@ -77,7 +77,7 @@ class _PurchaseFooterState extends State<PurchaseFooter> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _purchasedCubit.state.isInappPurchaseAvailable
+        _purchasedCubit.state.products.isNotEmpty
             ? FittedBox(
               child: Html(
                 data: widget.description,

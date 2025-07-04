@@ -11,6 +11,7 @@ import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dar
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
+import 'package:monkey_stories/presentation/widgets/onboard_progress.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 class SuggestedLevelTracker {
@@ -68,6 +69,17 @@ class SuggestedLevel extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: Spacing.lg),
               child: Column(
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      left: Spacing.md,
+                      right: Spacing.md,
+                      bottom: Spacing.lg,
+                    ),
+                    child: Hero(
+                      tag: 'onboard_progress',
+                      child: OnboardProgress(currentStep: 3, totalSteps: 4),
+                    ),
+                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(

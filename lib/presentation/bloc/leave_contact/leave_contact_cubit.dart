@@ -141,7 +141,7 @@ class LeaveContactCubit extends Cubit<LeaveContactState> {
                 .round(),
         phone:
             '${state.phone.value.countryCode}${state.phone.value.phoneNumber}',
-        clickType: _popupC3TrackingParams.clickType!,
+        clickType: _popupC3TrackingParams.clickType,
         isSuccess: state.isSuccess,
         source: _purchasedCubit.state.source ?? '',
       ),

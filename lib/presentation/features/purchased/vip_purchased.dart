@@ -16,9 +16,9 @@ import 'package:monkey_stories/presentation/widgets/purchase/purchased_content.d
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_image.dart';
 
 const listContent = [
-  'app.purchased.content1',
-  'app.purchased.content2',
-  'app.purchased.content3',
+  PurchasedContentItem(text: 'app.purchased.content1'),
+  PurchasedContentItem(text: 'app.purchased.content2'),
+  PurchasedContentItem(text: 'app.purchased.content3'),
 ];
 
 class VipPurchasedProvider extends StatelessWidget {
@@ -92,7 +92,7 @@ class VipPurchasedScreen extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: Spacing.md),
-                            const PurchasedContent(),
+                            const PurchasedContent(listContent: listContent),
                             const SizedBox(height: Spacing.md),
                             const PurchasedImage(),
                             const SizedBox(height: Spacing.lg),

@@ -9,7 +9,7 @@ import 'package:monkey_stories/presentation/features/onboarding/choose_language.
 import 'package:monkey_stories/presentation/features/onboarding/choose_level.dart';
 import 'package:monkey_stories/presentation/features/onboarding/choose_year_of_birth.dart';
 import 'package:monkey_stories/presentation/features/onboarding/leave_contact.dart';
-import 'package:monkey_stories/presentation/features/onboarding/obd_purchase.dart';
+import 'package:monkey_stories/presentation/features/purchased/obd_purchase.dart';
 import 'package:monkey_stories/presentation/features/onboarding/onboard_loading.dart';
 import 'package:monkey_stories/presentation/features/onboarding/suggested_level.dart';
 

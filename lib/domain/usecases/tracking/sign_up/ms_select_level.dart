@@ -47,7 +47,7 @@ enum MsSelectLevelClickType {
 
 class MsSelectLevelTrackingParams {
   final String source;
-  final MsSelectLevelType level;
+  final MsSelectLevelType? level;
   final MsSelectLevelClickType? clickType;
   final bool haveOccurredError;
   final String? errorMessage;
@@ -62,7 +62,7 @@ class MsSelectLevelTrackingParams {
 
   Map<String, dynamic> toCustomProperties() {
     return {
-      'level': level.value,
+      'level': level?.value,
       'have_occurred_error': haveOccurredError,
       'error_message': errorMessage,
     };
