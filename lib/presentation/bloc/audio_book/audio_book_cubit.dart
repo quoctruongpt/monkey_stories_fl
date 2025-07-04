@@ -216,8 +216,9 @@ class AudioBookCubit extends Cubit<AudioBookState> {
   void _checkPaidLockedAudio(int index) {
     if (index < 0 || index >= state.playlist.length) return;
     final track = state.playlist[index];
-    logger.info('checkPaidLockedAudio: ${track.name}');
-    if (!track.isFree && !_userCubit.state.purchasedInfo!.isActive) {
+    final isLocked = !track.isFree && !_userCubit.state.purchasedInfo!.isActive;
+    logger.info('checkPaidLockedAudio: ${track.name} isLocked: $isLocked');
+    if (isLocked) {
       emit(state.copyWith(showBuyToUnlockPopup: true));
       pause();
     }

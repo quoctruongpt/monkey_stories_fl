@@ -128,7 +128,7 @@ class _UnityViewState extends State<UnityView> with WidgetsBindingObserver {
                       "isDownloaded": true,
                       "localAudioPath": audioPath2,
                       "localThumbPath": "assets/images/purchased.png",
-                      "isFree": true,
+                      "isFree": false,
                     },
                   ],
                 },

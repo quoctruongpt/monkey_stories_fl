@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
@@ -15,6 +17,110 @@ void showUnlockLessonDialog({
         (context) => UnlockLessonDialog(onClose: onClose, onUnlock: onUnlock),
     barrierDismissible: false,
   );
+}
+
+class _Marquee extends StatefulWidget {
+  const _Marquee({
+    required this.child,
+    this.reverse = false,
+    this.duration = const Duration(seconds: 15),
+    this.gap = 4.0,
+  });
+
+  final Widget child;
+  final bool reverse;
+  final Duration duration;
+  final double gap;
+
+  @override
+  State<_Marquee> createState() => _MarqueeState();
+}
+
+class _MarqueeState extends State<_Marquee> {
+  late final ScrollController _controller;
+  final GlobalKey _childKey = GlobalKey();
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _postFrameCallback();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _postFrameCallback() {
+    if (!mounted) {
+      return;
+    }
+    final context = _childKey.currentContext;
+    final box = context?.findRenderObject() as RenderBox?;
+
+    if (box == null || !box.hasSize || box.size.width == 0) {
+      // Widget not laid out yet. Wait a bit and try again.
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          _postFrameCallback();
+        }
+      });
+      return;
+    }
+
+    final childWidth = box.size.width;
+    final viewportWidth = _controller.position.viewportDimension;
+    if (childWidth <= viewportWidth) {
+      return;
+    }
+    final scrollDistance = childWidth + widget.gap;
+    if (widget.reverse) {
+      _controller.jumpTo(scrollDistance);
+    }
+    _scroll(scrollDistance);
+  }
+
+  Future<void> _scroll(double scrollDistance) async {
+    while (_controller.hasClients) {
+      if (widget.reverse) {
+        await _controller.animateTo(
+          0,
+          duration: widget.duration,
+          curve: Curves.linear,
+        );
+        if (!_controller.hasClients) break;
+        _controller.jumpTo(scrollDistance);
+      } else {
+        await _controller.animateTo(
+          scrollDistance,
+          duration: widget.duration,
+          curve: Curves.linear,
+        );
+        if (!_controller.hasClients) break;
+        _controller.jumpTo(0);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      controller: _controller,
+      scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      child: Row(
+        children: [
+          Container(key: _childKey, child: widget.child),
+          SizedBox(width: widget.gap),
+          widget.child,
+        ],
+      ),
+    );
+  }
 }
 
 class UnlockLessonDialog extends StatelessWidget {
@@ -98,7 +204,6 @@ class UnlockLessonDialog extends StatelessWidget {
   }
 
   Widget _buildThumbnails() {
-    // Placeholder images, replace with actual asset paths
     return ShaderMask(
       shaderCallback: (Rect bounds) {
         return const LinearGradient(
@@ -114,10 +219,27 @@ class UnlockLessonDialog extends StatelessWidget {
         ).createShader(bounds);
       },
       blendMode: BlendMode.dstIn,
-      child: Image.asset(
-        'assets/images/unlock_banner.png',
-        height: 150,
-        fit: BoxFit.cover,
+      child: Column(
+        children: [
+          _Marquee(
+            child: Image.asset(
+              'assets/images/payment_popup_1.png',
+              height: 87,
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+            ),
+          ),
+          const SizedBox(height: 4),
+          _Marquee(
+            reverse: true,
+            child: Image.asset(
+              'assets/images/payment_popup_2.png',
+              height: 87,
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+            ),
+          ),
+        ],
       ),
     );
   }
