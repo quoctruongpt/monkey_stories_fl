@@ -40,6 +40,7 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
   Future<void> _deletePreference(String key) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
+    if (!mounted) return;
     setState(() {
       _preferences.remove(key);
     });
@@ -51,6 +52,7 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
   Future<void> _clearAllPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    if (!mounted) return;
     setState(() {
       _preferences.clear();
     });

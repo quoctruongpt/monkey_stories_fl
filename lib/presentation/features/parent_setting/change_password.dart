@@ -94,7 +94,10 @@ class ChangePasswordView extends StatelessWidget {
                                 ),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
-                                  color: AppTheme.textSecondaryColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    AppTheme.textSecondaryColor,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                                 errorText: AppLocalizations.of(
                                   context,
@@ -120,7 +123,10 @@ class ChangePasswordView extends StatelessWidget {
                                 ).translate('app.change_password.new_password'),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
-                                  color: AppTheme.textSecondaryColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    AppTheme.textSecondaryColor,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                                 errorText: AppLocalizations.of(
                                   context,
@@ -150,7 +156,10 @@ class ChangePasswordView extends StatelessWidget {
                                 ),
                                 labelTopIcon: SvgPicture.asset(
                                   'assets/icons/svg/password.svg',
-                                  color: AppTheme.textSecondaryColor,
+                                  colorFilter: const ColorFilter.mode(
+                                    AppTheme.textSecondaryColor,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                                 errorText: AppLocalizations.of(
                                   context,

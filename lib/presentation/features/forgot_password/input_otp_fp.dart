@@ -33,7 +33,7 @@ class _InputOtpFpState extends State<InputOtpFp>
     final canVerifyOtp = context.read<ForgotPasswordCubit>().canVerifyOtp();
     if (canVerifyOtp) {
       final isSuccess = await context.read<ForgotPasswordCubit>().verifyOtp();
-      if (isSuccess) {
+      if (isSuccess && context.mounted) {
         context.pushNamed(AppRouteNames.inputNewPasswordFp);
       }
     } else {

@@ -43,7 +43,6 @@ class _InputLicenseState extends State<InputLicense> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -51,7 +50,6 @@ class _InputLicenseState extends State<InputLicense> {
   void dispose() {
     _controller.dispose();
     _cameraController.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -223,7 +221,7 @@ class _InputLicenseState extends State<InputLicense> {
     _onTrackClick(ClickType.qrScan);
     final isGranted = await PermissionUtil.checkCameraPermission(context);
 
-    if (isGranted) {
+    if (isGranted && context.mounted) {
       context.read<ActiveLicenseCubit>().showScanner();
     }
   }

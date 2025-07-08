@@ -89,7 +89,13 @@ class _FooterState extends State<Footer> {
                           IconButton(
                             icon: SvgPicture.asset(
                               'assets/icons/svg/previous.svg',
-                              color: hasPrevious ? null : Colors.grey,
+                              colorFilter:
+                                  hasPrevious
+                                      ? null
+                                      : const ColorFilter.mode(
+                                        Colors.grey,
+                                        BlendMode.srcIn,
+                                      ),
                             ),
                             onPressed: hasPrevious ? cubit.previous : null,
                           ),
@@ -108,7 +114,13 @@ class _FooterState extends State<Footer> {
                           IconButton(
                             icon: SvgPicture.asset(
                               'assets/icons/svg/next.svg',
-                              color: hasNext ? null : Colors.grey,
+                              colorFilter:
+                                  hasNext
+                                      ? null
+                                      : const ColorFilter.mode(
+                                        Colors.grey,
+                                        BlendMode.srcIn,
+                                      ),
                             ),
                             onPressed: hasNext ? cubit.next : null,
                           ),

@@ -84,7 +84,7 @@ class _InputNewPasswordFpState extends State<InputNewPasswordFp>
 
   Future<void> _onUpdatePassword(BuildContext context) async {
     final result = await context.read<ForgotPasswordCubit>().changePassword();
-    if (result) {
+    if (result && context.mounted) {
       context.goNamed(AppRouteNames.forgotPasswordSuccess);
     }
   }

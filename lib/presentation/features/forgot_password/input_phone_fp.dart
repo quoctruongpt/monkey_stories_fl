@@ -41,7 +41,7 @@ class _InputPhoneFpState extends State<InputPhoneFp>
   Future<void> _onPressed(BuildContext context) async {
     _forgotPasswordCubit?.onConfirmPhone();
     final isSendDone = await context.read<ForgotPasswordCubit>().sendOtp();
-    if (isSendDone) {
+    if (isSendDone && context.mounted) {
       context.pushNamed(AppRouteNames.inputOtpFp);
     }
   }

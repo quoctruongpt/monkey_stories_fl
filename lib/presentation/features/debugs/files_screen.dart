@@ -94,7 +94,7 @@ class _FilesScreenState extends State<FilesScreen> {
     final size = stat.size;
     final modified = stat.modified;
 
-    if (!context.mounted) return;
+    if (!mounted) return;
 
     showModalBottomSheet(
       context: context,

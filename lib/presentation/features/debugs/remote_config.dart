@@ -64,7 +64,7 @@ class _RemoteConfigScreenState extends State<RemoteConfigScreen> {
                               Set<WidgetState> states,
                             ) {
                               if (index.isEven) {
-                                return Colors.grey.withOpacity(0.1);
+                                return Colors.grey.withValues(alpha: 0.1);
                               }
                               return null; // Use default value for odd rows.
                             }),
