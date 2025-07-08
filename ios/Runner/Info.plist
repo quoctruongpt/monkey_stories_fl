@@ -61,6 +61,8 @@
 	<string>This app needs camera access to scan QR codes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs photo library access to pick images</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone so you can record your voice for reading practice and interactive activities.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
