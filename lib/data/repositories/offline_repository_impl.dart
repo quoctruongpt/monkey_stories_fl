@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:fpdart/fpdart.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/network/network_info.dart';
 import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';

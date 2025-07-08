@@ -1,7 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/flutter_svg.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/localization/app_localizations.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
 import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:monkey_stories/presentation/widgets/report_card.dart';
 

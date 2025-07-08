@@ -1,7 +1,10 @@
-import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
-import 'package:monkey_stories/core/constants/purchased.dart';
-import 'package:monkey_stories/domain/entities/account/load_update_entity.dart';
+// Package imports:
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/purchased.dart';
+import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
+import 'package:monkey_stories/domain/entities/account/load_update_entity.dart';
 
 abstract class AccountLocalDataSource {
   Future<void> cacheUserInfo(LoadUpdateEntity userInfo);

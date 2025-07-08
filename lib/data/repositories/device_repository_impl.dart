@@ -1,13 +1,17 @@
+// Package imports:
 import 'package:fpdart/fpdart.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/device/device_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
+import 'package:monkey_stories/domain/repositories/device_repository.dart';
+
 // Import network info if needed
 // import 'package:monkey_stories/core/network/network_info.dart';
-import 'package:monkey_stories/domain/repositories/device_repository.dart';
 
 final logger = Logger('DeviceRepositoryImpl');
 

@@ -1,15 +1,20 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
-import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
 import 'package:monkey_stories/presentation/widgets/base/horizontal_line_text.dart';
+import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
 
 class ChooseMethodFp extends StatefulWidget {
   const ChooseMethodFp({super.key, this.isFromChangePassword = false});

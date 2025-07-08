@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/utils/profile.dart';
 import 'package:monkey_stories/core/validators/name.dart';
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
@@ -23,7 +26,7 @@ class UpdateProfileInfoCubit extends Cubit<UpdateProfileInfoState> {
   final MsUpdateProfilesTrackingUsecase _msUpdateProfilesTrackingUsecase;
   final UserCubit _userCubit;
 
-  UpdateProfileTracker _updateProfileTracker = UpdateProfileTracker();
+  final UpdateProfileTracker _updateProfileTracker = UpdateProfileTracker();
 
   UpdateProfileInfoCubit({
     required ProfileCubit profileCubit,

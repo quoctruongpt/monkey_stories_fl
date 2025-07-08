@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:lottie/lottie.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/lottie_utils.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 class CreateProfileHeader extends StatelessWidget {
   const CreateProfileHeader({super.key, this.title = ''});

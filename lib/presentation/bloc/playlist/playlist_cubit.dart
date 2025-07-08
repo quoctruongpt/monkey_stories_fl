@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 
 part 'playlist_state.dart';

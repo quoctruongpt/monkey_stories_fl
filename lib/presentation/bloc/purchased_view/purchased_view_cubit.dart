@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';

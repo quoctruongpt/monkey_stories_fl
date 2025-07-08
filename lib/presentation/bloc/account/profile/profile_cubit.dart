@@ -1,19 +1,23 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
 import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
-import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+
 part 'profile_state.dart';
 
 final Logger logger = Logger('ProfileCubit');

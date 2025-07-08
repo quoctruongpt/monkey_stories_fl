@@ -15,7 +15,6 @@ analyzer:
     prefer_const_constructors: warning # Cảnh báo nếu không sử dụng const khi có thể
     avoid_print: warning # Cảnh báo khi sử dụng print thay vì logger
 
-
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`

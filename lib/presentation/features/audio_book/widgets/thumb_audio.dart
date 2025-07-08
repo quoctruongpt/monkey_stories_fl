@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 
 class ThumbAudio extends StatelessWidget {

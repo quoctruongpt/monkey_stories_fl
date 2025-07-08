@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/core/utils/profile.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
@@ -9,6 +13,7 @@ import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dar
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
+
 part 'onboarding_state.dart';
 
 class OnboardingCubit extends Cubit<OnboardingState> {

@@ -1,8 +1,11 @@
+// Package imports:
 import 'package:fpdart/fpdart.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
-import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/domain/entities/tracking_event/airbridge_attribute.dart';
+import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 
 // ghi nhận khi user click vào bất kì nút nào ở section tiến độ học RC của bé
 class MsLearningReportRCTrackingUsecase

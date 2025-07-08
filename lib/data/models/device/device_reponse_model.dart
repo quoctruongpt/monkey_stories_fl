@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:monkey_stories/data/models/device/location_info_modal.dart';
 
 class RegisterLocationData {

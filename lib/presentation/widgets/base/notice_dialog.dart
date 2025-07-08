@@ -1,7 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/svg.dart';
-import 'package:monkey_stories/core/theme/app_theme.dart'; // Cần cho Spacing
+
+// Project imports:
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
+
+import 'package:monkey_stories/core/theme/app_theme.dart'; // Cần cho Spacing
 
 // Định nghĩa kiểu cho hàm translate để dễ truyền hơn
 typedef TranslateFunction = String Function(String key);

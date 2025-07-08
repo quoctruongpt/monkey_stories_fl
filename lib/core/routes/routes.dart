@@ -1,6 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
 import 'package:monkey_stories/di/injection_container.dart';
@@ -11,32 +16,32 @@ import 'package:monkey_stories/presentation/features/create_profile/choose_year_
 import 'package:monkey_stories/presentation/features/create_profile/create_profile_loading.dart';
 import 'package:monkey_stories/presentation/features/create_profile/input_name_screen.dart';
 import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
+import 'package:monkey_stories/presentation/features/home_screen.dart';
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/features/onboarding/intro_screen.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/change_password.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/change_password_success.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/edit_profile_info.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/general_setting.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/schedule_manager.dart';
+import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/parent_tab.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/report/report.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/setting.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/list_profile_setting.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/vip.dart';
 import 'package:monkey_stories/presentation/features/purchased/purchased.dart';
 import 'package:monkey_stories/presentation/features/purchased/renew_plan.dart';
+import 'package:monkey_stories/presentation/features/purchased_success.dart';
+import 'package:monkey_stories/presentation/features/result_screen.dart';
+import 'package:monkey_stories/presentation/features/sign_in/login_screen.dart';
+import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
 import 'package:monkey_stories/presentation/features/sign_up/sign_up_success_screen.dart';
 import 'package:monkey_stories/presentation/features/splash/splash_screen.dart';
 import 'package:monkey_stories/presentation/features/unity/unity_screen.dart';
-import 'package:monkey_stories/presentation/features/home_screen.dart';
-import 'package:monkey_stories/presentation/features/sign_in/login_screen.dart';
-import 'package:monkey_stories/presentation/features/result_screen.dart';
-import 'package:monkey_stories/presentation/features/sign_up/sign_up_screen.dart';
 import 'package:monkey_stories/presentation/features/webview.dart';
 import 'package:monkey_stories/presentation/widgets/orientation_wrapper.dart';
-import 'package:monkey_stories/presentation/features/purchased_success.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/user_info.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/edit_profile_info.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/change_password.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/change_password_success.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/general_setting.dart';
-import 'package:monkey_stories/presentation/features/parent_setting/schedule_manager.dart';
 
 final logger = Logger('router');
 

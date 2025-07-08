@@ -1,10 +1,14 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/blocs.dart';
-import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
@@ -14,6 +18,7 @@ import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dar
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_content.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_image.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 const listContent = [
   PurchasedContentItem(text: 'app.purchased.content1'),

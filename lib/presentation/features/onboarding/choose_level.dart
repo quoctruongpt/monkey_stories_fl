@@ -1,7 +1,12 @@
-import 'package:collection/collection.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/level.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -9,8 +14,8 @@ import 'package:monkey_stories/di/repositories.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
 import 'package:monkey_stories/presentation/features/onboarding/obd_navigator.dart';
-import 'package:monkey_stories/presentation/widgets/create_profile/choose_level_view.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/create_profile/choose_level_view.dart';
 import 'package:monkey_stories/presentation/widgets/onboard_progress.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 

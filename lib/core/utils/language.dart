@@ -1,5 +1,8 @@
-import 'package:monkey_stories/core/constants/constants.dart';
+// Package imports:
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/constants.dart';
 
 class LanguageUtils {
   static Future<String> getLocaleCode() async {

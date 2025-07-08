@@ -1,20 +1,26 @@
+// Dart imports:
 import 'dart:async';
-import 'dart:io'; // Để kiểm tra Platform.isIOS, Platform.isAndroid
 
+// Package imports:
 import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart'; // Để kiểm tra kIsWeb
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core/utils/language.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
+import 'package:monkey_stories/core/extensions/logger_service.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/core/utils/language.dart';
+import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/domain/usecases/tracking/lost_connection.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/lost_connect_dialog.dart';
-import 'package:monkey_stories/di/injection_container.dart';
-import 'package:monkey_stories/core/extensions/logger_service.dart';
+
+import 'dart:io'; // Để kiểm tra Platform.isIOS, Platform.isAndroid
+
+import 'package:dio/dio.dart'; // Để kiểm tra kIsWeb
 
 class DioInterceptor extends Interceptor {
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();

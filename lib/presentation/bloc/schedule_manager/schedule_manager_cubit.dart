@@ -1,11 +1,16 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/schedule_manager.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/domain/entities/setting/schedule_entity.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
-import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 
 part 'schedule_manager_state.dart';
 

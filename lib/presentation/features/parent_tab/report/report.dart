@@ -1,6 +1,12 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shimmer/shimmer.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/lesson.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
@@ -12,13 +18,12 @@ import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.d
 import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/report/overview_report.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/report/progress_report.dart';
-import 'package:monkey_stories/presentation/features/parent_tab/report/report_stories.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/report/report_header.dart';
+import 'package:monkey_stories/presentation/features/parent_tab/report/report_stories.dart';
 import 'package:monkey_stories/presentation/features/parent_tab/report/weekly_study_duration_dart.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/custom_pie_chart.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ReportScreen extends StatelessWidget {
   const ReportScreen({super.key});

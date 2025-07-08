@@ -1,11 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/create_profile/choose_year_of_birth_view.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/create_profile/choose_year_of_birth_view.dart';
 
 class CreateProfileChooseYearOfBirthScreen extends StatelessWidget {
   const CreateProfileChooseYearOfBirthScreen({

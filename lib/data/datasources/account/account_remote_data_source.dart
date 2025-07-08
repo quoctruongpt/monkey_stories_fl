@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:dio/dio.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/account/load_update_response_model.dart';
 import 'package:monkey_stories/data/models/account/update_user_info.dart';

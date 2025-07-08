@@ -1,5 +1,8 @@
-import 'package:fpdart/fpdart.dart';
+// Package imports:
 import 'package:equatable/equatable.dart';
+import 'package:fpdart/fpdart.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/error/failures.dart';
 
 // Type là kiểu dữ liệu trả về thành công

@@ -1,7 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -19,7 +25,6 @@ import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 class InputLicense extends StatefulWidget {
   const InputLicense({super.key, required this.source});

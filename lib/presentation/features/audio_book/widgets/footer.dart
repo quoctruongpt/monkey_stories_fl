@@ -1,8 +1,14 @@
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/core/utils/number.dart';
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
@@ -199,8 +205,9 @@ class _FooterState extends State<Footer> {
                             setState(() {
                               _dragValue = newPosition;
                             });
-                            if (_debounce?.isActive ?? false)
+                            if (_debounce?.isActive ?? false) {
                               _debounce!.cancel();
+                            }
                             _debounce = Timer(
                               const Duration(milliseconds: 200),
                               () {

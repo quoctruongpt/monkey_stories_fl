@@ -1,5 +1,8 @@
-import 'package:firebase_remote_config/firebase_remote_config.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class RemoteConfigScreen extends StatefulWidget {
   const RemoteConfigScreen({super.key});
@@ -57,8 +60,8 @@ class _RemoteConfigScreenState extends State<RemoteConfigScreen> {
                           final index = indexedEntry.key;
                           final entry = indexedEntry.value;
                           return DataRow(
-                            color: MaterialStateProperty.resolveWith<Color?>((
-                              Set<MaterialState> states,
+                            color: WidgetStateProperty.resolveWith<Color?>((
+                              Set<WidgetState> states,
                             ) {
                               if (index.isEven) {
                                 return Colors.grey.withOpacity(0.1);

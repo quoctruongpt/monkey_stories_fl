@@ -1,23 +1,25 @@
+// Package imports:
 import 'package:bloc/bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/error/failures.dart';
+import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
-import 'package:monkey_stories/core/error/failures.dart';
-
-// Assume these UseCases exist and are imported correctly
-import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
-import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart'; // Assuming this exists
-import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 
+// Assume these UseCases exist and are imported correctly
+import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart'; // Assuming this exists
 import 'package:monkey_stories/presentation/bloc/splash/splash_state.dart'; // Sử dụng package import
-import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
-import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
-import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
-import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
-import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   final CheckAuthStatusUseCase _checkAuthStatusUseCase;

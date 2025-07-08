@@ -1,8 +1,11 @@
+// Package imports:
 import 'package:fpdart/fpdart.dart';
-import 'package:monkey_stories/core/error/failures.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/remote_config.dart';
-import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
+import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/remote_config/remote_config_remote_data_source.dart';
+import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
 
 class RemoteConfigRepositoryImpl extends RemoteConfigRepository {
   final RemoteConfigRemoteDataSource _remoteConfigRemoteDataSource;

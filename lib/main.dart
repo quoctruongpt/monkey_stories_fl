@@ -1,24 +1,29 @@
+// Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:path_provider/path_provider.dart';
+
+// Project imports:
 import 'package:monkey_stories/app.dart';
-import 'package:monkey_stories/di/injection_container.dart' as di;
+import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/core/env/environment_service.dart';
 import 'package:monkey_stories/core/extensions/logger_service.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:monkey_stories/core/utils/schedule.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:monkey_stories/firebase_options.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
-import 'package:monkey_stories/core/constants/kinesis.dart';
+import 'package:monkey_stories/di/injection_container.dart' as di;
+import 'package:monkey_stories/firebase_options.dart';
 
 Future<void> main() async {
   await JustAudioBackground.init(

@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
-import 'package:logging/logging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 

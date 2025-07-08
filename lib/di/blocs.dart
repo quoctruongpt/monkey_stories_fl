@@ -1,19 +1,46 @@
+// Package imports:
 import 'package:get_it/get_it.dart';
+
+// Project imports:
 import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
+import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
 import 'package:monkey_stories/domain/usecases/account/save_fcm_usecase.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
+import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_skip_usecase.dart';
+import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/course/active_course_usecase.dart';
+import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_record_kinesis_usecase.dart';
+import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
 import 'package:monkey_stories/domain/usecases/leave_contact/save_contact_usecase.dart';
+import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/create_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/get_list_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
+import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/complete_purchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/dispose_purchse_error_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/get_products_usecase.dart';
@@ -22,122 +49,93 @@ import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchase_erro
 import 'package:monkey_stories/domain/usecases/purchased/listen_to_purchse_updated_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/puchase_usecase.dart';
 import 'package:monkey_stories/domain/usecases/purchased/restore_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
+import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
+import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_setting_system_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
 import 'package:monkey_stories/domain/usecases/settings/save_schedule_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
+import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_method.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_sent_otp.dart';
-import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_change_password_confirm_otp.dart';
 import 'package:monkey_stories/domain/usecases/tracking/forgot_password/ms_update_password.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_buy_now.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
 import 'package:monkey_stories/domain/usecases/tracking/payment/order_fail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
 import 'package:monkey_stories/domain/usecases/tracking/register_token_airbridge_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/set_user_usecase.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_view_sign_in.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
-import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_select_level.dart';
+import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_view_sign_up.dart';
-import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
+import 'package:monkey_stories/domain/usecases/unity/handle_unity_message_usecase.dart';
+import 'package:monkey_stories/domain/usecases/unity/register_handler_usecase.dart';
+import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_usecase.dart';
+import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_with_response_usecase.dart';
+import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/update_user_info/update_user_info_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/auth/sign_up/sign_up_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_level/choose_level_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/choose_year_of_birth/choose_year_of_birth_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/create_profile_loading/create_profile_loading_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/create_profile/input_name/input_name_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/float_button/float_button_cubit.dart';
-
-// Auth & Account Usecases and Blocs/Cubits
-import 'package:monkey_stories/domain/usecases/account/get_load_update.dart';
-import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/get_last_login_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/get_user_social_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/login_with_last_login_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/logout_usecase.dart';
-import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/auth/sign_up/sign_up_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-
-// Other App Features Usecases and Blocs/Cubits
-import 'package:monkey_stories/domain/usecases/auth/check_auth_status_usecase.dart';
-import 'package:monkey_stories/domain/usecases/device/register_device_usecase.dart';
 import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/general_setting/general_setting_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/leave_contact/leave_contact_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/onboarding/onboarding_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/schedule_manager/schedule_manager_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/splash/splash_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
-
-// Unity Usecases and Blocs/Cubits
-import 'package:monkey_stories/domain/usecases/unity/handle_unity_message_usecase.dart';
-import 'package:monkey_stories/domain/usecases/unity/register_handler_usecase.dart';
-import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_usecase.dart';
-import 'package:monkey_stories/domain/usecases/unity/send_message_to_unity_with_response_usecase.dart';
-import 'package:monkey_stories/domain/usecases/unity/unregister_handler_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart'; // UnityCubit import
-
-// Core App Usecases (needed by AppCubit)
-import 'package:monkey_stories/domain/usecases/settings/get_language_usecase.dart';
-import 'package:monkey_stories/domain/usecases/settings/save_language_usecase.dart';
-import 'package:monkey_stories/domain/usecases/settings/get_theme_usecase.dart';
-import 'package:monkey_stories/domain/usecases/settings/save_theme_usecase.dart';
-import 'package:monkey_stories/domain/usecases/system/set_preferred_orientations_usecase.dart';
-import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
-
-// Kinesis Usecases
-import 'package:monkey_stories/domain/usecases/kinesis/put_setting_kinesis_usecase.dart';
-import 'package:monkey_stories/domain/usecases/kinesis/put_record_kinesis_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
-import 'package:monkey_stories/domain/usecases/purchased/verify_purchased_usecase.dart';
-
-import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
-import 'package:monkey_stories/domain/usecases/active_license/verify_cod_usercrm.dart';
-import 'package:monkey_stories/domain/usecases/auth/get_has_logged_before_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/update_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/settings/save_sound_track_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/change_password/change_password_cubit.dart';
-import 'package:monkey_stories/domain/usecases/profile/get_list_profile_local_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/save_current_profile_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/report/report_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/unity_screen/unity_screen_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/bottom_navigation/bottom_navigation_cubit.dart';
-import 'package:monkey_stories/domain/usecases/offline/check_offline_status_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
-import 'package:monkey_stories/domain/usecases/remote_config/remote_config_initial_usecase.dart';
-import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_view_register.dart';
-import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_register.dart';
-import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_exit.dart';
-import 'package:monkey_stories/domain/usecases/tracking/payment/ms_ob_view_phone_number_screen.dart';
-import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
-import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
-import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_profiles.dart';
-import 'package:monkey_stories/presentation/bloc/general_setting/general_setting_cubit.dart';
-import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
-import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
-import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
-import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
-import 'package:monkey_stories/domain/usecases/tracking/put_event_to_aibridge.dart';
-import 'package:monkey_stories/domain/usecases/profile/get_version_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
-import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
-import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
-import 'package:monkey_stories/domain/usecases/settings/get_setting_system_usecase.dart';
+import 'package:monkey_stories/presentation/bloc/verify_parent/verify_parent_cubit.dart';
+
+// Auth & Account Usecases and Blocs/Cubits
+// Other App Features Usecases and Blocs/Cubits
+// Kinesis Usecases
+// Core App Usecases (needed by AppCubit)
+// Unity Usecases and Blocs/Cubits
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart'; // AppCubit import
+import 'package:monkey_stories/presentation/bloc/unity/unity_cubit.dart'; // UnityCubit import
 
 final sl = GetIt.instance;
 

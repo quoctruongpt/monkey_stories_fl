@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:monkey_stories/domain/entities/auth/verify_otp_entity.dart';
 
 class VerifyOtpResponseModel {

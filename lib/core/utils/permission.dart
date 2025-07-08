@@ -1,10 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class PermissionUtil {
   static Future<bool> checkCameraPermission(BuildContext context) async {

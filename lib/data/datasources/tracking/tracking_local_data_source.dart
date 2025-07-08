@@ -1,10 +1,13 @@
+// Package imports:
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/models/tracking/default_properties.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class TrackingLocalDataSource {
   Future<DefaultProperties> getDefaultProperties();

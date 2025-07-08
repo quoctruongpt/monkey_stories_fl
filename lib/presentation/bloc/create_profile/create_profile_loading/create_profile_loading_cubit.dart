@@ -1,8 +1,12 @@
+// Dart imports:
+import 'dart:async';
+
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'dart:async';
 
+// Project imports:
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 
 part 'create_profile_loading_state.dart';

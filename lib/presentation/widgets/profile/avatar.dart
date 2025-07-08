@@ -1,5 +1,10 @@
+// Dart imports:
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 
 class Avatar extends StatelessWidget {

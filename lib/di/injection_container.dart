@@ -1,13 +1,15 @@
+// Package imports:
 import 'package:get_it/get_it.dart';
 
+// Project imports:
+import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
 import 'package:monkey_stories/di/app_dependencies.dart';
-
-// Add imports for the new layer-based dependency files
+import 'package:monkey_stories/di/blocs.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/di/repositories.dart';
 import 'package:monkey_stories/di/usecases.dart';
-import 'package:monkey_stories/di/blocs.dart';
-import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
+
+// Add imports for the new layer-based dependency files
 
 /// Service locator instance
 final sl = GetIt.instance;

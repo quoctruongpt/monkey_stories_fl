@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/utils/profile.dart';
 
 part 'choose_year_of_birth_state.dart';

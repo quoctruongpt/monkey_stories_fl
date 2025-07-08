@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:monkey_stories/core/constants/remote_config.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/remote_config.dart';
 
 class RemoteConfigService {
   final FirebaseRemoteConfig _remoteConfig;

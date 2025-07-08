@@ -1,24 +1,29 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/utils/permission.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/account/update_profile_info/update_profile_info_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/dialogs/permission_denied_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/profile/avatar.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 import 'package:monkey_stories/presentation/widgets/year_button.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:monkey_stories/core/utils/permission.dart';
-import 'package:monkey_stories/presentation/widgets/dialogs/permission_denied_dialog.dart';
 
 class EditProfileInfo extends StatelessWidget {
   const EditProfileInfo({super.key, required this.profileId});

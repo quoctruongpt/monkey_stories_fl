@@ -1,5 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+// Package imports:
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/validators/name.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_profile_name.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';

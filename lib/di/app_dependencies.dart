@@ -1,21 +1,22 @@
+// Package imports:
 import 'package:aws_client/kinesis_2013_12_02.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:monkey_stories/core/network/network_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+// Project imports:
 import 'package:monkey_stories/core/network/dio_config.dart';
-
-// Import sl from the main container
+import 'package:monkey_stories/core/network/network_info.dart';
+import 'package:monkey_stories/core/remote_config/remote_config_service.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:monkey_stories/core/remote_config/remote_config_service.dart';
+// Import sl from the main container
 
 // final sl = GetIt.instance;
 

@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';

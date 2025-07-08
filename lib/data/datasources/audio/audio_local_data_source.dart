@@ -1,8 +1,13 @@
-import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
+// Dart imports:
 import 'dart:convert';
+
+// Package imports:
 import 'package:ffmpeg_kit_flutter_new/ffprobe_kit.dart';
 import 'package:ffmpeg_kit_flutter_new/return_code.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
+import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
 
 abstract class AudioLocalDataSource {
   Future<List<SyncTextData>> getSyncTextData(String audioPath, String content);
@@ -44,7 +49,7 @@ class AudioLocalDataSourceImpl implements AudioLocalDataSource {
             // Tìm vị trí từ trong content (tính theo ký tự, không phải byte)
             final int matchIndex = content.indexOf(word, lastIndex);
             if (matchIndex == -1) {
-              logger.warning("Không tìm thấy từ: $word");
+              logger.warning('Không tìm thấy từ: $word');
               continue;
             }
 

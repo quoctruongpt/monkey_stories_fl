@@ -1,75 +1,74 @@
+// Package imports:
 import 'package:get_it/get_it.dart';
+
+// Project imports:
+import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/active_license/active_license_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/audio/audio_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/course/course_remote_data.dart';
+import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/device/device_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/leave_contact/leave_contact_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
-import 'package:monkey_stories/data/datasources/report/report_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/profile/profile_remote_data_source.dart';
 import 'package:monkey_stories/data/datasources/purchased/purchased_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/remote_config/remote_config_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/report/report_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
-import 'package:monkey_stories/data/datasources/airbridge/airbridge_remote_data_source.dart';
+import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
+import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/tracking/tracking_remote_data_source.dart';
-import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
+import 'package:monkey_stories/data/datasources/unity_datasource.dart';
+import 'package:monkey_stories/data/repositories/account_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/active_license_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/audio_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/auth_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/course_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/device_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/leave_contact_repository_impl.dart';
-import 'package:monkey_stories/data/repositories/report_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/notification_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/offline_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/profile_repository_impl.dart';
 import 'package:monkey_stories/data/repositories/purchased_repository_impl.dart';
-import 'package:monkey_stories/data/repositories/notification_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/remote_config_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/report_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/settings_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/system_settings_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/tracking_repository_impl.dart';
+import 'package:monkey_stories/data/repositories/unity_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/account_repository.dart';
 import 'package:monkey_stories/domain/repositories/active_license_repository.dart';
+import 'package:monkey_stories/domain/repositories/audio_repository.dart';
+import 'package:monkey_stories/domain/repositories/auth_repository.dart';
 import 'package:monkey_stories/domain/repositories/course_repository.dart';
+import 'package:monkey_stories/domain/repositories/device_repository.dart';
+import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
 import 'package:monkey_stories/domain/repositories/leave_contact_repository.dart';
 import 'package:monkey_stories/domain/repositories/notification_repository.dart';
-import 'package:monkey_stories/domain/repositories/report_repository.dart';
+import 'package:monkey_stories/domain/repositories/offline_repository.dart';
 import 'package:monkey_stories/domain/repositories/profile_repository.dart';
-import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
-
-// Auth Datasources & Repositories
-import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
-import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
-import 'package:monkey_stories/data/repositories/auth_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/auth_repository.dart';
-import 'package:monkey_stories/data/datasources/account/account_remote_data_source.dart';
-import 'package:monkey_stories/data/datasources/account/account_local_data_source.dart';
-import 'package:monkey_stories/data/repositories/account_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/account_repository.dart';
-
-// Other App Features Datasources & Repositories
-import 'package:monkey_stories/data/datasources/device/device_local_data_source.dart';
-import 'package:monkey_stories/data/datasources/device/device_remote_data_source.dart';
-import 'package:monkey_stories/data/repositories/device_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/device_repository.dart';
-import 'package:monkey_stories/data/datasources/settings/settings_local_data_source.dart';
-import 'package:monkey_stories/data/repositories/settings_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
+import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
+import 'package:monkey_stories/domain/repositories/report_repository.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
-import 'package:monkey_stories/data/datasources/system/system_settings_data_source.dart';
-import 'package:monkey_stories/data/repositories/system_settings_repository_impl.dart';
 import 'package:monkey_stories/domain/repositories/system_settings_repository.dart';
-
-// Unity Datasources & Repositories
-import 'package:monkey_stories/data/datasources/unity_datasource.dart';
-import 'package:monkey_stories/data/repositories/unity_repository_impl.dart';
+import 'package:monkey_stories/domain/repositories/tracking_repository.dart';
 import 'package:monkey_stories/domain/repositories/unity_repository.dart';
 
-import 'package:monkey_stories/data/repositories/kinesis_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/kinesis_repository.dart';
-import 'package:monkey_stories/data/datasources/system/system_local_data_source.dart';
-import 'package:monkey_stories/data/repositories/offline_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/offline_repository.dart';
-import 'package:monkey_stories/data/datasources/remote_config/remote_config_remote_data_source.dart';
-import 'package:monkey_stories/data/repositories/remote_config_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/remote_config_repository.dart';
-
 // Audio Datasources & Repositories
-import 'package:monkey_stories/data/datasources/audio/audio_local_data_source.dart';
-import 'package:monkey_stories/data/repositories/audio_repository_impl.dart';
-import 'package:monkey_stories/domain/repositories/audio_repository.dart';
+// Auth Datasources & Repositories
+// Other App Features Datasources & Repositories
+// Unity Datasources & Repositories
 
 final sl = GetIt.instance;
 

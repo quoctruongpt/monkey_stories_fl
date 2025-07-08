@@ -1,13 +1,17 @@
+// Dart imports:
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+// Package imports:
 import 'package:aws_client/kinesis_2013_12_02.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/data/datasources/kinesis/kinesis_cache_data_source.dart';
-import 'package:monkey_stories/data/models/kinesis/kinesis_model.dart';
 import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
+import 'package:monkey_stories/data/models/kinesis/kinesis_model.dart';
 
 final logger = Logger('KinesisRemoteDataSource');
 

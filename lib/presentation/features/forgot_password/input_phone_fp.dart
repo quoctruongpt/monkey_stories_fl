@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -11,8 +16,8 @@ import 'package:monkey_stories/presentation/bloc/forgot_password/forgot_password
 import 'package:monkey_stories/presentation/features/forgot_password/forgot_password_navigator.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
-import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/forgot_password/forgot_password_header.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/phone_input_widget.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
 

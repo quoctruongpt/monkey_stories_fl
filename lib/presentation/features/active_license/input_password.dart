@@ -1,17 +1,22 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
+import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 import 'package:monkey_stories/presentation/widgets/text_field/text_field_widget.dart';
-import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
 
 class ActiveLicenseInputPassword extends StatefulWidget {
   const ActiveLicenseInputPassword({super.key});

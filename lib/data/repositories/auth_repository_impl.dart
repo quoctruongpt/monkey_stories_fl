@@ -1,9 +1,13 @@
+// Package imports:
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
+import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_local_data_source.dart';
 import 'package:monkey_stories/data/datasources/auth/auth_remote_data_source.dart';
 import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
@@ -17,7 +21,6 @@ import 'package:monkey_stories/domain/repositories/auth_repository.dart';
 import 'package:monkey_stories/domain/usecases/auth/change_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
 

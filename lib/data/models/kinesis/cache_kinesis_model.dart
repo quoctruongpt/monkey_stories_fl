@@ -1,3 +1,4 @@
+// Package imports:
 import 'package:hive/hive.dart';
 
 part 'cache_kinesis_model.g.dart';

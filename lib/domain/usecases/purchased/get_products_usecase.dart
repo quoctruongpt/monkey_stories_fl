@@ -1,7 +1,10 @@
+// Package imports:
 import 'package:fpdart/fpdart.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/error/failures.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
-import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/domain/entities/purchased/purchased_entity.dart';
 import 'package:monkey_stories/domain/repositories/purchased_repository.dart';
 

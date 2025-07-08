@@ -1,24 +1,29 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:logging/logging.dart';
 import 'package:lottie/lottie.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
+import 'package:monkey_stories/core/theme/app_theme.dart';
+import 'package:monkey_stories/core/utils/lottie_utils.dart';
 import 'package:monkey_stories/di/injection_container.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/auth/login/login_state.dart';
-import 'package:monkey_stories/core/localization/app_localizations.dart';
-import 'package:monkey_stories/core/constants/constants.dart';
-import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/core/utils/lottie_utils.dart';
-import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/auth/footer_authentication.dart';
-import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
-import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
+import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/base/text_and_action.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/password_dialog.dart';
+import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 
 final logger = Logger('LoginScreen');
 

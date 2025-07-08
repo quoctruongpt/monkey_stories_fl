@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:monkey_stories/domain/entities/active_license/package_info.dart';
 
 class PackageInfoResModel {

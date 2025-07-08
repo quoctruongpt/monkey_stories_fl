@@ -1,24 +1,28 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/usecases/usecase.dart';
+import 'package:monkey_stories/core/validators/password.dart';
+import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
-import 'package:monkey_stories/core/validators/password.dart';
-import 'package:monkey_stories/core/validators/phone.dart';
-import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_in/ms_sign_in_popup_warning.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_sign_up.dart';
 import 'package:monkey_stories/domain/usecases/tracking/sign_up/ms_view_sign_up.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 
 part 'sign_up_state.dart';
 

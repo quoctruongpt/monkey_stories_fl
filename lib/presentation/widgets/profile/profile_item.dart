@@ -1,5 +1,10 @@
+// Dart imports:
 import 'dart:math';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:monkey_stories/presentation/features/list_profile.dart';
 import 'package:monkey_stories/presentation/widgets/profile/avatar.dart';
 

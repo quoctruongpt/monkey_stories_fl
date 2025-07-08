@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/theme/app_theme.dart';
 
 class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {

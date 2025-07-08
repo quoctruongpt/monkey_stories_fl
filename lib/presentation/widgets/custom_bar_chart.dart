@@ -1,6 +1,13 @@
-import 'package:flutter/material.dart';
+// Dart imports:
 import 'dart:math' as math;
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:collection/collection.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 
 // Data class

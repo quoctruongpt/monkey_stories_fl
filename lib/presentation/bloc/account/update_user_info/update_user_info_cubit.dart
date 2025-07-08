@@ -1,6 +1,9 @@
+// Package imports:
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/email.dart';
@@ -11,8 +14,8 @@ import 'package:monkey_stories/domain/entities/phone/phone_entity.dart';
 import 'package:monkey_stories/domain/usecases/account/update_user_info_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/confirm_password_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/get_country_code_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_update_user_info_successful.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'update_user_info_state.dart';
 

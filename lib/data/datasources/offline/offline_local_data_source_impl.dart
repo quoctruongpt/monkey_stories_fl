@@ -1,5 +1,8 @@
-import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';
+// Package imports:
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:monkey_stories/data/datasources/offline/offline_local_data_source.dart';
 
 const String _lastOnlineTimeKey = 'last_online_time';
 

@@ -1,5 +1,7 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:collection/collection.dart';
 import 'package:lottie/lottie.dart';
 

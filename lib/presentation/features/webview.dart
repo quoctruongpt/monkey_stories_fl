@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:logging/logging.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 
 final logger = Logger('WebViewScreen');
 

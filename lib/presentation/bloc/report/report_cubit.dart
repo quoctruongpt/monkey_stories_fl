@@ -1,15 +1,18 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
 import 'package:monkey_stories/domain/entities/report/report_entity.dart';
 import 'package:monkey_stories/domain/usecases/report/get_report_usecase.dart';
-import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
-import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
-import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_phonics.dart';
 import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_rc.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_screen.dart';
+import 'package:monkey_stories/domain/usecases/tracking/learning_report/ms_learning_report_stories_level.dart';
+import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 part 'report_state.dart';
 

@@ -1,8 +1,11 @@
+// Package imports:
 import 'package:equatable/equatable.dart';
-import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
-import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/username.dart';
+import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
+import 'package:monkey_stories/domain/entities/auth/last_login_entity.dart';
 
 // Enum để biểu thị các trạng thái của việc gửi form
 enum FormSubmissionStatus {

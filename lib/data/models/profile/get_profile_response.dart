@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
 
 class GetProfileResponse {

@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:convert';
 
+// Package imports:
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/data/models/leave_contact/contact_local_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class LeaveContactLocalDataSource {
   Future<void> saveContact(ContactLocalModel contact);

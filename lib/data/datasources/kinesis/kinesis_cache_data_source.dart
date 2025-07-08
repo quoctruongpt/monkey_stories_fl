@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:hive_flutter/hive_flutter.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/kinesis.dart';
 import 'package:monkey_stories/data/models/kinesis/cache_kinesis_model.dart';
 
@@ -31,7 +34,7 @@ class KinesisCacheDataSourceImpl implements KinesisCacheDataSource {
       partitionKey: partitionKey,
       event: event,
       // Using a key that is more likely to be unique
-      id: '${DateTime.now().toIso8601String()}-${partitionKey}',
+      id: '${DateTime.now().toIso8601String()}-$partitionKey',
     );
     // Use the record's ID as the key in the Hive box.
     await _box.put(newRecord.id, newRecord);

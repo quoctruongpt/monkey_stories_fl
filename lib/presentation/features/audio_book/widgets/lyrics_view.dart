@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
 
 class LyricsView extends StatefulWidget {

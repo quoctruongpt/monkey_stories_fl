@@ -1,7 +1,12 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/env/environment_service.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 
 class DebugViewWidget extends StatelessWidget {
   const DebugViewWidget({super.key});

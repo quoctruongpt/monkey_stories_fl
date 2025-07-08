@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/di/datasources.dart';
-import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 import 'package:monkey_stories/domain/usecases/remote_config/get_pass_debug.dart';
+import 'package:monkey_stories/presentation/bloc/debug/debug_cubit.dart';
 
 Future<void> showPasswordDialog({required BuildContext context}) {
   return showDialog<void>(
@@ -127,7 +132,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(child: const Text('OK'), onPressed: _verifyPassword),
+            TextButton(onPressed: _verifyPassword, child: const Text('OK')),
           ],
         );
     }

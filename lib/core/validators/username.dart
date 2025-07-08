@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:formz/formz.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/validators/email.dart';
 
 class Username extends FormzInput<String, String> {

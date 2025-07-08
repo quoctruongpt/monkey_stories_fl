@@ -1,8 +1,13 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/active_license.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/validators/confirm_password.dart';
 import 'package:monkey_stories/core/validators/license_code.dart';
@@ -11,18 +16,17 @@ import 'package:monkey_stories/core/validators/password.dart';
 import 'package:monkey_stories/core/validators/phone.dart';
 import 'package:monkey_stories/domain/entities/active_license/account_info.dart';
 import 'package:monkey_stories/domain/entities/active_license/license_code_info.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
+import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
 import 'package:monkey_stories/domain/usecases/active_license/verify_license_code.dart';
 import 'package:monkey_stories/domain/usecases/auth/check_phone_number_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/login_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/send_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/auth/sign_up_usecase.dart';
-import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_this_account.dart';
-import 'package:monkey_stories/domain/usecases/active_license/link_cod_to_account.dart';
 import 'package:monkey_stories/domain/usecases/auth/verify_otp_usecase.dart';
 import 'package:monkey_stories/domain/usecases/tracking/active_license/ms_activated_code.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-import 'package:monkey_stories/core/constants/active_license.dart';
 
 part 'active_license_state.dart';
 

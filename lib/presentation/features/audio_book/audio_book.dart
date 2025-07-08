@@ -1,19 +1,24 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/di/datasources.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/audio_book/audio_book_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/footer.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/lyrics_view.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/playlist_view.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/thumb_audio.dart';
 import 'package:monkey_stories/presentation/features/audio_book/widgets/timer_dropdown.dart';
-import 'package:monkey_stories/presentation/bloc/playlist/playlist_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/unlock_lesson_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
 import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';

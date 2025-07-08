@@ -1,5 +1,7 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:airbridge_flutter_sdk_restricted/airbridge_flutter_sdk_restricted.dart';
 import 'package:logging/logging.dart';
 
@@ -37,11 +39,9 @@ class AirbridgeRemoteDataSourceImpl implements AirbridgeRemoteDataSource {
   void listenToAttribution() {
     Airbridge.setOnAttributionReceived((result) {
       _logger.info('Attribution result received: $result');
-      if (result != null) {
-        final data = Map<String, dynamic>.from(result);
-        _attributionDataController.add(data);
-      }
-    });
+      final data = Map<String, dynamic>.from(result);
+      _attributionDataController.add(data);
+        });
   }
 
   @override

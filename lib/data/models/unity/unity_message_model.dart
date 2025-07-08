@@ -1,6 +1,9 @@
+// Dart imports:
 import 'dart:convert';
-import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
+
+// Project imports:
 import 'package:monkey_stories/data/models/unity/unity_payload_model.dart';
+import 'package:monkey_stories/domain/entities/unity/unity_message_entity.dart';
 
 /// Model biểu diễn tin nhắn trao đổi với Unity
 class UnityMessageModel extends UnityMessageEntity {

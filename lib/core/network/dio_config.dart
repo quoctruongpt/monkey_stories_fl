@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/network/dio_interceptor.dart';
 
 class DioConfig {

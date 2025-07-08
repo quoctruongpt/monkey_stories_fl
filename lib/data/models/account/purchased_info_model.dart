@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:monkey_stories/domain/entities/account/purchased_info_entity.dart';
 
 class PurchasedInfoModel {

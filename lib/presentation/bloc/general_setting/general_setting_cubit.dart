@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
 import 'package:monkey_stories/domain/usecases/tracking/setting/ms_general_setting_detail.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 
@@ -17,7 +20,7 @@ class GeneralSettingCubit extends Cubit<GeneralSettingState> {
   final MsGeneralSettingDetailTrackingUsecase
   _msGeneralSettingDetailTrackingUsecase;
 
-  GeneralSettingTracker _generalSettingTracker = GeneralSettingTracker();
+  final GeneralSettingTracker _generalSettingTracker = GeneralSettingTracker();
 
   GeneralSettingCubit({
     required AppCubit appCubit,

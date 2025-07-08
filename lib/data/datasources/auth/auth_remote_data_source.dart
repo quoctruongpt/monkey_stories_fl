@@ -1,15 +1,18 @@
+// Package imports:
 import 'package:dio/dio.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core/error/exceptions.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/auth/account_info_res_model.dart';
 import 'package:monkey_stories/data/models/auth/forgot_password_model.dart';
 import 'package:monkey_stories/data/models/login_data.dart';
 import 'package:monkey_stories/data/models/sign_up_data.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 abstract class AuthRemoteDataSource {
   Future<ApiResponse<LoginResponseData?>> login(

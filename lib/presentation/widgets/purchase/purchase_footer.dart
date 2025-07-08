@@ -1,17 +1,22 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
-import 'package:monkey_stories/core/constants/purchased.dart';
 import 'package:monkey_stories/di/repositories.dart';
+import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_policy.dart';
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/terms_bottomsheet.dart';
-import 'package:monkey_stories/domain/usecases/tracking/payment/ms_purchase_screen_click_policy.dart';
 
 class PurchaseFooter extends StatefulWidget {
   const PurchaseFooter({

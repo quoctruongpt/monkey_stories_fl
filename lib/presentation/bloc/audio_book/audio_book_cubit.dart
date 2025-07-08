@@ -1,22 +1,27 @@
+// Dart imports:
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+// Flutter imports:
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Package imports:
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
+
+// Project imports:
+import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/data/models/audio_book/audio_book_item.dart';
 import 'package:monkey_stories/data/models/audio_book/sync_text_data.dart';
-import 'package:monkey_stories/core/usecases/usecase.dart';
 import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
-import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_change_order_list_audiobook.dart';
+import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_listen_all.dart';
 import 'package:monkey_stories/domain/usecases/tracking/audio_book/ms_view_list_audiobook.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'audio_book_state.dart';
 

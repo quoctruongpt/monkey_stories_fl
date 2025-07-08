@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:io';
 import 'dart:math';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -55,7 +59,7 @@ class _FilesScreenState extends State<FilesScreen> {
           title: const Text('Create a new file'),
           content: TextField(
             controller: _fileNameController,
-            decoration: const InputDecoration(hintText: "Enter file name"),
+            decoration: const InputDecoration(hintText: 'Enter file name'),
           ),
           actions: <Widget>[
             TextButton(
@@ -78,8 +82,8 @@ class _FilesScreenState extends State<FilesScreen> {
   }
 
   String _formatBytes(int bytes, [int decimals = 2]) {
-    if (bytes <= 0) return "0 B";
-    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    if (bytes <= 0) return '0 B';
+    const suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     var i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }

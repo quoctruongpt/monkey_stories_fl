@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:convert';
 
+// Package imports:
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/shared_pref_keys.dart';
 import 'package:monkey_stories/domain/entities/profile/profile_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProfileLocalDataSource {
   Future<void> saveListProfile(List<ProfileEntity> profiles);

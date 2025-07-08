@@ -1,6 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/routes_constant.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
@@ -9,12 +14,12 @@ import 'package:monkey_stories/presentation/bloc/purchased/purchased_cubit.dart'
 import 'package:monkey_stories/presentation/bloc/purchased_view/purchased_view_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
-import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/package_item_with_discount.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_footer.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchase_title.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_content.dart';
 import 'package:monkey_stories/presentation/widgets/purchase/purchased_image.dart';
+import 'package:monkey_stories/presentation/widgets/screen_tracker.dart';
 
 const listContent = [
   PurchasedContentItem(text: 'app.purchased.content1'),

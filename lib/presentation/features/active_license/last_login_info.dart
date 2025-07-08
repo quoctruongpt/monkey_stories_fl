@@ -1,15 +1,20 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/active_license/active_license_cubit.dart';
-import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
-import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
-import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/active_license/popup_merge_lifetime_to_paid.dart';
+import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
+import 'package:monkey_stories/presentation/widgets/base/button_widget.dart';
 import 'package:monkey_stories/presentation/widgets/loading/loading_overlay.dart';
 
 class ActiveLicenseLastLoginInfo extends StatelessWidget {

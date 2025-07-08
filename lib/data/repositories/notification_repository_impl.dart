@@ -1,5 +1,6 @@
-import 'package:monkey_stories/domain/repositories/notification_repository.dart';
+// Project imports:
 import 'package:monkey_stories/data/datasources/notification/notification_remote_data_soure.dart';
+import 'package:monkey_stories/domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationRemoteDataSource _notificationRemoteDataSource;

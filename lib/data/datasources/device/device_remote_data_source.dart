@@ -1,7 +1,10 @@
+// Package imports:
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
-import 'package:monkey_stories/core/error/exceptions.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
+import 'package:monkey_stories/core/error/exceptions.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/device/device_reponse_model.dart';
 

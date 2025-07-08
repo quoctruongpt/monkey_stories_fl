@@ -1,13 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
-import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/data/models/setting/setting_item.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
-
 import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/delete_data_dialog.dart';
 import 'package:monkey_stories/presentation/widgets/dialogs/logout_dialog.dart';

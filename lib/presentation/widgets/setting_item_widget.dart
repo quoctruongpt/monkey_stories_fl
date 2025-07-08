@@ -1,13 +1,19 @@
 // lib/widgets/setting_item_widget.dart
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
+// Project imports:
 import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/data/models/setting/setting_item.dart';
-import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/di/usecases.dart';
+import 'package:monkey_stories/domain/usecases/tracking/setting/ms_parent_setting_detail.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
 
 class SettingItemWidget extends StatelessWidget {
