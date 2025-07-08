@@ -468,22 +468,32 @@ class _LoginScreenState extends State<LoginScreen>
 
                                 const SizedBox(height: Spacing.md),
 
-                                Center(
-                                  child: TextAndAction(
-                                    text: translate('login.active_code.desc'),
-                                    actionText: translate(
-                                      'login.active_code.act',
-                                    ),
-                                    onActionTap: () {
-                                      context
-                                          .read<LoginCubit>()
-                                          .activeCodeClicked();
-                                      context.push(
-                                        AppRoutePaths.inputLicense,
-                                        extra: 'sign_in',
-                                      );
-                                    },
-                                  ),
+                                BlocBuilder<AppCubit, AppState>(
+                                  builder: (context, state) {
+                                    if (state.isHideSensitiveFeatures) {
+                                      return const SizedBox.shrink();
+                                    }
+
+                                    return Center(
+                                      child: TextAndAction(
+                                        text: translate(
+                                          'login.active_code.desc',
+                                        ),
+                                        actionText: translate(
+                                          'login.active_code.act',
+                                        ),
+                                        onActionTap: () {
+                                          context
+                                              .read<LoginCubit>()
+                                              .activeCodeClicked();
+                                          context.push(
+                                            AppRoutePaths.inputLicense,
+                                            extra: 'sign_in',
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),

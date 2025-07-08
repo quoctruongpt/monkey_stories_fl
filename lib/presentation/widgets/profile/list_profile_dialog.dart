@@ -8,6 +8,7 @@ import 'package:monkey_stories/core/routes/routes.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/profile/add_profile_item.dart';
 import 'package:monkey_stories/presentation/widgets/profile/profile_item.dart';
 import 'package:monkey_stories/presentation/widgets/parent_verify.dart';
@@ -154,19 +155,27 @@ class ListProfileDialog extends StatelessWidget {
             );
           },
         ),
-        TextButton(
-          onPressed: () => _activeLicensePressed(context),
-          child: Text(
-            AppLocalizations.of(
-              context,
-            ).translate('app.list_profile.input_license_button'),
-            style: const TextStyle(
-              color: Color(0xFF98A2B3),
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              decoration: TextDecoration.underline,
-            ),
-          ),
+        BlocBuilder<AppCubit, AppState>(
+          builder: (context, state) {
+            if (state.isHideSensitiveFeatures) {
+              return const SizedBox.shrink();
+            }
+
+            return TextButton(
+              onPressed: () => _activeLicensePressed(context),
+              child: Text(
+                AppLocalizations.of(
+                  context,
+                ).translate('app.list_profile.input_license_button'),
+                style: const TextStyle(
+                  color: Color(0xFF98A2B3),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            );
+          },
         ),
         Row(
           mainAxisSize: MainAxisSize.min,

@@ -7,6 +7,7 @@ import 'package:monkey_stories/core/localization/app_localizations.dart';
 import 'package:monkey_stories/core/theme/app_theme.dart';
 import 'package:monkey_stories/presentation/bloc/account/profile/profile_cubit.dart';
 import 'package:monkey_stories/presentation/bloc/account/user/user_cubit.dart';
+import 'package:monkey_stories/presentation/bloc/app/app_cubit.dart';
 import 'package:monkey_stories/presentation/widgets/base/app_bar_widget.dart';
 import 'package:monkey_stories/presentation/widgets/base/notice_dialog.dart';
 
@@ -168,19 +169,29 @@ class ListProfile extends StatelessWidget {
                   },
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  context.push(
-                    AppRoutePaths.inputLicense,
-                    extra: {'source': 'list_profile'},
+              BlocBuilder<AppCubit, AppState>(
+                builder: (context, state) {
+                  if (state.isHideSensitiveFeatures) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return TextButton(
+                    onPressed: () {
+                      context.push(
+                        AppRoutePaths.inputLicense,
+                        extra: {'source': 'list_profile'},
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(
+                        context,
+                      ).translate('app.list_profile.input_license_button'),
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                   );
                 },
-                child: Text(
-                  AppLocalizations.of(
-                    context,
-                  ).translate('app.list_profile.input_license_button'),
-                  style: const TextStyle(decoration: TextDecoration.underline),
-                ),
               ),
             ],
           ),

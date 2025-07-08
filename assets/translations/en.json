@@ -351,6 +351,7 @@
   "app.user_info.create_password.message": "Please set a password to edit information and sign in next time.",
   "app.user_info.create_password.password.label": "New password",
   "app.user_info.create_password.password.confirm": "Confirm new password",
+  "app.setting.delete_account": "Delete your account",
   "app.report.study_report": "Learning Report",
   "app.report.profile.time_join": "Joined on: {{date}}",
   "app.report.profile.change_profile": "Switch Profile",

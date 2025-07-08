@@ -351,6 +351,7 @@
   "app.user_info.create_password.message": "กรุณา\u200Bตั้ง\u200Bรหัส\u200Bผ่าน\u200Bเพื่อ\u200Bแก้ไข\u200Bข้อมูล\u200Bและ\u200Bเข้า\u200Bระบบ\u200Bใน\u200Bครั้ง\u200Bต่อ\u200Bไป\n",
   "app.user_info.create_password.password.label": "รหัส\u200Bผ่าน\u200Bใหม่",
   "app.user_info.create_password.password.confirm": "ยืนยัน\u200Bรหัส\u200Bผ่าน\u200Bใหม่\n",
+  "app.setting.delete_account": "ลบบัญชี",
   "app.report.study_report": "รายงานการเรียนรู้",
   "app.report.profile.time_join": "เข้าร่วมเมื่อ\u200B{{date}}",
   "app.report.profile.change_profile": "เปลี่ยนโปรไฟล์",

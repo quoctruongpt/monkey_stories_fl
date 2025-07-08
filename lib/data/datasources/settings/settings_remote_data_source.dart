@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:monkey_stories/core/constants/api_endpoints.dart';
 import 'package:monkey_stories/data/models/api_response.dart';
 import 'package:monkey_stories/data/models/setting/schedule.dart';
+import 'package:monkey_stories/data/models/setting/setting_system.dart';
 
 abstract class SettingsRemoteDataSource {
   Future<ApiResponse<Null>> updateUserSetting({
@@ -10,6 +11,8 @@ abstract class SettingsRemoteDataSource {
     String? languageId,
     Schedule? schedule,
   });
+
+  Future<ApiResponse<SettingSystem>> getSettingSystem();
 }
 
 class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
@@ -34,5 +37,15 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
     final response = await dio.post(ApiEndpoints.settingUser, data: params);
 
     return ApiResponse.fromJson(response.data, (json, res) => null);
+  }
+
+  @override
+  Future<ApiResponse<SettingSystem>> getSettingSystem() async {
+    final response = await dio.get(ApiEndpoints.getSettingSystem);
+
+    return ApiResponse.fromJson(
+      response.data,
+      (json, res) => SettingSystem.fromJson(json as Map<String, dynamic>),
+    );
   }
 }

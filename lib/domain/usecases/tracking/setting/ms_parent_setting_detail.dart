@@ -56,6 +56,7 @@ enum ClickType {
   termsOfUse('terms_of_use'),
   privacyPolicy('privacy_policy'),
   frequentlyAskedQuestions('frequently_asked_questions'),
+  deleteAccount('delete_account'),
   contactMonkey('contact_monkey');
 
   const ClickType(this.value);

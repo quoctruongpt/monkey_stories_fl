@@ -11,6 +11,7 @@ class AppState extends Equatable {
   final String appVersion;
   final bool isDeletingData;
   final bool isDeletingDataSuccess;
+  final bool isHideSensitiveFeatures;
 
   const AppState({
     required this.isOrientationLoading,
@@ -23,6 +24,7 @@ class AppState extends Equatable {
     this.appVersion = '',
     this.isDeletingData = false,
     this.isDeletingDataSuccess = false,
+    this.isHideSensitiveFeatures = true,
   });
 
   AppState copyWith({
@@ -37,6 +39,7 @@ class AppState extends Equatable {
     bool? isDeletingData,
     bool? isDeletingDataSuccess,
     bool? resetStatusDeletingData,
+    bool? isHideSensitiveFeatures,
   }) {
     return AppState(
       isOrientationLoading: isOrientationLoading ?? this.isOrientationLoading,
@@ -57,6 +60,8 @@ class AppState extends Equatable {
           resetStatusDeletingData == true
               ? false
               : isDeletingDataSuccess ?? this.isDeletingDataSuccess,
+      isHideSensitiveFeatures:
+          isHideSensitiveFeatures ?? this.isHideSensitiveFeatures,
     );
   }
 
@@ -72,5 +77,6 @@ class AppState extends Equatable {
     appVersion,
     isDeletingData,
     isDeletingDataSuccess,
+    isHideSensitiveFeatures,
   ];
 }

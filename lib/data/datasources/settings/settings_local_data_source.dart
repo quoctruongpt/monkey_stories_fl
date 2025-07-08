@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:monkey_stories/data/models/setting/schedule.dart';
+import 'package:monkey_stories/data/models/setting/setting_system.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/error/exceptions.dart';
@@ -20,6 +21,8 @@ abstract class SettingsLocalDataSource {
   Future<Schedule?> getSchedule();
   Future<void> saveSchedule(Schedule schedule);
   Future<void> setSchedule(Schedule schedule);
+  Future<void> cacheSettingSystem(SettingSystem settingSystem);
+  Future<SettingSystem?> getSettingSystem();
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -171,5 +174,24 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
       flutterLocalNotificationsPlugin,
       schedule,
     ); // Gọi hàm lên lịch ở đây
+  }
+
+  @override
+  Future<void> cacheSettingSystem(SettingSystem settingSystem) async {
+    await sharedPreferences.setString(
+      SharedPrefKeys.settingSystem,
+      jsonEncode(settingSystem.toJson()),
+    );
+  }
+
+  @override
+  Future<SettingSystem?> getSettingSystem() async {
+    final settingSystemJson = sharedPreferences.getString(
+      SharedPrefKeys.settingSystem,
+    );
+    if (settingSystemJson == null) {
+      return null;
+    }
+    return SettingSystem.fromJson(jsonDecode(settingSystemJson));
   }
 }

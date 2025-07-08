@@ -142,6 +142,9 @@ import 'package:monkey_stories/domain/usecases/purchased/check_available_usecase
 import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
 import 'package:monkey_stories/domain/repositories/audio_repository.dart';
 
+// Setting Usecases
+import 'package:monkey_stories/domain/usecases/settings/get_setting_system_usecase.dart';
+
 final sl = GetIt.instance;
 
 void initUsecaseDependencies() {
@@ -480,5 +483,10 @@ void initUsecaseDependencies() {
   // Audio
   sl.registerLazySingleton(
     () => GetSyncTextUsecase(audioRepository: sl<AudioRepository>()),
+  );
+
+  // Setting
+  sl.registerLazySingleton(
+    () => GetSettingSystemUseCase(sl<SettingsRepository>()),
   );
 }

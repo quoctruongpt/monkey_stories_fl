@@ -178,13 +178,21 @@ class IntroScreen extends StatelessWidget {
                           onPressed: () => _onPressedLogin(context),
                         ),
                         const SizedBox(height: Spacing.md),
-                        TextButton(
-                          onPressed: () => _onPressedActiveCode(context),
-                          child: Text(
-                            AppLocalizations.of(
-                              context,
-                            ).translate('app.intro.enter_activation_code'),
-                          ),
+                        BlocBuilder<AppCubit, AppState>(
+                          builder: (context, state) {
+                            if (state.isHideSensitiveFeatures) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return TextButton(
+                              onPressed: () => _onPressedActiveCode(context),
+                              child: Text(
+                                AppLocalizations.of(
+                                  context,
+                                ).translate('app.intro.enter_activation_code'),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

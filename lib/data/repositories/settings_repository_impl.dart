@@ -8,6 +8,7 @@ import 'package:monkey_stories/data/datasources/settings/settings_local_data_sou
 import 'package:monkey_stories/data/datasources/settings/settings_remote_data_source.dart';
 import 'package:monkey_stories/data/models/setting/schedule.dart';
 import 'package:monkey_stories/domain/entities/setting/schedule_entity.dart';
+import 'package:monkey_stories/domain/entities/setting/setting_system_entity.dart';
 import 'package:monkey_stories/domain/repositories/settings_repository.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -128,6 +129,30 @@ class SettingsRepositoryImpl implements SettingsRepository {
         return Left(ServerFailure(message: response.message));
       }
     } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SettingSystemEntity>> getSettingSystem() async {
+    try {
+      final settingSystem = await remoteDataSource.getSettingSystem();
+
+      if (settingSystem.status == ApiStatus.success) {
+        await localDataSource.cacheSettingSystem(settingSystem.data!);
+        return Right(settingSystem.data?.toEntity() ?? SettingSystemEntity());
+      } else {
+        final settingSystem = await localDataSource.getSettingSystem();
+        if (settingSystem != null) {
+          return Right(settingSystem.toEntity());
+        }
+        return const Left(ServerFailure(message: 'Setting system not found'));
+      }
+    } on CacheException catch (e) {
+      final settingSystem = await localDataSource.getSettingSystem();
+      if (settingSystem != null) {
+        return Right(settingSystem.toEntity());
+      }
       return Left(CacheFailure(message: e.message));
     }
   }

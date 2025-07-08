@@ -351,6 +351,7 @@
   "app.user_info.create_password.message": "Ba mẹ thêm mật khẩu để chỉnh sửa thông tin và đăng nhập trong lần sau nhé!",
   "app.user_info.create_password.password.label": "Mật khẩu mới",
   "app.user_info.create_password.password.confirm": "Xác nhận mật khẩu mới",
+  "app.setting.delete_account": "Xóa tài khoản",
   "app.report.study_report": "Báo cáo học tập",
   "app.report.profile.time_join": "Đã tham gia: {{date}}",
   "app.report.profile.change_profile": "Đổi hồ sơ",

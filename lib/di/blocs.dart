@@ -137,6 +137,7 @@ import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_use
 import 'package:monkey_stories/domain/usecases/profile/get_version_profile_remote_usecase.dart';
 import 'package:monkey_stories/domain/usecases/profile/cache_version_profile_remote_usecase.dart';
 import 'package:monkey_stories/domain/usecases/audio/get_sync_text_usecase.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_setting_system_usecase.dart';
 
 final sl = GetIt.instance;
 
@@ -245,6 +246,7 @@ void initBlocDependencies() {
       saveSoundTrackUsecase: sl<SaveSoundTrackUsecase>(),
       getSoundTrackUseCase: sl<GetSoundTrackUseCase>(),
       deleteDataFolderUseCase: sl<DeleteDataFolderUsecase>(),
+      getSettingSystemUseCase: sl<GetSettingSystemUseCase>(),
     ),
   );
 

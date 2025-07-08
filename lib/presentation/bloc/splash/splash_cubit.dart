@@ -101,6 +101,7 @@ class SplashCubit extends Cubit<SplashState> {
           _appCubit.updateDeviceInfo(deviceId: deviceId); // Cập nhật AppCubit
           _saveFcmUsecase.call(NoParams());
           await _remoteConfigInitialUsecase.call(NoParams());
+          await _appCubit.getSettingSystem();
 
           // Chỉ tiếp tục kiểm tra auth nếu đăng ký device thành công
           // 2. Check authentication status

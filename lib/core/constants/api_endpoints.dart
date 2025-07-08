@@ -43,4 +43,7 @@ class ApiEndpoints {
   static const String registerDevice = '/device/api/v1/fcm/save';
 
   static const String learningReport = '/report/ms2/parent_report';
+
+  // Setting
+  static const String getSettingSystem = '/app/api/v1/setting-feature';
 }

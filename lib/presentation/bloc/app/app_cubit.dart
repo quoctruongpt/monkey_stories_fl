@@ -22,6 +22,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:monkey_stories/domain/usecases/settings/get_sound_track_usecase.dart';
 import 'package:monkey_stories/domain/usecases/system/delete_data_folder_usecase.dart';
 import 'package:monkey_stories/core/constants/setting.dart';
+import 'package:monkey_stories/domain/usecases/settings/get_setting_system_usecase.dart';
 
 part 'app_state.dart';
 
@@ -35,6 +36,7 @@ class AppCubit extends Cubit<AppState> {
   final UnityCubit _unityCubit;
   final GetSoundTrackUseCase _getSoundTrackUseCase;
   final DeleteDataFolderUsecase _deleteDataFolderUseCase;
+  final GetSettingSystemUseCase _getSettingSystemUseCase;
   final Logger _logger = Logger('AppCubit');
 
   AppCubit({
@@ -47,6 +49,7 @@ class AppCubit extends Cubit<AppState> {
     required SaveSoundTrackUsecase saveSoundTrackUsecase,
     required GetSoundTrackUseCase getSoundTrackUseCase,
     required DeleteDataFolderUsecase deleteDataFolderUseCase,
+    required GetSettingSystemUseCase getSettingSystemUseCase,
   }) : _getLanguageUseCase = getLanguageUseCase,
        _saveLanguageUseCase = saveLanguageUseCase,
        _getThemeUseCase = getThemeUseCase,
@@ -56,6 +59,7 @@ class AppCubit extends Cubit<AppState> {
        _saveSoundTrackUsecase = saveSoundTrackUsecase,
        _getSoundTrackUseCase = getSoundTrackUseCase,
        _deleteDataFolderUseCase = deleteDataFolderUseCase,
+       _getSettingSystemUseCase = getSettingSystemUseCase,
        super(
          const AppState(
            isOrientationLoading: false,
@@ -245,6 +249,25 @@ class AppCubit extends Cubit<AppState> {
           emit(state.copyWith(resetStatusDeletingData: true));
         }
       });
+    }
+  }
+
+  Future<void> getSettingSystem() async {
+    try {
+      final result = await _getSettingSystemUseCase.call(NoParams());
+      result.fold(
+        (failure) => _logger.severe(
+          'Failed to get setting system: ${failure.displayMessage}',
+        ),
+        (settingSystem) => emit(
+          state.copyWith(
+            isHideSensitiveFeatures: true,
+            // isHideSensitiveFeatures: settingSystem.isSubmitting ?? true,
+          ),
+        ),
+      );
+    } catch (e) {
+      _logger.severe('Failed to get setting system: $e');
     }
   }
 }

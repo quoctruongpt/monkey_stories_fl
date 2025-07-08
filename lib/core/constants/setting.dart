@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:monkey_stories/core/constants/constants.dart';
 import 'package:monkey_stories/core/routes/routes.dart';
@@ -66,6 +67,10 @@ final List<Map<String, dynamic>> settingsData = [
           );
         },
         clickType: ClickType.licenseKey,
+        isVisibleGetter: (BuildContext context) async {
+          final isHide = context.read<AppCubit>().state.isHideSensitiveFeatures;
+          return !isHide;
+        },
       ),
       SettingItem(
         icon: 'assets/icons/svg/password.svg',
@@ -191,6 +196,23 @@ final List<Map<String, dynamic>> settingsData = [
           }
         },
         clickType: ClickType.contactMonkey,
+      ),
+      SettingItem(
+        icon: 'assets/icons/svg/trash.svg',
+        label: 'app.setting.delete_account',
+        onTap: (BuildContext context) {
+          final url = dotenv.env['DELETE_ACCOUNT_URL'] ?? '';
+          if (url.isNotEmpty) {
+            context.pushNamed(
+              AppRouteNames.webView,
+              queryParameters: {
+                'title': 'app.setting.delete_account',
+                'url': url,
+              },
+            );
+          }
+        },
+        clickType: ClickType.deleteAccount,
       ),
     ],
   },
